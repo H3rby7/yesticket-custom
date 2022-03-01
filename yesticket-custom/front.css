@@ -21,17 +21,19 @@
 }
 
 .ytc-container a {
-	text-decoration: none;
+	text-decoration: none !important;
 }
 
 .ytc-event {
 	flex: 0 0 33.333333%;
 	max-width: 33.333333%;
 	padding: 0 15px .5rem 15px;
+	line-height: 1.15;
 }
 
 .ytc-card {
 	width: 100%;
+	height: 100%;
 	position: relative;
 	border: 1px solid;
 	border-radius: .25rem;
@@ -63,15 +65,15 @@
 
 .ytc-card-day {
 	font-family: 'Zilla Slab', serif;
-	font-weight: 700;
-	font-size: 40px;
-	line-height: 0.7;
-	padding-bottom: 5px;
+	font-weight: 700 !important;
+	font-size: 40px !important;
+	line-height: 0.7 !important;
+	padding-bottom: 5px !important;
 }
 
 .ytc-card-captions {
-	font-size: 0.9rem;
-	line-height: 1.1;
+	font-size: 0.9rem !important;
+	line-height: 1.1 !important;
 }
 
 /* Light Theme */

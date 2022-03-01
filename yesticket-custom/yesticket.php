@@ -2,7 +2,7 @@
 /**
 * Plugin Name: YesTicketCustom
 * Plugin URI: ?page=yesticket-custom-plugin
-* Version: 1.0.3
+* Version: 1.0.3-1
 * Author: Joka
 * Author URI: https://github.com/H3rby7
 * Description: Onlineticketing
@@ -84,25 +84,44 @@ function YtcGetEvents($atts) {
 
 	if (count($result) > 0 && $result->message != "no items found"){
 		$count = 0;
+		$content .= "<div class='ytc-container'>\n";
 		foreach($result as $item){
-			$addEventType = "";
-			if ($att["type"]=="all") $addEventType = " <span class='ytc-eventtype'>".$item->event_type."</span>";
-			$content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytc-button">';
-				$content .= "<span class='ytc-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$addEventType;
-				//$content .= '<img src="https://www.yesticket.org/img/YesTicket_260x260.png" height="50" width="50">';
-				//$content .= "<a href='".$item->yesticket_booking_url."'>".$item->event_name."</a>";
-				$content .= "<span class='ytc-eventname'>".htmlentities($item->event_name)."</span>";
-
-				$content .= "<span class='ytc-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
-				if (!empty($item->event_urgency_string)) $content.= "<br><span class='ytc-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
-			$content .= "</a>\n";
+			$time = strtotime($item->event_datetime);
+			$content .= '<div class="ytc-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="ytc-card">';
+				// START 'Wrapper' [div > a > div(ytc-card)]
+				// START 'img'
+				$content .= '<div class="ytc-card-image-wrapper">'."\n";
+					$content .= '<img src="'.$item->event_picture_url.'" alt="Eventbild">'."\n";
+				$content .= '</div>'."\n";
+				// END 'img'
+				// START 'text'
+				$content .= '<div class="ytc-card-text-wrapper">'."\n";
+					// START 'DATE'
+					$content .= '<div class="ytc-card-date">'."\n";
+						$content .= '<span class="ytc-card-month">'.date('M', $time).'</span><br>'."\n";
+						$content .= '<strong class="ytc-card-day">'.date('d', $time).'</strong><br>'."\n";
+						$content .= '<span class="ytc-card-year">'.date('Y', $time).'</span>'."\n";
+					$content .= '</div>'."\n";
+					// END 'DATE'
+					// START 'Body // The Event'
+					$content .= '<div class="ytc-card-body">'."\n";
+						$content .= '<span class="ytc-card-body-organizer">'.htmlentities($item->organizer_name).'</span><br>'."\n";
+						$content .= '<strong class="ytc-card-body-title">'.htmlentities($item->event_name).'</strong><br>'."\n";
+						$content .= '<small class="ytc-card-body-location">'.htmlentities($item->location_name).'</small>'."\n";
+					$content .= '</div>'."\n";
+					// END 'Body // The Event'
+				$content .= '</div>'."\n";
+				// END 'text'
+			$content .= "</div>\n</a>\n</div>";
+			// END 'Wrapper' [div > a > div(ytc-card)]
 			$count++;
 			if ($count == (int)$att["count"]) break;
 		}
+		$content .= "</div>\n";
 	} else {
 		$content = "<div><p>Im Moment keine aktuellen Veranstaltungen.</p>";
 	}
-	$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p></div>";
+	$content .= "</div>";
 	return $content;
 }
 
