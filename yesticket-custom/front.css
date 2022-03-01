@@ -24,9 +24,23 @@
 	text-decoration: none !important;
 }
 
+@media (min-width:576px) {
+	.ytc-event {
+		flex: 0 0 50% !important;
+		max-width: 50% !important;
+	}
+}
+
+@media (min-width:768px) {
+	.ytc-event {
+		flex: 0 0 33.333333% !important;
+		max-width: 33.333333% !important;
+	}
+}
+
 .ytc-event {
-	flex: 0 0 33.333333%;
-	max-width: 33.333333%;
+	flex: 0 0 100%;
+	max-width: 100%;
 	padding: 0 15px .5rem 15px;
 	line-height: 1.15;
 }
