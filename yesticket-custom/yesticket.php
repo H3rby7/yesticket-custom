@@ -25,7 +25,6 @@ function YtcGetEvents($atts) {
 	$att = shortcode_atts( array(
 			'organizer' => '',
 			'key' => '',
-			'details' => 'no',
 			'type' => 'all',
 			'env' => 'prod',
 			'count' => '100',
@@ -74,40 +73,29 @@ function YtcGetEvents($atts) {
 	//////////
 
 	if ($att["theme"] == "light") {
-			$content .= "<div class='yt-light'>";
+			$content .= "<div class='ytc-light'>";
 	}
 	else if ($att["theme"] == "dark") {
-			$content .= "<div class='yt-dark'>";
+			$content .= "<div class='ytc-dark'>";
 	}
 	else {
-		$content .= "<div class='yt-default ".$att["theme"]."'>";
+		$content .= "<div class='ytc-default ".$att["theme"]."'>";
 	}
 
 	if (count($result) > 0 && $result->message != "no items found"){
 		$count = 0;
 		foreach($result as $item){
 			$addEventType = "";
-			$content .= "<div class='yt-row'>";
-			if ($att["type"]=="all") $addEventType = " <span class='yt-eventtype'>".$item->event_type."</span>";
-			$content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">Tickets '.'<img src="https://www.yesticket.org/img/YesTicket_260x260.png" height="20" width="20">'.'</a>';
-			$content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$addEventType;
-			//$content .= '<img src="https://www.yesticket.org/img/YesTicket_260x260.png" height="50" width="50">';
-			//$content .= "<a href='".$item->yesticket_booking_url."'>".$item->event_name."</a>";
-			$content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
+			if ($att["type"]=="all") $addEventType = " <span class='ytc-eventtype'>".$item->event_type."</span>";
+			$content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytc-button">';
+				$content .= "<span class='ytc-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$addEventType;
+				//$content .= '<img src="https://www.yesticket.org/img/YesTicket_260x260.png" height="50" width="50">';
+				//$content .= "<a href='".$item->yesticket_booking_url."'>".$item->event_name."</a>";
+				$content .= "<span class='ytc-eventname'>".htmlentities($item->event_name)."</span>";
 
-			$content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
-			if (!empty($item->event_urgency_string)) $content.= "<br><span class='yt-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
-			if ($att["details"] == "yes") {
-				$details = nl2br(htmlentities($item->event_description))."<br><br>";
-				if (!empty($item->event_notes_help)) $details .= "Hinweise: ".nl2br(htmlentities($item->event_notes_help))."<br><br>";
-				$details .= "Tickets:<br>".htmlentities($item->tickets)."<br><br>";
-				$details .= "Spielort:<br>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
-				$content .= "<br><details>
-								<summary><a>Details anzeigen</a></summary>
-								<p>".$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">Tickets ordern<img src="https://www.yesticket.org/img/YesTicket_260x260.png" height="20" width="20">'.'</a></div>'."
-							</details>";
-			}
-			$content .= "</div>\n";
+				$content .= "<span class='ytc-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
+				if (!empty($item->event_urgency_string)) $content.= "<br><span class='ytc-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
+			$content .= "</a>\n";
 			$count++;
 			if ($count == (int)$att["count"]) break;
 		}
@@ -126,7 +114,7 @@ function ytc_pluginpage_wp_menu(){
 
 function ytc_pluginpage_init(){
 				echo "<style>
-					.yt-code { background: #fff; padding: 10px; margin: 5px; font-family: monospace; border: 1px solid #eee; font-size: 1.1em; display: inline-block; }
+					.ytc-code { background: #fff; padding: 10px; margin: 5px; font-family: monospace; border: 1px solid #eee; font-size: 1.1em; display: inline-block; }
 					h1 { margin-top: 40px; }
 					h2 { margin-top: 30px; }
 					h3 { margin-top: 20px; font-style: italic; }
@@ -138,25 +126,22 @@ function ytc_pluginpage_init(){
 				echo "<p>Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen.</p>";
 				echo "<h2>Shortcodes für Events</h2>";
 				echo "<p>Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden: <a href='https://www.yesticket.org/login/de/integration.php#wp-plugin' target='_blank'>https://www.yesticket.org/login/de/integration.php#wp-plugin</a></p>";
-				echo '<p>Das sieht dann z.B. so aus: <span class="yt-code">[ytc_events organizer="1" key="e4761c1215ff1bd225e22add" type="all" details="no" count="5" theme="light"]</span>';
+				echo '<p>Das sieht dann z.B. so aus: <span class="ytc-code">[ytc_events organizer="1" key="e4761c1215ff1bd225e22add" type="all" details="no" count="5" theme="light"]</span>';
 				echo "<h3>Optionen für Event-Shortcodes</h3>";
 				echo "<h4>Type</h4>";
 				echo "<p class='ml-3'>Mit <b>type</b> kannst du die eine Liste deiner Auftritte, Workshops oder halt Auftritte und Workshops in einer Liste gemischt anzeigen.</p>";
-				echo '<p class="ml-3"><span class="yt-code">type="performance"</span> nur kommende Auftritte<br>';
-				echo '<span class="yt-code">type="workshop"</span> nur kommende Workshops<br>';
-				echo '<span class="yt-code">type="festivals"</span> nur kommende Festivals<br>';
-				echo '<span class="yt-code">type="all"</span> Workshops und Auftritte gemischt</p>';
+				echo '<p class="ml-3"><span class="ytc-code">type="performance"</span> nur kommende Auftritte<br>';
+				echo '<span class="ytc-code">type="workshop"</span> nur kommende Workshops<br>';
+				echo '<span class="ytc-code">type="festivals"</span> nur kommende Festivals<br>';
+				echo '<span class="ytc-code">type="all"</span> Workshops und Auftritte gemischt</p>';
 				echo "<h4>Count</h4>";
 				echo "<p class='ml-3'>Mit <b>count</b> kannst du die eine Liste begrenzen. Die eingegebene Zahl ist die Maximalzahl, sofern du so viele kommende Events angelegt hast.</p>";
-				echo '<p class="ml-3"><span class="yt-code">count="5"</span> werden maximal 5 kommende Events angezeigt</p>';
-				echo "<h4>Details</h4>";
-				echo "<p class='ml-3'>Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar.</p>";
-				echo '<p class="ml-3"><span class="yt-code">details="yes"</span> zeigt den Link zu Aufklappen und die Beschreibung an</p>';
+				echo '<p class="ml-3"><span class="ytc-code">count="5"</span> werden maximal 5 kommende Events angezeigt</p>';
 				echo "<h4>Theme</h4>";
 				echo "<p class='ml-3'>Mit <b>theme</b> kannst du die Farben deinem Layout ein wenig anpassen. Es gibt eine helle und eine dunkle Variante.</p>";
-				echo '<p class="ml-3"><span class="yt-code">theme="light"</span> Buttons sind Hellgrau und passen zu hellen Hintergründen</p>';
-				echo '<p class="ml-3"><span class="yt-code">theme="dark"</span> Buttons sind Dunkelgrau und passen zu dunklen Hintergründen</p>';
-				echo '<p class="ml-3"><span class="yt-code">theme=""</span> Wenn du theme leer angibst, dann bekommst du eine simple Formatierung und Du kannst mit CSS-Formatierungen in deinem Wordpress die Formatierung selbst überschreiben - eher so die Möglichkeit für Webdesigner.</p>';
+				echo '<p class="ml-3"><span class="ytc-code">theme="light"</span> Buttons sind Hellgrau und passen zu hellen Hintergründen</p>';
+				echo '<p class="ml-3"><span class="ytc-code">theme="dark"</span> Buttons sind Dunkelgrau und passen zu dunklen Hintergründen</p>';
+				echo '<p class="ml-3"><span class="ytc-code">theme=""</span> Wenn du theme leer angibst, dann bekommst du eine simple Formatierung und Du kannst mit CSS-Formatierungen in deinem Wordpress die Formatierung selbst überschreiben - eher so die Möglichkeit für Webdesigner.</p>';
 }
 
 ?>
