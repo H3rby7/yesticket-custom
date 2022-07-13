@@ -28,6 +28,7 @@ function YtcGetEvents($atts) {
 			'type' => 'all',
 			'env' => 'prod',
 			'count' => '100',
+			'grep' => '',
 			'theme' => 'light',
 			), $atts );
 	$content = "";
@@ -86,6 +87,12 @@ function YtcGetEvents($atts) {
 		$count = 0;
 		$content .= "<div class='ytc-container'>\n";
 		foreach($result as $item){
+			if (!empty($att["grep"])) {
+				if (!str_contains($item->event_name, $att["grep"])) {
+					// Did not find the required Substring in the event_title, skip this event
+					continue;
+				}
+			}
 			$time = strtotime($item->event_datetime);
 			$content .= '<div class="ytc-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="ytc-card">';
 				// START 'Wrapper' [div > a > div(ytc-card)]
@@ -156,6 +163,9 @@ function ytc_pluginpage_init(){
 				echo "<h4>Count</h4>";
 				echo "<p class='ml-3'>Mit <b>count</b> kannst du die eine Liste begrenzen. Die eingegebene Zahl ist die Maximalzahl, sofern du so viele kommende Events angelegt hast.</p>";
 				echo '<p class="ml-3"><span class="ytc-code">count="5"</span> werden maximal 5 kommende Events angezeigt</p>';
+				echo "<h4>Grep</h4>";
+				echo "<p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>";
+				echo '<p class="ml-3"><span class="ytc-code">grep="im Bierhaus"</span> werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "im Bierhaus" enthalten.</p>';
 				echo "<h4>Theme</h4>";
 				echo "<p class='ml-3'>Mit <b>theme</b> kannst du die Farben deinem Layout ein wenig anpassen. Es gibt eine helle und eine dunkle Variante.</p>";
 				echo '<p class="ml-3"><span class="ytc-code">theme="light"</span> Buttons sind Hellgrau und passen zu hellen Hintergründen</p>';
