@@ -4,7 +4,9 @@ Custom Version of [YesTicket's Wordpress Plugin](https://www.yesticket.org/login
 
 ## Why?
 
-Need event image in event_shortcode.
+* Need event images, when using the event_shortcode
+* Need to filter events by their name (done via str_contains())
+* Need proper styling when displaying a single event (when count="1")
 
 ## Installation
 

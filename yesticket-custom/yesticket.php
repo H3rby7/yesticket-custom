@@ -85,7 +85,11 @@ function YtcGetEvents($atts) {
 
 	if (count($result) > 0 && $result->message != "no items found"){
 		$count = 0;
-		$content .= "<div class='ytc-container'>\n";
+		if ((int)$att["count"] === 1) {
+			$content .= "<div class='ytc-single'>\n";	
+		} else {
+			$content .= "<div class='ytc-container'>\n";
+		}
 		foreach($result as $item){
 			if (!empty($att["grep"])) {
 				if (!str_contains($item->event_name, $att["grep"])) {
@@ -163,6 +167,7 @@ function ytc_pluginpage_init(){
 				echo "<h4>Count</h4>";
 				echo "<p class='ml-3'>Mit <b>count</b> kannst du die eine Liste begrenzen. Die eingegebene Zahl ist die Maximalzahl, sofern du so viele kommende Events angelegt hast.</p>";
 				echo '<p class="ml-3"><span class="ytc-code">count="5"</span> werden maximal 5 kommende Events angezeigt</p>';
+				echo '<p class="ml-3"><span class="ytc-code">count="1"</span> bekommt spezielles CSS, sodass das eine Event schön dargestellt wird.</p>';
 				echo "<h4>Grep</h4>";
 				echo "<p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>";
 				echo '<p class="ml-3"><span class="ytc-code">grep="im Bierhaus"</span> werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "im Bierhaus" enthalten.</p>';
