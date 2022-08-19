@@ -83,7 +83,7 @@ function YtcGetEvents($atts) {
 		$content .= "<div class='ytc-default ".$att["theme"]."'>";
 	}
 
-	if (count($result) > 0 && $result->message != "no items found"){
+	if (!empty($result) && $result->message != "no items found"){
 		$count = 0;
 		if ((int)$att["count"] === 1) {
 			$content .= "<div class='ytc-single'>\n";	
