@@ -25,47 +25,7 @@ if (!function_exists('is_countable')) {
     }
 }
 
-///////// YesTicket Shortcodes:
-
-function getYesTicketEvents($atts)
-{
-    $att = shortcode_atts(array(
-                    'organizer' => '',
-                    'key' => '',
-                    'details' => 'no',
-                    'type' => 'all',
-                    'env' => 'prod',
-                    'count' => '100',
-                    'theme' => 'light',
-                    ), $atts);
-    $content = "";
-    $env_add = "";
-    if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-    // Get it from API URL:
-    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
+function getData($get_url) {
     if (function_exists('curl_version')) {
         $ch = curl_init();
         $timeout = 4;
@@ -100,10 +60,56 @@ function getYesTicketEvents($atts)
         return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
     }
     $result = json_decode($get_content);
-
     //return(json_last_error());
-    //////////
+    return $result;
+}
 
+function getEventsFromApi($att) {
+    $env_add = "";
+    if ($att["env"] == 'dev') {
+        $env_add = "/dev";
+    }
+    if (empty($att["organizer"])) {
+        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
+    }
+    if (empty($att["key"])) {
+        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
+    }
+    if ($att["type"]=="Impro-Show") {
+        $att["type"] = "performance";
+    }
+    if ($att["type"]=="Auftritt") {
+        $att["type"] = "performance";
+    }
+    if ($att["type"]=="Workshop") {
+        $att["type"] = "workshop";
+    }
+    if ($att["type"]=="Festival") {
+        $att["type"] = "festival";
+    }
+    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
+        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
+    }
+    // Get it from API URL:
+    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
+    return getData($get_url);
+}
+
+///////// YesTicket Shortcodes:
+
+function getYesTicketEvents($atts)
+{
+    $att = shortcode_atts(array(
+                    'organizer' => '',
+                    'key' => '',
+                    'details' => 'no',
+                    'type' => 'all',
+                    'env' => 'prod',
+                    'count' => '100',
+                    'theme' => 'light',
+                    ), $atts);
+    $result = getEventsFromApi($att);
+    $content = "";
     if ($att["theme"] == "light") {
         $content .= "<div class='yt-light'>";
     } elseif ($att["theme"] == "dark") {
@@ -164,72 +170,8 @@ function getYesTicketEventsCards($atts) {
 			'grep' => '',
 			'theme' => 'light',
 			), $atts );
-	$content = "";
-	$env_add = "";
-	if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-	// Get it from API URL:
-	$get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
-	if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 4;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 4,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-	$result = json_decode($get_content);
-
-	//return(json_last_error());
-	//////////
-
+    $result = getEventsFromApi($att);
+    $content = "";
 	if ($att["theme"] == "light") {
 			$content .= "<div class='yt-light'>";
 	}
@@ -304,69 +246,8 @@ function getYesTicketEventsList($atts)
                     'count' => '100',
                     'theme' => 'light',
                     ), $atts);
+    $result = getEventsFromApi($att);
     $content = "";
-    $env_add = "";
-    if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-    // Get it from API URL:
-    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
-    if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 4;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 4,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-    $result = json_decode($get_content);
-    //////////
 
     if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
         $count = 0;
@@ -439,40 +320,7 @@ function getYesTicketTestimonials($atts)
     }
     // Get it from API URL:
     $get_url = "https://www.yesticket.org".$env_add."/api/testimonials-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&count=".$att["count"]."&key=".$att["key"];
-    if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 3;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 3);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 3,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-    $result = json_decode($get_content);
+    $result = getData($get_url);
     //////////
 
     if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
