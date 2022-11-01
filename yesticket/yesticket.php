@@ -516,7 +516,8 @@ function pluginpage_init()
     echo "<h1><img src='".plugin_dir_url(__FILE__) . 'img/YesTicket_logo.png'."' height='60' alt='YesTicket Logo'></h1>";
     echo "<p>YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen (Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im Inhaltsteil, in Widgets oder in was auch immer in Wordpress.</p>";
     echo "<p>Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen.</p>";
-    echo "<h2>Shortcodes für Events</h2>";
+    
+    echo "<h2>Shortcodes für deine Events als Liste</h2>";
     echo "<p>Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden: <a href='https://www.yesticket.org/login/de/integration.php#wp-plugin' target='_blank'>https://www.yesticket.org/login/de/integration.php#wp-plugin</a></p>";
     echo '<p>Das sieht dann z.B. so aus: <span class="yt-code">[yesticket_events organizer="1" key="e4761c1215ff1bd225e22add" type="all" count="5" theme="light"]</span>';
     echo "<h3>Optionen für Event-Shortcodes</h3>";
@@ -537,6 +538,30 @@ function pluginpage_init()
     echo '<p class="ml-3"><span class="yt-code">theme="light"</span> Buttons sind Hellgrau und passen zu hellen Hintergründen</p>';
     echo '<p class="ml-3"><span class="yt-code">theme="dark"</span> Buttons sind Dunkelgrau und passen zu dunklen Hintergründen</p>';
     echo '<p class="ml-3"><span class="yt-code">theme=""</span> Wenn du theme leer angibst, dann bekommst du eine simple Formatierung und Du kannst mit CSS-Formatierungen in deinem Wordpress die Formatierung selbst überschreiben - eher so die Möglichkeit für Webdesigner.</p>';
+
+    echo "<h2>Shortcodes für deine Events als Kacheln bzw. Cards</h2>";
+    echo "<p>Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden: <a href='https://www.yesticket.org/login/de/integration.php#wp-plugin' target='_blank'>https://www.yesticket.org/login/de/integration.php#wp-plugin</a></p>";
+    echo '<p>Das sieht dann z.B. so aus: <span class="yt-code">[yesticket_events_cards organizer="1" key="e4761c1215ff1bd225e22add" type="all" details="no" count="5" theme="light"]</span>';
+    echo "<h3>Optionen für Event-Shortcodes</h3>";
+    echo "<h4>Type</h4>";
+    echo "<p class='ml-3'>Mit <b>type</b> kannst du die eine Liste deiner Auftritte, Workshops oder halt Auftritte und Workshops in einer Liste gemischt anzeigen.</p>";
+    echo '<p class="ml-3"><span class="yt-code">type="performance"</span> nur kommende Auftritte<br>';
+    echo '<span class="yt-code">type="workshop"</span> nur kommende Workshops<br>';
+    echo '<span class="yt-code">type="festivals"</span> nur kommende Festivals<br>';
+    echo '<span class="yt-code">type="all"</span> Workshops und Auftritte gemischt</p>';
+    echo "<h4>Count</h4>";
+    echo "<p class='ml-3'>Mit <b>count</b> kannst du die eine Liste begrenzen. Die eingegebene Zahl ist die Maximalzahl, sofern du so viele kommende Events angelegt hast.</p>";
+    echo '<p class="ml-3"><span class="yt-code">count="5"</span> werden maximal 5 kommende Events angezeigt</p>';
+    echo '<p class="ml-3"><span class="yt-code">count="1"</span> bekommt spezielles CSS, sodass das eine Event schön dargestellt wird.</p>';
+    echo "<h4>Grep</h4>";
+    echo "<p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>";
+    echo '<p class="ml-3"><span class="yt-code">grep="im Bierhaus"</span> werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "im Bierhaus" enthalten.</p>';
+    echo "<h4>Theme</h4>";
+    echo "<p class='ml-3'>Mit <b>theme</b> kannst du die Farben deinem Layout ein wenig anpassen. Es gibt eine helle und eine dunkle Variante.</p>";
+    echo '<p class="ml-3"><span class="yt-code">theme="light"</span> Buttons sind Hellgrau und passen zu hellen Hintergründen</p>';
+    echo '<p class="ml-3"><span class="yt-code">theme="dark"</span> Buttons sind Dunkelgrau und passen zu dunklen Hintergründen</p>';
+    echo '<p class="ml-3"><span class="yt-code">theme=""</span> Wenn du theme leer angibst, dann bekommst du eine simple Formatierung und Du kannst mit CSS-Formatierungen in deinem Wordpress die Formatierung selbst überschreiben - eher so die Möglichkeit für Webdesigner.</p>';
+    
     echo "<h2>Shortcodes für Zuschauerstimmen</h2>";
     echo "<p>Du benötigst für deine Testimonials die gleichen 2 Dinge wie oben: deine persönliche <b>Organizer-ID</b> und deinen dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Marketing > YesTicket einfach einbinden: <a href='https://www.yesticket.org/login/de/integration.php#wp-plugin' target='_blank'>https://www.yesticket.org/login/de/integration.php#wp-plugin</a></p>";
     echo '<p>Das sieht dann z.B. so aus: <span class="yt-code">[yesticket_testimonials organizer="1" key="e4361c1215ff1bd225e22add" count="30"]</span></p>';
