@@ -1,0 +1,141 @@
+.yt-testimonial-row {
+    padding-bottom: 20px;
+}
+.yt-testimonial-text {
+    font-size: 1em; 
+	font-weight: 700;
+}
+.yt-testimonial-source {
+   	font-size: 0.8em;
+	text-transform: uppercase;
+	margin-left: 20px;
+}
+.yt-testimonial-date {
+   	font-size: 0.8em;
+	text-transform: lowercase;
+	font-style: italic;
+	margin-left: 3px;
+}
+.yt-row-list {
+    padding-bottom: 20px;
+}
+
+.yt-row {
+    padding-bottom: 20px;
+}
+.yt-eventname {
+	font-size: 1.3em;
+	line-height: 1.2;
+	font-weight: 700;
+	display: block;
+	margin: 0 0 5px 0;
+}
+.yt-eventdate {
+	font-size: 1em;
+	margin-right: 10px;
+}
+.yt-eventtype {
+	font-size: 1em;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+.yt-urgency {
+	font-size: 0.7em;
+	font-weight: 700;
+	background-color: rgba(0,0,0,0.1);
+	padding: 3px 5px;
+}
+.yt-location {
+	font-size: 0.8em;
+}
+.yt-button {
+	float: right;
+	padding: 7px 15px; 
+	margin: 0 0 0 30px;
+	font-weight: 700;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.yt-button-row {
+    padding: 10px;
+    text-align: center;
+}
+.yt-button-big {
+	margin: 10px 0 25px 18px;
+	display: block;
+	text-align: center;
+	font-size: 1em;
+	padding: 10px 20px;
+	font-weight: 700;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.yt-button img, .yt-button-big img {
+	position: relative;
+	top: -2px;
+	right: -5px;
+}
+details {
+	font-size: 1em;
+	margin: 5px 0 10px 0;
+}
+details p {
+	margin: 15px 0 5px 18px;
+}
+
+/* Light Theme */
+
+.yt-light .yt-button {
+	color: #000;
+	background: #eee; 
+	border: 1px solid #fff;
+	transition: background-color 300ms ease-out;
+}
+.yt-light .yt-button:hover, .yt-light .yt-button:active, .yt-light .yt-button:focus,
+.yt-light .yt-button-big:hover, .yt-light .yt-button-big:active, .yt-light .yt-button-big:focus {
+	background-color: #e3e3e3;
+	color: #000;
+}
+.yt-light .yt-button-row {
+	border-bottom: 1px solid #eee;
+}
+.yt-light .yt-button-big {
+	color: #000;
+	background-color: #eee;
+	transition: background-color 300ms ease-out;
+	border: 1px solid #fff;
+}
+.yt-light .yt-urgency {
+	background-color: #eee;
+	border: 1px solid #fff;
+}
+
+/* Dark Theme */
+
+.yt-dark .yt-button {
+	color: #fff;
+	background: #666; 
+	border: 1px solid #333;
+	transition: background-color 300ms ease-out;
+}
+.yt-dark .yt-button:hover, .yt-dark .yt-button:active, .yt-dark .yt-button:focus,
+.yt-dark .yt-button-big:hover, .yt-dark .yt-button-big:active, .yt-dark .yt-button-big:focus {
+	background-color: #777;
+	color: #fff;
+}
+.yt-dark .yt-button-row {
+	border-bottom: 1px solid #333;
+}
+.yt-dark .yt-button-big {
+	color: #fff;
+	background-color: #666;
+	transition: background-color 300ms ease-out;
+	border: 1px solid #333;
+}
+.yt-dark .yt-urgency {
+	color: #fff;
+	background-color: #666;
+	border: 1px solid #333;
+}
+
