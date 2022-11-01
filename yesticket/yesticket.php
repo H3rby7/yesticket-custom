@@ -25,6 +25,69 @@ if (!function_exists('is_countable')) {
     }
 }
 
+function getData($get_url) {
+    if (function_exists('curl_version')) {
+        $ch = curl_init();
+        $timeout = 4;
+        curl_setopt($ch, CURLOPT_URL, $get_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $get_content = curl_exec($ch);
+        curl_close($ch);
+    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
+        ini_set('default_socket_timeout', 4);
+        $ctx = stream_context_create(array('http'=>
+        array(
+        'timeout' => 4,  //5 seconds
+        )
+        ));
+        $get_content = file_get_contents($get_url, 0, $ctx);
+    } else {
+        throw new Exception('Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.');
+    }
+    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
+        // in Case of a CURL-error
+        ini_set('default_socket_timeout', 4);
+        $ctx = stream_context_create(array('http'=>
+            array(
+            'timeout' => 4,  //5 seconds
+            )
+            ));
+        $get_content = file_get_contents($get_url, 0, $ctx);
+    }
+    if (empty($get_content)) {
+        throw new RuntimeException("Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.");
+    }
+    $result = json_decode($get_content);
+    //return(json_last_error());
+    return $result;
+}
+
+function validateArguments($att) {
+    if (empty($att["organizer"])) {
+        throw new InvalidArgumentException("Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.");
+    }
+    if (empty($att["key"])) {
+        throw new InvalidArgumentException("Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.");
+    }
+    if (!empty($att["type"]) and $att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
+        throw new InvalidArgumentException("Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an.");
+    }
+    return true;
+}
+
+function getEventsFromApi($att) {
+    $env_add = "";
+    if ($att["env"] == 'dev') {
+        $env_add = "/dev";
+    }
+    validateArguments($att);
+    // Get it from API URL:
+    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
+    return getData($get_url);
+}
+
 ///////// YesTicket Shortcodes:
 
 function getYesTicketEvents($atts)
@@ -39,117 +102,57 @@ function getYesTicketEvents($atts)
                     'theme' => 'light',
                     ), $atts);
     $content = "";
-    $env_add = "";
-    if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-    // Get it from API URL:
-    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
-    if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 4;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 4,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-    $result = json_decode($get_content);
-
-    //return(json_last_error());
-    //////////
-
-    if ($att["theme"] == "light") {
-        $content .= "<div class='yt-light'>";
-    } elseif ($att["theme"] == "dark") {
-        $content .= "<div class='yt-dark'>";
-    } else {
-        $content .= "<div class='yt-default ".$att["theme"]."'>";
-    }
-
-    if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-        $count = 0;
-        foreach ($result as $item) {
-            $add = "";
-            $content .= "<div class='yt-row'>";
-            if ($att["type"]=="all") {
-                $add = " <span class='yt-eventtype'>".$item->event_type."</span>";
-            }
-            $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">Tickets '.'<img src="'.plugin_dir_url(__FILE__) .'img/YesTicket_260x260.png" height="20" width="20">'.'</a>';
-            $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add;
-            $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
-
-            $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
-            if (!empty($item->event_urgency_string)) {
-                $content.= "<br><span class='yt-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
-            }
-            if ($att["details"] == "yes") {
-                $details = nl2br(htmlentities($item->event_description))."<br><br>";
-                if (!empty($item->event_notes_help)) {
-                    $details .= "Hinweise: ".nl2br(htmlentities($item->event_notes_help))."<br><br>";
-                }
-                $details .= "Tickets:<br>".htmlentities($item->tickets)."<br><br>";
-                $details .= "Spielort:<br>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
-                $content .= "<br><details>
-                              <summary><u>Details anzeigen</u></summary>
-                              <p>".$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">Tickets ordern<img src="'.plugin_dir_url(__FILE__) . 'img/YesTicket_260x260.png'.'" height="20" width="20">'.'</a></div>'."
-                            </details>";
-            }
-            $content .= "</div>\n";
-            $count++;
-            if ($count == (int)$att["count"]) {
-                break;
-            }
+    try {
+        $result = getEventsFromApi($att);
+        if ($att["theme"] == "light") {
+            $content .= "<div class='yt-light'>";
+        } elseif ($att["theme"] == "dark") {
+            $content .= "<div class='yt-dark'>";
+        } else {
+            $content .= "<div class='yt-default ".$att["theme"]."'>";
         }
-    } else {
-        $content = "<div><p>Im Moment keine aktuellen Veranstaltungen.</p>";
+        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
+            $count = 0;
+            foreach ($result as $item) {
+                $add = "";
+                $content .= "<div class='yt-row'>";
+                if ($att["type"]=="all") {
+                    $add = " <span class='yt-eventtype'>".$item->event_type."</span>";
+                }
+                $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">Tickets '.'<img src="'.plugin_dir_url(__FILE__) .'img/YesTicket_260x260.png" height="20" width="20">'.'</a>';
+                $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add;
+                $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
+    
+                $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
+                if (!empty($item->event_urgency_string)) {
+                    $content.= "<br><span class='yt-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
+                }
+                if ($att["details"] == "yes") {
+                    $details = nl2br(htmlentities($item->event_description))."<br><br>";
+                    if (!empty($item->event_notes_help)) {
+                        $details .= "Hinweise: ".nl2br(htmlentities($item->event_notes_help))."<br><br>";
+                    }
+                    $details .= "Tickets:<br>".htmlentities($item->tickets)."<br><br>";
+                    $details .= "Spielort:<br>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
+                    $content .= "<br><details>
+                                  <summary><u>Details anzeigen</u></summary>
+                                  <p>".$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">Tickets ordern<img src="'.plugin_dir_url(__FILE__) . 'img/YesTicket_260x260.png'.'" height="20" width="20">'.'</a></div>'."
+                                </details>";
+                }
+                $content .= "</div>\n";
+                $count++;
+                if ($count == (int)$att["count"]) {
+                    break;
+                }
+            }
+        } else {
+            $content = "<p>Im Moment keine aktuellen Veranstaltungen.</p>";
+        }
+        //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
+        $content .= "</div>";
+    } catch (Exception $e) {
+        $content .= $e->getMessage();
     }
-    //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p></div>";
     return $content;
 }
 
@@ -164,133 +167,73 @@ function getYesTicketEventsCards($atts) {
 			'grep' => '',
 			'theme' => 'light',
 			), $atts );
-	$content = "";
-	$env_add = "";
-	if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-	// Get it from API URL:
-	$get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
-	if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 4;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 4,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-	$result = json_decode($get_content);
+    try {
+        $result = getEventsFromApi($att);
+        $content = "";
+        if ($att["theme"] == "light") {
+                $content .= "<div class='yt-light'>";
+        }
+        else if ($att["theme"] == "dark") {
+                $content .= "<div class='yt-dark'>";
+        }
+        else {
+            $content .= "<div class='yt-default ".$att["theme"]."'>";
+        }
 
-	//return(json_last_error());
-	//////////
-
-	if ($att["theme"] == "light") {
-			$content .= "<div class='yt-light'>";
-	}
-	else if ($att["theme"] == "dark") {
-			$content .= "<div class='yt-dark'>";
-	}
-	else {
-		$content .= "<div class='yt-default ".$att["theme"]."'>";
-	}
-
-	if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-		$count = 0;
-		if ((int)$att["count"] === 1) {
-			$content .= "<div class='yt-single'>\n";
-		} else {
-			$content .= "<div class='yt-container'>\n";
-		}
-		foreach($result as $item){
-			if (!empty($att["grep"])) {
-				if (!str_contains($item->event_name, $att["grep"])) {
-					// Did not find the required Substring in the event_title, skip this event
-					continue;
-				}
-			}
-			$time = strtotime($item->event_datetime);
-			$content .= '<div class="yt-card-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="yt-card">';
-				// START 'Wrapper' [div > a > div(yt-card)]
-				// START 'img'
-				$content .= '<div class="yt-card-image-wrapper">'."\n";
-					$content .= '<img src="'.$item->event_picture_url.'" alt="Eventbild">'."\n";
-				$content .= '</div>'."\n";
-				// END 'img'
-				// START 'text'
-				$content .= '<div class="yt-card-text-wrapper">'."\n";
-					// START 'DATE'
-					$content .= '<div class="yt-card-date">'."\n";
-						$content .= '<span class="yt-card-month">'.date('M', $time).'</span><br>'."\n";
-						$content .= '<strong class="yt-card-day">'.date('d', $time).'</strong><br>'."\n";
-						$content .= '<span class="yt-card-year">'.date('Y', $time).'</span>'."\n";
-					$content .= '</div>'."\n";
-					// END 'DATE'
-					// START 'Body // The Event'
-					$content .= '<div class="yt-card-body">'."\n";
-						$content .= '<span class="yt-card-body-organizer">'.htmlentities($item->organizer_name).'</span><br>'."\n";
-						$content .= '<strong class="yt-card-body-title">'.htmlentities($item->event_name).'</strong><br>'."\n";
-						$content .= '<small class="yt-card-body-location">'.htmlentities($item->location_name).'</small>'."\n";
-					$content .= '</div>'."\n";
-					// END 'Body // The Event'
-				$content .= '</div>'."\n";
-				// END 'text'
-			$content .= "</div>\n</a>\n</div>";
-			// END 'Wrapper' [div > a > div(yt-card)]
-			$count++;
-			if ($count == (int)$att["count"]) break;
-		}
-		$content .= "</div>\n";
-	} else {
-		$content = "<div><p>Im Moment keine aktuellen Veranstaltungen.</p>";
-	}
-	$content .= "</div>";
-	return $content;
+        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
+            $count = 0;
+            if ((int)$att["count"] === 1) {
+                $content .= "<div class='yt-single'>\n";
+            } else {
+                $content .= "<div class='yt-container'>\n";
+            }
+            foreach($result as $item){
+                if (!empty($att["grep"])) {
+                    if (!str_contains($item->event_name, $att["grep"])) {
+                        // Did not find the required Substring in the event_title, skip this event
+                        continue;
+                    }
+                }
+                $time = strtotime($item->event_datetime);
+                $content .= '<div class="yt-card-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="yt-card">';
+                    // START 'Wrapper' [div > a > div(yt-card)]
+                    // START 'img'
+                    $content .= '<div class="yt-card-image-wrapper">'."\n";
+                        $content .= '<img src="'.$item->event_picture_url.'" alt="Eventbild">'."\n";
+                    $content .= '</div>'."\n";
+                    // END 'img'
+                    // START 'text'
+                    $content .= '<div class="yt-card-text-wrapper">'."\n";
+                        // START 'DATE'
+                        $content .= '<div class="yt-card-date">'."\n";
+                            $content .= '<span class="yt-card-month">'.date('M', $time).'</span><br>'."\n";
+                            $content .= '<strong class="yt-card-day">'.date('d', $time).'</strong><br>'."\n";
+                            $content .= '<span class="yt-card-year">'.date('Y', $time).'</span>'."\n";
+                        $content .= '</div>'."\n";
+                        // END 'DATE'
+                        // START 'Body // The Event'
+                        $content .= '<div class="yt-card-body">'."\n";
+                            $content .= '<span class="yt-card-body-organizer">'.htmlentities($item->organizer_name).'</span><br>'."\n";
+                            $content .= '<strong class="yt-card-body-title">'.htmlentities($item->event_name).'</strong><br>'."\n";
+                            $content .= '<small class="yt-card-body-location">'.htmlentities($item->location_name).'</small>'."\n";
+                        $content .= '</div>'."\n";
+                        // END 'Body // The Event'
+                    $content .= '</div>'."\n";
+                    // END 'text'
+                $content .= "</div>\n</a>\n</div>";
+                // END 'Wrapper' [div > a > div(yt-card)]
+                $count++;
+                if ($count == (int)$att["count"]) break;
+            }
+            $content .= "</div>\n";
+        } else {
+            $content = "<p>Im Moment keine aktuellen Veranstaltungen.</p>";
+        }
+        $content .= "</div>";
+    } catch (Exception $e) {
+        $content .= $e->getMessage();
+    }
+    return $content;
 }
 
 function getYesTicketEventsList($atts)
@@ -304,95 +247,39 @@ function getYesTicketEventsList($atts)
                     'count' => '100',
                     'theme' => 'light',
                     ), $atts);
-    $content = "";
-    $env_add = "";
-    if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-    // Get it from API URL:
-    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
-    if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 4;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 4,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-    $result = json_decode($get_content);
-    //////////
+    try {
+        $result = getEventsFromApi($att);
+        $content = "";
 
-    if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-        $count = 0;
-        foreach ($result as $item) {
-            $add = "";
-            $content .= "<div class='yt-row-list'>";
-            if ($att["type"]=="all") {
-                $add = "<br><span class='yt-eventtype'>".$item->event_type."</span>";
-            }
-            $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";
-            $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
+        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
+            $count = 0;
+            foreach ($result as $item) {
+                $add = "";
+                $content .= "<div class='yt-row-list'>";
+                if ($att["type"]=="all") {
+                    $add = "<br><span class='yt-eventtype'>".$item->event_type."</span>";
+                }
+                $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";
+                $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
 
-            $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
-            if ($att["ticketlink"]=="yes") {
-                $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
+                $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
+                if ($att["ticketlink"]=="yes") {
+                    $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
+                }
+                $content .= "</div>\n";
+                $count++;
+                if ($count == (int)$att["count"]) {
+                    break;
+                }
             }
-            $content .= "</div>\n";
-            $count++;
-            if ($count == (int)$att["count"]) {
-                break;
-            }
+        } else {
+            $content = "<div><p>Im Moment keine aktuellen Veranstaltungen.</p>";
         }
-    } else {
-        $content = "<div><p>Im Moment keine aktuellen Veranstaltungen.</p>";
+        //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
+        $content .= "</div>";
+    } catch (Exception $e) {
+        $content .= $e->getMessage();
     }
-    //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
     return $content;
 }
 
@@ -412,81 +299,28 @@ function getYesTicketTestimonials($atts)
     if ($att["env"] == 'dev') {
         $env_add = "/dev";
     }
-    if (empty($att["organizer"])) {
-        return "FEHLER: Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    if (empty($att["key"])) {
-        return "FEHLER: Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.";
-    }
-    $att["count"] = intval($att["count"]);
-    if (empty($att["count"])) {
-        $att["count"] = 3;
-    }
-    if ($att["type"]=="Impro-Show") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Auftritt") {
-        $att["type"] = "performance";
-    }
-    if ($att["type"]=="Workshop") {
-        $att["type"] = "workshop";
-    }
-    if ($att["type"]=="Festival") {
-        $att["type"] = "festival";
-    }
-    if ($att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-        return "FEHLER: Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an";
-    }
-    // Get it from API URL:
-    $get_url = "https://www.yesticket.org".$env_add."/api/testimonials-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&count=".$att["count"]."&key=".$att["key"];
-    if (function_exists('curl_version')) {
-        $ch = curl_init();
-        $timeout = 3;
-        curl_setopt($ch, CURLOPT_URL, $get_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $get_content = curl_exec($ch);
-        curl_close($ch);
-    } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        ini_set('default_socket_timeout', 3);
-        $ctx = stream_context_create(array('http'=>
-        array(
-        'timeout' => 3,  //5 seconds
-        )
-        ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    } else {
-        return 'Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.';
-    }
-    if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-        // in Case of a CURL-error
-        ini_set('default_socket_timeout', 4);
-        $ctx = stream_context_create(array('http'=>
-            array(
-            'timeout' => 4,  //5 seconds
-            )
-            ));
-        $get_content = file_get_contents($get_url, 0, $ctx);
-    }
-    if (empty($get_content)) {
-        return "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.";
-    }
-    $result = json_decode($get_content);
-    //////////
+    try {
+        validateArguments($att);
+        // Get it from API URL:
+        $get_url = "https://www.yesticket.org".$env_add."/api/testimonials-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&count=".$att["count"]."&key=".$att["key"];
+        $result = getData($get_url);
+        //////////
 
-    if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-        foreach ($result as $item) {
-            $add = "";
-            $content .= "<div class='yt-testimonial-row'>";
-            if (!empty($item->event_name) && $att["details"] == "yes") {
-                $add_event = "<br><span class='yt-testimonial-source'>über ".htmlentities($item->event_name)."</span>";
+        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
+            foreach ($result as $item) {
+                $add = "";
+                $content .= "<div class='yt-testimonial-row'>";
+                if (!empty($item->event_name) && $att["details"] == "yes") {
+                    $add_event = "<br><span class='yt-testimonial-source'>über ".htmlentities($item->event_name)."</span>";
+                }
+                $content .= "<span class='yt-testimonial-text'>&raquo;".htmlentities($item->text).'&laquo;</span><br>'."<span class='yt-testimonial-source'>".htmlentities($item->source).' '."</span> <span class='yt-testimonial-date'>Am ".htmlentities(date('d.m.Y', strtotime($item->date)))."</span>".$add_event;
+                $content .= "</div>\n";
             }
-            $content .= "<span class='yt-testimonial-text'>&raquo;".htmlentities($item->text).'&laquo;</span><br>'."<span class='yt-testimonial-source'>".htmlentities($item->source).' '."</span> <span class='yt-testimonial-date'>Am ".htmlentities(date('d.m.Y', strtotime($item->date)))."</span>".$add_event;
-            $content .= "</div>\n";
+        } else {
+            $content = "";
         }
-    } else {
-        $content = "";
+    } catch (Exception $e) {
+        $content .= $e->getMessage();
     }
     return $content;
 }
