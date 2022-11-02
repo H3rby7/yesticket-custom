@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  wordpress_phpunit:
+    image: "chriszarate/wordpress-phpunit:6.0.6"
+    volumes:
+      - "./yesticket/:/app"
+      - "./bin/:/mount/bin"
+      - "testsuite:/tmp"
+  mysql_phpunit:
+    image: "mariadb:10.2"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "wordpress_test"
+      MYSQL_ROOT_PASSWORD: "test"
+
+volumes:
+  testsuite: {}

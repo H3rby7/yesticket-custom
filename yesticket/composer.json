@@ -1,0 +1,12 @@
+{
+    "name": "root/app",
+    "type": "wp-plugin",
+    "require": {},
+    "require-dev": {
+        "yoast/phpunit-polyfills": "^1.0"
+    },
+    "config": {
+        "discard-changes": true,
+        "vendor-dir": "/tmp/vendor"
+    }
+}

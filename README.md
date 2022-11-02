@@ -80,8 +80,29 @@ Setup will run on [http://127.0.0.1](http://127.0.0.1).
 
     docker-compose up
 
-*Not that wp-cli will crash until you finish the WP installation*
+*Note that wp-cli will crash until you finish the WP installation*
+*Might need to add '--force-recreate'*
 
 ## Stop
 
     docker-compose stop
+
+## Testing
+
+Credits to https://github.com/chriszarate/docker-compose-wordpress
+
+### Setup Tests
+
+Make sure the scripts in `bin` have `LF` line-endings!
+
+    docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /mount/bin/install-wp-tests.sh wordpress_test root test mysql_phpunit latest true
+
+### Running Tests
+
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit [args...]
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit tests
+
+### Stop Test Container
+
+    docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml stop
