@@ -10,7 +10,7 @@ Custom Version of [YesTicket's Wordpress Plugin](https://www.yesticket.org/login
 
 ## Installation
 
-Zip all files inside the `yesticket-custom` folder. (The resulting ZIP should contain the files directly)
+Zip all files inside the `yesticket` folder. (The resulting ZIP should contain the files directly)
 
 Then follow along with the original's install instructions, just use our own freshly packed ZIP as basis.
 
@@ -69,3 +69,19 @@ URL: https://www.yesticket.org/api/events-endpoint.php?organizer=<ORGID>&type=al
   ...
 ]
 ```
+
+# Development Environment
+
+Credits to https://github.com/nezhar/wordpress-docker-compose
+
+Setup will run on [http://127.0.0.1](http://127.0.0.1).
+
+## Run
+
+    docker-compose up
+
+*Not that wp-cli will crash until you finish the WP installation*
+
+## Stop
+
+    docker-compose stop
