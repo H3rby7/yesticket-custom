@@ -10,13 +10,13 @@
 * Text Domain: yesticket
 */
 
-function my_styles()
+function yesticket_styles()
 {
     wp_enqueue_style('yesticket', plugins_url('front.css', __FILE__), false, 'all');
     // wp_enqueue_script('yesticket', plugins_url('front.js', __FILE__));
 }
 
-add_action('wp_enqueue_scripts', 'my_styles');
+add_action('wp_enqueue_scripts', 'yesticket_styles');
 
 if (!function_exists('is_countable')) {
     function is_countable($var)
@@ -331,14 +331,14 @@ add_shortcode('yesticket_events_list', 'getYesTicketEventsList');
 add_shortcode('yesticket_testimonials', 'getYesTicketTestimonials');
 
 // WP Backend Plugin Page
-add_action('admin_menu', 'pluginpage_wp_menu');
+add_action('admin_menu', 'yesticket_pluginpage_wp_menu');
 
-function pluginpage_wp_menu()
+function yesticket_pluginpage_wp_menu()
 {
-    add_menu_page('YesTicket', 'YesTicket', 'manage_options', 'yesticket-plugin', 'pluginpage_init', plugin_dir_url(__FILE__) . 'img/yesticket-logo.png');
+    add_menu_page('YesTicket', 'YesTicket', 'manage_options', 'yesticket-plugin', 'yesticket_pluginpage_init', plugin_dir_url(__FILE__) . 'img/yesticket-logo.png');
 }
 
-function pluginpage_init()
+function yesticket_pluginpage_init()
 {
     echo "<style>
                   .yt-code { background: #fff; padding: 10px; margin: 5px; font-family: monospace; border: 1px solid #eee; font-size: 1.1em; display: inline-block; }
