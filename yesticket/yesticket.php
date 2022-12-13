@@ -25,10 +25,13 @@ if (!function_exists('is_countable')) {
     }
 }
 
+// add_option('yesticket_cache_time_in_minutes', 60);
+// add_option('yesticket_transient_keys', array());
+
 function getDataCached($get_url) {
     // TODO: make this an option on the Plugin page?
     // TODO: add an 'empty cache' button on the plugin page?
-    $CACHE_TIME_IN_MINUTES = 60;
+    $CACHE_TIME_IN_MINUTES = get_option('yesticket_cache_time_in_minutes', 60);
     $CACHE_KEY = cacheKey($get_url);
 
     // check if we have cached information
@@ -36,7 +39,9 @@ function getDataCached($get_url) {
     if( false === $data ) {
         // Cache not present, we make the API call
         $data = getData($get_url);
-        set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES*60 );
+        set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS );
+        // save cache key to options, so we can delete the transient, if necessary
+        addCacheKeyToOptions($CACHE_KEY);
     }
     // at this time we have our data, either from cache or after an API call.
     return $data;
@@ -44,7 +49,16 @@ function getDataCached($get_url) {
 
 function cacheKey($get_url) {
     // common key specific to yesticket to set and retrieve WP_TRANSIENTS
-    return md5('yesticket_' . $get_url);
+    return 'yesticket_' . md5($get_url);
+}
+
+function addCacheKeyToOptions($CACHE_KEY) {
+    $cacheKeys = get_option('yesticket_transient_keys', array());
+    if (!in_array($CACHE_KEY, $cacheKeys)) {
+        // unknown cache key, add to known keys
+        $cacheKeys[] = $CACHE_KEY;
+        update_option('yesticket_transient_keys', $cacheKeys);
+    }
 }
 
 function getData($get_url) {
@@ -352,6 +366,9 @@ add_shortcode('yesticket_events_cards', 'getYesTicketEventsCards');
 add_shortcode('yesticket_events_list', 'getYesTicketEventsList');
 add_shortcode('yesticket_testimonials', 'getYesTicketTestimonials');
 
+add_option('yesticket_cache_time_in_minutes', 60);
+add_option('yesticket_transient_keys', array());
+
 // WP Backend Plugin Page
 add_action('admin_menu', 'yesticket_pluginpage_wp_menu');
 
@@ -369,6 +386,7 @@ function yesticket_pluginpage_init()
                   h3 { margin-top: 20px; font-style: italic; }
                   .ml-3 { margin-left: 30px; }
                 </style>";
+    echoDebugInformation();
     echo "<h1><img src='".plugin_dir_url(__FILE__) . 'img/YesTicket_logo.png'."' height='60' alt='YesTicket Logo'></h1>";
     echo "<p>YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen (Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im Inhaltsteil, in Widgets oder in was auch immer in Wordpress.</p>";
     echo "<p>Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen.</p>";
@@ -425,4 +443,15 @@ function yesticket_pluginpage_init()
     echo "<h4>Count</h4>";
     echo "<p class='ml-3'>Mit <b>count</b> kannst du die eine Liste begrenzen. Die eingegebene Zahl ist die Maximalzahl, sofern du so viele kommende Events angelegt hast.</p>";
     echo '<p class="ml-3"><span class="yt-code">count="5"</span> werden maximal 5 kommende Events angezeigt</p>';
+}
+
+function echoDebugInformation() {
+    echo '<h1>DEBUG INFO</h1>';
+    echo '<p>Configured cache timout is ' . get_option('yesticket_cache_time_in_minutes') . ' minutes</p>';
+    $cacheKeys = get_option('yesticket_transient_keys');
+    echo '<p>Active Caches</p><ul>';
+    foreach($cacheKeys as $k) {
+        echo '<li>' . $k . '</li>';
+    }
+    echo '</ul>';
 }
