@@ -25,6 +25,28 @@ if (!function_exists('is_countable')) {
     }
 }
 
+function getDataCached($get_url) {
+    // TODO: make this an option on the Plugin page?
+    // TODO: add an 'empty cache' button on the plugin page?
+    $CACHE_TIME_IN_MINUTES = 60;
+    $CACHE_KEY = cacheKey($get_url);
+
+    // check if we have cached information
+    $data = get_transient($CACHE_KEY);
+    if( false === $data ) {
+        // Cache not present, we make the API call
+        $data = getData($get_url);
+        set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES*60 );
+    }
+    // at this time we have our data, either from cache or after an API call.
+    return $data;
+}
+
+function cacheKey($get_url) {
+    // common key specific to yesticket to set and retrieve WP_TRANSIENTS
+    return md5('yesticket_' . $get_url);
+}
+
 function getData($get_url) {
     if (function_exists('curl_version')) {
         $ch = curl_init();
@@ -85,7 +107,7 @@ function getEventsFromApi($att) {
     validateArguments($att);
     // Get it from API URL:
     $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
-    return getData($get_url);
+    return getDataCached($get_url);
 }
 
 ///////// YesTicket Shortcodes:
@@ -303,7 +325,7 @@ function getYesTicketTestimonials($atts)
         validateArguments($att);
         // Get it from API URL:
         $get_url = "https://www.yesticket.org".$env_add."/api/testimonials-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&count=".$att["count"]."&key=".$att["key"];
-        $result = getData($get_url);
+        $result = getDataCached($get_url);
         //////////
 
         if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
