@@ -1,5 +1,6 @@
 <?php
 
+include_once("yesticket_options_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
@@ -52,5 +53,14 @@ function getYesTicketEventsList($atts)
     return $content;
 }
 
+function render_yesTicketEventsListHelp() {?>
+    <h2>Shortcodes für deine Events als Liste</h2>
+    <p>Schnellstart: <span class="yt-code">[yesticket_events_list type="all" count="3" theme="light"]</span>
+    <h3>Optionen für Event-List-Shortcodes</h3>
+    <?php 
+    echo render_optionType('Events');
+    echo render_optionCount();
+    echo render_optionTheme();
+}
 
 ?>

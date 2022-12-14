@@ -1,5 +1,6 @@
 <?php
 
+include_once("yesticket_options_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
@@ -52,5 +53,15 @@ function getYesTicketTestimonials($atts)
         $content .= __($e->getMessage(), 'yesticket');
     }
     return $content;
+}
+
+function render_yesTicketTestimonialsHelp() {?>
+    <h2>Shortcodes für Zuschauerstimmen</h2>
+    <p>Schnellstart: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
+    <h3>Optionen für Testimonial-Shortcodes</h3>
+    <?php 
+    echo render_optionType('Testimonials');
+    echo render_optionCount();
+    echo render_optionTheme();
 }
 ?>

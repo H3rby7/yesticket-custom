@@ -1,5 +1,6 @@
 <?php
 
+include_once("yesticket_options_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
@@ -85,4 +86,16 @@ function getYesTicketEventsCards($atts) {
     return $content;
 }
 
-?>
+function render_yesTicketEventsCardsHelp() {?>
+    <h2>Shortcodes für deine Events als Kacheln bzw. Cards</h2>
+    <p>Schnellstart: <span class="yt-code">[yesticket_events_cards type="all" count="3" theme="light"]</span>
+    <h3>Optionen für Event-Card-Shortcodes</h3>
+    <?php 
+    echo render_optionType('Events');
+    echo render_optionCount();
+    echo render_optionTheme();
+    ?>
+    <h4>Grep</h4>
+    <p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>
+    <p class="ml-3"><span class="yt-code">grep="im Bierhaus"</span> werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "im Bierhaus" enthalten.</p>
+<?php } ?>

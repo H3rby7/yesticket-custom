@@ -19,4 +19,8 @@ function addCacheKeyToOptions($CACHE_KEY) {
       update_option('yesticket_transient_keys', $cacheKeys);
   }
 }
+
+function getYesTicketLogoUrl() {
+  return plugin_dir_url(__FILE__).'img/YesTicket_260x260.png';
+}
 ?>
