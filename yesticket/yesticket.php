@@ -29,8 +29,6 @@ if (!function_exists('is_countable')) {
 // add_option('yesticket_transient_keys', array());
 
 function getDataCached($get_url) {
-    // TODO: make this an option on the Plugin page?
-    // TODO: add an 'empty cache' button on the plugin page?
     $options = get_option('yesticket_settings');
     $CACHE_TIME_IN_MINUTES = $options['cache_time_in_minutes'];
     $CACHE_KEY = cacheKey($get_url);
@@ -101,12 +99,13 @@ function getData($get_url) {
     return $result;
 }
 
-function validateArguments($att) {
-    if (empty($att["organizer"])) {
-        throw new InvalidArgumentException("Bitte gib das Organizer-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.");
+function validateArguments($att, $options) {
+    // We prefer people setting their private info in the settings, rather than the shortcode.
+    if (empty($options["organizer_id"]) and empty($att["organizer"])) {
+        throw new InvalidArgumentException("Bitte konfiguriere deine Organizer-ID in den Plugin Settings.");
     }
-    if (empty($att["key"])) {
-        throw new InvalidArgumentException("Bitte gib das Key-Attribut an. Dieses kannst Du direkt von der Einbinden-Seite auf YesTicket übernehmen.");
+    if (empty($options["api_key"]) and empty($att["key"])) {
+        throw new InvalidArgumentException("Bitte konfiguriere deinen Key in den Plugin Settings.");
     }
     if (!empty($att["type"]) and $att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
         throw new InvalidArgumentException("Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an.");
@@ -119,10 +118,33 @@ function getEventsFromApi($att) {
     if ($att["env"] == 'dev') {
         $env_add = "/dev";
     }
-    validateArguments($att);
+    $options = get_option('yesticket_settings');
+    validateArguments($att, $options);
     // Get it from API URL:
-    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&key=".$att["key"];
+    $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php";
+    $get_url .= buildYesticketQueryParams($atts, $options);
     return getDataCached($get_url);
+}
+
+function buildYesticketQueryParams($atts, $options) {
+    $queryParams = '';
+    if (!empty($att["organizer"])) {
+        $queryParams .= '?organizer='.$att["organizer"];
+    } else {
+        $queryParams .= '?organizer='.$options["organizer_id"];
+    }
+    if (!empty($att["key"])) {
+        $queryParams .= '&key='.$att["key"];
+    } else {
+        $queryParams .= '&key='.$options["api_key"];
+    }
+    if (!empty($att["count"])) {
+        $queryParams .= '&count='.$att["count"];
+    }
+    if (!empty($att["type"])) {
+        $queryParams .= '&type='.$att["type"];
+    }
+    return $queryParams;
 }
 
 ///////// YesTicket Shortcodes:
@@ -188,7 +210,7 @@ function getYesTicketEvents($atts)
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";
     } catch (Exception $e) {
-        $content .= $e->getMessage();
+        $content .= __($e->getMessage(), 'yesticket');
     }
     return $content;
 }
@@ -268,7 +290,7 @@ function getYesTicketEventsCards($atts) {
         }
         $content .= "</div>";
     } catch (Exception $e) {
-        $content .= $e->getMessage();
+        $content .= __($e->getMessage(), 'yesticket');
     }
     return $content;
 }
@@ -315,7 +337,7 @@ function getYesTicketEventsList($atts)
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";
     } catch (Exception $e) {
-        $content .= $e->getMessage();
+        $content .= __($e->getMessage(), 'yesticket');
     }
     return $content;
 }
@@ -337,13 +359,16 @@ function getYesTicketTestimonials($atts)
         $env_add = "/dev";
     }
     try {
-        validateArguments($att);
+        $options = get_option('yesticket_settings');
+        validateArguments($att, $options);
         // Get it from API URL:
-        $get_url = "https://www.yesticket.org".$env_add."/api/testimonials-endpoint.php?organizer=".$att["organizer"]."&type=".$att["type"]."&count=".$att["count"]."&key=".$att["key"];
+        $get_url = "https://www.yesticket.org".$env_add."/api/v2/testimonials.php";
+        $get_url .= buildYesticketQueryParams($atts, $options);
         $result = getDataCached($get_url);
         //////////
 
         if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
+            $count = 0;
             foreach ($result as $item) {
                 $add = "";
                 $content .= "<div class='yt-testimonial-row'>";
@@ -352,12 +377,16 @@ function getYesTicketTestimonials($atts)
                 }
                 $content .= "<span class='yt-testimonial-text'>&raquo;".htmlentities($item->text).'&laquo;</span><br>'."<span class='yt-testimonial-source'>".htmlentities($item->source).' '."</span> <span class='yt-testimonial-date'>Am ".htmlentities(date('d.m.Y', strtotime($item->date)))."</span>".$add_event;
                 $content .= "</div>\n";
+                $count++;
+                if ($count == (int)$att["count"]) {
+                    break;
+                }
             }
         } else {
             $content = "";
         }
     } catch (Exception $e) {
-        $content .= $e->getMessage();
+        $content .= __($e->getMessage(), 'yesticket');
     }
     return $content;
 }
@@ -460,9 +489,30 @@ function yesticket_settings_init(  ) {
 	register_setting( 'pluginPage', 'yesticket_settings' );
 
 	add_settings_section(
+		'yesticket_pluginPage_section_required', 
+		__( 'Required Settings', 'yesticket' ), 
+		'yesticket_settings_required_section_callback', 
+		'pluginPage'
+	);
+	add_settings_field( 
+		'organizer_id', 
+		__( 'Your Organizer-ID', 'yesticket' ), 
+		'yesticket_organizer_id_render', 
+		'pluginPage', 
+		'yesticket_pluginPage_section_required' 
+	);
+	add_settings_field( 
+		'api_key', 
+		__( 'Your Key', 'yesticket' ), 
+		'yesticket_api_key_render', 
+		'pluginPage', 
+		'yesticket_pluginPage_section_required' 
+	);
+
+	add_settings_section(
 		'yesticket_pluginPage_section_cache', 
-		__( 'Cache', 'yesticket' ), 
-		'yesticket_settings_section_callback', 
+		__( 'Technical Settings', 'yesticket' ), 
+		'yesticket_settings_technical_section_callback', 
 		'pluginPage'
 	);
 
@@ -475,20 +525,38 @@ function yesticket_settings_init(  ) {
 	);
 }
 
-
-function yesticket_cache_time_in_minutes_render(  ) { 
-
-	$options = get_option( 'yesticket_settings' );
-	?>
-	<input type='number' name='yesticket_settings[cache_time_in_minutes]' min="0" step="1" value='<?php echo $options['cache_time_in_minutes']; ?>'>
-	<?php
-
+function yesticket_settings_required_section_callback(  ) {
+	echo __( 'These settings are necessary for yesticket to function.', 'yesticket' );?>
+    <p><?php echo __('Du benötigst 2 Dinge: deine persönliche', 'yesticket');?> 
+    <b>Organizer-ID</b>
+    <?php echo __('und deinen dazugehörigen', 'yesticket');?>
+    <b>Key</b>.
+    <?php echo __('Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden', 'yesticket');?>:
+    <a href='https://www.yesticket.org/login/<?php echo __('de', 'yesticket');?>/integration.php#wp-plugin' target='_blank'>
+        https://www.yesticket.org/login/<?php echo __('de', 'yesticket');?>/integration.php#wp-plugin</a></p>
+    <?php
 }
 
-function yesticket_settings_section_callback(  ) { 
+function yesticket_organizer_id_render(  ) { 
+	$options = get_option( 'yesticket_settings' );?>
+	<input type='number' min='1' step='1' name='yesticket_settings[organizer_id]' value='<?php echo $options['organizer_id']; ?>'>
+	<?php
+}
 
-	echo __( 'Configure Cache', 'yesticket' );
+function yesticket_api_key_render(  ) { 
+	$options = get_option( 'yesticket_settings' );?>
+	<input type='text' placeholder='61dc12e43225e22add15ff1b' name='yesticket_settings[api_key]' value='<?php echo $options['api_key']; ?>'>
+	<?php
+}
 
+function yesticket_cache_time_in_minutes_render(  ) { 
+	$options = get_option( 'yesticket_settings' );?>
+	<input type='number' name='yesticket_settings[cache_time_in_minutes]' min="0" step="1" value='<?php echo $options['cache_time_in_minutes']; ?>'>
+	<?php
+}
+
+function yesticket_settings_technical_section_callback(  ) { 
+	echo __( 'These settings can be adjusted, if you know what you are doing.', 'yesticket' );
 }
 
 function yesticket_cache_clear_button_render(  ) {
