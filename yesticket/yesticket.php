@@ -29,9 +29,5 @@ function yesticket_styles()
 function yesticket_load_textdomain() {
     load_plugin_textdomain( 'yesticket', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
-
-function ytp_test() {
-    __('something', 'yesticket');
-}
     
 ?>
