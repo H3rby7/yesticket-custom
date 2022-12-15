@@ -18,6 +18,10 @@ Zip all files inside the `yesticket` folder. (The resulting ZIP should contain t
 4. Configure the necessary settings
 5. Use the shortcodes...
 
+# Translations
+
+https://wordpress.org/plugins/loco-translate/ (short note of how to do translations in README)
+
 # Knowledge
 
 ## API
