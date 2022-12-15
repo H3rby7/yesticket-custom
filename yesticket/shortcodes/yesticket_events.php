@@ -33,9 +33,9 @@ function getYesTicketEvents($atts)
                 $add = "";
                 $content .= "<div class='yt-row'>";
                 if ($att["type"]=="all") {
-                    $add = " <span class='yt-eventtype'>".$item->event_type."</span>";
+                    $add = " <span class='yt-eventtype'>".__($item->event_type, 'yesticket')."</span>";
                 }
-                $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">Tickets <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
+                $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">'.__('tickets', 'yesticket').' <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
                 $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add;
                 $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
     
@@ -51,8 +51,8 @@ function getYesTicketEvents($atts)
                     $details .= "Tickets:<br>".htmlentities($item->tickets)."<br><br>";
                     $details .= "Spielort:<br>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
                     $content .= '<br><details>
-                                  <summary><u class="yt-show-details">Details anzeigen</u></summary>
-                                  <p>'.$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">Tickets ordern<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
+                                  <summary><u class="yt-show-details">'.__('show details', 'yesticket').'</u></summary>
+                                  <p>'.$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">'.__('order tickets', 'yesticket').'<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
                                 </details>";
                 }
                 $content .= "</div>\n";
@@ -62,7 +62,7 @@ function getYesTicketEvents($atts)
                 }
             }
         } else {
-            $content = "<p>Im Moment keine aktuellen Veranstaltungen.</p>";
+            $content = '<p>'.__('no shows', 'yesticket').'</p>';
         }
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";

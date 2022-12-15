@@ -77,7 +77,7 @@ function getYesTicketEventsCards($atts) {
             }
             $content .= "</div>\n";
         } else {
-            $content = "<p>Im Moment keine aktuellen Veranstaltungen.</p>";
+            $content = "<p>".__('no shows', 'yesticket')."</p>";
         }
         $content .= "</div>";
     } catch (Exception $e) {

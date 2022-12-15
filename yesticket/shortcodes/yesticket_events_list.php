@@ -29,9 +29,10 @@ function getYesTicketEventsList($atts)
                 if ($att["type"]=="all") {
                     $add = "<br><span class='yt-eventtype'>".$item->event_type."</span>";
                 }
+                // TODO: Time in local format!
                 $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";
                 $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
-
+                // TODO: Date in local format!
                 $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
                 if ($att["ticketlink"]=="yes") {
                     $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
@@ -43,7 +44,7 @@ function getYesTicketEventsList($atts)
                 }
             }
         } else {
-            $content = "<div><p>Im Moment keine aktuellen Veranstaltungen.</p>";
+            $content = "<div><p>".__('no shows', 'yesticket')."</p>";
         }
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";

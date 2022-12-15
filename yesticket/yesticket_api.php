@@ -39,7 +39,7 @@ function getData($get_url) {
       ));
       $get_content = file_get_contents($get_url, 0, $ctx);
   } else {
-      throw new Exception('Sie haben weder cURL installiert, noch allow_url_fopen aktiviert. Bitte aktivieren/installieren allow_url_fopen oder Curl. Bitte gehen Sie dazu auf ihren Webhosting-Provider zu.');
+      throw new Exception('We require "cURL" or "allow_url_fopen". Please contact your web hosting provider to install/activate one of the features.');
   }
   if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
       // in Case of a CURL-error
@@ -52,7 +52,7 @@ function getData($get_url) {
       $get_content = file_get_contents($get_url, 0, $ctx);
   }
   if (empty($get_content)) {
-      throw new RuntimeException("Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte später noch einmal.");
+      throw new RuntimeException(__("error yesticket api unavailable", 'yesticket'));
   }
   $result = json_decode($get_content);
   //return(json_last_error());
@@ -62,13 +62,13 @@ function getData($get_url) {
 function validateArguments($att, $options) {
   // We prefer people setting their private info in the settings, rather than the shortcode.
   if (empty($options["organizer_id"]) and empty($att["organizer"])) {
-      throw new InvalidArgumentException("Bitte konfiguriere deine Organizer-ID in den Plugin Settings.");
+      throw new InvalidArgumentException(__('error config organizer missing', 'yesticket'));
   }
   if (empty($options["api_key"]) and empty($att["key"])) {
-      throw new InvalidArgumentException("Bitte konfiguriere deinen Key in den Plugin Settings.");
+      throw new InvalidArgumentException(__('error config key missing', 'yesticket'));
   }
   if (!empty($att["type"]) and $att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="workshop" and $att["type"]!="festival") {
-      throw new InvalidArgumentException("Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach nicht an.");
+      throw new InvalidArgumentException(__('error config invalid type', 'yesticket'));
   }
   return true;
 }

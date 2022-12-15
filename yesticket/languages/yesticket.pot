@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-15 22:21+0000\n"
+"POT-Creation-Date: 2022-12-15 23:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -18,6 +18,10 @@ msgstr ""
 
 #. URI of the plugin
 msgid "?page=yesticket-plugin"
+msgstr ""
+
+#: shortcodes/yesticket_testimonials.php:40
+msgid "about event"
 msgstr ""
 
 #: yesticket_plugin_page.php:110
@@ -36,8 +40,28 @@ msgstr ""
 msgid "clear cache button"
 msgstr ""
 
+#: shortcodes/yesticket_testimonials.php:42
+msgid "date on"
+msgstr ""
+
 #: shortcodes/yesticket_events.php:79
 msgid "details"
+msgstr ""
+
+#: yesticket_api.php:71
+msgid "error config invalid type"
+msgstr ""
+
+#: yesticket_api.php:68
+msgid "error config key missing"
+msgstr ""
+
+#: yesticket_api.php:65
+msgid "error config organizer missing"
+msgstr ""
+
+#: yesticket_api.php:55
+msgid "error yesticket api unavailable"
 msgstr ""
 
 #. Author URI of the plugin
@@ -46,6 +70,15 @@ msgstr ""
 
 #: yesticket_plugin_page.php:31
 msgid "introducing yesticket on admin page"
+msgstr ""
+
+#: shortcodes/yesticket_events.php:65 shortcodes/yesticket_events_cards.php:80
+#: shortcodes/yesticket_events_list.php:47
+msgid "no shows"
+msgstr ""
+
+#: shortcodes/yesticket_testimonials.php:50
+msgid "no testimonials"
 msgstr ""
 
 #. Description of the plugin
@@ -124,7 +157,7 @@ msgstr ""
 msgid "options for event cards"
 msgstr ""
 
-#: shortcodes/yesticket_events_list.php:59
+#: shortcodes/yesticket_events_list.php:60
 msgid "options for event list"
 msgstr ""
 
@@ -136,12 +169,16 @@ msgstr ""
 msgid "options for testimonials"
 msgstr ""
 
+#: shortcodes/yesticket_events.php:55
+msgid "order tickets"
+msgstr ""
+
 #: yesticket_plugin_page.php:40
 msgid "preview shortcodes on hover"
 msgstr ""
 
 #: shortcodes/yesticket_events.php:77 shortcodes/yesticket_events_cards.php:91
-#: shortcodes/yesticket_events_list.php:58
+#: shortcodes/yesticket_events_list.php:59
 #: shortcodes/yesticket_testimonials.php:60
 msgid "quickstart"
 msgstr ""
@@ -154,7 +191,7 @@ msgstr ""
 msgid "shortcode help event cards"
 msgstr ""
 
-#: shortcodes/yesticket_events_list.php:57
+#: shortcodes/yesticket_events_list.php:58
 msgid "shortcode help event list"
 msgstr ""
 
@@ -170,12 +207,20 @@ msgstr ""
 msgid "shortcodes"
 msgstr ""
 
+#: shortcodes/yesticket_events.php:54
+msgid "show details"
+msgstr ""
+
 #: yesticket_plugin_page.php:103
 msgid "technical settings"
 msgstr ""
 
 #: yesticket_plugin_page.php:149
 msgid "text before clear cache button"
+msgstr ""
+
+#: shortcodes/yesticket_events.php:38
+msgid "tickets"
 msgstr ""
 
 #: yesticket_plugin_page.php:119 yesticket_plugin_page.php:120

@@ -26,17 +26,17 @@ function getYesTicketTestimonials($atts)
                 $add = "";
                 $content .= "<div class='yt-testimonial-row'>";
                 if (!empty($item->event_name) && $att["details"] == "yes") {
-                    $add_event = "<br><span class='yt-testimonial-source'>über ".htmlentities($item->event_name)."</span>";
+                    $add_event = '<br><span class="yt-testimonial-source">'.__('about event', 'yesticket').htmlentities($item->event_name).'</span>';
                 }
-                $content .= "<span class='yt-testimonial-text'>&raquo;".htmlentities($item->text).'&laquo;</span><br>'."<span class='yt-testimonial-source'>".htmlentities($item->source).' '."</span> <span class='yt-testimonial-date'>Am ".htmlentities(date('d.m.Y', strtotime($item->date)))."</span>".$add_event;
-                $content .= "</div>\n";
+                $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>'.'<span class="yt-testimonial-source">'.htmlentities($item->source).' </span> <span class="yt-testimonial-date">'.__('date on', 'yesticket').' '.htmlentities(date('d.m.Y', strtotime($item->date))).'</span>'.$add_event;
+                $content .= '</div>';
                 $count++;
                 if ($count == (int)$att["count"]) {
                     break;
                 }
             }
         } else {
-            $content = "";
+            $content = "<p>".__('no testimonials', 'yesticket')."</p>";
         }
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
