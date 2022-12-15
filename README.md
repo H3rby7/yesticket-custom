@@ -12,13 +12,11 @@ Custom Version of [YesTicket's Wordpress Plugin](https://www.yesticket.org/login
 
 Zip all files inside the `yesticket` folder. (The resulting ZIP should contain the files directly)
 
-Then follow along with the original's install instructions, just use our own freshly packed ZIP as basis.
-
-Eg:
 1. In your Wordpress go to `Plugins > Install`.
 2. Select the freshly packed ZIP archive.
 3. Activate plugin
-4. Use the shortcodes...
+4. Configure the necessary settings
+5. Use the shortcodes...
 
 # Knowledge
 
