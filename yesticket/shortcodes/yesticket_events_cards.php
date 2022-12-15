@@ -86,16 +86,15 @@ function getYesTicketEventsCards($atts) {
     return $content;
 }
 
-function render_yesTicketEventsCardsHelp() {?>
-    <h2>Shortcodes für deine Events als Kacheln bzw. Cards</h2>
-    <p>Schnellstart: <span class="yt-code">[yesticket_events_cards type="all" count="3" theme="light"]</span>
-    <h3>Optionen für Event-Card-Shortcodes</h3>
-    <?php 
+function render_yesTicketEventsCardsHelp() {
+    ytp_h(2, 'Shortcodes für deine Events als Kacheln bzw. Cards');
+    ?><p><?php ytp_translate('Schnellstart');?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p><?php 
+    ytp_h(3, 'Optionen für Event-Card-Shortcodes');
     echo ytp_render_optionType('Events');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
     ?>
     <h4>Grep</h4>
-    <p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>
-    <p class="ml-3"><span class="yt-code">grep="im Bierhaus"</span> werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "im Bierhaus" enthalten.</p>
+    <p class='ml-3'><?php ytp_translate('Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.');?></p>
+    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php ytp_translate('werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "Johnstone" enthalten.');?></p>
 <?php } ?>

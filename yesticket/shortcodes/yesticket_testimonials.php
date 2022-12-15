@@ -44,14 +44,14 @@ function getYesTicketTestimonials($atts)
     return $content;
 }
 
-function render_yesTicketTestimonialsHelp() {?>
-    <h2>Shortcodes für Zuschauerstimmen</h2>
-    <p>Schnellstart: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
-    <h3>Optionen für Testimonial-Shortcodes</h3>
-    <h4>Details</h4>
+function render_yesTicketTestimonialsHelp() {
+    ytp_h(2, 'Shortcodes für Zuschauerstimmen');
+    ?><p><?php ytp_translate('Schnellstart');?>: <span class="yt-code">[yesticket_testimonials count="30"]</span></p><?php 
+    ytp_h(3, 'Optionen für Testimonial-Shortcodes');
+    ?><h4>Details</h4>
     <p class='ml-3'><?php echo __('option testimonials with details explanation', 'yesticket');?></p>
     <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('option testimonials with details explanation of chosing "yes"', 'yesticket');?></p>
-    <?php 
+    <?php
     echo ytp_render_optionType('Testimonials');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
