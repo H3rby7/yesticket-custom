@@ -54,9 +54,9 @@ function getYesTicketEventsList($atts)
 }
 
 function render_yesTicketEventsListHelp() {?>
-    <h2><?php echo __('Shortcodes für deine Events als Liste', 'yesticket');?></h2>
-    <p><?php echo __('Schnellstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p>
-    <h3><?php echo __('Optionen für Event-List-Shortcodes', 'yesticket');?></h3>
+    <h2><?php echo __('shortcode help event list', 'yesticket');?></h2>
+    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p>
+    <h3><?php echo __('options for event list', 'yesticket');?></h3>
     <?php 
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();

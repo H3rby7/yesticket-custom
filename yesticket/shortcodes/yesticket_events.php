@@ -73,12 +73,12 @@ function getYesTicketEvents($atts)
 }
 
 function render_yesTicketEventsHelp() {?>
-    <h2><?php echo __('Shortcodes für deine Events als interaktive Liste', 'yesticket');?></h2>
-    <p><?php echo __('Schnellstart', 'yesticket');?>: <span class="yt-code">[yesticket_events type="all" count="3"]</span></p>
-    <h3><?php echo __('Optionen für Event-Shortcodes', 'yesticket');?></h3>
-    <h4><?php echo __('Details', 'yesticket');?></h4>
-    <p class='ml-3'><?php echo __('Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar.', 'yesticket');?></p>
-    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('zeigt den Link zu Aufklappen und die Beschreibung an.', 'yesticket');?></p>
+    <h2><?php echo __('shortcode help events', 'yesticket');?></h2>
+    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_events type="all" count="3"]</span></p>
+    <h3><?php echo __('options for events', 'yesticket');?></h3>
+    <h4><?php echo __('details', 'yesticket');?></h4>
+    <p class='ml-3'><?php echo __('option events with details explanation', 'yesticket');?></p>
+    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('option events with details explanation of chosing "yes"', 'yesticket');?></p>
     <?php
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();

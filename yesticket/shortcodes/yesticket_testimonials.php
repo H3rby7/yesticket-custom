@@ -45,9 +45,9 @@ function getYesTicketTestimonials($atts)
 }
 
 function render_yesTicketTestimonialsHelp() {?>
-    <h2><?php echo __('Shortcodes für Zuschauerstimmen', 'yesticket');?></h2>
-    <p><?php echo __('Schnellstart', 'yesticket');?>: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
-    <h3><?php echo __('Optionen für Testimonial-Shortcodes', 'yesticket');?></h3>
+    <h2><?php echo __('shortcode help testimonials', 'yesticket');?></h2>
+    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
+    <h3><?php echo __('options for testimonials', 'yesticket');?></h3>
     <h4>Details</h4>
     <p class='ml-3'><?php echo __('option testimonials with details explanation', 'yesticket');?></p>
     <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('option testimonials with details explanation of chosing "yes"', 'yesticket');?></p>

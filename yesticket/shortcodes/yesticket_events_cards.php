@@ -87,15 +87,15 @@ function getYesTicketEventsCards($atts) {
 }
 
 function render_yesTicketEventsCardsHelp() {?>
-    <h2><?php echo __('Shortcodes für deine Events als Kacheln bzw. Cards', 'yesticket');?></h2>
-    <p><?php echo __('Schnellstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p>
-    <h3><?php echo __('Optionen für Event-Card-Shortcodes', 'yesticket');?></h3>
+    <h2><?php echo __('shortcode help event cards', 'yesticket');?></h2>
+    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p>
+    <h3><?php echo __('options for event cards', 'yesticket');?></h3>
     <?php 
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
     ?>
     <h4>Grep</h4>
-    <p class='ml-3'><?php echo __('Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.', 'yesticket');?></p>
-    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php echo __('werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "Johnstone" enthalten.', 'yesticket');?></p>
+    <p class='ml-3'><?php echo __('option grep explanation', 'yesticket');?></p>
+    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php echo __('option grep example', 'yesticket');?></p>
 <?php } ?>
