@@ -3,31 +3,24 @@
 add_action('admin_menu', 'yesticket_pluginpage_wp_menu');
 add_action('admin_init', 'yesticket_settings_init');
 
+function yesticket_pluginpage_styles()
+{
+    wp_enqueue_style('yesticket', plugins_url('admin.css', __FILE__), false, 'all');
+}
+
+add_action('admin_enqueue_scripts', 'yesticket_pluginpage_styles');
+
 function yesticket_pluginpage_wp_menu()
 {
-    add_menu_page('YesTicket', 'YesTicket', 'manage_options', 'yesticket-plugin', 'yesticket_pluginpage_init', plugin_dir_url(__FILE__) . 'img/yesticket-logo.png');
+    add_menu_page('YesTicket', 'YesTicket', 'manage_options', 'yesticket-plugin', 'yesticket_pluginpage_init', ytp_getImageUrl('YesTicket_icon_small.png'));
 }
 
 function yesticket_pluginpage_init()
 {
   $tab = isset($_GET['tab']) ? $_GET['tab'] : null;
   yesticket_render_feedback();
-    ?><style>
-      .yt-code { 
-        background: #fff; 
-        padding: 10px; 
-        margin: 5px; 
-        font-family: monospace; 
-        border: 1px solid #eee; 
-        font-size: 1.1em; 
-        display: inline-block;
-      }
-      h1 { margin-top: 40px; }
-      h2 { margin-top: 30px; }
-      h3 { margin-top: 20px; font-style: italic; }
-      .ml-3 { margin-left: 30px; }
-    </style>
-    <h1><img src='<?php echo plugin_dir_url(__FILE__) ?>img/YesTicket_logo.png' height='60' alt='YesTicket Logo'></h1>
+    ?>
+    <h1><img src="<?php echo ytp_getImageUrl('YesTicket_logo.png') ?>" height="60" alt="YesTicket Logo"></h1>
     <p><?php echo __('YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen (Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im Inhaltsteil, in Widgets oder in was auch immer in Wordpress.', 'yesticket');?></p>
     <?php
     $options = get_option( 'yesticket_settings' );
@@ -40,10 +33,14 @@ function yesticket_pluginpage_init()
     <p>Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen.</p>
 
     <nav class="nav-tab-wrapper">
-      <a href="?page=yesticket-plugin" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Events</a>
-      <a href="?page=yesticket-plugin&tab=cards" class="nav-tab <?php if($tab==='cards'):?>nav-tab-active<?php endif; ?>">Cards</a>
-      <a href="?page=yesticket-plugin&tab=list" class="nav-tab <?php if($tab==='list'):?>nav-tab-active<?php endif; ?>">List</a>
-      <a href="?page=yesticket-plugin&tab=testimonials" class="nav-tab <?php if($tab==='testimonials'):?>nav-tab-active<?php endif; ?>">Testimonials</a>
+      <a href="?page=yesticket-plugin" class="hover_trigger nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Events</a>
+        <?php echo yesticket_render_shortcode_preview('yesticket_events', 'sample_events.png');?>
+      <a href="?page=yesticket-plugin&tab=cards" class="hover_trigger nav-tab <?php if($tab==='cards'):?>nav-tab-active<?php endif; ?>">Cards</a>
+        <?php echo yesticket_render_shortcode_preview('yesticket_events_cards', 'sample_events_cards.png');?>
+      <a href="?page=yesticket-plugin&tab=list" class="hover_trigger nav-tab <?php if($tab==='list'):?>nav-tab-active<?php endif; ?>">List</a>
+        <?php echo yesticket_render_shortcode_preview('yesticket_events_list', 'sample_events_list.png');?>
+      <a href="?page=yesticket-plugin&tab=testimonials" class="hover_trigger nav-tab <?php if($tab==='testimonials'):?>nav-tab-active<?php endif; ?>">Testimonials</a>
+        <?php echo yesticket_render_shortcode_preview('yesticket_testimonials', 'sample_testimonials.png');?>
       <a href="?page=yesticket-plugin&tab=settings" class="nav-tab <?php if($tab==='settings'):?>nav-tab-active<?php endif; ?>">Settings</a>
     </nav>
 
@@ -181,5 +178,14 @@ function yesticket_render_feedback(  ) {
 
 function yesticket_render_success_message( $msg ) {
     ?><p style="background-color: #97ff00; padding: 1rem"><?php echo $msg ?></p><?php
+}
+
+function yesticket_render_shortcode_preview( $shortcode, $previewImageFileName) {
+  ?>
+  <div class="show_on_hover shortcode_preview">
+    <!--<p>Preview of shortcode <span class="yt-code">[<?php echo $shortcode;?>]</span></p>-->
+    <img src="<?php echo ytp_getImageUrl($previewImageFileName) ?>" alt="<?php echo $shortcode;?> preview">
+  </div>
+  <?php
 }
 ?>

@@ -5,7 +5,7 @@ add_option('yesticket_transient_keys', array());
 function getDataCached($get_url) {
   $options = get_option('yesticket_settings');
   $CACHE_TIME_IN_MINUTES = $options['cache_time_in_minutes'];
-  $CACHE_KEY = cacheKey($get_url);
+  $CACHE_KEY = ytp_cacheKey($get_url);
 
   // check if we have cached information
   $data = get_transient($CACHE_KEY);
@@ -14,7 +14,7 @@ function getDataCached($get_url) {
       $data = getData($get_url);
       set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS );
       // save cache key to options, so we can delete the transient, if necessary
-      addCacheKeyToOptions($CACHE_KEY);
+      ytp_addCacheKeyToOptions($CACHE_KEY);
   }
   // at this time we have our data, either from cache or after an API call.
   return $data;

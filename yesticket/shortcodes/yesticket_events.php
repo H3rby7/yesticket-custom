@@ -35,7 +35,7 @@ function getYesTicketEvents($atts)
                 if ($att["type"]=="all") {
                     $add = " <span class='yt-eventtype'>".$item->event_type."</span>";
                 }
-                $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">Tickets <img src="'. getYesTicketLogoUrl() .'" height="20" width="20"></a>';
+                $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">Tickets <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
                 $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add;
                 $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
     
@@ -52,7 +52,7 @@ function getYesTicketEvents($atts)
                     $details .= "Spielort:<br>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
                     $content .= '<br><details>
                                   <summary><u class="yt-show-details">Details anzeigen</u></summary>
-                                  <p>'.$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">Tickets ordern<img src="'.getYesTicketLogoUrl().'" height="20" width="20">'.'</a></div>'."
+                                  <p>'.$details.'</p><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">Tickets ordern<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
                                 </details>";
                 }
                 $content .= "</div>\n";
@@ -73,15 +73,15 @@ function getYesTicketEvents($atts)
 }
 
 function render_yesTicketEventsHelp() {?>
-    <h2>Shortcodes für deine Events als Liste</h2>
+    <h2>Deine Events als interaktive Liste</h2>
     <p>Schnellstart: <span class="yt-code">[yesticket_events type="all" count="3" theme="light"]</span>
     <h3>Optionen für Event-Shortcodes</h3>
     <h4>Details</h4>
     <p class='ml-3'>Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar.</p>
     <p class="ml-3"><span class="yt-code">details="yes"</span> zeigt den Link zu Aufklappen und die Beschreibung an</p>
     <?php 
-    echo render_optionType('Events');
-    echo render_optionCount();
-    echo render_optionTheme();
+    echo ytp_render_optionType('Events');
+    echo ytp_render_optionCount();
+    echo ytp_render_optionTheme();
 }
 ?>

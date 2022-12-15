@@ -58,9 +58,9 @@ function render_yesTicketEventsListHelp() {?>
     <p>Schnellstart: <span class="yt-code">[yesticket_events_list type="all" count="3" theme="light"]</span>
     <h3>Optionen für Event-List-Shortcodes</h3>
     <?php 
-    echo render_optionType('Events');
-    echo render_optionCount();
-    echo render_optionTheme();
+    echo ytp_render_optionType('Events');
+    echo ytp_render_optionCount();
+    echo ytp_render_optionTheme();
 }
 
 ?>

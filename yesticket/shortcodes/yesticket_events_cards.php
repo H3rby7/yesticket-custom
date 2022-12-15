@@ -91,9 +91,9 @@ function render_yesTicketEventsCardsHelp() {?>
     <p>Schnellstart: <span class="yt-code">[yesticket_events_cards type="all" count="3" theme="light"]</span>
     <h3>Optionen für Event-Card-Shortcodes</h3>
     <?php 
-    echo render_optionType('Events');
-    echo render_optionCount();
-    echo render_optionTheme();
+    echo ytp_render_optionType('Events');
+    echo ytp_render_optionCount();
+    echo ytp_render_optionTheme();
     ?>
     <h4>Grep</h4>
     <p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>

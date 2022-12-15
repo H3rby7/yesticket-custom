@@ -60,8 +60,8 @@ function render_yesTicketTestimonialsHelp() {?>
     <p>Schnellstart: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
     <h3>Optionen für Testimonial-Shortcodes</h3>
     <?php 
-    echo render_optionType('Testimonials');
-    echo render_optionCount();
-    echo render_optionTheme();
+    echo ytp_render_optionType('Testimonials');
+    echo ytp_render_optionCount();
+    echo ytp_render_optionTheme();
 }
 ?>
