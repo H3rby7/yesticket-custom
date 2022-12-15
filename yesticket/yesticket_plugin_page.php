@@ -1,11 +1,4 @@
 <?php
-/**
-* Author: YesTicket
-* Author URI: https://www.yesticket.org/
-* License: GPL2
-* Text Domain: yesticket
-* Domain Path: /languages
-*/
 
 add_action('admin_menu', 'yesticket_pluginpage_wp_menu');
 add_action('admin_init', 'yesticket_settings_init');
