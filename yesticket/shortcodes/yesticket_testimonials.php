@@ -18,19 +18,8 @@ function getYesTicketTestimonials($atts)
                     'theme' => 'light',
                     ), $atts);
     $content = "";
-    $env_add = "";
-    if ($att["env"] == 'dev') {
-        $env_add = "/dev";
-    }
     try {
-        $options = get_option('yesticket_settings');
-        validateArguments($att, $options);
-        // Get it from API URL:
-        $get_url = "https://www.yesticket.org".$env_add."/api/v2/testimonials.php";
-        $get_url .= buildYesticketQueryParams($atts, $options);
-        $result = getDataCached($get_url);
-        //////////
-
+        $result = getTestimonialsFromApi($att);
         if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
             $count = 0;
             foreach ($result as $item) {

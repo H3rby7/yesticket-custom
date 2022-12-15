@@ -74,19 +74,26 @@ function validateArguments($att, $options) {
 }
 
 function getEventsFromApi($att) {
-  $env_add = "";
-  if ($att["env"] == 'dev') {
-      $env_add = "/dev";
-  }
-  $options = get_option('yesticket_settings');
-  validateArguments($att, $options);
-  // Get it from API URL:
-  $get_url = "https://www.yesticket.org".$env_add."/api/events-endpoint.php";
-  $get_url .= buildYesticketQueryParams($atts, $options);
-  return getDataCached($get_url);
+  return getDataCached(validateAndBuildApiCall($att, "events-endpoint.php"));
 }
 
-function buildYesticketQueryParams($atts, $options) {
+function getTestimonialsFromApi($att) {
+    return getDataCached(validateAndBuildApiCall($att, "v2/testimonials.php"));
+}
+
+function validateAndBuildApiCall($att, $apiEndpoint) {
+    $env_add = "";
+    if ($att["env"] == 'dev') {
+        $env_add = "/dev";
+    }
+    $options = get_option('yesticket_settings');
+    validateArguments($att, $options);
+    $get_url = 'https://www.yesticket.org' . $env_add . '/api/' . $apiEndpoint;
+    $get_url .= buildYesticketQueryParams($att, $options);
+    return $get_url;
+}
+
+function buildYesticketQueryParams($att, $options) {
   $queryParams = '';
   if (!empty($att["organizer"])) {
       $queryParams .= '?organizer='.$att["organizer"];
