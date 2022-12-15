@@ -40,7 +40,7 @@ services:
   #     # https://docs.phpmyadmin.net/en/latest/setup.html#docker-environment-variables
   #     PMA_HOST: db
   #     PMA_PORT: 3306
-  #     MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+  #     MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}" #user will be 'root'
   #     UPLOAD_LIMIT: 50M
   #   ports:
   #     - ${IP}:8080:80
