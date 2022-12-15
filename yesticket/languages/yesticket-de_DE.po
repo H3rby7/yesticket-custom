@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2022-12-15 23:06+0000\n"
+"PO-Revision-Date: 2022-12-15 23:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -89,7 +89,7 @@ msgstr "Momentan sind leider keine kommenden Veranstaltungen vorhanden."
 
 #: shortcodes/yesticket_testimonials.php:50
 msgid "no testimonials"
-msgstr "Momentan sind leider Zuschauerstimmen vorhanden."
+msgstr "Momentan sind leider keine Zuschauerstimmen vorhanden."
 
 #. Description of the plugin
 msgid "Onlineticketing"
