@@ -74,7 +74,7 @@ function validateArguments($att, $options) {
 }
 
 function getEventsFromApi($att) {
-  return getDataCached(validateAndBuildApiCall($att, "events-endpoint.php"));
+  return getDataCached(validateAndBuildApiCall($att, "v2/events.php"));
 }
 
 function getTestimonialsFromApi($att) {
