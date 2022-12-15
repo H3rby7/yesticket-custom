@@ -53,11 +53,12 @@ function getYesTicketEventsList($atts)
     return $content;
 }
 
-function render_yesTicketEventsListHelp() {
-    ytp_h(2, 'Shortcodes für deine Events als Liste');
-    ?><p><?php ytp_translate('Schnellstart');?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p><?php 
-    ytp_h(3, 'Optionen für Event-List-Shortcodes');
-    echo ytp_render_optionType('Events');
+function render_yesTicketEventsListHelp() {?>
+    <h2><?php echo __('Shortcodes für deine Events als Liste', 'yesticket');?></h2>
+    <p><?php echo __('Schnellstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p>
+    <h3><?php echo __('Optionen für Event-List-Shortcodes', 'yesticket');?></h3>
+    <?php 
+    echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
 }

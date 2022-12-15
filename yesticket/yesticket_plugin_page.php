@@ -1,4 +1,11 @@
 <?php
+/**
+* Author: YesTicket
+* Author URI: https://www.yesticket.org/
+* License: GPL2
+* Text Domain: yesticket
+* Domain Path: /languages
+*/
 
 add_action('admin_menu', 'yesticket_pluginpage_wp_menu');
 add_action('admin_init', 'yesticket_settings_init');
@@ -21,18 +28,16 @@ function yesticket_pluginpage_init()
   yesticket_render_feedback();
     ?>
     <h1><img src="<?php echo ytp_getImageUrl('YesTicket_logo.png') ?>" height="60" alt="YesTicket Logo"></h1>
-    <?php 
-    ytp_p('YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen (Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im Inhaltsteil, in Widgets oder in was auch immer in Wordpress.');
+    <p><?php echo __('YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen (Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im Inhaltsteil, in Widgets oder in was auch immer in Wordpress.', 'yesticket');?></p><?php
     $options = get_option( 'yesticket_settings' );
     $renderSettingsOnly = empty($options['organizer_id'] or empty($options['api_key']));
     if ($renderSettingsOnly) {
       echo yesticket_settings_render($tab);
       return;
-    }
-    ytp_h(2, 'Shortcodes');
-    ytp_p('Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen.');
-    ytp_p('Ziehe die Maus über einen Tab für eine Vorschau.');
-    ?>
+    }?>
+    <h2><?php echo __('Shortcodes', 'yesticket');?></h2>
+    <p><?php echo __('Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen.', 'yesticket');?></p>
+    <p><?php echo __($text, 'Ziehe die Maus über einen Tab für eine Vorschau.');?></p>
 
     <nav class="nav-tab-wrapper">
       <a href="?page=yesticket-plugin" class="hover_trigger nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Events</a>
@@ -74,47 +79,46 @@ function yesticket_settings_init(  ) {
 
 	add_settings_section(
 		'yesticket_pluginPage_section_required', 
-		ytp__( 'Obligatorische Einstellungen'), 
+		__('Obligatorische Einstellungen', 'yesticket'),
 		'yesticket_settings_required_section_callback', 
 		'pluginPage'
 	);
 	add_settings_field( 
-		'organizer_id', 
-		ytp__( 'Deine "Organizer-ID"'), 
+		'organizer_id',
+    __('Deine "Organizer-ID"', 'yesticket'),
 		'yesticket_organizer_id_render', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_required' 
 	);
 	add_settings_field( 
-		'api_key', 
-		ytp__( 'Dein "Key"'), 
+		'api_key',
+    __('Dein "Key"', 'yesticket'),
 		'yesticket_api_key_render', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_required' 
 	);
 
 	add_settings_section(
-		'yesticket_pluginPage_section_cache', 
-		ytp__( 'Technische Einstellungen'), 
+		'yesticket_pluginPage_section_cache',
+    __('Technische Einstellungen', 'yesticket'),
 		'yesticket_settings_technical_section_callback', 
 		'pluginPage'
 	);
 
 	add_settings_field( 
 		'cache_time_in_minutes', 
-		ytp__( 'Cache Zeit in MIN'), 
+    __('Cache Zeit in MIN', 'yesticket'),
 		'yesticket_cache_time_in_minutes_render', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_cache' 
 	);
 }
 
-function yesticket_settings_required_section_callback(  ) {
-  ytp_p('Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen dazugehörigen <b>Key</b>.
-   Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden:');
-  ?>
-  <a href='https://www.yesticket.org/login/<?php ytp_translate('de');?>/integration.php#wp-plugin' target='_blank'>
-      https://www.yesticket.org/login/<?php ytp_translate('de');?>/integration.php#wp-plugin</a>
+function yesticket_settings_required_section_callback(  ) {?>
+  <p><?php echo __('Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen dazugehörigen <b>Key</b>.
+    Beides findest du direkt zum Kopieren im Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden:', 'yesticket');?></p>
+  <a href='https://www.yesticket.org/login/<?php echo __('de', 'yesticket');?>/integration.php#wp-plugin' target='_blank'>
+      https://www.yesticket.org/login/<?php echo __('de', 'yesticket');?>/integration.php#wp-plugin</a>
   <?php
 }
 
@@ -136,15 +140,15 @@ function yesticket_cache_time_in_minutes_render(  ) {
 	<?php
 }
 
-function yesticket_settings_technical_section_callback(  ) { 
-	ytp_translate( 'Diese Einstellungen kannst du anpassen, wenn du weißt, was du tust.');
+function yesticket_settings_technical_section_callback(  ) {
+  echo __('Diese Einstellungen kannst du anpassen, wenn du weißt, was du tust.', 'yesticket');
 }
 
 function yesticket_cache_clear_button_render(  ) {
     ?><form action="admin.php?page=yesticket-plugin" method="POST">
         <input type="hidden" name="clear_cache" value="1">
-        <label for="clear_cache_submit"><?php ytp_translate('Wenn sich deine Einträge nicht schnell genug updaten, versuche es mal mit: '); ?></label>
-        <input type="submit" name="clear_cache_submit" value="<?php ytp_translate('Cache löschen'); ?>">
+        <label for="clear_cache_submit"><?php echo __('Wenn sich deine Einträge nicht schnell genug updaten, versuche es mal mit:', 'yesticket');?></label>
+        <input type="submit" name="clear_cache_submit" value="<?php echo __('Cache löschen', 'yesticket'); ?>">
       </form><?php
 }
 

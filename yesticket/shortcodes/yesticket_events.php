@@ -72,16 +72,15 @@ function getYesTicketEvents($atts)
     return $content;
 }
 
-function render_yesTicketEventsHelp() {
-    ytp_h(2, 'Deine Events als interaktive Liste');
-    ?><p><?php ytp_translate('Schnellstart');?>: <span class="yt-code">[yesticket_events type="all" count="3"]</span></p><?php 
-    ytp_h(3, 'Optionen für Event-Shortcodes');
-    ytp_h(4, 'Details');
-    ?>
-    <p class='ml-3'><?php ytp_translate('Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar.');?></p>
-    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php ytp_translate('zeigt den Link zu Aufklappen und die Beschreibung an.');?></p>
+function render_yesTicketEventsHelp() {?>
+    <h2><?php echo __('Shortcodes für deine Events als interaktive Liste', 'yesticket');?></h2>
+    <p><?php echo __('Schnellstart', 'yesticket');?>: <span class="yt-code">[yesticket_events type="all" count="3"]</span></p>
+    <h3><?php echo __('Optionen für Event-Shortcodes', 'yesticket');?></h3>
+    <h4><?php echo __('Details', 'yesticket');?></h4>
+    <p class='ml-3'><?php echo __('Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar.', 'yesticket');?></p>
+    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('zeigt den Link zu Aufklappen und die Beschreibung an.', 'yesticket');?></p>
     <?php
-    echo ytp_render_optionType('Events');
+    echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
 }

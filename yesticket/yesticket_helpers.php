@@ -24,18 +24,4 @@ function ytp_getImageUrl($fileName) {
   return plugin_dir_url(__FILE__).'img/'.$fileName;
 }
 
-function ytp__($text) {
-  __($text, 'yesticket');
-}
-
-function ytp_translate($text) {
-  echo __($text, 'yesticket');
-}
-
-function ytp_p($text) {
-  ?><p><?php echo __($text, 'yesticket');?></p><?php
-}
-function ytp_h($hierarchy, $text) {
-  echo '<h'.$hierarchy.'>'.__($text, 'yesticket').'</h'.$hierarchy.'>';
-}
 ?>
