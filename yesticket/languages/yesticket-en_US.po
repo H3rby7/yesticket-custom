@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2022-12-16 14:52+0000\n"
+"PO-Revision-Date: 2022-12-16 15:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -64,6 +64,10 @@ msgstr "Please configure your 'organizer-id' in the plugin settings."
 #: yesticket_api.php:55
 msgid "error yesticket api unavailable"
 msgstr "Our events are currently unavailable. Please try again later."
+
+#: shortcodes/yesticket_shortcode_helpers.php:13
+msgid "festival"
+msgstr "Festival"
 
 #. Author URI of the plugin
 msgid "https://www.yesticket.org/"
@@ -195,6 +199,10 @@ msgstr "Options for testimonial shortcodes"
 msgid "order tickets"
 msgstr "Order Tickets"
 
+#: shortcodes/yesticket_shortcode_helpers.php:7
+msgid "performance"
+msgstr "Show"
+
 #: yesticket_plugin_page.php:33
 msgid "preview shortcodes on hover"
 msgstr "Hover above the tabs for a preview."
@@ -255,6 +263,10 @@ msgstr ""
 "You need two things: your personal <b>organizer-ID</b> and the corresponding "
 "<b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > "
 "Integrations:"
+
+#: shortcodes/yesticket_shortcode_helpers.php:10
+msgid "workshop"
+msgstr "Workshop"
 
 #. Name of the plugin
 #. Author of the plugin

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-16 00:13+0000\n"
+"POT-Creation-Date: 2022-12-16 15:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -58,6 +58,10 @@ msgstr ""
 
 #: yesticket_api.php:55
 msgid "error yesticket api unavailable"
+msgstr ""
+
+#: shortcodes/yesticket_shortcode_helpers.php:13
+msgid "festival"
 msgstr ""
 
 #. Author URI of the plugin
@@ -177,6 +181,10 @@ msgstr ""
 msgid "order tickets"
 msgstr ""
 
+#: shortcodes/yesticket_shortcode_helpers.php:7
+msgid "performance"
+msgstr ""
+
 #: yesticket_plugin_page.php:33
 msgid "preview shortcodes on hover"
 msgstr ""
@@ -233,6 +241,10 @@ msgstr ""
 
 #: yesticket_plugin_page.php:111
 msgid "what you need and where to find it"
+msgstr ""
+
+#: shortcodes/yesticket_shortcode_helpers.php:10
+msgid "workshop"
 msgstr ""
 
 #. Name of the plugin

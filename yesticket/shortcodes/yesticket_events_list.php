@@ -1,6 +1,7 @@
 <?php
 
 include_once("yesticket_options_helpers.php");
+include_once("yesticket_shortcode_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
@@ -27,7 +28,7 @@ function getYesTicketEventsList($atts)
                 $add = "";
                 $content .= "<div class='yt-row-list'>";
                 if ($att["type"]=="all") {
-                    $add = "<br><span class='yt-eventtype'>".$item->event_type."</span>";
+                    $add = "<br><span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
                 }
                 // TODO: Time in local format!
                 $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";

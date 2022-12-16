@@ -1,6 +1,7 @@
 <?php
 
 include_once("yesticket_options_helpers.php");
+include_once("yesticket_shortcode_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
@@ -33,7 +34,7 @@ function getYesTicketEvents($atts)
                 $add = "";
                 $content .= "<div class='yt-row'>";
                 if ($att["type"]=="all") {
-                    $add = " <span class='yt-eventtype'>".__($item->event_type, 'yesticket')."</span>";
+                    $add = " <span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
                 }
                 $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">'.__('tickets', 'yesticket').' <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
                 $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add;
