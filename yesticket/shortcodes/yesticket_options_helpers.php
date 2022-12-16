@@ -28,5 +28,5 @@ function ytp_render_optionCount() {?>
   <h4>Count</h4>
   <p class='ml-3'><?php echo __('option count explanation', 'yesticket');?></p>
   <p class="ml-3"><span class="yt-code">count="6"</span> <?php echo __('option count example', 'yesticket');?></p>
-  <p><?php echo __('option count hint', 'yesticket');?></p><?php
+  <p class="ml-3"><?php echo __('option count hint', 'yesticket');?></p><?php
 }
