@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2022-12-16 00:18+0000\n"
+"PO-Revision-Date: 2022-12-16 14:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -263,7 +263,7 @@ msgid "what you need and where to find it"
 msgstr ""
 "Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen "
 "dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im "
-"Adminbereich von YesTicket > Mehr können > YesTicket einfach einbinden:"
+"Adminbereich von YesTicket > Marketing > YesTicket einfach einbinden:"
 
 #. Name of the plugin
 #. Author of the plugin
