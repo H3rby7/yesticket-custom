@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2022-12-15 23:13+0000\n"
+"PO-Revision-Date: 2022-12-16 00:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -261,7 +261,7 @@ msgstr ""
 #. Name of the plugin
 #. Author of the plugin
 msgid "YesTicket"
-msgstr "YesTicker"
+msgstr "YesTicket"
 
 #: yesticket_plugin_page.php:95
 msgid "your key"
