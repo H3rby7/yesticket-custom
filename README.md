@@ -20,7 +20,9 @@ Zip all files inside the `yesticket` folder. (The resulting ZIP should contain t
 
 # Translations
 
-https://wordpress.org/plugins/loco-translate/ (short note of how to do translations in README)
+[Official Wordpress Guide](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/)
+
+['Loco' Plugin to help translating locally](https://wordpress.org/plugins/loco-translate/)
 
 # Knowledge
 
@@ -32,7 +34,7 @@ Use organizerr ID and Key instead of `<ORGID>` and `<KEY>` in the listed request
 
 ### GET Events 
 
-URL: https://www.yesticket.org/api/events-endpoint.php?organizer=<ORGID>&type=all&key=<KEY>
+URL: https://www.yesticket.org/api/v2/events.php?organizer=<ORGID>&type=all&key=<KEY>
 
 ```json
 [
@@ -80,7 +82,7 @@ Setup will run on [http://127.0.0.1](http://127.0.0.1).
 
 ## Run
 
-    docker-compose up
+    docker-compose up -d
 
 *Note that wp-cli will crash until you finish the WP installation*
 *Might need to add '--force-recreate'*
