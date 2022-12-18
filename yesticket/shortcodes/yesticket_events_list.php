@@ -21,36 +21,43 @@ function getYesTicketEventsList($atts)
     try {
         $result = getEventsFromApi($att);
         $content = "";
-
-        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-            $count = 0;
-            foreach ($result as $item) {
-                $add = "";
-                $content .= "<div class='yt-row-list'>";
-                if ($att["type"]=="all") {
-                    $add = "<br><span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
-                }
-                // TODO: Time in local format!
-                $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";
-                $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
-                // TODO: Date in local format!
-                $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
-                if ($att["ticketlink"]=="yes") {
-                    $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
-                }
-                $content .= "</div>\n";
-                $count++;
-                if ($count == (int)$att["count"]) {
-                    break;
-                }
-            }
+        if (!is_countable($result) or count($result) < 1) {
+            $content = ytp_render_no_events();
+        } else if (array_key_exists('message', $result) && $result->message == "no items found") {
+            $content = ytp_render_no_events();
         } else {
-            $content = "<div><p>".__("At this time no upcoming events are available.", "yesticket")."</p>";
+            $content .= render_yesTicketEventsList($result, $att);
         }
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
+    }
+    return $content;
+}
+
+function render_yesTicketEventsList($result, $att) {
+    $content = "";
+    $count = 0;
+    foreach ($result as $item) {
+        $add = "";
+        $content .= "<div class='yt-row-list'>";
+        if ($att["type"]=="all") {
+            $add = "<br><span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
+        }
+        // TODO: Time in local format!
+        $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";
+        $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
+        // TODO: Date in local format!
+        $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
+        if ($att["ticketlink"]=="yes") {
+            $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
+        }
+        $content .= "</div>\n";
+        $count++;
+        if ($count == (int)$att["count"]) {
+            break;
+        }
     }
     return $content;
 }

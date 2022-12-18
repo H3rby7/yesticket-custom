@@ -20,26 +20,34 @@ function getYesTicketTestimonials($atts)
     $content = "";
     try {
         $result = getTestimonialsFromApi($att);
-        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-            $count = 0;
-            foreach ($result as $item) {
-                $add = "";
-                $content .= "<div class='yt-testimonial-row'>";
-                if (!empty($item->event_name) && $att["details"] == "yes") {
-                    $add_event = '<br><span class="yt-testimonial-source">'.__("about", "yesticket").' "'.htmlentities($item->event_name).'"</span>';
-                }
-                $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>'.'<span class="yt-testimonial-source">'.htmlentities($item->source).' </span> <span class="yt-testimonial-date">'.__("date on", "yesticket").' '.htmlentities(date('d.m.Y', strtotime($item->date))).'</span>'.$add_event;
-                $content .= '</div>';
-                $count++;
-                if ($count == (int)$att["count"]) {
-                    break;
-                }
-            }
+        if (!is_countable($result) or count($result) < 1) {
+            $content = ytp_render_no_events();
+        } else if (array_key_exists('message', $result) && $result->message == "no items found") {
+            $content = ytp_render_no_events();
         } else {
-            $content = "<p>".__("At this time no audience feedback is present.", "yesticket")."</p>";
+            $content .= render_yesTicketTestimonials($result, $att);
         }
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
+    }
+    return $content;
+}
+
+function render_yesTicketTestimonials($result, $att) {
+    $content = "";
+    $count = 0;
+    foreach ($result as $item) {
+        $add = "";
+        $content .= "<div class='yt-testimonial-row'>";
+        if (!empty($item->event_name) && $att["details"] == "yes") {
+            $add_event = '<br><span class="yt-testimonial-source">'.__("about", "yesticket").' "'.htmlentities($item->event_name).'"</span>';
+        }
+        $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>'.'<span class="yt-testimonial-source">'.htmlentities($item->source).' </span> <span class="yt-testimonial-date">'.__("date on", "yesticket").' '.htmlentities(date('d.m.Y', strtotime($item->date))).'</span>';
+        $content .= '</div>';
+        $count++;
+        if ($count == (int)$att["count"]) {
+            break;
+        }
     }
     return $content;
 }
