@@ -29,55 +29,12 @@ function getYesTicketEventsCards($atts) {
         else {
             $content .= "<div class='yt-default ".$att["theme"]."'>";
         }
-
-        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-            $count = 0;
-            if ((int)$att["count"] === 1) {
-                $content .= "<div class='yt-single'>\n";
-            } else {
-                $content .= "<div class='yt-container'>\n";
-            }
-            foreach($result as $item){
-                if (!empty($att["grep"])) {
-                    if (!str_contains($item->event_name, $att["grep"])) {
-                        // Did not find the required Substring in the event_title, skip this event
-                        continue;
-                    }
-                }
-                $time = strtotime($item->event_datetime);
-                $content .= '<div class="yt-card-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="yt-card">';
-                    // START 'Wrapper' [div > a > div(yt-card)]
-                    // START 'img'
-                    $content .= '<div class="yt-card-image-wrapper">'."\n";
-                        $content .= '<img src="'.$item->event_picture_url.'" alt="Eventbild">'."\n";
-                    $content .= '</div>'."\n";
-                    // END 'img'
-                    // START 'text'
-                    $content .= '<div class="yt-card-text-wrapper">'."\n";
-                        // START 'DATE'
-                        $content .= '<div class="yt-card-date">'."\n";
-                            $content .= '<span class="yt-card-month">'.date('M', $time).'</span><br>'."\n";
-                            $content .= '<strong class="yt-card-day">'.date('d', $time).'</strong><br>'."\n";
-                            $content .= '<span class="yt-card-year">'.date('Y', $time).'</span>'."\n";
-                        $content .= '</div>'."\n";
-                        // END 'DATE'
-                        // START 'Body // The Event'
-                        $content .= '<div class="yt-card-body">'."\n";
-                            $content .= '<span class="yt-card-body-organizer">'.htmlentities($item->organizer_name).'</span><br>'."\n";
-                            $content .= '<strong class="yt-card-body-title">'.htmlentities($item->event_name).'</strong><br>'."\n";
-                            $content .= '<small class="yt-card-body-location">'.htmlentities($item->location_name).'</small>'."\n";
-                        $content .= '</div>'."\n";
-                        // END 'Body // The Event'
-                    $content .= '</div>'."\n";
-                    // END 'text'
-                $content .= "</div>\n</a>\n</div>";
-                // END 'Wrapper' [div > a > div(yt-card)]
-                $count++;
-                if ($count == (int)$att["count"]) break;
-            }
-            $content .= "</div>\n";
+        if (!is_countable($result) or count($result) < 1) {
+            $content = ytp_render_no_events();
+        } else if (array_key_exists('message', $result) && $result->message == "no items found") {
+            $content = ytp_render_no_events();
         } else {
-            $content = "<p>Im Moment keine aktuellen Veranstaltungen.</p>";
+            $content .= render_yesTicketEventsCards($result, $att);
         }
         $content .= "</div>";
     } catch (Exception $e) {
@@ -86,16 +43,70 @@ function getYesTicketEventsCards($atts) {
     return $content;
 }
 
+function render_yesTicketEventsCards($result, $att) {
+    $content = "";
+    $count = 0;
+    if ((int)$att["count"] === 1) {
+        $content .= "<div class='yt-single'>\n";
+    } else {
+        $content .= "<div class='yt-container'>\n";
+    }
+    foreach($result as $item){
+        if (!empty($att["grep"])) {
+            if (!str_contains($item->event_name, $att["grep"])) {
+                // Did not find the required Substring in the event_title, skip this event
+                continue;
+            }
+        }
+        $time = ytp_to_local_datetime($item->event_datetime);
+        $ts = $time->getTimestamp();
+        $content .= '<div class="yt-card-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="yt-card">';
+            // START 'Wrapper' [div > a > div(yt-card)]
+            // START 'img'
+            $content .= '<div class="yt-card-image-wrapper">'."\n";
+                $content .= '<img src="'.$item->event_picture_url.'" alt="Eventbild">'."\n";
+            $content .= '</div>'."\n";
+            // END 'img'
+            // START 'text'
+            $content .= '<div class="yt-card-text-wrapper">'."\n";
+                // START 'DATE'
+                $content .= '<div class="yt-card-date">'."\n";
+                    $content .= '<span class="yt-card-month">'.wp_date('M', $ts).'</span><br>'."\n";
+                    $content .= '<strong class="yt-card-day">'.wp_date('d', $ts).'</strong><br>'."\n";
+                    $content .= '<span class="yt-card-year">'.wp_date('Y', $ts).'</span>'."\n";
+                $content .= '</div>'."\n";
+                // END 'DATE'
+                // START 'Body // The Event'
+                $content .= '<div class="yt-card-body">'."\n";
+                    $content .= '<span class="yt-card-body-organizer">'.htmlentities($item->organizer_name).'</span><br>'."\n";
+                    $content .= '<strong class="yt-card-body-title">'.htmlentities($item->event_name).'</strong><br>'."\n";
+                    $content .= '<small class="yt-card-body-location">'.htmlentities($item->location_name).'</small>'."\n";
+                $content .= '</div>'."\n";
+                // END 'Body // The Event'
+            $content .= '</div>'."\n";
+            // END 'text'
+        $content .= "</div>\n</a>\n</div>";
+        // END 'Wrapper' [div > a > div(yt-card)]
+        $count++;
+        if ($count == (int)$att["count"]) break;
+    }
+    $content .= "</div>\n";
+    return $content;
+}
+
 function render_yesTicketEventsCardsHelp() {?>
-    <h2>Shortcodes für deine Events als Kacheln bzw. Cards</h2>
-    <p>Schnellstart: <span class="yt-code">[yesticket_events_cards type="all" count="3" theme="light"]</span>
-    <h3>Optionen für Event-Card-Shortcodes</h3>
+    <h2><?php echo __("Shortcodes for your events as cards.", "yesticket");?></h2>
+    <p><?php echo __("quickstart", "yesticket");?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p>
+    <h3><?php echo __("Options for event card shortcodes", "yesticket");?></h3>
     <?php 
-    echo ytp_render_optionType('Events');
+    echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
     ?>
     <h4>Grep</h4>
-    <p class='ml-3'>Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern.</p>
-    <p class="ml-3"><span class="yt-code">grep="im Bierhaus"</span> werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "im Bierhaus" enthalten.</p>
+    <p class='ml-3'><?php
+    echo __("Using <b>grep</b> you can filter your events by their title.", "yesticket");?></p>
+    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php
+    /* translators: The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'*/
+    echo __("will only display events, who have \"Johnstone\" in their title.", "yesticket");?></p>
 <?php } ?>

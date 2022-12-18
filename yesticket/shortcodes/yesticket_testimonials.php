@@ -20,23 +20,12 @@ function getYesTicketTestimonials($atts)
     $content = "";
     try {
         $result = getTestimonialsFromApi($att);
-        if (count((is_countable($result) ? $result : [])) > 0 && $result->message != "no items found") {
-            $count = 0;
-            foreach ($result as $item) {
-                $add = "";
-                $content .= "<div class='yt-testimonial-row'>";
-                if (!empty($item->event_name) && $att["details"] == "yes") {
-                    $add_event = "<br><span class='yt-testimonial-source'>über ".htmlentities($item->event_name)."</span>";
-                }
-                $content .= "<span class='yt-testimonial-text'>&raquo;".htmlentities($item->text).'&laquo;</span><br>'."<span class='yt-testimonial-source'>".htmlentities($item->source).' '."</span> <span class='yt-testimonial-date'>Am ".htmlentities(date('d.m.Y', strtotime($item->date)))."</span>".$add_event;
-                $content .= "</div>\n";
-                $count++;
-                if ($count == (int)$att["count"]) {
-                    break;
-                }
-            }
+        if (!is_countable($result) or count($result) < 1) {
+            $content = ytp_render_no_events();
+        } else if (array_key_exists('message', $result) && $result->message == "no items found") {
+            $content = ytp_render_no_events();
         } else {
-            $content = "";
+            $content .= render_yesTicketTestimonials($result, $att);
         }
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
@@ -44,15 +33,48 @@ function getYesTicketTestimonials($atts)
     return $content;
 }
 
+function render_yesTicketTestimonials($result, $att) {
+    $content = "";
+    $count = 0;
+    foreach ($result as $item) {
+        $add = "";
+        $content .= "<div class='yt-testimonial-row'>";
+        if (!empty($item->event_name) && $att["details"] == "yes") {
+            $add_event = '<br><span class="yt-testimonial-source">'.__("about", "yesticket").' "'.htmlentities($item->event_name).'"</span>';
+        }
+        $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>';
+        $content .= '<span class="yt-testimonial-source">'.render_yesTicketTestimonialSource($item).'</span>';
+        $content .= '</div>';
+        $count++;
+        if ($count == (int)$att["count"]) {
+            break;
+        }
+    }
+    return $content;
+}
+
+function render_yesTicketTestimonialSource($item) {
+    $source = $item->source;
+    $date = $item->date;
+    return sprintf(
+        /* translators: %1$s is replaced with the author; %2$s is replaced with the date */
+        __('%1$s on %2$s.', "yesticket" ),
+        $source,
+        ytp_render_date($date)
+    );
+}
+
 function render_yesTicketTestimonialsHelp() {?>
-    <h2>Shortcodes für Zuschauerstimmen</h2>
-    <p>Schnellstart: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
-    <h3>Optionen für Testimonial-Shortcodes</h3>
+    <h2><?php echo __("Shortcodes for your testimonials.", "yesticket");?></h2>
+    <p><?php echo __("quickstart", "yesticket");?>: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
+    <h3><?php echo __("Options for testimonial shortcodes", "yesticket");?></h3>
     <h4>Details</h4>
-    <p class='ml-3'><?php echo __('option testimonials with details explanation', 'yesticket');?></p>
-    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('option testimonials with details explanation of chosing "yes"', 'yesticket');?></p>
+    <p class='ml-3'><?php echo __("Using details you can display the corresponding event to a testimonial.", "yesticket");?></p>
+    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php 
+    /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
+    echo __("will add the event name to each testimonial, if present.", "yesticket");?></p>
     <?php 
-    echo ytp_render_optionType('Testimonials');
+    echo ytp_render_optionType('testimonials');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
 }

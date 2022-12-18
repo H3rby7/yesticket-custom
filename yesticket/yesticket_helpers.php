@@ -23,4 +23,5 @@ function ytp_addCacheKeyToOptions($CACHE_KEY) {
 function ytp_getImageUrl($fileName) {
   return plugin_dir_url(__FILE__).'img/'.$fileName;
 }
+
 ?>
