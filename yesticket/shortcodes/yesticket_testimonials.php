@@ -57,7 +57,7 @@ function render_yesTicketTestimonialSource($item) {
     $source = $item->source;
     $date = $item->date;
     return sprintf(
-        /* translators: 1: Author 2: Date */
+        /* translators: %1$s is replaced with the author; %2$s is replaced with the date */
         __('%1$s on %2$s.', "yesticket" ),
         $source,
         ytp_render_date($date)
@@ -70,7 +70,9 @@ function render_yesTicketTestimonialsHelp() {?>
     <h3><?php echo __("Options for testimonial shortcodes", "yesticket");?></h3>
     <h4>Details</h4>
     <p class='ml-3'><?php echo __("Using details you can display the corresponding event to a testimonial.", "yesticket");?></p>
-    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __("will add the event name to each testimonial, if present.", "yesticket");?></p>
+    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php 
+    /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
+    echo __("will add the event name to each testimonial, if present.", "yesticket");?></p>
     <?php 
     echo ytp_render_optionType('testimonials');
     echo ytp_render_optionCount();

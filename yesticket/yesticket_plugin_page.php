@@ -21,7 +21,10 @@ function yesticket_pluginpage_init()
   yesticket_render_feedback();
     ?>
     <h1><img src="<?php echo ytp_getImageUrl('YesTicket_logo.png') ?>" height="60" alt="YesTicket Logo"></h1>
-    <p><?php echo __("YesTicket is a ticketing system and we love wordpress - so here's our plugin! You can integrate upcoming events and audience feedback (testimonials) using shortcodes anywhere on your page. Be it pages, posts, widgets, ... get creative!", "yesticket");?></p><?php
+    <p><?php 
+    /* translators: YesTicket Plugin Page Introduction Text*/
+    echo __("YesTicket is a ticketing system and we love wordpress - so here's our plugin! You can integrate upcoming events and audience feedback (testimonials) using shortcodes anywhere on your page. Be it pages, posts, widgets, ... get creative!", "yesticket");?>
+    </p><?php
     $options = get_option( 'yesticket_settings' );
     $renderSettingsOnly = empty($options['organizer_id'] or empty($options['api_key']));
     if ($renderSettingsOnly) {
@@ -30,7 +33,9 @@ function yesticket_pluginpage_init()
     }?>
     <h2><?php echo __("Shortcodes", "yesticket");?></h2>
     <p><?php echo __("You can use multiple shortcodes on your page. For example you might start with a list of your shows, followed by your workshops and finish with testimonials of your audience.", "yesticket");?></p>
-    <p><?php echo __("Hover above the tabs for a preview.", "yesticket");?></p>
+    <p><?php  
+    /* translators: Hint text on plugin-page to preview different shortcodes */
+    echo __("Hover above the tabs for a preview.", "yesticket");?></p>
 
     <nav class="nav-tab-wrapper">
       <a href="?page=yesticket-plugin" class="hover_trigger nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Events</a>
@@ -78,6 +83,7 @@ function yesticket_settings_init(  ) {
 	);
 	add_settings_field( 
 		'organizer_id',
+    /* translators: Please keep the quotation marks! */
     __("Your \"organizer-ID\"", "yesticket"),
 		'yesticket_organizer_id_render', 
 		'pluginPage', 
@@ -85,6 +91,7 @@ function yesticket_settings_init(  ) {
 	);
 	add_settings_field( 
 		'api_key',
+    /* translators: Please keep the quotation marks! */
     __("Your \"key\"", "yesticket"),
 		'yesticket_api_key_render', 
 		'pluginPage', 
@@ -108,8 +115,11 @@ function yesticket_settings_init(  ) {
 }
 
 function yesticket_settings_required_section_callback(  ) {
+  /* translators: Points to the english website */
   $link = __("https://www.yesticket.org/login/en/integration.php#wp-plugin", "yesticket");?>
-  <p><?php echo __("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:", "yesticket");?></p>
+  <p><?php 
+  /* translators: Please keep the <b>blabla</b> Markup. */
+  echo __("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:", "yesticket");?></p>
   <a href='<?php echo $link;?>' target='_blank'><?php echo $link;?></a>
   <?php
 }
@@ -139,8 +149,12 @@ function yesticket_settings_technical_section_callback(  ) {
 function yesticket_cache_clear_button_render(  ) {
     ?><form action="admin.php?page=yesticket-plugin" method="POST">
         <input type="hidden" name="clear_cache" value="1">
-        <label for="clear_cache_submit"><?php echo __("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");?></label>
-        <input type="submit" name="clear_cache_submit" value="<?php echo __("Clear Cache", "yesticket"); ?>">
+        <label for="clear_cache_submit"><?php 
+        /* translators: The sentence ends with a button 'Clear Cache' (can be translated at that msgId) */
+        echo __("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");?></label>
+        <input type="submit" name="clear_cache_submit" value="<?php
+        /* translators: Text on a button, use imperativ if possible. */
+        echo __("Clear Cache", "yesticket"); ?>">
       </form><?php
 }
 
@@ -160,7 +174,9 @@ function yesticket_clear_cache(  ) {
     foreach($cacheKeys as $k) {
         delete_transient($k);
     }
-    yesticket_render_success_message('Cache gelöscht.');
+    yesticket_render_success_message(
+      /* translators: Success Message after clearing cache */
+      __("Deleted the cache.", "yesticket"));
 }
 
 function yesticket_render_feedback(  ) {
@@ -168,7 +184,9 @@ function yesticket_render_feedback(  ) {
         yesticket_clear_cache();
     }
     if (isset( $_GET['settings-updated'] )) {
-        yesticket_render_success_message('Einstellungen gespeichert.');
+        yesticket_render_success_message(
+          /* translators: Success Message after updating settings */
+          __("Settings saved.", "yesticket"));
     }
 }
 
@@ -179,8 +197,12 @@ function yesticket_render_success_message( $msg ) {
 function yesticket_render_shortcode_preview( $shortcode, $previewImageFileName) {
   ?>
   <div class="show_on_hover shortcode_preview">
-    <!--<p>Preview of shortcode <span class="yt-code">[<?php echo $shortcode;?>]</span></p>-->
-    <img src="<?php echo ytp_getImageUrl($previewImageFileName) ?>" alt="<?php echo $shortcode;?> preview">
+    <img src="<?php echo ytp_getImageUrl($previewImageFileName) ?>" alt="<?php
+    printf(
+      /* translators: %s is replaced with the shortcode, e.G. 'yesticket_events' */
+      __('[%s] preview', "yesticket" ),
+      $shortcode
+    );?>">
   </div>
   <?php
 }

@@ -12,10 +12,18 @@ function ytp_render_optionType($type) {?>
     <?php } else  {
       throw new AssertionError('Expect argument "$type" to be either "events" or "testimonials"!');
     }?>
-    <p class="ml-3"><span class="yt-code">type="performance"</span> <?php echo __("only shows/performances", "yesticket");?><br>
-    <span class="yt-code">type="workshop"</span> <?php echo __("only workshops", "yesticket");?><br>
-    <span class="yt-code">type="festivals"</span> <?php echo __("only festivals", "yesticket");?><br>
-    <span class="yt-code">type="all"</span> <?php echo __("Everything, mixed", "yesticket");?></p>
+    <p class="ml-3"><span class="yt-code">type="performance"</span><?php
+    /* translators: Explanation of using the shortcode option 'type="performance"'*/
+    echo __("only shows/performances", "yesticket");?><br>
+    <span class="yt-code">type="workshop"</span> <?php 
+    /* translators: Explanation of using the shortcode option 'type="workshop"'*/
+    echo __("only workshops", "yesticket");?><br>
+    <span class="yt-code">type="festivals"</span> <?php 
+    /* translators: Explanation of using the shortcode option 'type="festivals"'*/
+    echo __("only festivals", "yesticket");?><br>
+    <span class="yt-code">type="all"</span> <?php 
+    /* translators: Explanation of using the shortcode option 'type="all"'*/
+    echo __("Everything, mixed", "yesticket");?></p>
 <?php } 
 function ytp_render_optionTheme() {?>
     <h4>Theme</h4>
@@ -27,6 +35,11 @@ function ytp_render_optionTheme() {?>
 function ytp_render_optionCount() {?>
   <h4>Count</h4>
   <p class='ml-3'><?php echo __("Using <b>count</b> you can define the maximum amount of elements.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">count="6"</span> <?php echo __("a maximum of 6 events is displayed", "yesticket");?></p>
-  <p class="ml-3"><?php echo __("Please note, that count describes an upper limit. If fewer items are available, only these can be displayed.", "yesticket");?></p><?php
+  <p class="ml-3"><span class="yt-code">count="6"</span> <?php 
+    /* translators: The sentence actually starts with a non-translatable codeblock 'count="6"'*/
+  echo __("a maximum of 6 events is displayed", "yesticket");?></p>
+  <p class="ml-3"><?php 
+  /* translators: Note, when using the shortcode option 'count'*/
+  echo __("Please note, that count describes an upper limit. If fewer items are available, only these can be displayed.", "yesticket");
+  ?></p><?php
 }

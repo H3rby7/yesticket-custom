@@ -62,13 +62,22 @@ function getData($get_url) {
 function validateArguments($att, $options) {
   // We prefer people setting their private info in the settings, rather than the shortcode.
   if (empty($options["organizer_id"]) and empty($att["organizer"])) {
-      throw new InvalidArgumentException(__("Please configure your 'organizer-id' in the plugin settings.", "yesticket"));
+      throw new InvalidArgumentException(
+        /* translators: Error message, if the plugin is not properly configured*/
+        __("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
+    );
   }
   if (empty($options["api_key"]) and empty($att["key"])) {
-      throw new InvalidArgumentException(__("Please configure your 'key' in the plugin settings.", "yesticket"));
+      throw new InvalidArgumentException(
+        /* translators: Error message, if the plugin is not properly configured*/
+        __("Please configure your 'key' in the plugin settings.", "yesticket")
+    );
   }
   if (!empty($att["type"]) and $att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="Workshop" and $att["type"]!="festival") {
-      throw new InvalidArgumentException(__("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket"));
+      throw new InvalidArgumentException(
+        /* translators: Error message, if the shortcode uses wrong/invalid types*/
+        __("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
+    );
   }
   return true;
 }

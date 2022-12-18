@@ -87,7 +87,9 @@ function render_yesTicketEventsHelp() {?>
     <h3><?php echo __("Options for event shortcodes", "yesticket");?></h3>
     <h4>Details</h4>
     <p class='ml-3'><?php echo __("Using <b>details</b> you can include the description of your YesTicket event. The description is collapsed and can be expanded.", "yesticket");?></p>
-    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __("will show a link to expand the details.", "yesticket");?></p>
+    <p class="ml-3"><span class="yt-code">details="yes"</span><?php
+    /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
+    echo __("will show a link to expand the details.", "yesticket");?></p>
     <?php
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
