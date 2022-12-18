@@ -58,7 +58,8 @@ function render_yesTicketEventsCards($result, $att) {
                 continue;
             }
         }
-        $time = strtotime($item->event_datetime);
+        $time = ytp_to_local_datetime($item->event_datetime);
+        $ts = $time->getTimestamp();
         $content .= '<div class="yt-card-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="yt-card">';
             // START 'Wrapper' [div > a > div(yt-card)]
             // START 'img'
@@ -70,9 +71,9 @@ function render_yesTicketEventsCards($result, $att) {
             $content .= '<div class="yt-card-text-wrapper">'."\n";
                 // START 'DATE'
                 $content .= '<div class="yt-card-date">'."\n";
-                    $content .= '<span class="yt-card-month">'.date('M', $time).'</span><br>'."\n";
-                    $content .= '<strong class="yt-card-day">'.date('d', $time).'</strong><br>'."\n";
-                    $content .= '<span class="yt-card-year">'.date('Y', $time).'</span>'."\n";
+                    $content .= '<span class="yt-card-month">'.wp_date('M', $ts).'</span><br>'."\n";
+                    $content .= '<strong class="yt-card-day">'.wp_date('d', $ts).'</strong><br>'."\n";
+                    $content .= '<span class="yt-card-year">'.wp_date('Y', $ts).'</span>'."\n";
                 $content .= '</div>'."\n";
                 // END 'DATE'
                 // START 'Body // The Event'
