@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2022-12-18 18:45+0000\n"
+"PO-Revision-Date: 2022-12-18 19:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -97,6 +97,10 @@ msgstr "d.m.y H:i \\U\\h\\r"
 msgid "Festival"
 msgstr "Festival"
 
+#: shortcodes/yesticket_events.php:66
+msgid "Hints"
+msgstr "Hinweise"
+
 #. Hint text on plugin-page to preview different shortcodes
 #: yesticket_plugin_page.php:38
 msgid "Hover above the tabs for a preview."
@@ -125,6 +129,10 @@ msgstr ""
 msgid "If your changes in YesTicket are not reflected fast enough, try to: "
 msgstr ""
 "Wenn sich deine Einträge nicht schnell genug updaten, versuche es mal mit:"
+
+#: shortcodes/yesticket_events.php:69
+msgid "Location"
+msgstr "Ort"
 
 #. Description of the plugin
 msgid "Online Ticketing"
@@ -253,7 +261,7 @@ msgstr ""
 "Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte "
 "später noch einmal."
 
-#: shortcodes/yesticket_events.php:55
+#: shortcodes/yesticket_events.php:55 shortcodes/yesticket_events.php:68
 msgid "Tickets"
 msgstr "Tickets"
 

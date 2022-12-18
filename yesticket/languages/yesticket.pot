@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 18:44+0000\n"
+"POT-Creation-Date: 2022-12-18 19:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -98,6 +98,10 @@ msgstr ""
 msgid "Festival"
 msgstr ""
 
+#: shortcodes/yesticket_events.php:66
+msgid "Hints"
+msgstr ""
+
 #. Hint text on plugin-page to preview different shortcodes
 #: yesticket_plugin_page.php:38
 msgid "Hover above the tabs for a preview."
@@ -121,6 +125,10 @@ msgstr ""
 #. The sentence ends with a button 'Clear Cache' (can be translated at that msgId)
 #: yesticket_plugin_page.php:154
 msgid "If your changes in YesTicket are not reflected fast enough, try to: "
+msgstr ""
+
+#: shortcodes/yesticket_events.php:69
+msgid "Location"
 msgstr ""
 
 #. Description of the plugin
@@ -238,7 +246,7 @@ msgstr ""
 msgid "The YesTicket service is currently unavailable. Please try again later."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:55
+#: shortcodes/yesticket_events.php:55 shortcodes/yesticket_events.php:68
 msgid "Tickets"
 msgstr ""
 

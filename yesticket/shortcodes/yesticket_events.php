@@ -63,10 +63,10 @@ function render_yesTicketEvents($result, $att) {
         if ($att["details"] == "yes") {
             $details = nl2br(htmlentities($item->event_description));
             if (!empty($item->event_notes_help)) {
-                $details .= "<h5>Hinweise</h5>".nl2br(htmlentities($item->event_notes_help));
+                $details .= "<h5>".__("Hints", "yesticket")."</h5>".nl2br(htmlentities($item->event_notes_help));
             }
-            $details .= "<h5>Tickets</h5>".htmlentities($item->tickets);
-            $details .= "<h5>Spielort</h5>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
+            $details .= "<h5>".__("Tickets", "yesticket")."</h5>".htmlentities($item->tickets);
+            $details .= "<h5>".__("Location", "yesticket")."</h5>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
             $content .= '<br><details class="yt-details">
                             <summary><u class="yt-show-details">'.__("Show details", "yesticket").'</u></summary>
                             <div>'.$details.'</div><div class="yt-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button-big">'.__("Order Tickets", "yesticket").'<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
