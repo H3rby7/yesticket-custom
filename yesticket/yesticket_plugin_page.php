@@ -164,10 +164,10 @@ function yesticket_clear_cache(  ) {
 }
 
 function yesticket_render_feedback(  ) {
-    if ($_POST['clear_cache']) {
+    if (isset( $_POST['clear_cache'] )) {
         yesticket_clear_cache();
     }
-    if ($_GET['settings-updated']) {
+    if (isset( $_GET['settings-updated'] )) {
         yesticket_render_success_message('Einstellungen gespeichert.');
     }
 }
