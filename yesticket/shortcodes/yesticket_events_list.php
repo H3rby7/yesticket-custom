@@ -45,7 +45,7 @@ function getYesTicketEventsList($atts)
                 }
             }
         } else {
-            $content = "<div><p>".__('no shows', 'yesticket')."</p>";
+            $content = "<div><p>".__('At this time no upcoming events are available.', 'yesticket')."</p>";
         }
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";
@@ -56,9 +56,9 @@ function getYesTicketEventsList($atts)
 }
 
 function render_yesTicketEventsListHelp() {?>
-    <h2><?php echo __('shortcode help event list', 'yesticket');?></h2>
-    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p>
-    <h3><?php echo __('options for event list', 'yesticket');?></h3>
+    <h2><?php echo __('Shortcodes for your events as list.', 'yesticket');?></h2>
+    <p><?php echo __("quickstart", 'yesticket');?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p>
+    <h3><?php echo __('Options for event list shortcodes', 'yesticket');?></h3>
     <?php 
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();

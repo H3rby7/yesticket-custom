@@ -77,7 +77,7 @@ function getYesTicketEventsCards($atts) {
             }
             $content .= "</div>\n";
         } else {
-            $content = "<p>".__('no shows', 'yesticket')."</p>";
+            $content = "<p>".__('At this time no upcoming events are available.', 'yesticket')."</p>";
         }
         $content .= "</div>";
     } catch (Exception $e) {
@@ -87,15 +87,15 @@ function getYesTicketEventsCards($atts) {
 }
 
 function render_yesTicketEventsCardsHelp() {?>
-    <h2><?php echo __('shortcode help event cards', 'yesticket');?></h2>
-    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p>
-    <h3><?php echo __('options for event cards', 'yesticket');?></h3>
+    <h2><?php echo __("Shortcodes for your events as cards.", 'yesticket');?></h2>
+    <p><?php echo __("quickstart", 'yesticket');?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p>
+    <h3><?php echo __("Options for event card shortcodes", 'yesticket');?></h3>
     <?php 
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
     echo ytp_render_optionTheme();
     ?>
     <h4>Grep</h4>
-    <p class='ml-3'><?php echo __('option grep explanation', 'yesticket');?></p>
-    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php echo __('option grep example', 'yesticket');?></p>
+    <p class='ml-3'><?php echo __('Using <b>grep</b> you can filter your events by their title.', 'yesticket');?></p>
+    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php echo __('will only display events, who have \"Johnstone\" in their title.', 'yesticket');?></p>
 <?php } ?>

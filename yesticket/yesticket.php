@@ -5,7 +5,7 @@
 * Version: 2.0.0
 * Author: YesTicket
 * Author URI: https://www.yesticket.org/
-* Description: Onlineticketing
+* Description: Online Ticketing
 * License: GPL2
 * Text Domain: yesticket
 * Domain Path: /languages

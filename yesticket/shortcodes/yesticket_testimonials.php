@@ -26,7 +26,7 @@ function getYesTicketTestimonials($atts)
                 $add = "";
                 $content .= "<div class='yt-testimonial-row'>";
                 if (!empty($item->event_name) && $att["details"] == "yes") {
-                    $add_event = '<br><span class="yt-testimonial-source">'.__('about event', 'yesticket').' "'.htmlentities($item->event_name).'"</span>';
+                    $add_event = '<br><span class="yt-testimonial-source">'.__('about', 'yesticket').' "'.htmlentities($item->event_name).'"</span>';
                 }
                 $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>'.'<span class="yt-testimonial-source">'.htmlentities($item->source).' </span> <span class="yt-testimonial-date">'.__('date on', 'yesticket').' '.htmlentities(date('d.m.Y', strtotime($item->date))).'</span>'.$add_event;
                 $content .= '</div>';
@@ -36,7 +36,7 @@ function getYesTicketTestimonials($atts)
                 }
             }
         } else {
-            $content = "<p>".__('no testimonials', 'yesticket')."</p>";
+            $content = "<p>".__('At this time no audience feedback is present.', 'yesticket')."</p>";
         }
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
@@ -45,12 +45,12 @@ function getYesTicketTestimonials($atts)
 }
 
 function render_yesTicketTestimonialsHelp() {?>
-    <h2><?php echo __('shortcode help testimonials', 'yesticket');?></h2>
-    <p><?php echo __('quickstart', 'yesticket');?>: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
-    <h3><?php echo __('options for testimonials', 'yesticket');?></h3>
+    <h2><?php echo __('Shortcodes for your testimonials.', 'yesticket');?></h2>
+    <p><?php echo __("quickstart", 'yesticket');?>: <span class="yt-code">[yesticket_testimonials count="30"]</span></p>
+    <h3><?php echo __('Options for testimonial shortcodes', 'yesticket');?></h3>
     <h4>Details</h4>
-    <p class='ml-3'><?php echo __('option testimonials with details explanation', 'yesticket');?></p>
-    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __('option testimonials with details explanation of chosing "yes"', 'yesticket');?></p>
+    <p class='ml-3'><?php echo __("Using details you can display the corresponding event to a testimonial.", 'yesticket');?></p>
+    <p class="ml-3"><span class="yt-code">details="yes"</span> <?php echo __("will add the event name to each testimonial, if present.", 'yesticket');?></p>
     <?php 
     echo ytp_render_optionType('testimonials');
     echo ytp_render_optionCount();

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2022-12-16 15:12+0000\n"
+"PO-Revision-Date: 2022-12-18 14:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -19,262 +19,250 @@ msgstr ""
 msgid "?page=yesticket-plugin"
 msgstr "?page=yesticket-plugin"
 
+#: shortcodes/yesticket_options_helpers.php:30
+msgid "a maximum of 6 events is displayed"
+msgstr "werden maximal 6 kommende Events angezeigt"
+
 #: shortcodes/yesticket_testimonials.php:29
-msgid "about event"
+msgid "about"
 msgstr "über"
 
+#: shortcodes/yesticket_testimonials.php:39
+msgid "At this time no audience feedback is present."
+msgstr "Momentan sind leider keine Zuschauerstimmen vorhanden."
+
+#: shortcodes/yesticket_events.php:66 shortcodes/yesticket_events_cards.php:80
+#: shortcodes/yesticket_events_list.php:48
+msgid "At this time no upcoming events are available."
+msgstr "Momentan sind leider keine kommenden Veranstaltungen vorhanden."
+
+#: shortcodes/yesticket_options_helpers.php:24
+msgid "Buttons will be in a dark grey and match darker backgrounds"
+msgstr "Buttons sind Dunkelgrau und passen zu dunklen Hintergründen"
+
+#: shortcodes/yesticket_options_helpers.php:22
+#: shortcodes/yesticket_options_helpers.php:23
+msgid "Buttons will be in a light grey and match lighter backgrounds"
+msgstr "Buttons sind Hellgrau und passen zu hellen Hintergründen"
+
 #: yesticket_plugin_page.php:103
-msgid "cache time in min"
+msgid "Cache time in minutes"
 msgstr "Cache Zeit in Minuten"
 
-#: yesticket_plugin_page.php:32
-msgid "can use multiple shortcodes"
-msgstr ""
-"Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die "
-"Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen."
-
 #: yesticket_plugin_page.php:136
-msgid "change settings on own risk"
+msgid "Change these settings at your own risk."
 msgstr "Diese Einstellungen kannst du anpassen, wenn du weißt, was du tust."
 
 #: yesticket_plugin_page.php:143
-msgid "clear cache button"
+msgid "Clear Cache"
 msgstr "Cache löschen"
 
 #: shortcodes/yesticket_testimonials.php:31
 msgid "date on"
 msgstr "am"
 
-#: yesticket_api.php:71
-msgid "error config invalid type"
-msgstr ""
-"Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, "
-"workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach "
-"nicht an."
-
-#: yesticket_api.php:68
-msgid "error config key missing"
-msgstr "Bitte konfiguriere deinen Key in den Plugin Settings."
-
-#: yesticket_api.php:65
-msgid "error config organizer missing"
-msgstr "Bitte konfiguriere deine Organizer-ID in den Plugin Settings."
-
-#: yesticket_api.php:55
-msgid "error yesticket api unavailable"
-msgstr ""
-"Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte "
-"später noch einmal."
+#: shortcodes/yesticket_options_helpers.php:18
+msgid "Everything, mixed"
+msgstr "Alles, gemischt"
 
 #: shortcodes/yesticket_shortcode_helpers.php:13
-msgid "festival"
+msgid "Festival"
 msgstr "Festival"
+
+#: yesticket_plugin_page.php:33
+msgid "Hover above the tabs for a preview."
+msgstr "Ziehe die Maus über einen Tab für eine Vorschau"
 
 #. Author URI of the plugin
 msgid "https://www.yesticket.org/"
 msgstr "https://www.yesticket.org/"
 
-#: yesticket_plugin_page.php:24
-msgid "introducing yesticket on admin page"
-msgstr ""
-"YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser "
-"Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen "
-"(Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im "
-"Inhaltsteil, in Widgets oder in was auch immer in Wordpress."
-
-#: shortcodes/yesticket_events.php:65 shortcodes/yesticket_events_cards.php:80
-#: shortcodes/yesticket_events_list.php:47
-msgid "no shows"
-msgstr "Momentan sind leider keine kommenden Veranstaltungen vorhanden."
-
-#: shortcodes/yesticket_testimonials.php:39
-msgid "no testimonials"
-msgstr "Momentan sind leider keine Zuschauerstimmen vorhanden."
-
-#. Description of the plugin
-msgid "Onlineticketing"
-msgstr "Onlineticketing"
-
-#: shortcodes/yesticket_options_helpers.php:30
-msgid "option count example"
-msgstr "werden maximal 6 kommende Events angezeigt"
-
-#: shortcodes/yesticket_options_helpers.php:29
-msgid "option count explanation"
-msgstr ""
-"Mit <b>count</b> kannst du die maximale Anzahl der gezeigten Elemente "
-"bestimmen."
-
-#: shortcodes/yesticket_options_helpers.php:31
-msgid "option count hint"
-msgstr ""
-"Beachte, dass es sich um eine Maximalzahl handelt. Wenn also nicht genügend "
-"Elemente vorhanden sind, werden weniger angezeigt."
-
-#: shortcodes/yesticket_events.php:80
-msgid "option events with details explanation"
-msgstr ""
-"Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in "
-"YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar."
-
-#: shortcodes/yesticket_events.php:81
-msgid "option events with details explanation of chosing \"yes\""
-msgstr "zeigt den Link zu Aufklappen und die Beschreibung an."
-
-#: shortcodes/yesticket_options_helpers.php:9
-msgid "option events with type explanation"
-msgstr "Mit <b>type</b> kannst du deine Events nach Art filtern."
-
-#: shortcodes/yesticket_events_cards.php:100
-msgid "option grep example"
-msgstr ""
-"werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "
-"\"Johnstone\" enthalten."
-
-#: shortcodes/yesticket_events_cards.php:99
-msgid "option grep explanation"
-msgstr "Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern."
-
-#: shortcodes/yesticket_testimonials.php:52
-msgid "option testimonials with details explanation"
-msgstr ""
-"Mit details kannst du die Veranstaltung anzeigen lassen, die zu einem "
-"Testimonial dazugehört."
-
-#: shortcodes/yesticket_testimonials.php:53
-msgid "option testimonials with details explanation of chosing \"yes\""
-msgstr ""
-"ergänzt das Testimonial um die zugehörige Veranstaltung, sofern vorhanden."
-
-#: shortcodes/yesticket_options_helpers.php:11
-msgid "option testimonials with type explanation"
-msgstr "Mit <b>type</b> kannst du deine Testimonials nach Art filtern."
-
-#: shortcodes/yesticket_options_helpers.php:24
-msgid "option theme chosing \"dark\""
-msgstr "Buttons sind Dunkelgrau und passen zu dunklen Hintergründen"
-
-#: shortcodes/yesticket_options_helpers.php:23
-msgid "option theme chosing \"light\""
-msgstr "Buttons sind Hellgrau und passen zu hellen Hintergründen"
-
-#: shortcodes/yesticket_options_helpers.php:22
-msgid "option theme explanation"
-msgstr ""
-"Mit <b>theme</b> kannst du die Farben deinem Layout ein wenig anpassen. Es "
-"gibt eine helle und eine dunkle Variante."
+#: yesticket_plugin_page.php:111
+msgid "https://www.yesticket.org/login/en/integration.php#wp-plugin"
+msgstr "https://www.yesticket.org/login/de/integration.php#wp-plugin"
 
 #: shortcodes/yesticket_options_helpers.php:25
-msgid "option theme leaving empty"
+msgid ""
+"If you do not provide a theme only basic formatting is applied. This is an "
+"option to provide your own clean CSS. Maybe you are a Webdesigner after all?"
 msgstr ""
 "Wenn du theme leer angibst, dann bekommst du eine simple Formatierung und Du "
 "kannst mit CSS-Formatierungen in deinem Wordpress die Formatierung selbst "
 "überschreiben - eher so die Möglichkeit für Webdesigner."
 
-#: shortcodes/yesticket_options_helpers.php:18
-msgid "option type chosing \"all\""
-msgstr "Alles, gemischt"
+#: yesticket_plugin_page.php:142
+msgid "If your changes in YesTicket are not reflected fast enough, try to: "
+msgstr ""
+"Wenn sich deine Einträge nicht schnell genug updaten, versuche es mal mit:"
+
+#. Description of the plugin
+msgid "Online Ticketing"
+msgstr "Online Ticketing"
 
 #: shortcodes/yesticket_options_helpers.php:17
-msgid "option type chosing \"festivals\""
+msgid "only festivals"
 msgstr "nur vom Typ Festivals"
 
 #: shortcodes/yesticket_options_helpers.php:15
-msgid "option type chosing \"performance\""
+msgid "only shows/performances"
 msgstr "nur vom Typ Auftritte"
 
 #: shortcodes/yesticket_options_helpers.php:16
-msgid "option type chosing \"workshop\""
+msgid "only workshops"
 msgstr "nur vom Typ Workshops"
 
 #: shortcodes/yesticket_events_cards.php:92
-msgid "options for event cards"
+msgid "Options for event card shortcodes"
 msgstr "Optionen für Event-Card-Shortcodes"
 
-#: shortcodes/yesticket_events_list.php:60
-msgid "options for event list"
+#: shortcodes/yesticket_events_list.php:61
+msgid "Options for event list shortcodes"
 msgstr "Optionen für Event-List-Shortcodes"
 
-#: shortcodes/yesticket_events.php:78
-msgid "options for events"
+#: shortcodes/yesticket_events.php:79
+msgid "Options for event shortcodes"
 msgstr "Optionen für Event-Shortcodes"
 
 #: shortcodes/yesticket_testimonials.php:50
-msgid "options for testimonials"
+msgid "Options for testimonial shortcodes"
 msgstr "Optionen für Testimonial-Shortcodes"
 
-#: shortcodes/yesticket_events.php:55
-msgid "order tickets"
+#: shortcodes/yesticket_events.php:56
+msgid "Order Tickets"
 msgstr "Tickets bestellen"
 
 #: shortcodes/yesticket_shortcode_helpers.php:7
-msgid "performance"
+msgid "Performance"
 msgstr "Auftritt"
 
-#: yesticket_plugin_page.php:33
-msgid "preview shortcodes on hover"
-msgstr "Ziehe die Maus über einen Tab für eine Vorschau"
+#: yesticket_api.php:68
+msgid "Please configure your 'key' in the plugin settings."
+msgstr "Bitte konfiguriere deinen Key in den Plugin Settings."
 
-#: shortcodes/yesticket_events.php:77 shortcodes/yesticket_events_cards.php:91
-#: shortcodes/yesticket_events_list.php:59
+#: yesticket_api.php:65
+msgid "Please configure your 'organizer-id' in the plugin settings."
+msgstr "Bitte konfiguriere deine Organizer-ID in den Plugin Settings."
+
+#: shortcodes/yesticket_options_helpers.php:31
+msgid ""
+"Please note, that count describes an upper limit. If fewer items are "
+"available, only these can be displayed."
+msgstr ""
+"Beachte, dass es sich um eine Maximalzahl handelt. Wenn also nicht genügend "
+"Elemente vorhanden sind, werden weniger angezeigt."
+
+#: yesticket_api.php:71
+#| msgid ""
+#| "Please provide a valid 'type'. If you omit the attribute it will default "
+#| "to 'all'. Possible options are 'all', 'performance', \"'workshop' and "
+#| "'festival'."
+msgid ""
+"Please provide a valid 'type'. If you omit the attribute it will default to "
+"'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'."
+msgstr ""
+"Bitte gib ein korrektes Type-Attribut an. Gültig sind nur all, performance, "
+"workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach "
+"nicht an."
+
+#: shortcodes/yesticket_events.php:78 shortcodes/yesticket_events_cards.php:91
+#: shortcodes/yesticket_events_list.php:60
 #: shortcodes/yesticket_testimonials.php:49
+#| msgid "Quickstart"
 msgid "quickstart"
 msgstr "Schnellstart"
 
 #: yesticket_plugin_page.php:75
-msgid "required settings"
+msgid "Required Settings"
 msgstr "Obligatorische Einstellungen"
 
-#: shortcodes/yesticket_events_cards.php:90
-msgid "shortcode help event cards"
-msgstr "Shortcodes für deine Events als Kacheln bzw. Cards"
-
-#: shortcodes/yesticket_events_list.php:58
-msgid "shortcode help event list"
-msgstr "Shortcodes für deine Events als Liste"
-
-#: shortcodes/yesticket_events.php:76
-msgid "shortcode help events"
-msgstr "Shortcodes für deine Events als interaktive Liste"
-
-#: shortcodes/yesticket_testimonials.php:48
-msgid "shortcode help testimonials"
-msgstr "Shortcodes für Zuschauerstimmen"
-
 #: yesticket_plugin_page.php:31
-msgid "shortcodes"
+msgid "Shortcodes"
 msgstr "Shortcodes"
 
-#: shortcodes/yesticket_events.php:54
-msgid "show details"
+#: shortcodes/yesticket_events_cards.php:90
+msgid "Shortcodes for your events as cards."
+msgstr "Shortcodes für deine Events als Kacheln bzw. Cards"
+
+#: shortcodes/yesticket_events.php:77
+msgid "Shortcodes for your events as interactive list."
+msgstr "Shortcodes für deine Events als interaktive Liste"
+
+#: shortcodes/yesticket_events_list.php:59
+msgid "Shortcodes for your events as list."
+msgstr "Shortcodes für deine Events als Liste"
+
+#: shortcodes/yesticket_testimonials.php:48
+msgid "Shortcodes for your testimonials."
+msgstr "Shortcodes für Zuschauerstimmen"
+
+#: shortcodes/yesticket_events.php:55
+msgid "Show details"
 msgstr "Details anzeigen"
 
 #: yesticket_plugin_page.php:96
-msgid "technical settings"
+msgid "Technical Settings"
 msgstr "Technische Einstellungen"
 
-#: yesticket_plugin_page.php:142
-msgid "text before clear cache button"
+#: yesticket_api.php:55
+msgid "The YesTicket service is currently unavailable. Please try again later."
 msgstr ""
-"Wenn sich deine Einträge nicht schnell genug updaten, versuche es mal mit:"
+"Im Moment sind unsere Veranstaltungen nicht erreichbar. Versucht es bitte "
+"später noch einmal."
 
-#: shortcodes/yesticket_events.php:38
-msgid "tickets"
+#: shortcodes/yesticket_events.php:39
+msgid "Tickets"
 msgstr "Tickets"
 
-#: yesticket_plugin_page.php:112 yesticket_plugin_page.php:113
-msgid "url to wordpress plugin integration"
-msgstr "https://www.yesticket.org/login/de/integration.php#wp-plugin"
-
-#: yesticket_plugin_page.php:111
-msgid "what you need and where to find it"
+#: shortcodes/yesticket_options_helpers.php:29
+msgid "Using <b>count</b> you can define the maximum amount of elements."
 msgstr ""
-"Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen "
-"dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im "
-"Adminbereich von YesTicket > Marketing > YesTicket einfach einbinden:"
+"Mit <b>count</b> kannst du die maximale Anzahl der gezeigten Elemente "
+"bestimmen."
+
+#: shortcodes/yesticket_events.php:81
+msgid ""
+"Using <b>details</b> you can include the description of your YesTicket event."
+" The description is collapsed and can be expanded."
+msgstr ""
+"Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in "
+"YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar."
+
+#: shortcodes/yesticket_events_cards.php:99
+msgid "Using <b>grep</b> you can filter your events by their title."
+msgstr "Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern."
+
+#: shortcodes/yesticket_options_helpers.php:9
+msgid "Using <b>type</b> you can filter your events by type."
+msgstr "Mit <b>type</b> kannst du deine Events nach Art filtern."
+
+#: shortcodes/yesticket_options_helpers.php:11
+msgid "Using <b>type</b> you can filter your testimonials by type."
+msgstr "Mit <b>type</b> kannst du deine Testimonials nach Art filtern."
+
+#: shortcodes/yesticket_testimonials.php:52
+msgid "Using details you can display the corresponding event to a testimonial."
+msgstr ""
+"Mit details kannst du die Veranstaltung anzeigen lassen, die zu einem "
+"Testimonial dazugehört."
+
+#: shortcodes/yesticket_testimonials.php:53
+msgid "will add the event name to each testimonial, if present."
+msgstr ""
+"ergänzt das Testimonial um die zugehörige Veranstaltung, sofern vorhanden."
+
+#: shortcodes/yesticket_events_cards.php:100
+#| msgid "will only display events, who have \"Johnstone\" in their title."
+msgid "will only display events, who have \\\"Johnstone\\\" in their title."
+msgstr ""
+"werden nur Events angezeigt, die im Event Titel irgendwo die Zeichenfolge "
+"\"Johnstone\" enthalten."
+
+#: shortcodes/yesticket_events.php:82
+msgid "will show a link to expand the details."
+msgstr "zeigt den Link zu Aufklappen und die Beschreibung an."
 
 #: shortcodes/yesticket_shortcode_helpers.php:10
-msgid "workshop"
+msgid "Workshop"
 msgstr "Workshop"
 
 #. Name of the plugin
@@ -282,10 +270,41 @@ msgstr "Workshop"
 msgid "YesTicket"
 msgstr "YesTicket"
 
+#: yesticket_plugin_page.php:24
+msgid ""
+"YesTicket is a ticketing system and we love wordpress - so here's our plugin!"
+" You can integrate upcoming events and audience feedback (testimonials) "
+"using shortcodes anywhere on your page. Be it pages, posts, widgets, ... get "
+"creative!"
+msgstr ""
+"YesTicket ist ein Ticketsystem und wir lieben Wordpress - daher hier unser "
+"Plugin. Du kannst damit deine zukünftigen Events und Zuschauerstimmen "
+"(Testimonials) per Shortcode an beliebige Stellen deiner Seite einbinden. Im "
+"Inhaltsteil, in Widgets oder in was auch immer in Wordpress."
+
+#: yesticket_plugin_page.php:32
+msgid ""
+"You can use multiple shortcodes on your page. For example you might start "
+"with a list of your shows, followed by your workshops and finish with "
+"testimonials of your audience."
+msgstr ""
+"Du kannst mehrere Shortcodes in einer Seite verwenden - also z.B. erst die "
+"Liste deiner Auftritte, dann Workshops und am Ende dann Zuschauerstimmen."
+
+#: yesticket_plugin_page.php:112
+msgid ""
+"You need two things: your personal <b>organizer-ID</b> and the corresponding "
+"<b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > "
+"Integrations:"
+msgstr ""
+"Du benötigst 2 Dinge: deine persönliche <b>Organizer-ID</b> und deinen "
+"dazugehörigen <b>Key</b>. Beides findest du direkt zum Kopieren im "
+"Adminbereich von YesTicket > Marketing > YesTicket einfach einbinden:"
+
 #: yesticket_plugin_page.php:88
-msgid "your key"
+msgid "Your \"key\""
 msgstr "Dein \"Key\""
 
 #: yesticket_plugin_page.php:81
-msgid "your organizer-id"
+msgid "Your \"organizer-ID\""
 msgstr "Deine \"Organizer-ID\""
