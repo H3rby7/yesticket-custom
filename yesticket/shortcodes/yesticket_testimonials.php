@@ -42,7 +42,8 @@ function render_yesTicketTestimonials($result, $att) {
         if (!empty($item->event_name) && $att["details"] == "yes") {
             $add_event = '<br><span class="yt-testimonial-source">'.__("about", "yesticket").' "'.htmlentities($item->event_name).'"</span>';
         }
-        $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>'.'<span class="yt-testimonial-source">'.htmlentities($item->source).' </span> <span class="yt-testimonial-date">'.__("date on", "yesticket").' '.htmlentities(date('d.m.Y', strtotime($item->date))).'</span>';
+        $content .= '<span class="yt-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>';
+        $content .= '<span class="yt-testimonial-source">'.render_yesTicketTestimonialSource($item).'</span>';
         $content .= '</div>';
         $count++;
         if ($count == (int)$att["count"]) {
@@ -50,6 +51,17 @@ function render_yesTicketTestimonials($result, $att) {
         }
     }
     return $content;
+}
+
+function render_yesTicketTestimonialSource($item) {
+    $source = $item->source;
+    $date = $item->date;
+    return sprintf(
+        /* translators: 1: Author 2: Date */
+        __('%1$s on %2$s.', "yesticket" ),
+        $source,
+        ytp_render_date($date)
+    );
 }
 
 function render_yesTicketTestimonialsHelp() {?>

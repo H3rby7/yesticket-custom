@@ -45,10 +45,8 @@ function render_yesTicketEventsList($result, $att) {
         if ($att["type"]=="all") {
             $add = "<br><span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
         }
-        // TODO: Time in local format!
-        $content .= "<span class='yt-eventdate'>".date('d.m.y H:i', strtotime($item->event_datetime))." Uhr</span>".$add."</span><br>";
+        $content .= "<span class='yt-eventdate'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add."</span><br>";
         $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
-        // TODO: Date in local format!
         $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
         if ($att["ticketlink"]=="yes") {
             $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';

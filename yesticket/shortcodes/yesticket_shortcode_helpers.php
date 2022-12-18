@@ -21,15 +21,22 @@ function ytp_render_eventType($type) {
     return __("Festival", "yesticket");
   }
   return __($type, 'yesticket');
-} 
-
-function ytc_extract_event_datetime($event) {
-  $eventdate = new DateTime($event->event_datetime, wp_timezone());
-  return $eventdate;
 }
 
-function ytc_render_date_and_time($event) {
-  $date = ytc_extract_event_datetime($event);
-  $format = __("d.m.y H:i \U\h\\r", "yesticket");
+function ytp_to_local_datetime($datetimestring) {
+  return new DateTime($datetimestring, wp_timezone());
+}
+
+function ytp_render_date_and_time($datetimestring) {
+  $date = ytp_to_local_datetime($datetimestring);
+  /* translators: date format when using date and time, see http://php.net/date */
+  $format = __("F j, Y \a\\t g:i A", "yesticket");
+  return wp_date($format, $date->getTimestamp());
+}
+
+function ytp_render_date($datetimestring) {
+  $date = ytp_to_local_datetime($datetimestring);
+  /* translators: date format when using only the date, see http://php.net/date */
+  $format = __("F j, Y", "yesticket");
   return wp_date($format, $date->getTimestamp());
 }

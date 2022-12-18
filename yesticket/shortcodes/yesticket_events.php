@@ -53,7 +53,7 @@ function render_yesTicketEvents($result, $att) {
             $add = " <span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
         }
         $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="yt-button">'.__("Tickets", "yesticket").' <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
-        $content .= "<span class='yt-eventdate'>".ytc_render_date_and_time($item)."</span>".$add;
+        $content .= "<span class='yt-eventdate'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add;
         $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
 
         $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";

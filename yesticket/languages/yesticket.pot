@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 14:41+0000\n"
+"POT-Creation-Date: 2022-12-18 18:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,6 +16,12 @@ msgstr ""
 "X-Loco-Version: 2.6.3; wp-6.1.1\n"
 "X-Domain: yesticket"
 
+#. 1: Author 2: Date
+#: shortcodes/yesticket_testimonials.php:61
+#, php-format
+msgid "%1$s on %2$s."
+msgstr ""
+
 #. URI of the plugin
 msgid "?page=yesticket-plugin"
 msgstr ""
@@ -24,8 +30,16 @@ msgstr ""
 msgid "a maximum of 6 events is displayed"
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:29
+#: shortcodes/yesticket_testimonials.php:43
 msgid "about"
+msgstr ""
+
+#: shortcodes/yesticket_shortcode_helpers.php:10
+msgid "At this time no audience feedback is present."
+msgstr ""
+
+#: shortcodes/yesticket_shortcode_helpers.php:6
+msgid "At this time no upcoming events are available."
 msgstr ""
 
 #: shortcodes/yesticket_options_helpers.php:24
@@ -49,15 +63,21 @@ msgstr ""
 msgid "Clear Cache"
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:31
-msgid "date on"
-msgstr ""
-
 #: shortcodes/yesticket_options_helpers.php:18
 msgid "Everything, mixed"
 msgstr ""
 
-#: shortcodes/yesticket_shortcode_helpers.php:13
+#. date format when using only the date, see http://php.net/date
+#: shortcodes/yesticket_shortcode_helpers.php:40
+msgid "F j, Y"
+msgstr ""
+
+#. date format when using date and time, see http://php.net/date
+#: shortcodes/yesticket_shortcode_helpers.php:33
+msgid "F j, Y \\a\\t g:i A"
+msgstr ""
+
+#: shortcodes/yesticket_shortcode_helpers.php:21
 msgid "Festival"
 msgstr ""
 
@@ -83,15 +103,6 @@ msgstr ""
 msgid "If your changes in YesTicket are not reflected fast enough, try to: "
 msgstr ""
 
-#: shortcodes/yesticket_events.php:66 shortcodes/yesticket_events_cards.php:80
-#: shortcodes/yesticket_events_list.php:48
-msgid "At this time no upcoming events are available."
-msgstr ""
-
-#: shortcodes/yesticket_testimonials.php:39
-msgid "At this time no audience feedback is present."
-msgstr ""
-
 #. Description of the plugin
 msgid "Online Ticketing"
 msgstr ""
@@ -108,27 +119,27 @@ msgstr ""
 msgid "only workshops"
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:92
+#: shortcodes/yesticket_events_cards.php:99
 msgid "Options for event card shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events_list.php:61
+#: shortcodes/yesticket_events_list.php:68
 msgid "Options for event list shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:79
+#: shortcodes/yesticket_events.php:87
 msgid "Options for event shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:50
+#: shortcodes/yesticket_testimonials.php:70
 msgid "Options for testimonial shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:56
+#: shortcodes/yesticket_events.php:72
 msgid "Order Tickets"
 msgstr ""
 
-#: shortcodes/yesticket_shortcode_helpers.php:7
+#: shortcodes/yesticket_shortcode_helpers.php:15
 msgid "Performance"
 msgstr ""
 
@@ -152,9 +163,9 @@ msgid ""
 "'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:78 shortcodes/yesticket_events_cards.php:91
-#: shortcodes/yesticket_events_list.php:60
-#: shortcodes/yesticket_testimonials.php:49
+#: shortcodes/yesticket_events.php:86 shortcodes/yesticket_events_cards.php:98
+#: shortcodes/yesticket_events_list.php:67
+#: shortcodes/yesticket_testimonials.php:69
 msgid "quickstart"
 msgstr ""
 
@@ -166,23 +177,23 @@ msgstr ""
 msgid "Shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:90
+#: shortcodes/yesticket_events_cards.php:97
 msgid "Shortcodes for your events as cards."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:77
+#: shortcodes/yesticket_events.php:85
 msgid "Shortcodes for your events as interactive list."
 msgstr ""
 
-#: shortcodes/yesticket_events_list.php:59
+#: shortcodes/yesticket_events_list.php:66
 msgid "Shortcodes for your events as list."
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:48
+#: shortcodes/yesticket_testimonials.php:68
 msgid "Shortcodes for your testimonials."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:55
+#: shortcodes/yesticket_events.php:71
 msgid "Show details"
 msgstr ""
 
@@ -194,7 +205,7 @@ msgstr ""
 msgid "The YesTicket service is currently unavailable. Please try again later."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:39
+#: shortcodes/yesticket_events.php:55
 msgid "Tickets"
 msgstr ""
 
@@ -202,13 +213,13 @@ msgstr ""
 msgid "Using <b>count</b> you can define the maximum amount of elements."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:81
+#: shortcodes/yesticket_events.php:89
 msgid ""
 "Using <b>details</b> you can include the description of your YesTicket event."
 " The description is collapsed and can be expanded."
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:99
+#: shortcodes/yesticket_events_cards.php:106
 msgid "Using <b>grep</b> you can filter your events by their title."
 msgstr ""
 
@@ -220,23 +231,23 @@ msgstr ""
 msgid "Using <b>type</b> you can filter your testimonials by type."
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:52
+#: shortcodes/yesticket_testimonials.php:72
 msgid "Using details you can display the corresponding event to a testimonial."
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:53
+#: shortcodes/yesticket_testimonials.php:73
 msgid "will add the event name to each testimonial, if present."
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:100
-msgid "will only display events, who have \\\"Johnstone\\\" in their title."
+#: shortcodes/yesticket_events_cards.php:107
+msgid "will only display events, who have \"Johnstone\" in their title."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:82
+#: shortcodes/yesticket_events.php:90
 msgid "will show a link to expand the details."
 msgstr ""
 
-#: shortcodes/yesticket_shortcode_helpers.php:10
+#: shortcodes/yesticket_shortcode_helpers.php:18
 msgid "Workshop"
 msgstr ""
 
