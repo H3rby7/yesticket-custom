@@ -67,7 +67,7 @@
     text-align: center;
 }
 .yt-button-big {
-	margin: 10px 0 25px 18px;
+	margin: 10px 0 25px 0;
 	display: block;
 	text-align: center;
 	font-size: 1em;
@@ -81,12 +81,15 @@
 	top: -2px;
 	right: -5px;
 }
-details {
+.yt-details {
 	font-size: 1em;
 	margin: 5px 0 10px 0;
 }
-details p {
-	margin: 15px 0 5px 18px;
+.yt-details > div {
+	padding: 15px 0 5px 18px;
+}
+.yt-details h5 {
+	margin-bottom: 0;
 }
 
 /* Card Container */
