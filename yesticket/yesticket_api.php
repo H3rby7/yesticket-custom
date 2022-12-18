@@ -52,7 +52,7 @@ function getData($get_url) {
       $get_content = file_get_contents($get_url, 0, $ctx);
   }
   if (empty($get_content)) {
-      throw new RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", 'yesticket'));
+      throw new RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
   }
   $result = json_decode($get_content);
   //return(json_last_error());
@@ -62,13 +62,13 @@ function getData($get_url) {
 function validateArguments($att, $options) {
   // We prefer people setting their private info in the settings, rather than the shortcode.
   if (empty($options["organizer_id"]) and empty($att["organizer"])) {
-      throw new InvalidArgumentException(__("Please configure your 'organizer-id' in the plugin settings.", 'yesticket'));
+      throw new InvalidArgumentException(__("Please configure your 'organizer-id' in the plugin settings.", "yesticket"));
   }
   if (empty($options["api_key"]) and empty($att["key"])) {
-      throw new InvalidArgumentException(__("Please configure your 'key' in the plugin settings.", 'yesticket'));
+      throw new InvalidArgumentException(__("Please configure your 'key' in the plugin settings.", "yesticket"));
   }
   if (!empty($att["type"]) and $att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="Workshop" and $att["type"]!="festival") {
-      throw new InvalidArgumentException(__("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", 'yesticket'));
+      throw new InvalidArgumentException(__("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket"));
   }
   return true;
 }

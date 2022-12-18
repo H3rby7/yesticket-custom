@@ -21,16 +21,16 @@ function yesticket_pluginpage_init()
   yesticket_render_feedback();
     ?>
     <h1><img src="<?php echo ytp_getImageUrl('YesTicket_logo.png') ?>" height="60" alt="YesTicket Logo"></h1>
-    <p><?php echo __("YesTicket is a ticketing system and we love wordpress - so here's our plugin! You can integrate upcoming events and audience feedback (testimonials) using shortcodes anywhere on your page. Be it pages, posts, widgets, ... get creative!", 'yesticket');?></p><?php
+    <p><?php echo __("YesTicket is a ticketing system and we love wordpress - so here's our plugin! You can integrate upcoming events and audience feedback (testimonials) using shortcodes anywhere on your page. Be it pages, posts, widgets, ... get creative!", "yesticket");?></p><?php
     $options = get_option( 'yesticket_settings' );
     $renderSettingsOnly = empty($options['organizer_id'] or empty($options['api_key']));
     if ($renderSettingsOnly) {
       echo yesticket_settings_render($tab);
       return;
     }?>
-    <h2><?php echo __("Shortcodes", 'yesticket');?></h2>
-    <p><?php echo __('You can use multiple shortcodes on your page. For example you might start with a list of your shows, followed by your workshops and finish with testimonials of your audience.', 'yesticket');?></p>
-    <p><?php echo __('Hover above the tabs for a preview.', 'yesticket');?></p>
+    <h2><?php echo __("Shortcodes", "yesticket");?></h2>
+    <p><?php echo __("You can use multiple shortcodes on your page. For example you might start with a list of your shows, followed by your workshops and finish with testimonials of your audience.", "yesticket");?></p>
+    <p><?php echo __("Hover above the tabs for a preview.", "yesticket");?></p>
 
     <nav class="nav-tab-wrapper">
       <a href="?page=yesticket-plugin" class="hover_trigger nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>">Events</a>
@@ -72,20 +72,20 @@ function yesticket_settings_init(  ) {
 
 	add_settings_section(
 		'yesticket_pluginPage_section_required', 
-		__("Required Settings", 'yesticket'),
+		__("Required Settings", "yesticket"),
 		'yesticket_settings_required_section_callback', 
 		'pluginPage'
 	);
 	add_settings_field( 
 		'organizer_id',
-    __("Your \"organizer-ID\"", 'yesticket'),
+    __("Your \"organizer-ID\"", "yesticket"),
 		'yesticket_organizer_id_render', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_required' 
 	);
 	add_settings_field( 
 		'api_key',
-    __("Your \"key\"", 'yesticket'),
+    __("Your \"key\"", "yesticket"),
 		'yesticket_api_key_render', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_required' 
@@ -93,14 +93,14 @@ function yesticket_settings_init(  ) {
 
 	add_settings_section(
 		'yesticket_pluginPage_section_cache',
-    __('Technical Settings', 'yesticket'),
+    __("Technical Settings", "yesticket"),
 		'yesticket_settings_technical_section_callback', 
 		'pluginPage'
 	);
 
 	add_settings_field( 
 		'cache_time_in_minutes', 
-    __('Cache time in minutes', 'yesticket'),
+    __("Cache time in minutes", "yesticket"),
 		'yesticket_cache_time_in_minutes_render', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_cache' 
@@ -108,8 +108,8 @@ function yesticket_settings_init(  ) {
 }
 
 function yesticket_settings_required_section_callback(  ) {
-  $link = __("https://www.yesticket.org/login/en/integration.php#wp-plugin", 'yesticket');?>
-  <p><?php echo __("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:", 'yesticket');?></p>
+  $link = __("https://www.yesticket.org/login/en/integration.php#wp-plugin", "yesticket");?>
+  <p><?php echo __("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:", "yesticket");?></p>
   <a href='<?php echo $link;?>' target='_blank'><?php echo $link;?></a>
   <?php
 }
@@ -133,14 +133,14 @@ function yesticket_cache_time_in_minutes_render(  ) {
 }
 
 function yesticket_settings_technical_section_callback(  ) {
-  echo __('Change these settings at your own risk.', 'yesticket');
+  echo __("Change these settings at your own risk.", "yesticket");
 }
 
 function yesticket_cache_clear_button_render(  ) {
     ?><form action="admin.php?page=yesticket-plugin" method="POST">
         <input type="hidden" name="clear_cache" value="1">
-        <label for="clear_cache_submit"><?php echo __('If your changes in YesTicket are not reflected fast enough, try to: ', 'yesticket');?></label>
-        <input type="submit" name="clear_cache_submit" value="<?php echo __('Clear Cache', 'yesticket'); ?>">
+        <label for="clear_cache_submit"><?php echo __("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");?></label>
+        <input type="submit" name="clear_cache_submit" value="<?php echo __("Clear Cache", "yesticket"); ?>">
       </form><?php
 }
 
