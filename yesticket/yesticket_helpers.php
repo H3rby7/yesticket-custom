@@ -24,4 +24,18 @@ function ytp_getImageUrl($fileName) {
   return plugin_dir_url(__FILE__).'img/'.$fileName;
 }
 
+if (!function_exists('ytp_log')) {
+
+  function ytp_log($log) {
+      if (true === WP_DEBUG) {
+          if (is_array($log) || is_object($log)) {
+              error_log("YESTICKET: ".print_r($log, true));
+          } else {
+              error_log("YESTICKET: ".$log);
+          }
+      }
+  }
+
+}
+
 ?>

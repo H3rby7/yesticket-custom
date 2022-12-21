@@ -103,23 +103,32 @@ function validateAndBuildApiCall($att, $apiEndpoint) {
 }
 
 function buildYesticketQueryParams($att, $options) {
-  $queryParams = '';
-  if (!empty($att["organizer"])) {
-      $queryParams .= '?organizer='.$att["organizer"];
-  } else {
-      $queryParams .= '?organizer='.$options["organizer_id"];
-  }
-  if (!empty($att["key"])) {
-      $queryParams .= '&key='.$att["key"];
-  } else {
-      $queryParams .= '&key='.$options["api_key"];
-  }
-  if (!empty($att["count"])) {
-      $queryParams .= '&count='.$att["count"];
-  }
-  if (!empty($att["type"])) {
-      $queryParams .= '&type='.$att["type"];
-  }
-  return $queryParams;
+    $queryParams = '';
+    if (!empty($att["count"])) {
+        $queryParams .= '&count='.$att["count"];
+    }
+    if (!empty($att["type"])) {
+        $queryParams .= '&type='.$att["type"];
+    }
+    $lang = get_locale();
+    $langUnderscorePos = strpos($lang, "_");
+    if ($langUnderscorePos != false and $langUnderscorePos > -1) {
+        $lang = substr($lang, 0, $langUnderscorePos);
+    }
+    $queryParams .= '&lang='.$lang;
+    ytp_log(__FILE__."@".__LINE__.": 'Public query params for API Call: " . $queryParams."'");
+    // We keep organizedID and key out of the ytp_log.
+    $secretQueryParams = '';
+    if (!empty($att["organizer"])) {
+        $secretQueryParams .= '?organizer='.$att["organizer"];
+    } else {
+        $secretQueryParams .= '?organizer='.$options["organizer_id"];
+    }
+    if (!empty($att["key"])) {
+        $secretQueryParams .= '&key='.$att["key"];
+    } else {
+        $secretQueryParams .= '&key='.$options["api_key"];
+    }
+    return $secretQueryParams.$queryParams;
 }
 ?>
