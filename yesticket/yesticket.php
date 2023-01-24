@@ -2,7 +2,7 @@
 /**
 * Plugin Name: YesTicket
 * Plugin URI: ?page=yesticket-plugin
-* Version: 2.0.0
+* Version: 2.1.0
 * Author: YesTicket
 * Author URI: https://www.yesticket.org/
 * Description: Online Ticketing
@@ -16,6 +16,7 @@ include_once("shortcodes/yesticket_events.php");
 include_once("shortcodes/yesticket_events_list.php");
 include_once("shortcodes/yesticket_events_cards.php");
 include_once("shortcodes/yesticket_testimonials.php");
+include_once "shortcodes/yesticket_slides.php";
 
 add_action('init', 'ytp_init_callback');
 
