@@ -1,0 +1,59 @@
+@media (min-width: 1024px) {
+  section,
+  .slide {
+    padding: 4.8rem !important; }
+  .yesticket-event-teaser {
+    padding: 4.8rem !important;
+  }
+}
+
+.yesticket-slide {
+  position: relative;
+  justify-content: initial;
+}
+
+.yesticket-slide .background {
+  height: 105%;
+  animation-duration: 1s;
+}
+
+.yesticket-event-meta {
+  color: white;
+  position: relative;
+  padding: 1.2rem !important;
+  display: inline-block !important;
+  width: fit-content;
+}
+
+.yesticket-event-name {
+  color: white;
+  padding: 0 !important;
+  display: inline-block !important;
+}
+
+.yesticket-event-teaser {
+  position: absolute;
+  padding: 2.4rem;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.yesticket-event-teaser > * {
+  padding: 1.2rem !important;
+  width: fit-content;
+  text-align: center;
+  float: right;
+}
+
+.delay1 {
+  animation-delay: 1.5s;
+}
+
+.delay2 {
+  animation-delay: 3s;
+}
+
+.delay3 {
+  animation-delay: 4.5s;
+}
