@@ -20,8 +20,9 @@ function getYesTicketSlides($atts)
     $att = shortcode_atts(array(
                     'type' => 'all',
                     'env' => 'prod',
-                    'count' => '100',
+                    'count' => '10',
                     'max-text-length' => '250',
+                    'autoslide' => '10000',
                     'theme' => 'light',
                     ), $atts);
     $content = "";
@@ -70,9 +71,14 @@ function render_yesTicketSlides($result, $att) {
             <p class="text-symbols">das improtheater</p>
           </div>
         </section>
-        <?php 
+        <?php
+        $count = 0;
         foreach ($result as $item):
           echo render_yesTicketEventSlide($item, $att);
+          $count++;
+          if ($count == (int)$att["count"]) {
+              break;
+          }
         endforeach;
         ?>
       </article>
@@ -82,7 +88,7 @@ function render_yesTicketSlides($result, $att) {
     <script>
       window.addEventListener('load', function () {
         window.ws = new WebSlides(
-        //  { autoslide: 10000 }
+         { autoslide: <?php echo $att["autoslide"]; ?> }
         );
       }, false);
     </script>
@@ -97,7 +103,7 @@ function render_yesTicketEventSlide($event, $att) {
           <h2 class="yesticket-event-name"><?php echo $event->event_name; ?></h2>
           <p><?php echo ytp_render_date_and_time($event->event_datetime) . ", " . $event->location_name; ?></p>
       </div>
-      <div class="yesticket-event-teaser slideInRight delay2">
+      <div class="yesticket-event-teaser slideInRight delay3">
         <p class="bg-trans-dark">
           <?php echo render_yesTicketEventDescriptionForSlides($event, $att); ?>
         </p>
@@ -110,7 +116,7 @@ function render_yesTicketEventDescriptionForSlides($item, $att) {
   $shorter = substr($item->event_description, 0, $att["max-text-length"]);
   $indexOfLastPeriod = strrpos($shorter, ".");
   if (!$indexOfLastPeriod) {
-    return $shorter . "...";
+    return $shorter . "[...]";
   } else {
     return substr($shorter, 0, $indexOfLastPeriod + 1);
   }
