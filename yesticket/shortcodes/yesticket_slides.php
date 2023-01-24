@@ -113,7 +113,11 @@ function render_yesTicketEventSlide($event, $att) {
 <?php }
 
 function render_yesTicketEventDescriptionForSlides($item, $att) {
-  $shorter = substr($item->event_description, 0, $att["max-text-length"]);
+  $descr = $item->event_description;
+  if (strlen($descr) < $att["max-text-length"]) {
+    return $descr;
+  }
+  $shorter = substr($descr, 0, $att["max-text-length"]);
   $indexOfLastPeriod = strrpos($shorter, ".");
   if (!$indexOfLastPeriod) {
     return $shorter . "[...]";
