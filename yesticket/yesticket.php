@@ -17,6 +17,7 @@ include_once("shortcodes/yesticket_events_list.php");
 include_once("shortcodes/yesticket_events_cards.php");
 include_once("shortcodes/yesticket_testimonials.php");
 include_once "shortcodes/yesticket_slides.php";
+include_once "templates/yesticket_page_templater.php";
 
 add_action('init', 'ytp_init_callback');
 
