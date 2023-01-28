@@ -25,9 +25,7 @@ function yesticket_pluginpage_init()
     /* translators: YesTicket Plugin Page Introduction Text*/
     echo __("YesTicket is a ticketing system and we love wordpress - so here's our plugin! You can integrate upcoming events and audience feedback (testimonials) using shortcodes anywhere on your page. Be it pages, posts, widgets, ... get creative!", "yesticket");?>
     </p><?php
-    $options = get_option( 'yesticket_settings' );
-    $renderSettingsOnly = empty($options['organizer_id'] or empty($options['api_key']));
-    if ($renderSettingsOnly) {
+    if (!yesticket_necessary_settings_are_set()) {
       echo yesticket_settings_render($tab);
       return;
     }?>
@@ -73,7 +71,16 @@ function yesticket_pluginpage_init()
 
 function yesticket_settings_init(  ) { 
 
-	register_setting( 'pluginPage', 'yesticket_settings' );
+  $settings_args = array(
+    'type' => 'object',
+    'default' => array(
+      'cache_time_in_minutes' => 60,
+      'yesticket_transient_keys' => array(),
+      'organizer_id' => NULL,
+      'api_key' => NULL,
+    ),
+  );
+	register_setting( 'pluginPage', 'yesticket_settings', $settings_args);
 
 	add_settings_section(
 		'yesticket_pluginPage_section_required', 
@@ -112,6 +119,19 @@ function yesticket_settings_init(  ) {
 		'pluginPage', 
 		'yesticket_pluginPage_section_cache' 
 	);
+}
+
+function yesticket_necessary_settings_are_set() {
+  $options = get_option( 'yesticket_settings' );
+  $organizer_id = $options['organizer_id'];
+  $api_key = $options['api_key'];
+  if ($organizer_id === null || trim($organizer_id) === '') {
+    return false;
+  }
+  if ($api_key === null || trim($api_key) === '') {
+    return false;
+  }
+  return true;
 }
 
 function yesticket_settings_required_section_callback(  ) {
