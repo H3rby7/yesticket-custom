@@ -3,8 +3,6 @@
 See: https://github.com/wpexplorer/page-templater
 */
 
-include_once(__DIR__ ."/../yesticket_helpers.php");
-
 class YesTicketPageTemplater {
 
 	/**
@@ -56,7 +54,7 @@ class YesTicketPageTemplater {
 
 		}
 
-		// Add a filter to the save post to inject out template into the page cache
+		// Add a filter to the save post to inject our template into the page cache
 		add_filter(
 			'wp_insert_post_data',
 			array( $this, 'register_project_templates' )
@@ -70,10 +68,9 @@ class YesTicketPageTemplater {
 			array( $this, 'view_project_template')
 		);
 
-
 		// Add your templates to this array.
 		$this->templates = array(
-			'slides_template.php' => 'Yesticket Preshow',
+			'yesticket_slides_template.php' => 'Yesticket Preshow',
 		);
 
 	}
@@ -84,7 +81,6 @@ class YesTicketPageTemplater {
 	 */
 	public function add_new_template( $posts_templates ) {
 		$posts_templates = array_merge( $posts_templates, $this->templates );
-    // var_dump($posts_templates);
 		return $posts_templates;
 	}
 
@@ -93,14 +89,12 @@ class YesTicketPageTemplater {
 	 * into thinking the template file exists where it doens't really exist.
 	 */
 	public function register_project_templates( $atts ) {
-
 		// Create the key used for the themes cache
 		$cache_key = 'page_templates-' . md5( get_theme_root() . '/' . get_stylesheet() );
 
 		// Retrieve the cache list.
 		// If it doesn't exist, or it's empty prepare an array
 		$templates = wp_get_theme()->get_page_templates();
-		var_dump($templates);
 		if ( empty( $templates ) ) {
 			$templates = array();
 		}
@@ -135,8 +129,6 @@ class YesTicketPageTemplater {
 		if ( ! $post ) {
 			return $template;
 		}
-
-		var_dump($template);
 
 		// Return default template if we don't have a custom one defined
 		if ( ! isset( $this->templates[get_post_meta(
