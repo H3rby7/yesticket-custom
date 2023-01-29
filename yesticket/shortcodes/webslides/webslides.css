@@ -38,13 +38,6 @@ webslides.js will add .ws-ready automatically. Don't worry :) -- */
   #webslides::-webkit-scrollbar {
     display: none; }
 
-/*=== 1.1 WRAP/CONTAINER === */
-#ytp-slides .wrap {
-  margin: 2.4rem;
-  max-width: 100%;
-  position: relative;
-  height: 100%;}
-
 #ytp-slides .aligncenter {
   margin-left: auto;
   margin-right: auto;
@@ -230,13 +223,6 @@ Vertically and horizontally centered
   position: relative;
   word-wrap: break-word; }
 
-/*slide with no padding (full card, .embed youtube video...) */
-#ytp-slides .fullscreen {
-  padding: 0;
-  /* Fixed/Visible header?
-  padding:8.2rem 0 0 0;
-  */ }
-
 /* slide alignment - top */
 #ytp-slides .slide-top {
   -webkit-box-pack: start;
@@ -307,6 +293,12 @@ Vertically and horizontally centered
   height: 100%;
 }
 
+#ytp-slides .wrap {
+  margin: 2vw;
+  max-width: 100%;
+  position: relative;
+  height: 100%;}
+
 #ytp-slides .yesticket-slide .background {
   height: 105%;
   animation-duration: 1s;
@@ -314,7 +306,7 @@ Vertically and horizontally centered
 
 #ytp-slides .yesticket-event-meta {
   color: var(--wp--preset--color--base);
-  padding: 1.2rem !important;
+  padding: 2vw;
   display: inline-block !important;
   width: fit-content;
 }
@@ -327,7 +319,7 @@ Vertically and horizontally centered
 
 #ytp-slides .yesticket-event-teaser {
   position: absolute;
-  padding: 2.4rem;
+  padding: 2vw;
   bottom: 0;
   right: 0;
 }
@@ -343,8 +335,6 @@ Vertically and horizontally centered
 }
 
 #ytp-slides .backdrop-dark {
-  margin: 0;
-  padding: 0;
   width: 100%;
   height: 100%;
   opacity: 0.8;
@@ -354,8 +344,6 @@ Vertically and horizontally centered
 }
 #ytp-slides .backdrop-dark > * {
   background-color: var(--wp--preset--color--contrast);
-  margin: 0;
-  padding: 0;
   width: 100%;
   height: 100%;
   z-index: inherit;

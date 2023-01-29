@@ -69,7 +69,6 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 function render_yesTicketWelcomeSlide() {
 return <<<EOD
       <section class="">
-       <span class="background dark"></span>
         <div class="wrap aligncenter slow">
           <p class="text-symbols">Willkommen zu</p>
           <h1 class="text-landing">Kanonenfutter</h1>
