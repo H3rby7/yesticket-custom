@@ -155,6 +155,17 @@ function render_yesTicketSlideshowHelp() {?>
   <p><?php echo __("Running this presentation on a big screen, before/after a show, is a nice way to inform your audience about upcoming events.", "yesticket");?></p>
   <h3><?php echo __("Options for slideshow shortcodes", "yesticket");?></h3>
 
+  <h4>Welcome-1 Welcome-2 Welcome-3</h4>
+  <p class='ml-3'><?php echo __("Using 'welcome-1', 'welcome-2' and 'welcome-3', you can adjust the text on the welcome splash slide.", "yesticket");?></p>
+  <p class="ml-3">
+    <span class="yt-code">
+      welcome-1="<?php echo __('welcome to our', "yesticket"); ?>"
+      welcome-2="<?php echo __('improv theatre show', "yesticket"); ?>"
+      welcome-3="<?php echo __('where everything is made up', "yesticket"); ?>"
+    </span></br><?php 
+    echo __("'welcome-2' defines the bigger text in the center.", "yesticket");?>
+  </p>
+
   <h4>Color-1</h4>
   <p class='ml-3'><?php echo __("'color-1' is used for the background of the welcome slide and as text color on other slides.", "yesticket");?></p>
   <p class="ml-3"><span class="yt-code">color-1="#fff000"</span></p>
@@ -176,17 +187,6 @@ function render_yesTicketSlideshowHelp() {?>
   <h4>Teaser-Length</h4>
   <p class='ml-3'><?php echo __("Using 'teaser-length', you can define the maximum characters of the descriptive text. The text is cut at the end of the last sentence that fits within the limit.", "yesticket");?></p>
   <p class="ml-3"><span class="yt-code">teaser-length="123"</span></p>
-
-  <h4>Welcome-1 Welcome-2 Welcome-3</h4>
-  <p class='ml-3'><?php echo __("Using 'welcome-1', 'welcome-2' and 'welcome-3', you can adjust the text on the welcome splash slide.", "yesticket");?></p>
-  <p class="ml-3">
-    <span class="yt-code">
-      welcome-1="<?php echo __('welcome to our', "yesticket"); ?>"
-      welcome-2="<?php echo __('improv theatre show', "yesticket"); ?>"
-      welcome-3="<?php echo __('where everything is made up', "yesticket"); ?>"
-    </span></br><?php 
-    echo __("'welcome-2' defines the bigger text in the center.", "yesticket");?>
-  </p>
   
   <h4>Text-Scale</h4>
   <p class='ml-3'><?php echo __("Using 'text-scale', you can change the font-size of the presentation.", "yesticket");?></p>
