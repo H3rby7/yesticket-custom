@@ -6,7 +6,7 @@ msgstr ""
 "Language: de_DE\n"
 "Language-Team: Deutsch\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"PO-Revision-Date: 2023-02-24 18:18+0000\n"
+"PO-Revision-Date: 2023-02-24 18:19+0000\n"
 "X-Generator: Loco https://localise.biz/"
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
@@ -20,6 +20,26 @@ msgstr "%1$s am %2$s über \"%3$s\"."
 #, php-format
 msgid "%1$s on %2$s."
 msgstr "%1$s am %2$s."
+
+#: shortcodes/yesticket_slides.php:170
+msgid ""
+"'color-1' is used for the background of the welcome slide and as text color "
+"on other slides."
+msgstr ""
+"'color-1' wird auf der Willkommensfolie als Hintergrund genutzt und auf den "
+"weiteren Folien als Textfarbe."
+
+#: shortcodes/yesticket_slides.php:176
+msgid ""
+"'color-2' is used for the text color of the welcome slide and as box shadow "
+"color on other slides."
+msgstr ""
+"'color-2' wird auf der Willkommensfolie als Textfarbe genutzt und auf den "
+"weiteren Folien Hintergrund für die Boxen."
+
+#: shortcodes/yesticket_slides.php:166
+msgid "'welcome-2' defines the bigger text in the center."
+msgstr "'welcome-2' definiert den größeren Text in der Mitte der Folie."
 
 #. URI of the plugin
 msgid "?page=yesticket-plugin"
@@ -36,6 +56,14 @@ msgstr "[%s] Vorschaubild"
 msgid "a maximum of 6 events is displayed"
 msgstr "werden maximal 6 kommende Events angezeigt"
 
+#: shortcodes/yesticket_slides.php:173 shortcodes/yesticket_slides.php:179
+msgid ""
+"Any valid css color definiton is okay. Use this option to bring in your "
+"company's style."
+msgstr ""
+"Hier kann jede valide CSS Farbe genutzt werden. Damit kannst du die Farben "
+"deiner Gruppe einbringen."
+
 #. When no audience feedback can be found.
 #: helpers/functions.php:59
 msgid "At this time no audience feedback is present."
@@ -49,6 +77,14 @@ msgstr "Momentan sind leider keine kommenden Veranstaltungen vorhanden."
 #: shortcodes/templates/event_details.php:13
 msgid "Back to top"
 msgstr "Zurück nach oben"
+
+#: shortcodes/yesticket_slides.php:154
+msgid ""
+"Beware: This shortcode must be placed on a separate page. Visit that page "
+"and enter fullscreen mode to view your presentation."
+msgstr ""
+"Achtung: Nutze diesen Shortcode auf einer separaten Seite. Besuche diese "
+"dann im Vollbildmodus, um deine Präsentation anzusehen."
 
 #: admin/templates/shortcode_options_theme.php:5
 msgid "Buttons will be in a dark grey and match darker backgrounds"
@@ -71,6 +107,13 @@ msgstr "Kacheln"
 #: admin/settings_technical.php:110
 msgid "Change these settings at your own risk."
 msgstr "Diese Einstellungen kannst du anpassen, wenn du weißt, was du tust."
+
+#: shortcodes/yesticket_slides.php:195
+msgid ""
+"Check how small/big you need this value to be, so your audience can read the "
+"information well."
+msgstr ""
+"Prüfe wie groß/klein dieser Wert sein muss, damit alles gut lesbar ist."
 
 #. Text on a button, use imperativ if possible.
 #: admin/settings_technical.php:93
@@ -162,7 +205,7 @@ msgid "If your changes in YesTicket are not reflected fast enough, try to: "
 msgstr ""
 "Wenn sich deine Einträge nicht schnell genug updaten, versuche es mal mit:"
 
-#: shortcodes/yesticket_slides.php:29
+#: shortcodes/yesticket_slides.php:29 shortcodes/yesticket_slides.php:163
 msgid "improv theatre show"
 msgstr "Improtheater Show"
 
@@ -206,6 +249,10 @@ msgstr "Optionen für Event-List-Shortcodes"
 msgid "Options for event shortcodes"
 msgstr "Optionen für Event-Shortcodes"
 
+#: shortcodes/yesticket_slides.php:156
+msgid "Options for slideshow shortcodes"
+msgstr "Optionen für Slideshow-Shortcodes"
+
 #: admin/templates/examples_testimonials.php:3
 msgid "Options for testimonial shortcodes"
 msgstr "Optionen für Testimonial-Shortcodes"
@@ -248,7 +295,7 @@ msgstr ""
 "workshop und festival. Wenn Du alle Events möchtest gib das Attribut einfach "
 "nicht an."
 
-#: admin/templates/examples_events.php:2
+#: shortcodes/yesticket_slides.php:153 admin/templates/examples_events.php:2
 #: admin/templates/examples_events_cards.php:2
 #: admin/templates/examples_events_list.php:2
 #: admin/templates/examples_testimonials.php:2
@@ -264,6 +311,14 @@ msgstr "Obligatorisch"
 #: admin/settings_required.php:29
 msgid "Required Settings"
 msgstr "Obligatorische Einstellungen"
+
+#: shortcodes/yesticket_slides.php:155
+msgid ""
+"Running this presentation on a big screen, before/after a show, is a nice "
+"way to inform your audience about upcoming events."
+msgstr ""
+"Die Präsentation kann auf einem großen Bildschirm oder Leinwand vor/nach der "
+"Show laufen, um das Publikum über anstehende Events zu informieren."
 
 #. Success Message after updating settings
 #: admin/settings_required.php:123
@@ -352,6 +407,37 @@ msgstr "Tickets"
 msgid "Type"
 msgstr "Art"
 
+#: shortcodes/yesticket_slides.php:183
+msgid ""
+"Using 'ms-per-slide', you adjust the duration of each slide. The unit is "
+"milliseconds."
+msgstr ""
+"Nutze 'ms-per-slide' um die Dauer zu verändern, die eine Slide angezeigt "
+"wird. Der Wert wird in Millisekunden angegeben."
+
+#: shortcodes/yesticket_slides.php:189
+msgid ""
+"Using 'teaser-length', you can define the maximum characters of the "
+"descriptive text. The text is cut at the end of the last sentence that fits "
+"within the limit."
+msgstr ""
+"Nutze 'teaser-length', um die maximale Zeichenzahl für den Beschreibungstext "
+"der Events zu verändern. Der Text wird beim letzten Satzzeichen innerhalb "
+"des Limits gekürzt."
+
+#: shortcodes/yesticket_slides.php:193
+msgid "Using 'text-scale', you can change the font-size of the presentation."
+msgstr ""
+"Mittels 'text-scale' kannst du die Textgröße der Präsentation verändern."
+
+#: shortcodes/yesticket_slides.php:159
+msgid ""
+"Using 'welcome-1', 'welcome-2' and 'welcome-3', you can adjust the text on "
+"the welcome splash slide."
+msgstr ""
+"Nutze 'welcome-1', 'welcome-2' und 'welcome-3', um den Text der "
+"Willkommensfolie zu individualisieren."
+
 #: admin/templates/shortcode_options_count.php:2
 msgid "Using <b>count</b> you can define the maximum amount of elements."
 msgstr ""
@@ -392,11 +478,11 @@ msgstr "Mit <b>type</b> kannst du deine Events nach Art filtern."
 msgid "Using <b>type</b> you can filter your testimonials by type."
 msgstr "Mit <b>type</b> kannst du deine Testimonials nach Art filtern."
 
-#: shortcodes/yesticket_slides.php:28
+#: shortcodes/yesticket_slides.php:28 shortcodes/yesticket_slides.php:162
 msgid "welcome to our"
 msgstr "Willkommen zu unserer"
 
-#: shortcodes/yesticket_slides.php:30
+#: shortcodes/yesticket_slides.php:30 shortcodes/yesticket_slides.php:164
 msgid "where everything is made up"
 msgstr "wo alles frei erfunden ist."
 
@@ -405,6 +491,11 @@ msgstr "wo alles frei erfunden ist."
 msgid "will add the event name to each testimonial, if present."
 msgstr ""
 "ergänzt das Testimonial um die zugehörige Veranstaltung, sofern vorhanden."
+
+#. The sentence actually starts with a non-translatable codeblock 'ms-per-slide="8000"'
+#: shortcodes/yesticket_slides.php:186
+msgid "will display each slide for 8 seconds."
+msgstr "zeigt jede Folie für 8 Sekunden an."
 
 #. The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'
 #: admin/templates/shortcode_options_grep.php:8

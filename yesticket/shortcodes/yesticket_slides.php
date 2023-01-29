@@ -181,7 +181,8 @@ function render_yesTicketSlideshowHelp() {?>
   
   <h4>Ms-Per-Slide</h4>
   <p class='ml-3'><?php echo __("Using 'ms-per-slide', you adjust the duration of each slide. The unit is milliseconds.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">ms-per-slide="8000"</span><?php 
+  <p class="ml-3"><span class="yt-code">ms-per-slide="8000"</span><?php
+  /* translators: The sentence actually starts with a non-translatable codeblock 'ms-per-slide="8000"'*/
     echo __("will display each slide for 8 seconds.", "yesticket");?></p>
 
   <h4>Teaser-Length</h4>
