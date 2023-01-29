@@ -12,5 +12,5 @@ services:
       - "./yesticket/:/app"
       - "./bin/:/scripts"
       - "./out/:/build"
+      - "./CHANGELOG.md:/meta/CHANGELOG.md:ro"
     restart: "no"
-
