@@ -109,6 +109,17 @@ Describes how the manual testing is being done.
 
 </details>
 
+5. Create another page to check the slide-show as shown below
+
+<details>
+    <summary>Create a page with this content</summary>
+
+    <!-- wp:shortcode -->
+    [yesticket_slides ms-per-slide="false"]
+    <!-- /wp:shortcode -->
+
+</details>
+
 ### Manual Testing Process
 
 1. On Settings page trigger all functions once

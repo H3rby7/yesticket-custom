@@ -25,13 +25,13 @@ function getYesTicketSlides($atts)
                     'text-scale' => '100%',
                     'color-1' => '#ffffff',
                     'color-2' => '#000000',
-                    'welcome-1' => __('welcome to our'),
-                    'welcome-2' => __('improv theatre show'),
-                    'welcome-3' => __('where everything is made up'),
+                    'welcome-1' => __('welcome to our', "yesticket"),
+                    'welcome-2' => __('improv theatre show', "yesticket"),
+                    'welcome-3' => __('where everything is made up', "yesticket"),
                     ), $atts);
     $content = "";
     try {
-        $result = getEventsFromApi($att);
+        $result = ytp_api_getEvents($att);
         $content .= render_yesTicketSlideInlineStyles($att);
         $content .= "<div id='ytp-slides' style='font-size: ".$att["text-scale"]."'>";
         if (!is_countable($result) or count($result) < 1) {
