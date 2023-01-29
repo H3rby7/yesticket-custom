@@ -115,7 +115,7 @@ Describes how the manual testing is being done.
     <summary>Create a page with this content</summary>
 
     <!-- wp:shortcode -->
-    [yesticket_slides ms-per-slide="false"]
+    [yesticket_slides ms-per-slide="30000" color-1="#fff000" color-2="#000fff" welcome-1="erste Zeile" welcome-2="zweite Zeile" welcome-3="drei (zeigt eine vier)" teaser-length="100" text-scale="200%"]
     <!-- /wp:shortcode -->
 
 </details>
