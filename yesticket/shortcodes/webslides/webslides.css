@@ -40,15 +40,10 @@ webslides.js will add .ws-ready automatically. Don't worry :) -- */
 
 /*=== 1.1 WRAP/CONTAINER === */
 #ytp-slides .wrap {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2.4rem;
   max-width: 100%;
   position: relative;
-  width: 100%;
-  z-index: 2; }
-  @media (min-width: 1024px) {
-    #ytp-slides .wrap {
-      width: 90%; } }
+  height: 100%;}
 
 #ytp-slides .aligncenter {
   margin-left: auto;
@@ -196,9 +191,6 @@ https://github.com/daneden/animate.css */
 #ytp-slides .text-landing {
   letter-spacing: .4rem;
   text-transform: uppercase; }
-  @media (min-width: 768px) {
-    .text-landing {
-      letter-spacing: 1.6rem; } }
 
 /* -- Separator/Symbols (stars ***...) -- */
 #ytp-slides .text-symbols {
@@ -216,9 +208,7 @@ Vertically and horizontally centered
   -webkit-animation: fadeIn .6s ease-in-out;
           animation: fadeIn .6s ease-in-out; }
 
-#ytp-slides section .background,
-#ytp-slides section .light,
-#ytp-slides section .dark {
+#ytp-slides section .background {
   -webkit-animation-duration: 0s;
           animation-duration: 0s; }
 
@@ -236,18 +226,9 @@ Vertically and horizontally centered
       -ms-flex-pack: center;
           justify-content: center;
   min-height: 100vh;
-  /*Fullscreen*/
-  /* Prototyping? min-height: 720px (Baseline: 8px = .8rem)*/
-  padding: 2.4rem;
-  /*Fixed/Visible header? padding-top: 12rem; */
   page-break-after: always;
   position: relative;
   word-wrap: break-word; }
-  @media (min-width: 1024px) {
-    #ytp-slides section,
-    #ytp-slides .slide {
-      padding-bottom: 12rem;
-      padding-top: 12rem; } }
 
 /*slide with no padding (full card, .embed youtube video...) */
 #ytp-slides .fullscreen {
@@ -291,22 +272,18 @@ Vertically and horizontally centered
 =========================================
 */
 
-@media (min-width: 1024px) {
-  section,
-  .slide {
-    padding: 4.8rem !important; }
-  .yesticket-event-teaser {
-    padding: 4.8rem !important;
-  }
-}
-
 #ytp-slides,
 #ytp-slides * {
-  z-index: 125000;
+  z-index: 140000;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
 #ytp-slides .background,
 #ytp-slides [class*='background-'] {
   z-index: 120000;}
+#ytp-slides [class*='backdrop-'] {
+  z-index: 130000;}
 
 #ytp-slides {
   overflow: hidden;
@@ -325,8 +302,9 @@ Vertically and horizontally centered
 }
 
 #ytp-slides .yesticket-slide {
-  position: relative;
   justify-content: initial;
+  color: var(--wp--preset--color--base);
+  height: 100%;
 }
 
 #ytp-slides .yesticket-slide .background {
@@ -336,7 +314,6 @@ Vertically and horizontally centered
 
 #ytp-slides .yesticket-event-meta {
   color: var(--wp--preset--color--base);
-  position: relative;
   padding: 1.2rem !important;
   display: inline-block !important;
   width: fit-content;
@@ -344,7 +321,7 @@ Vertically and horizontally centered
 
 #ytp-slides .yesticket-event-name {
   color: var(--wp--preset--color--base);
-  padding: 0 !important;
+  margin-bottom: 1rem;
   display: inline-block !important;
 }
 
@@ -352,25 +329,41 @@ Vertically and horizontally centered
   position: absolute;
   padding: 2.4rem;
   bottom: 0;
-  left: 0;
-  width: 100%;
+  right: 0;
 }
 
-#ytp-slides .yesticket-event-teaser > * {
-  padding: 1.2rem !important;
-  width: fit-content;
+#ytp-slides .yesticket-event-meta,
+#ytp-slides .yesticket-event-teaser {
+  max-width: 50%;
+}
+
+#ytp-slides .yesticket-event-teaser > p {
   text-align: center;
   float: right;
 }
 
-#ytp-slides .delay1 {
-  animation-delay: 1.5s;
+#ytp-slides .backdrop-dark {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#ytp-slides .backdrop-dark > * {
+  background-color: var(--wp--preset--color--contrast);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  z-index: inherit;
 }
 
-#ytp-slides .delay2 {
-  animation-delay: 3s;
-}
-
-#ytp-slides .delay3 {
-  animation-delay: 4.5s;
-}
+#ytp-slides .delay {animation-delay: 1.5s;}
+#ytp-slides .delay + .delay,
+#ytp-slides .delay2 {animation-delay: 3s;}
+#ytp-slides .delay2 + .delay,
+#ytp-slides .delay + .delay2 {animation-delay: 4.5s;}
+#ytp-slides .delay2 + .delay2 {animation-delay: 6s;}

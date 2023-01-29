@@ -98,15 +98,19 @@ function render_yesTicketEventSlide($event, $att) {
   $description = render_yesTicketEventDescriptionForSlides($event, $att);
   return <<<EOD
   <section class="yesticket-slide">
-    <span class="background dark fadeIn" style="background-image:url('$bg_image_url')"></span>
-      <div class="yesticket-event-meta slide-top slideInLeft delay1 bg-trans-dark">
-          <h2 class="yesticket-event-name">$event_name</h2>
-          <p>$date_and_location</p>
+    <span class="background fadeIn" style="background-image:url('$bg_image_url')"></span>
+    <div class="wrap">
+      <div class="yesticket-event-meta slide-top slideInLeft delay">
+        <h2 class="yesticket-event-name">$event_name</h2>
+        <p>$date_and_location</p>
+        <div class="backdrop-dark"><div></div></div>
       </div>
-      <div class="yesticket-event-teaser slideInRight delay3">
-        <p class="bg-trans-dark">$description</p>
+      <div class="yesticket-event-teaser slideInRight delay delay2">
+        <p>$description</p>
+        <div class="backdrop-dark"><div></div></div>
       </div>
-      <!-- end .yesticket-slide-->
+    </div>
+    <!-- end .yesticket-slide-->
   </section>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
