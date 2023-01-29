@@ -23,18 +23,11 @@ function getYesTicketSlides($atts)
                     'count' => '10',
                     'max-text-length' => '250',
                     'autoslide' => '10000',
-                    'theme' => 'light',
                     ), $atts);
     $content = "";
     try {
         $result = getEventsFromApi($att);
-        if ($att["theme"] == "light") {
-            $content .= "<div class='yt-light'>";
-        } elseif ($att["theme"] == "dark") {
-            $content .= "<div class='yt-dark'>";
-        } else {
-            $content .= "<div class='yt-default ".$att["theme"]."'>";
-        }
+        $content .= "<div id='ytp-slides'>";
         if (!is_countable($result) or count($result) < 1) {
             $content = ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
@@ -51,7 +44,7 @@ function getYesTicketSlides($atts)
 }
 
 function render_yesTicketSlides($result, $att) {
-    ?>
+$content = <<<EOD
     <main role="main">
       <article id="webslides">
 
@@ -66,21 +59,23 @@ function render_yesTicketSlides($result, $att) {
         <section class="">
          <span class="background dark"></span>
           <div class="wrap aligncenter slow">
-            <p class="text-symbols">Wilkommen zu</p>
+            <p class="text-symbols">Willkommen zu</p>
             <h1 class="text-landing">Kanonenfutter</h1>
             <p class="text-symbols">das improtheater</p>
           </div>
         </section>
-        <?php
+EOD;
+// !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
         $count = 0;
-        foreach ($result as $item):
-          echo render_yesTicketEventSlide($item, $att);
+        foreach ($result as $item) {
+          $content .= render_yesTicketEventSlide($item, $att);
           $count++;
           if ($count == (int)$att["count"]) {
               break;
           }
-        endforeach;
-        ?>
+        }
+        $autoslide = $att["autoslide"];
+        $content .= <<<EOD
       </article>
     </main>
     <!--main-->
@@ -88,29 +83,35 @@ function render_yesTicketSlides($result, $att) {
     <script>
       window.addEventListener('load', function () {
         window.ws = new WebSlides(
-         { autoslide: <?php echo $att["autoslide"]; ?> }
+         { autoslide: $autoslide }
         );
       }, false);
     </script>
-    <?php
+EOD;
+// !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+return $content;
 }
 
 function render_yesTicketEventSlide($event, $att) {
-  ?>
+  $bg_image_url = $event->event_picture_url;
+  $event_name = $event->event_name;
+  $date_and_location = ytp_render_date_and_time($event->event_datetime) . ", " . $event->location_name;
+  $description = render_yesTicketEventDescriptionForSlides($event, $att);
+  return <<<EOD
   <section class="yesticket-slide">
-    <span class="background dark fadeIn" style="background-image:url('<?php echo $event->event_picture_url; ?>')"></span>
+    <span class="background dark fadeIn" style="background-image:url('$bg_image_url')"></span>
       <div class="yesticket-event-meta slide-top slideInLeft delay1 bg-trans-dark">
-          <h2 class="yesticket-event-name"><?php echo $event->event_name; ?></h2>
-          <p><?php echo ytp_render_date_and_time($event->event_datetime) . ", " . $event->location_name; ?></p>
+          <h2 class="yesticket-event-name">$event_name</h2>
+          <p>$date_and_location</p>
       </div>
       <div class="yesticket-event-teaser slideInRight delay3">
-        <p class="bg-trans-dark">
-          <?php echo render_yesTicketEventDescriptionForSlides($event, $att); ?>
-        </p>
+        <p class="bg-trans-dark">$description</p>
       </div>
       <!-- end .yesticket-slide-->
   </section>
-<?php }
+EOD;
+// !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+}
 
 function render_yesTicketEventDescriptionForSlides($item, $att) {
   $descr = $item->event_description;
@@ -126,8 +127,7 @@ function render_yesTicketEventDescriptionForSlides($item, $att) {
   }
 }
 
-function render_yesTicketSlidesHelp() {?>
-    <h2><?php echo __("Shortcodes for your events as slides.", "yesticket");?></h2>
-    <?php
+function render_yesTicketSlidesHelp() {
+  echo '<h2>' . __("Shortcodes for your events as slides.", "yesticket") . '</h2>';
 }
 ?>

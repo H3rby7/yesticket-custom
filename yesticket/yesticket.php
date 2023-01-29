@@ -17,7 +17,6 @@ include_once("shortcodes/yesticket_events_list.php");
 include_once("shortcodes/yesticket_events_cards.php");
 include_once("shortcodes/yesticket_testimonials.php");
 include_once "shortcodes/yesticket_slides.php";
-include_once "templates/yesticket_page_templater.php";
 
 add_action('init', 'ytp_init_callback');
 
@@ -26,5 +25,5 @@ function ytp_init_callback() {
     wp_register_style('yesticket-admin', plugins_url('admin/styles.css', __FILE__), false, 'all');
     load_plugin_textdomain( 'yesticket', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
-    
+
 ?>

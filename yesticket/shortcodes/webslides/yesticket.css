@@ -7,17 +7,34 @@
   }
 }
 
-.yesticket-slide {
+#ytp-slides {
+  overflow: hidden;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  z-index: 99999;
+}
+
+#ytp-slides #navigation {
+  display: none;
+}
+
+#ytp-slides .yesticket-slide {
   position: relative;
   justify-content: initial;
 }
 
-.yesticket-slide .background {
+#ytp-slides .yesticket-slide .background {
   height: 105%;
   animation-duration: 1s;
 }
 
-.yesticket-event-meta {
+#ytp-slides .yesticket-event-meta {
   color: white;
   position: relative;
   padding: 1.2rem !important;
@@ -25,13 +42,13 @@
   width: fit-content;
 }
 
-.yesticket-event-name {
+#ytp-slides .yesticket-event-name {
   color: white;
   padding: 0 !important;
   display: inline-block !important;
 }
 
-.yesticket-event-teaser {
+#ytp-slides .yesticket-event-teaser {
   position: absolute;
   padding: 2.4rem;
   bottom: 0;
@@ -39,21 +56,21 @@
   width: 100%;
 }
 
-.yesticket-event-teaser > * {
+#ytp-slides .yesticket-event-teaser > * {
   padding: 1.2rem !important;
   width: fit-content;
   text-align: center;
   float: right;
 }
 
-.delay1 {
+#ytp-slides .delay1 {
   animation-delay: 1.5s;
 }
 
-.delay2 {
+#ytp-slides .delay2 {
   animation-delay: 3s;
 }
 
-.delay3 {
+#ytp-slides .delay3 {
   animation-delay: 4.5s;
 }
