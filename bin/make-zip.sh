@@ -5,6 +5,7 @@
 SOURCE_DIR=/app
 META_INF_DIR=/meta
 BUILD_DIR=/build-tmp
+LANGUAGE_DIR=$BUILD_DIR/languages
 OUTPUT_DIR=/build
 
 echo "clearing ${BUILD_DIR}"
@@ -27,6 +28,13 @@ rm -rf tests
 rm composer.json
 rm composer.lock
 rm phpunit.xml
+
+echo "removing language backup files"
+rm $LANGUAGE_DIR/*-backup-*
+rm $LANGUAGE_DIR/.gitignore
+
+echo "Listing content of ${LANGUAGE_DIR}"
+ls $LANGUAGE_DIR
 
 echo "Listing content of ${BUILD_DIR}"
 ls -l
