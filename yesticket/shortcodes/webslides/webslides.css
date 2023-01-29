@@ -1,5 +1,6 @@
 /*!
  * Heavily stripped version of webslides css.
+ * And adjusted to our specific needs.
  * URL: https://github.com/webslides/webslides#readme
  * Credits: @jlantunez, @LuisSacristan, @Belelros
  */
@@ -14,7 +15,6 @@
   display: block; }
 
 /*=========================================
-1. Base --> Baseline: 8px = .8rem
 =========================================== */
 /* -- Disable elastic scrolling/bounce:
 webslides.js will add .ws-ready automatically. Don't worry :) -- */
@@ -153,30 +153,22 @@ https://github.com/daneden/animate.css */
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both; }
 
-/* Animated Background (Matrix) */
-@-webkit-keyframes anim {
-  0% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0); }
-  100% {
-    -webkit-transform: translateY(-1200px);
-            transform: translateY(-1200px); } }
-@keyframes anim {
-  0% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0); }
-  100% {
-    -webkit-transform: translateY(-1200px);
-            transform: translateY(-1200px); } }
-
 /* Duration */
 #ytp-slides .slow {
   -webkit-animation-duration: 4s;
-          animation-duration: 4s; }
-#ytp-slides .slow + .slow {
+  animation-duration: 4s; }
+  #ytp-slides .slow + .slow {
     -webkit-animation-duration: 5s;
-            animation-duration: 5s; }
+    animation-duration: 5s; }
 
+/* Delay */
+#ytp-slides .delay {animation-delay: 1.5s;}
+#ytp-slides .delay + .delay,
+#ytp-slides .delay2 {animation-delay: 3s;}
+#ytp-slides .delay2 + .delay,
+#ytp-slides .delay + .delay2 {animation-delay: 4.5s;}
+#ytp-slides .delay2 + .delay2 {animation-delay: 6s;}
+            
 /*============================
 2. TYPOGRAPHY & LISTS
 ============================== */
@@ -348,10 +340,3 @@ Vertically and horizontally centered
   height: 100%;
   z-index: inherit;
 }
-
-#ytp-slides .delay {animation-delay: 1.5s;}
-#ytp-slides .delay + .delay,
-#ytp-slides .delay2 {animation-delay: 3s;}
-#ytp-slides .delay2 + .delay,
-#ytp-slides .delay + .delay2 {animation-delay: 4.5s;}
-#ytp-slides .delay2 + .delay2 {animation-delay: 6s;}
