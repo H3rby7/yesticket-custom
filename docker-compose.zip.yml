@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  zipper:
+    build:
+      context: tools
+      dockerfile: zip.dockerfile
+    entrypoint: bash
+    command: make-zip.sh
+    working_dir: /scripts
+    volumes:
+      - "./yesticket/:/app"
+      - "./bin/:/scripts"
+      - "./out/:/build"
+    restart: "no"
+
