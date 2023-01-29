@@ -23,6 +23,8 @@ function getYesTicketSlides($atts)
                     'teaser-length' => '250',
                     'ms-per-slide' => '10000',
                     'text-scale' => '100%',
+                    'color-1' => '#ffffff',
+                    'color-2' => '#000000',
                     'welcome-1' => __('welcome to our'),
                     'welcome-2' => __('improv theatre show'),
                     'welcome-3' => __('where everything is made up'),
@@ -30,6 +32,7 @@ function getYesTicketSlides($atts)
     $content = "";
     try {
         $result = getEventsFromApi($att);
+        $content .= render_yesTicketSlideInlineStyles($att);
         $content .= "<div id='ytp-slides' style='font-size: ".$att["text-scale"]."'>";
         if (!is_countable($result) or count($result) < 1) {
             $content = ytp_render_no_events();
@@ -44,6 +47,19 @@ function getYesTicketSlides($atts)
         $content .= __($e->getMessage(), 'yesticket');
     }
     return $content;
+}
+
+function render_yesTicketSlideInlineStyles($att) {
+  $color1 = $att['color-1'];
+  $color2 = $att['color-2'];
+  return <<<EOD
+  <style>
+    #ytp-slides {
+      --ytp--color--primary: $color1;
+      --ytp--color--contrast: $color2;
+    }
+  </style>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 
 function render_yesTicketSlides($result, $att) {
