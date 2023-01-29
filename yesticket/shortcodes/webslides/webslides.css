@@ -302,6 +302,9 @@ Vertically and horizontally centered
   display: inline-block !important;
   width: fit-content;
 }
+#ytp-slides .yesticket-event-meta h2 {
+  font-size: 200%;
+}
 
 #ytp-slides .yesticket-event-name {
   color: var(--wp--preset--color--base);

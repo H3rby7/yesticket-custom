@@ -20,13 +20,17 @@ function getYesTicketSlides($atts)
                     'type' => 'all',
                     'env' => 'prod',
                     'count' => '10',
-                    'max-text-length' => '250',
-                    'autoslide' => '10000',
+                    'teaser-length' => '250',
+                    'ms-per-slide' => '10000',
+                    'text-scale' => '100%',
+                    'welcome-1' => __('welcome to our'),
+                    'welcome-2' => __('improv theatre show'),
+                    'welcome-3' => __('where everything is made up'),
                     ), $atts);
     $content = "";
     try {
         $result = getEventsFromApi($att);
-        $content .= "<div id='ytp-slides'>";
+        $content .= "<div id='ytp-slides' style='font-size: ".$att["text-scale"]."'>";
         if (!is_countable($result) or count($result) < 1) {
             $content = ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
@@ -47,7 +51,7 @@ function render_yesTicketSlides($result, $att) {
   <main role="main">
     <article id="webslides">
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-  $content .= render_yesTicketWelcomeSlide();
+  $content .= render_yesTicketWelcomeSlide($att["welcome-1"], $att["welcome-2"], $att["welcome-3"]);
   $count = 0;
   foreach ($result as $item) {
     $content .= render_yesTicketEventSlide($item, $att);
@@ -61,18 +65,18 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
   </main>
   <!--main-->
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-  $autoslide = $att["autoslide"];
+  $autoslide = $att["ms-per-slide"];
   $content .= render_yesTicketWebslidesJS($autoslide);
   return $content;
 }
 
-function render_yesTicketWelcomeSlide() {
+function render_yesTicketWelcomeSlide($row1, $row2, $row3) {
 return <<<EOD
       <section class="">
         <div class="wrap aligncenter slow">
-          <p class="text-symbols">Willkommen zu</p>
-          <h1 class="text-landing">Kanonenfutter</h1>
-          <p class="text-symbols">das improtheater</p>
+          <p class="text-symbols">$row1</p>
+          <h1 class="text-landing">$row2</h1>
+          <p class="text-symbols">$row3</p>
         </div>
       </section>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
@@ -83,7 +87,7 @@ return <<<EOD
 <script>
 window.addEventListener('load', function () {
   window.ws = new WebSlides(
-   // { autoslide: $autoslide }
+    { autoslide: $autoslide }
   );
 }, false);
 </script>
@@ -116,10 +120,10 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 
 function render_yesTicketEventDescriptionForSlides($item, $att) {
   $descr = $item->event_description;
-  if (strlen($descr) < $att["max-text-length"]) {
+  if (strlen($descr) < $att["teaser-length"]) {
     return $descr;
   }
-  $shorter = substr($descr, 0, $att["max-text-length"]);
+  $shorter = substr($descr, 0, $att["teaser-length"]);
   $indexOfLastPeriod = strrpos($shorter, ".");
   if (!$indexOfLastPeriod) {
     return $shorter . "[...]";
