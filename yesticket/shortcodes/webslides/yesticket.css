@@ -7,9 +7,17 @@
   }
 }
 
+#ytp-slides,
+#ytp-slides * {
+  z-index: 120001;
+}
+#ytp-slides .background,
+#ytp-slides [class*='background-'] {
+  z-index: 120000;}
+
 #ytp-slides {
   overflow: hidden;
-  background-color: white;
+  background-color: var(--wp--preset--color--base);
   position: fixed;
   top: 0;
   left: 0;
@@ -17,7 +25,6 @@
   height: 100vh;
   max-width: 100vw;
   max-height: 100vh;
-  z-index: 99999;
 }
 
 #ytp-slides #navigation {
@@ -35,7 +42,7 @@
 }
 
 #ytp-slides .yesticket-event-meta {
-  color: white;
+  color: var(--wp--preset--color--base);
   position: relative;
   padding: 1.2rem !important;
   display: inline-block !important;
@@ -43,7 +50,7 @@
 }
 
 #ytp-slides .yesticket-event-name {
-  color: white;
+  color: var(--wp--preset--color--base);
   padding: 0 !important;
   display: inline-block !important;
 }

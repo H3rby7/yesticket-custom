@@ -44,52 +44,52 @@ function getYesTicketSlides($atts)
 }
 
 function render_yesTicketSlides($result, $att) {
-$content = <<<EOD
-    <main role="main">
-      <article id="webslides">
+  $content = <<<EOD
+  <main role="main">
+    <article id="webslides">
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+  $content .= render_yesTicketWelcomeSlide();
+  $count = 0;
+  foreach ($result as $item) {
+    $content .= render_yesTicketEventSlide($item, $att);
+    $count++;
+    if ($count == (int)$att["count"]) {
+        break;
+    }
+  }
+  $content .= <<<EOD
+    </article>
+  </main>
+  <!--main-->
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+  $autoslide = $att["autoslide"];
+  $content .= render_yesTicketWebslidesJS($autoslide);
+  return $content;
+}
 
-        <!-- Quick Guide
-          - Each parent <section> in the <article id="webslides"> element is an individual slide.
-          - Vertical sliding = <article id="webslides" class="vertical">
-          - <div class="wrap"> = container 90% / <div class="wrap size-50"> = 45%;
-        -->
+function render_yesTicketWelcomeSlide() {
+return <<<EOD
+      <section class="">
+       <span class="background dark"></span>
+        <div class="wrap aligncenter slow">
+          <p class="text-symbols">Willkommen zu</p>
+          <h1 class="text-landing">Kanonenfutter</h1>
+          <p class="text-symbols">das improtheater</p>
+        </div>
+      </section>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+}
 
-        <!-- Just 5 basic animations: .fadeIn, .fadeInUp, .zoomIn, .slideInLeft, and .slideInRight. -->
-
-        <section class="">
-         <span class="background dark"></span>
-          <div class="wrap aligncenter slow">
-            <p class="text-symbols">Willkommen zu</p>
-            <h1 class="text-landing">Kanonenfutter</h1>
-            <p class="text-symbols">das improtheater</p>
-          </div>
-        </section>
-EOD;
-// !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-        $count = 0;
-        foreach ($result as $item) {
-          $content .= render_yesTicketEventSlide($item, $att);
-          $count++;
-          if ($count == (int)$att["count"]) {
-              break;
-          }
-        }
-        $autoslide = $att["autoslide"];
-        $content .= <<<EOD
-      </article>
-    </main>
-    <!--main-->
-
-    <script>
-      window.addEventListener('load', function () {
-        window.ws = new WebSlides(
-         { autoslide: $autoslide }
-        );
-      }, false);
-    </script>
-EOD;
-// !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-return $content;
+function render_yesTicketWebslidesJS($autoslide) {
+return <<<EOD
+<script>
+window.addEventListener('load', function () {
+  window.ws = new WebSlides(
+   // { autoslide: $autoslide }
+  );
+}, false);
+</script>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 
 function render_yesTicketEventSlide($event, $att) {
@@ -109,8 +109,7 @@ function render_yesTicketEventSlide($event, $att) {
       </div>
       <!-- end .yesticket-slide-->
   </section>
-EOD;
-// !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 
 function render_yesTicketEventDescriptionForSlides($item, $att) {
