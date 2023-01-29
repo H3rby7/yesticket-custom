@@ -1,6 +1,18 @@
 <?php
 include_once("functions.php");
 
+function strpos_findLast_viaRegex($haystack, $needlePattern) {
+  // https://www.php.net/manual/de/function.preg-match-all.php
+  preg_match_all($needlePattern, $haystack, $matches, PREG_OFFSET_CAPTURE);
+  // $matches is an array containing the matches
+  // each match is an array of size 1, containing at [0] an array of 
+  // [0] being the match and [1] the corresponding index.
+  if (count($matches) < 0) {
+    return false;
+  }
+  $lastMatch = $matches[count($matches) - 1];
+  return $lastMatch[0][1];
+}
 /**
  * Manage the plugin's wp options
  */
@@ -192,3 +204,5 @@ class YesTicketPluginOptions
     return true;
   }
 }
+
+?>

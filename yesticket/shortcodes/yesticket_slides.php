@@ -140,11 +140,11 @@ function render_yesTicketEventDescriptionForSlides($item, $att) {
     return $descr;
   }
   $shorter = substr($descr, 0, $att["teaser-length"]);
-  $indexOfLastPeriod = strrpos($shorter, ".");
-  if (!$indexOfLastPeriod) {
+  $indexOfLastPunctuationMark = strpos_findLast_viaRegex($shorter, "/[!.?]/i");
+  if (!$indexOfLastPunctuationMark) {
     return $shorter . "[...]";
   } else {
-    return substr($shorter, 0, $indexOfLastPeriod + 1);
+    return substr($shorter, 0, $indexOfLastPunctuationMark + 1);
   }
 }
 
