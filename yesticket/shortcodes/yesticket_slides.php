@@ -10,8 +10,7 @@ add_action('wp_enqueue_scripts', 'webslides_styles');
 
 function webslides_styles()
 {
-  wp_enqueue_style('yesticket_slides_base', plugins_url('webslides/webslides.css', __FILE__), false, 'all');
-  wp_enqueue_style('yesticket_slides_custom', plugins_url('webslides/yesticket.css', __FILE__), false, 'all');
+  wp_enqueue_style('yesticket_slides', plugins_url('webslides/webslides.css', __FILE__), false, 'all');
   wp_enqueue_script('yesticket_slides', plugins_url('webslides/webslides.min.js', __FILE__));
 }
 
