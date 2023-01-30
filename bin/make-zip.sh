@@ -9,7 +9,7 @@ fi
 
 SOURCE_DIR=$1
 
-BUILD_DIR=/build-tmp
+BUILD_DIR=$SOURCE_DIR/dist
 LANGUAGE_DIR=$BUILD_DIR/languages
 CODE_DIR=$SOURCE_DIR/yesticket/*
 OUT_ZIP_PATH=$SOURCE_DIR/yesticket.zip
