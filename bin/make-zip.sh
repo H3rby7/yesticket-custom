@@ -38,8 +38,8 @@ rm composer.lock
 rm phpunit.xml
 
 echo "removing language backup files"
-rm $LANGUAGE_DIR/*-backup-*
-rm $LANGUAGE_DIR/.gitignore
+rm -f $LANGUAGE_DIR/*-backup-*
+rm -f $LANGUAGE_DIR/.gitignore
 
 echo "Listing content of ${LANGUAGE_DIR}"
 ls $LANGUAGE_DIR
