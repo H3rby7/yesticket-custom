@@ -1,46 +1,40 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: https://example.com/
-Tags: tag1, tag2
-Requires at least: 4.7
-Tested up to: 5.4
-Stable tag: 4.3
-Requires PHP: 7.0
+=== Yesticket ===
+Contributors: h3rby7
+Donate link: https://www.yesticket.org/de/partners.php
+Tags: e-tickets, event ticketing, sell tickets, ticket, ticketing
+Requires at least: 5.6
+Tested up to: 6.1.1
+Stable tag: 2.0.0
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Display Events, Shows, Performances, Workshops, Festivals and Testimonials from the "YesTicket" Online Ticketing Service.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+Display Events, Shows, Performances, Workshops, Festivals and Testimonials from the "YesTicket" Online Ticketing Service.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+Provides a selection of shortcodes to add the above from yesticket to your site.
 
-A few notes about the sections above:
+These include:
 
-* "Contributors" is a comma separated list of wordpress.org usernames
-* "Tags" is a comma separated list of tags that apply to the plugin
-* "Requires at least" is the lowest version that the plugin will work on
-* "Tested up to" is the highest version that you've *successfully used to test the plugin*
-* Stable tag must indicate the Subversion "tag" of the latest stable version
+* a simple list of events
+* a rich list of events
+* a card view of events
+* a list of testimonials
 
-Note that the `readme.txt` value of stable tag is the one that is the defining one for the plugin.  If the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used for displaying information about the plugin.
-
-If you develop in trunk, you can update the trunk `readme.txt` to reflect changes in your in-development version, without having that information incorrectly disclosed about the current stable version that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
-
-If no stable tag is provided, your users may not get the correct version of your code.
+That means in order to work with this plugin you need to be a user of the free yesticket service.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Do I need a yesticket account? =
 
-An answer to that question.
+Yes you need to register for a free account at [yesticket](www.yesticket.org).
 
-= What about foo bar? =
+= Where can I find more information on the conditions? =
 
-Answer to foo bar dilemma.
+For the up-to-date information and conditions visit the [yesticket](www.yesticket.org) website
 
 == Screenshots ==
 
@@ -49,47 +43,20 @@ Answer to foo bar dilemma.
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+= 2.0.0 =
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+* Added caching functionality
+* 'Key' and 'Organizer-ID' are now configured globally on the Settings Page
+* Added translation support
+* Added the displaying of events as cards (as known from the `iframe` embedding of YesTicket)
+* Updated Plugin Settings Page
+    * Guides through the configuration
+    * Shortcodes have previews
+    * All options are explained
+    * Configure your api access there.
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
+Please define `organizer` and `key` centrally on the plugin settings page.
 
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== A brief Markdown Example ==
-
-Markdown is what the parser uses to process much of the readme file.
-
-[markdown syntax]: https://daringfireball.net/projects/markdown/syntax
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Links require brackets and parenthesis:
-
-Here's a link to [WordPress](https://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax]. Link titles are optional, naturally.
-
-Blockquotes are email style:
-
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-And Backticks for code:
-
-`<?php code(); ?>`
+While defining `organizer` and `key` within the shortcode still works, it is deprecated and will be removed later.
