@@ -8,8 +8,8 @@ if [ $# -lt 1 ]; then
 fi
 
 SOURCE_DIR=$1
+BUILD_DIR=$1/dist
 
-BUILD_DIR=$SOURCE_DIR/dist
 LANGUAGE_DIR=$BUILD_DIR/languages
 CODE_DIR=$SOURCE_DIR/yesticket/*
 OUT_ZIP_PATH=$SOURCE_DIR/yesticket.zip
@@ -46,10 +46,3 @@ ls $LANGUAGE_DIR
 
 echo "Listing content of ${BUILD_DIR}"
 ls -l
-
-echo "Zipping ${BUILD_DIR} to ${OUT_ZIP_PATH}"
-
-zip -r $OUT_ZIP_PATH ./*
-
-echo "deleting build files ${BUILD_DIR}"
-rm -rf $BUILD_DIR

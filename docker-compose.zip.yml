@@ -6,7 +6,7 @@ services:
       context: tools
       dockerfile: zip.dockerfile
     entrypoint: bash
-    command: make-zip.sh /src
+    command: compose-build.sh
     working_dir: /src/bin
     volumes:
       - "./:/src"

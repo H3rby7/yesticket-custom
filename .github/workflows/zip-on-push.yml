@@ -8,12 +8,13 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - name: Run 'make-zip.sh'
+      - name: Prepare zip files
         run: |
-          . ${{ github.workspace }}/bin/make-zip.sh ${{ github.workspace }}
+          . ${{ github.workspace }}/bin/prepare-zip.sh ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Archive finished ZIP
         uses: actions/upload-artifact@v3
         with:
-          name: yesticket.zip
-          path: ${{ github.workspace }}/yesticket.zip
+          name: yesticket
+          path: ${{ github.workspace }}/dist
+
