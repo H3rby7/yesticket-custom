@@ -47,6 +47,9 @@ ls $LANGUAGE_DIR
 echo "Listing content of ${BUILD_DIR}"
 ls -l
 
-echo "Zipping ${BUILD_DIR}"
+echo "Zipping ${BUILD_DIR} to ${OUT_ZIP_PATH}"
 
 zip -r $OUT_ZIP_PATH ./*
+
+echo "deleting build files ${BUILD_DIR}"
+rm -rf $BUILD_DIR
