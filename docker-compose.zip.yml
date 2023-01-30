@@ -6,11 +6,8 @@ services:
       context: tools
       dockerfile: zip.dockerfile
     entrypoint: bash
-    command: make-zip.sh
-    working_dir: /scripts
+    command: make-zip.sh /src
+    working_dir: /src/bin
     volumes:
-      - "./yesticket/:/app"
-      - "./bin/:/scripts"
-      - "./out/:/build"
-      - "./CHANGELOG.md:/meta/CHANGELOG.md:ro"
+      - "./:/src"
     restart: "no"

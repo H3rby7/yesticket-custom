@@ -1,24 +1,32 @@
 #!/usr/bin/env bash
 
-# MAKE SURE THIS FILE HAS 'LF' LINE-ENDINGS FOR IT TO RUN!
+# MAKE SURE THIS FILE HAS 'LF' LINE-ENDINGS IF RUNNING IN DOCKER FOR IT TO RUN!
 
-SOURCE_DIR=/app
-META_INF_DIR=/meta
+if [ $# -lt 1 ]; then
+	echo "usage: $0 <src-dir>"
+	exit 1
+fi
+
+SOURCE_DIR=$1
+
 BUILD_DIR=/build-tmp
 LANGUAGE_DIR=$BUILD_DIR/languages
-OUTPUT_DIR=/build
+CODE_DIR=$SOURCE_DIR/yesticket/*
+OUT_ZIP_PATH=$SOURCE_DIR/yesticket.zip
+CHANGELOG_PATH=$SOURCE_DIR/CHANGELOG.md
 
-echo "clearing ${BUILD_DIR}"
+echo "preparing build-dir: ${BUILD_DIR}"
 rm -rf $BUILD_DIR
+mkdir $BUILD_DIR
 
-echo "clearing existing build artifacts in ${OUTPUT_DIR}"
-rm -rf $OUTPUT_DIR/*
+echo "clearing existing build artifact ${OUT_ZIP_PATH}"
+rm -f $OUT_ZIP_PATH
 
-echo "copying source files from ${SOURCE_DIR} to ${BUILD_DIR}"
-cp -r $SOURCE_DIR $BUILD_DIR
+echo "copying source code files from ${CODE_DIR} to ${BUILD_DIR}"
+cp -r $CODE_DIR $BUILD_DIR
 
-echo "copying meta files from ${META_INF_DIR} to ${BUILD_DIR}"
-cp -r $META_INF_DIR/* $BUILD_DIR
+echo "copying CHANGELOG from ${CHANGELOG_PATH} to ${BUILD_DIR}/"
+cp $CHANGELOG_PATH $BUILD_DIR/
 
 echo "entering ${BUILD_DIR}"
 cd $BUILD_DIR
@@ -41,4 +49,4 @@ ls -l
 
 echo "Zipping ${BUILD_DIR}"
 
-zip -r $OUTPUT_DIR/yesticket.zip ./*
+zip -r $OUT_ZIP_PATH ./*
