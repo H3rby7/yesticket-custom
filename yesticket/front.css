@@ -100,6 +100,7 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	justify-content: center;
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
@@ -111,28 +112,29 @@
 	text-decoration: none !important;
 }
 
-@media screen and (min-width:576px) {
-	.yt-container .yt-card-event {
-		flex: 0 0 50% !important;
-		max-width: 50% !important;
-	}
-}
-
-@media screen and (min-width:768px) {
-	.yt-container .yt-card-event {
-		flex: 0 0 33.333333% !important;
-		max-width: 33.333333% !important;
-	}
+.yt-container .yt-card-event {
+	flex: 0 auto;
 }
 
 .yt-container .yt-card-event {
-	flex: 0 0 100%;
-	max-width: 100%;
 	padding: 0 15px .5rem 15px;
 	line-height: 1.15;
 }
 
-/* Card Design */
+.yt-container .yt-card {
+	height: 240px;
+	width: 300px;
+}
+.yt-container .yt-card-image {
+	height: 145px;
+}
+.yt-container .yt-card-text-wrapper {
+	height: 95px;
+}
+.yt-card-body {
+	height: 100%;
+	overflow: hidden;
+}
 
 .yt-card {
 	width: 100%;
@@ -142,17 +144,15 @@
 	border-radius: .25rem;
 }
 
-.yt-card-image-wrapper {
+.yt-card-image {
 	width: 100%;
-	overflow: hidden;
-}
-.yt-card-image-wrapper img {
-	width: 100%;
+	height: 100px;
+	background-size: cover;
+	background-position: top;
 }
 
 .yt-card-text-wrapper {
 	position: relative;
-	top: -12px;
 	padding: .5rem 1rem;
 	width: 100%;
 	display: flex;
@@ -214,12 +214,9 @@
 	border: 1px solid #fff;
 }
 
-.yt-light .yt-card-text-wrapper {
+.yt-light .yt-card {
 	background: #fff;
 	color: #333;
-}
-
-.yt-light .yt-card {
 	border-color: rgba(0,0,0,.125);
 }
 
@@ -251,7 +248,8 @@
 	border: 1px solid #333;
 }
 
-.yt-dark .yt-card-text-wrapper {
+.yt-dark .yt-card {
 	background: #333;
 	color: #fff;
+	border-color: rgba(255, 255, 255, 0.2);
 }

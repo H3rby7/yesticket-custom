@@ -13,7 +13,7 @@ function getYesTicketEventsCards($atts) {
             'details' => 'no',
 			'type' => 'all',
 			'env' => 'prod',
-			'count' => '100',
+			'count' => '6',
 			'grep' => '',
 			'theme' => 'light',
 			), $atts );
@@ -60,6 +60,7 @@ function render_yesTicketEventsCards($result, $att) {
         }
         $time = ytp_to_local_datetime($item->event_datetime);
         $booking_url = $item->yesticket_booking_url;
+        // picture size is 1200x628 px
         $picture_url = $item->event_picture_url;
         $ts = $time->getTimestamp();
         $month = wp_date('M', $ts);
@@ -72,9 +73,7 @@ function render_yesTicketEventsCards($result, $att) {
         <div class="yt-card-event">
             <a href="$booking_url" target="_new">
                 <div class="yt-card">
-                    <div class="yt-card-image-wrapper">
-                        <img src="$picture_url" alt="Eventbild">
-                    </div>
+                    <div class="yt-card-image" style="background-image: url('$picture_url')"></div>
                     <div class="yt-card-text-wrapper">
                         <div class="yt-card-date">
                             <span class="yt-card-month">$month</span></br>
@@ -82,9 +81,9 @@ function render_yesTicketEventsCards($result, $att) {
                             <span class="yt-card-year">$year</span>
                         </div>
                         <div class="yt-card-body">
-                            <span class="yt-card-body-organizer">$organizer_name</span><br>
+                            <small class="yt-card-body-location">$location_name</small><br>
                             <strong class="yt-card-body-title">$event_name</strong><br>
-                            <small class="yt-card-body-location">$location_name</small>
+                            <!--<span class="yt-card-body-organizer">$organizer_name</span>-->
                         </div>
                     </div>
                 </div>
