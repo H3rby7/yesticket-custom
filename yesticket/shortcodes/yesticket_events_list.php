@@ -5,9 +5,9 @@ include_once("yesticket_shortcode_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
-add_shortcode('yesticket_events_list', 'getYesTicketEventsList');
+add_shortcode('yesticket_events_list', 'ytp_getEventList');
 
-function getYesTicketEventsList($atts)
+function ytp_getEventList($atts)
 {
     $att = shortcode_atts(array(
                     'organizer' => '',
@@ -19,14 +19,14 @@ function getYesTicketEventsList($atts)
                     'theme' => 'light',
                     ), $atts);
     try {
-        $result = getEventsFromApi($att);
+        $result = ytp_api_getEvents($att);
         $content = "";
         if (!is_countable($result) or count($result) < 1) {
             $content = ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
             $content = ytp_render_no_events();
         } else {
-            $content .= render_yesTicketEventsList($result, $att);
+            $content .= ytp_render_eventList($result, $att);
         }
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         $content .= "</div>";
@@ -36,7 +36,7 @@ function getYesTicketEventsList($atts)
     return $content;
 }
 
-function render_yesTicketEventsList($result, $att) {
+function ytp_render_eventList($result, $att) {
     $content = "";
     $count = 0;
     foreach ($result as $item) {
@@ -60,7 +60,7 @@ function render_yesTicketEventsList($result, $att) {
     return $content;
 }
 
-function render_yesTicketEventsListHelp() {?>
+function ytp_render_eventListHelp() {?>
     <h2><?php echo __("Shortcodes for your events as list.", "yesticket");?></h2>
     <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_events_list type="all" count="3"]</span></p>
     <h3><?php echo __("Options for event list shortcodes", "yesticket");?></h3>

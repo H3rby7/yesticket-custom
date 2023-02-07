@@ -2,7 +2,7 @@
 
 add_option('yesticket_transient_keys', array());
 
-function getDataCached($get_url) {
+function ytp_api_getDataCached($get_url) {
   $options = get_option('yesticket_settings');
   $CACHE_TIME_IN_MINUTES = $options['cache_time_in_minutes'];
   $CACHE_KEY = ytp_cacheKey($get_url);
@@ -11,7 +11,7 @@ function getDataCached($get_url) {
   $data = get_transient($CACHE_KEY);
   if( false === $data ) {
       // Cache not present, we make the API call
-      $data = getData($get_url);
+      $data = ytp_api_getData($get_url);
       set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS );
       // save cache key to options, so we can delete the transient, if necessary
       ytp_addCacheKeyToOptions($CACHE_KEY);
@@ -20,7 +20,7 @@ function getDataCached($get_url) {
   return $data;
 }
 
-function getData($get_url) {
+function ytp_api_getData($get_url) {
   if (function_exists('curl_version')) {
       $ch = curl_init();
       $timeout = 4;
@@ -59,7 +59,7 @@ function getData($get_url) {
   return $result;
 }
 
-function validateArguments($att, $options) {
+function ytp_api_validateArguments($att, $options) {
   // We prefer people setting their private info in the settings, rather than the shortcode.
   if (empty($options["organizer_id"]) and empty($att["organizer"])) {
       throw new InvalidArgumentException(
@@ -82,27 +82,27 @@ function validateArguments($att, $options) {
   return true;
 }
 
-function getEventsFromApi($att) {
-  return getDataCached(validateAndBuildApiCall($att, "v2/events.php"));
+function ytp_api_getEvents($att) {
+  return ytp_api_getDataCached(ytp_api_validateAndBuildApiUrl($att, "v2/events.php"));
 }
 
-function getTestimonialsFromApi($att) {
-    return getDataCached(validateAndBuildApiCall($att, "v2/testimonials.php"));
+function ytp_api_getTestimonials($att) {
+    return ytp_api_getDataCached(ytp_api_validateAndBuildApiUrl($att, "v2/testimonials.php"));
 }
 
-function validateAndBuildApiCall($att, $apiEndpoint) {
+function ytp_api_validateAndBuildApiUrl($att, $apiEndpoint) {
     $env_add = "";
     if ($att["env"] == 'dev') {
         $env_add = "/dev";
     }
     $options = get_option('yesticket_settings');
-    validateArguments($att, $options);
+    ytp_api_validateArguments($att, $options);
     $get_url = 'https://www.yesticket.org' . $env_add . '/api/' . $apiEndpoint;
-    $get_url .= buildYesticketQueryParams($att, $options);
+    $get_url .= ytp_api_buildQueryParams($att, $options);
     return $get_url;
 }
 
-function buildYesticketQueryParams($att, $options) {
+function ytp_api_buildQueryParams($att, $options) {
     $queryParams = '';
     if (!empty($att["count"])) {
         $queryParams .= '&count='.$att["count"];

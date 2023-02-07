@@ -18,7 +18,7 @@ function ytp_getEventCards($atts) {
 			'theme' => 'light',
 			), $atts );
     try {
-        $result = getEventsFromApi($att);
+        $result = ytp_api_getEvents($att);
         $content = "";
         if ($att["theme"] == "light") {
                 $content .= "<div class='ytp-light'>";

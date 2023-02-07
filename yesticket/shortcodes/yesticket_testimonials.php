@@ -4,9 +4,9 @@ include_once("yesticket_options_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
-add_shortcode('yesticket_testimonials', 'getYesTicketTestimonials');
+add_shortcode('yesticket_testimonials', 'ytp_getTestimonials');
 
-function getYesTicketTestimonials($atts)
+function ytp_getTestimonials($atts)
 {
     $att = shortcode_atts(array(
                     'organizer' => '',
@@ -19,13 +19,13 @@ function getYesTicketTestimonials($atts)
                     ), $atts);
     $content = "";
     try {
-        $result = getTestimonialsFromApi($att);
+        $result = ytp_api_getTestimonials($att);
         if (!is_countable($result) or count($result) < 1) {
             $content = ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
             $content = ytp_render_no_events();
         } else {
-            $content .= render_yesTicketTestimonials($result, $att);
+            $content .= ytp_render_testimonials($result, $att);
         }
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
@@ -33,7 +33,7 @@ function getYesTicketTestimonials($atts)
     return $content;
 }
 
-function render_yesTicketTestimonials($result, $att) {
+function ytp_render_testimonials($result, $att) {
     $content = "";
     $count = 0;
     foreach ($result as $item) {
@@ -43,7 +43,7 @@ function render_yesTicketTestimonials($result, $att) {
             $add_event = '<br><span class="ytp-testimonial-source">'.__("about", "yesticket").' "'.htmlentities($item->event_name).'"</span>';
         }
         $content .= '<span class="ytp-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>';
-        $content .= '<span class="ytp-testimonial-source">'.render_yesTicketTestimonialSource($item).'</span>';
+        $content .= '<span class="ytp-testimonial-source">'.ytp_render_testimonialSource($item).'</span>';
         $content .= '</div>';
         $count++;
         if ($count == (int)$att["count"]) {
@@ -53,7 +53,7 @@ function render_yesTicketTestimonials($result, $att) {
     return $content;
 }
 
-function render_yesTicketTestimonialSource($item) {
+function ytp_render_testimonialSource($item) {
     $source = $item->source;
     $date = $item->date;
     return sprintf(
@@ -64,7 +64,7 @@ function render_yesTicketTestimonialSource($item) {
     );
 }
 
-function render_yesTicketTestimonialsHelp() {?>
+function ytp_render_testimonialsHelp() {?>
     <h2><?php echo __("Shortcodes for your testimonials.", "yesticket");?></h2>
     <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_testimonials count="30"]</span></p>
     <h3><?php echo __("Options for testimonial shortcodes", "yesticket");?></h3>

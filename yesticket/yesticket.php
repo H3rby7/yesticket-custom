@@ -17,16 +17,16 @@ include_once "shortcodes/yesticket_events_list.php";
 include_once "shortcodes/yesticket_events_cards.php";
 include_once "shortcodes/yesticket_testimonials.php";
 
-add_action('wp_enqueue_scripts', 'yesticket_styles');
-add_action('init', 'yesticket_load_textdomain');
+add_action('wp_enqueue_scripts', 'ytp_site_styles');
+add_action('init', 'ytp_load_textdomain');
 
-function yesticket_styles()
+function ytp_site_styles()
 {
-    wp_enqueue_style('yesticket', plugins_url('front.css', __FILE__), false, 'all');
+    wp_enqueue_style('yesticket', plugins_url('ytp-site.css', __FILE__), false, 'all');
     // wp_enqueue_script('yesticket', plugins_url('front.js', __FILE__));
 }
 
-function yesticket_load_textdomain() {
+function ytp_load_textdomain() {
     load_plugin_textdomain( 'yesticket', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
     
