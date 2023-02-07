@@ -21,13 +21,13 @@ function getYesTicketEventsCards($atts) {
         $result = getEventsFromApi($att);
         $content = "";
         if ($att["theme"] == "light") {
-                $content .= "<div class='yt-light'>";
+                $content .= "<div class='ytp-light'>";
         }
         else if ($att["theme"] == "dark") {
-                $content .= "<div class='yt-dark'>";
+                $content .= "<div class='ytp-dark'>";
         }
         else {
-            $content .= "<div class='yt-default ".$att["theme"]."'>";
+            $content .= "<div class='ytp-default ".$att["theme"]."'>";
         }
         if (!is_countable($result) or count($result) < 1) {
             $content = ytp_render_no_events();
@@ -46,7 +46,7 @@ function getYesTicketEventsCards($atts) {
 function render_yesTicketEventsCards($result, $att) {
     $content = "";
     $count = 0;
-    $content .= "<div class='yt-container'>\n";
+    $content .= "<div class='ytp-container'>\n";
     foreach($result as $item){
         if (!empty($att["grep"])) {
             if (!str_contains($item->event_name, $att["grep"])) {
@@ -66,20 +66,20 @@ function render_yesTicketEventsCards($result, $att) {
         $event_name = htmlentities($item->event_name);
         $location_name = htmlentities($item->location_name);
         $content .= <<<EOD
-        <div class="yt-card-event">
+        <div class="ytp-card-event">
             <a href="$booking_url" target="_new">
-                <div class="yt-card">
-                    <div class="yt-card-image" style="background-image: url('$picture_url')"></div>
-                    <div class="yt-card-text-wrapper">
-                        <div class="yt-card-date">
-                            <span class="yt-card-month">$month</span></br>
-                            <span class="yt-card-day">$day</span></br>
-                            <span class="yt-card-year">$year</span>
+                <div class="ytp-card">
+                    <div class="ytp-card-image" style="background-image: url('$picture_url')"></div>
+                    <div class="ytp-card-text-wrapper">
+                        <div class="ytp-card-date">
+                            <span class="ytp-card-month">$month</span></br>
+                            <span class="ytp-card-day">$day</span></br>
+                            <span class="ytp-card-year">$year</span>
                         </div>
-                        <div class="yt-card-body">
-                            <small class="yt-card-body-location">$location_name</small><br>
-                            <strong class="yt-card-body-title">$event_name</strong><br>
-                            <!--<span class="yt-card-body-organizer">$organizer_name</span>-->
+                        <div class="ytp-card-body">
+                            <small class="ytp-card-body-location">$location_name</small><br>
+                            <strong class="ytp-card-body-title">$event_name</strong><br>
+                            <!--<span class="ytp-card-body-organizer">$organizer_name</span>-->
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 
 function render_yesTicketEventsCardsHelp() {?>
     <h2><?php echo __("Shortcodes for your events as cards.", "yesticket");?></h2>
-    <p><?php echo __("quickstart", "yesticket");?>: <span class="yt-code">[yesticket_events_cards count="30"]</span></p>
+    <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_events_cards count="30"]</span></p>
     <h3><?php echo __("Options for event card shortcodes", "yesticket");?></h3>
     <?php 
     echo ytp_render_optionType('events');
@@ -105,7 +105,7 @@ function render_yesTicketEventsCardsHelp() {?>
     <h4>Grep</h4>
     <p class='ml-3'><?php
     echo __("Using <b>grep</b> you can filter your events by their title.", "yesticket");?></p>
-    <p class="ml-3"><span class="yt-code">grep="Johnstone"</span> <?php
+    <p class="ml-3"><span class="ytp-code">grep="Johnstone"</span> <?php
     /* translators: The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'*/
     echo __("will only display events, who have \"Johnstone\" in their title.", "yesticket");?></p>
 <?php } ?>

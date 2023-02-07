@@ -41,13 +41,13 @@ function render_yesTicketEventsList($result, $att) {
     $count = 0;
     foreach ($result as $item) {
         $add = "";
-        $content .= "<div class='yt-row-list'>";
+        $content .= "<div class='ytp-row-list'>";
         if ($att["type"]=="all") {
-            $add = "<br><span class='yt-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
+            $add = "<br><span class='ytp-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
         }
-        $content .= "<span class='yt-eventdate'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add."</span><br>";
-        $content .= "<span class='yt-eventname'>".htmlentities($item->event_name)."</span>";
-        $content .= "<span class='yt-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
+        $content .= "<span class='ytp-eventdate'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add."</span><br>";
+        $content .= "<span class='ytp-eventname'>".htmlentities($item->event_name)."</span>";
+        $content .= "<span class='ytp-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
         if ($att["ticketlink"]=="yes") {
             $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
         }
@@ -62,7 +62,7 @@ function render_yesTicketEventsList($result, $att) {
 
 function render_yesTicketEventsListHelp() {?>
     <h2><?php echo __("Shortcodes for your events as list.", "yesticket");?></h2>
-    <p><?php echo __("quickstart", "yesticket");?>: <span class="yt-code">[yesticket_events_list type="all" count="3"]</span></p>
+    <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_events_list type="all" count="3"]</span></p>
     <h3><?php echo __("Options for event list shortcodes", "yesticket");?></h3>
     <?php 
     echo ytp_render_optionType('events');
