@@ -37,7 +37,7 @@ function ytp_getEventList($atts)
 }
 
 function ytp_render_eventList($result, $att) {
-    $content = "<div class='ytp-list'>";
+    $content = "<ol class='ytp-list'>";
     $count = 0;
     foreach ($result as $item) {
         $content .= ytp_render_eventListEntry($item, $att);
@@ -46,7 +46,7 @@ function ytp_render_eventList($result, $att) {
             break;
         }
     }
-    $content .= "</div>";
+    $content .= "</ol>";
     return $content;
 }
 
@@ -57,20 +57,22 @@ function ytp_render_eventListEntry($item, $att) {
     $location_city = htmlentities($item->location_city);
     $event_type = "";
     if ($att["type"]=="all") {
-        $event_type = "<span class='ytp-list-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
+        $event_type = "<li class='ytp-list-eventtype'>".ytp_render_eventType($item->event_type)."</li>";
     }
     $booking = "";
     if ($att["ticketlink"]=="yes") {
-        $booking .= '<span class="ytp-list-tickets"><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a></span>';
+        $booking .= '<li class="ytp-list-tickets"><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a></li>';
     }
     return <<<EOD
-    <div class='ytp-list-row'>
-        <span class='ytp-list-eventdate'>$event_datetime</span>
-        $event_type
-        <span class='ytp-list-eventname'>$event_name</span>
-        <span class='ytp-list-eventlocation'>$location_name, $location_city</span>
-        $booking
-    </div>
+    <li class='ytp-list-row'>
+        <ul>
+            <li class='ytp-list-eventdate'>$event_datetime</li>
+            $event_type
+            <li class='ytp-list-eventname'>$event_name</li>
+            <li class='ytp-list-eventlocation'>$location_name, $location_city</li>
+            $booking
+        </ul>
+    </li>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 

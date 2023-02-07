@@ -20,6 +20,13 @@
 	font-size: 0.8em;
 	margin-left: 20px;
 }
+.ytp-list li {
+	list-style: none;
+}
+ol.ytp-list,
+.ytp-list ul {
+	padding-left: 0;
+}
 .ytp-list-row {
     padding-bottom: 20px;
 }
@@ -29,8 +36,8 @@
 .ytp-row {
     padding-bottom: 20px;
 }
-.ytp-eventname,
-.ytp-list-eventname {
+.ytp-list-eventname,
+.ytp-eventname {
 	font-size: 1.3em;
 	line-height: 1.2;
 	font-weight: 700;
