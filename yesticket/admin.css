@@ -1,8 +1,8 @@
 /* GENERIC CSS START */
 .ytp-code { 
-	background: #fff; 
-	padding: 10px; 
-	margin: 5px; 
+	background: #fff;
+	padding: 2px 5px;
+	margin: 5px 0;
 	font-family: monospace; 
 	border: 1px solid #eee; 
 	font-size: 1.1em; 

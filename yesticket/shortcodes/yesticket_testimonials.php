@@ -69,7 +69,7 @@ function render_yesTicketTestimonialsHelp() {?>
     <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_testimonials count="30"]</span></p>
     <h3><?php echo __("Options for testimonial shortcodes", "yesticket");?></h3>
     <h4>Details</h4>
-    <p class='ml-3'><?php echo __("Using details you can display the corresponding event to a testimonial.", "yesticket");?></p>
+    <p><?php echo __("Using details you can display the corresponding event to a testimonial.", "yesticket");?></p>
     <p class="ml-3"><span class="ytp-code">details="yes"</span> <?php 
     /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
     echo __("will add the event name to each testimonial, if present.", "yesticket");?></p>
