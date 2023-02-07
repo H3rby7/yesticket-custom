@@ -59,34 +59,38 @@ function render_yesTicketEventsCards($result, $att) {
             }
         }
         $time = ytp_to_local_datetime($item->event_datetime);
+        $booking_url = $item->yesticket_booking_url;
+        $picture_url = $item->event_picture_url;
         $ts = $time->getTimestamp();
-        $content .= '<div class="yt-card-event">'."\n".'<a href="'.$item->yesticket_booking_url.'" target="_new">'."\n".'<div class="yt-card">';
-            // START 'Wrapper' [div > a > div(yt-card)]
-            // START 'img'
-            $content .= '<div class="yt-card-image-wrapper">'."\n";
-                $content .= '<img src="'.$item->event_picture_url.'" alt="Eventbild">'."\n";
-            $content .= '</div>'."\n";
-            // END 'img'
-            // START 'text'
-            $content .= '<div class="yt-card-text-wrapper">'."\n";
-                // START 'DATE'
-                $content .= '<div class="yt-card-date">'."\n";
-                    $content .= '<span class="yt-card-month">'.wp_date('M', $ts).'</span><br>'."\n";
-                    $content .= '<strong class="yt-card-day">'.wp_date('d', $ts).'</strong><br>'."\n";
-                    $content .= '<span class="yt-card-year">'.wp_date('Y', $ts).'</span>'."\n";
-                $content .= '</div>'."\n";
-                // END 'DATE'
-                // START 'Body // The Event'
-                $content .= '<div class="yt-card-body">'."\n";
-                    $content .= '<span class="yt-card-body-organizer">'.htmlentities($item->organizer_name).'</span><br>'."\n";
-                    $content .= '<strong class="yt-card-body-title">'.htmlentities($item->event_name).'</strong><br>'."\n";
-                    $content .= '<small class="yt-card-body-location">'.htmlentities($item->location_name).'</small>'."\n";
-                $content .= '</div>'."\n";
-                // END 'Body // The Event'
-            $content .= '</div>'."\n";
-            // END 'text'
-        $content .= "</div>\n</a>\n</div>";
-        // END 'Wrapper' [div > a > div(yt-card)]
+        $month = wp_date('M', $ts);
+        $day = wp_date('d', $ts);
+        $year = wp_date('Y', $ts);
+        $organizer_name = htmlentities($item->organizer_name);
+        $event_name = htmlentities($item->event_name);
+        $location_name = htmlentities($item->location_name);
+        $content .= <<<EOD
+        <div class="yt-card-event">
+            <a href="$booking_url" target="_new">
+                <div class="yt-card">
+                    <div class="yt-card-image-wrapper">
+                        <img src="$picture_url" alt="Eventbild">
+                    </div>
+                    <div class="yt-card-text-wrapper">
+                        <div class="yt-card-date">
+                            <span class="yt-card-month">$month</span></br>
+                            <span class="yt-card-day">$day</span></br>
+                            <span class="yt-card-year">$year</span>
+                        </div>
+                        <div class="yt-card-body">
+                            <span class="yt-card-body-organizer">$organizer_name</span><br>
+                            <strong class="yt-card-body-title">$event_name</strong><br>
+                            <small class="yt-card-body-location">$location_name</small>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
         $count++;
         if ($count == (int)$att["count"]) break;
     }
