@@ -94,7 +94,7 @@
 
 /* Card Container */
 
-.ytp-container {
+.ytp-card-container {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -104,31 +104,28 @@
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
-.ytp-container * {
+.ytp-card-container * {
   box-sizing: border-box;
 }
 
-.ytp-container a {
+.ytp-card-container a {
 	text-decoration: none !important;
 }
 
-.ytp-container .ytp-card-event {
+.ytp-card-container > div {
 	flex: 0 auto;
-}
-
-.ytp-container .ytp-card-event {
 	padding: 0 15px .5rem 15px;
 	line-height: 1.15;
 }
 
-.ytp-container .ytp-card {
+.ytp-card-container .ytp-card {
 	height: 240px;
 	width: 300px;
 }
-.ytp-container .ytp-card-image {
+.ytp-card-container .ytp-card-image {
 	height: 145px;
 }
-.ytp-container .ytp-card-text-wrapper {
+.ytp-card-container .ytp-card-text-wrapper {
 	height: 95px;
 }
 .ytp-card-body {

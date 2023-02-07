@@ -46,7 +46,7 @@ function getYesTicketEventsCards($atts) {
 function render_yesTicketEventsCards($result, $att) {
     $content = "";
     $count = 0;
-    $content .= "<div class='ytp-container'>\n";
+    $content .= "<div class='ytp-card-container'>\n";
     foreach($result as $item){
         if (!empty($att["grep"])) {
             if (!str_contains($item->event_name, $att["grep"])) {
@@ -66,7 +66,7 @@ function render_yesTicketEventsCards($result, $att) {
         $event_name = htmlentities($item->event_name);
         $location_name = htmlentities($item->location_name);
         $content .= <<<EOD
-        <div class="ytp-card-event">
+        <div>
             <a href="$booking_url" target="_new">
                 <div class="ytp-card">
                     <div class="ytp-card-image" style="background-image: url('$picture_url')"></div>
@@ -77,9 +77,9 @@ function render_yesTicketEventsCards($result, $att) {
                             <span class="ytp-card-year">$year</span>
                         </div>
                         <div class="ytp-card-body">
-                            <small class="ytp-card-body-location">$location_name</small><br>
-                            <strong class="ytp-card-body-title">$event_name</strong><br>
-                            <!--<span class="ytp-card-body-organizer">$organizer_name</span>-->
+                            <small class="ytp-card-location">$location_name</small><br>
+                            <strong class="ytp-card-title">$event_name</strong><br>
+                            <!--<span class="ytp-card-organizer">$organizer_name</span>-->
                         </div>
                     </div>
                 </div>
