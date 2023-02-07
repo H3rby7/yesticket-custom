@@ -53,7 +53,7 @@ function yesticket_pluginpage_init()
           echo render_yesTicketEventsListHelp();
           break;
         case 'cards':
-          echo render_yesTicketEventsCardsHelp();
+          echo ytp_render_eventCardsHelp();
           break;
         case 'testimonials':
           echo render_yesTicketTestimonialsHelp();
