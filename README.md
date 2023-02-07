@@ -36,6 +36,14 @@ Setup will run on [http://127.0.0.1](http://127.0.0.1).
 
 Update [this file](README.md) and also update [the changelog](CHANGELOG.md)!
 
+### Automated
+
+Requires docker. Windows users: Make sure the `bin/*.sh` files have LF file endings.
+
+    docker-compose -f docker-compose.zip.yml run --rm zipper
+
+### Manual
+
 Zip the files inside the `yesticket` folder. It should contain the following files and folders:
 
     |_admin.css
