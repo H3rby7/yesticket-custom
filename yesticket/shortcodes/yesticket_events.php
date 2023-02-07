@@ -48,17 +48,17 @@ function ytp_render_events($result, $att) {
     $count = 0;
     foreach ($result as $item) {
         $add = "";
-        $content .= "<div class='ytp-row'>";
+        $content .= "<div class='ytp-event-row'>";
         if ($att["type"]=="all") {
-            $add = " <span class='ytp-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
+            $add = " <span class='ytp-event-type'>".ytp_render_eventType($item->event_type)."</span>";
         }
         $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button">'.__("Tickets", "yesticket").' <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
-        $content .= "<span class='ytp-eventdate'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add;
-        $content .= "<span class='ytp-eventname'>".htmlentities($item->event_name)."</span>";
+        $content .= "<span class='ytp-event-date'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add;
+        $content .= "<span class='ytp-event-name'>".htmlentities($item->event_name)."</span>";
 
-        $content .= "<span class='ytp-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
+        $content .= "<span class='ytp-event-date'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
         if (!empty($item->event_urgency_string)) {
-            $content.= "<br><span class='ytp-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
+            $content.= "<br><span class='ytp-event-urgency'>".htmlentities($item->event_urgency_string).""."</span>";
         }
         if ($att["details"] == "yes") {
             $details = nl2br(htmlentities($item->event_description));
@@ -67,9 +67,9 @@ function ytp_render_events($result, $att) {
             }
             $details .= "<h5>".__("Tickets", "yesticket")."</h5>".htmlentities($item->tickets);
             $details .= "<h5>".__("Location", "yesticket")."</h5>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
-            $content .= '<br><details class="ytp-details">
-                            <summary><u class="ytp-show-details">'.__("Show details", "yesticket").'</u></summary>
-                            <div>'.$details.'</div><div class="ytp-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button-big">'.__("Order Tickets", "yesticket").'<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
+            $content .= '<br><details class="ytp-event-details">
+                            <summary><u class="ytp-event-show-details">'.__("Show details", "yesticket").'</u></summary>
+                            <div>'.$details.'</div><div class="ytp-event-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button-big">'.__("Order Tickets", "yesticket").'<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
                         </details>";
         }
         $content .= "</div>\n";

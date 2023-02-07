@@ -10,10 +10,10 @@
 }
 
 .ytp-testimonial-row {
-    padding-bottom: 20px;
+	padding-bottom: 20px;
 }
 .ytp-testimonial-text {
-    font-size: 1em; 
+	font-size: 1em; 
 	font-weight: 700;
 }
 .ytp-testimonial-source {
@@ -27,15 +27,12 @@ ol.ytp-event-list,
 .ytp-event-list ul {
 	padding-left: 0;
 }
-.ytp-event-list-row {
-    padding-bottom: 20px;
-}
-
-.ytp-row {
-    padding-bottom: 20px;
+.ytp-event-list-row,
+.ytp-event-row {
+	padding-bottom: 20px;
 }
 .ytp-event-list-name,
-.ytp-eventname {
+.ytp-event-name {
 	font-size: 1.3em;
 	line-height: 1.2;
 	font-weight: 700;
@@ -52,39 +49,36 @@ ol.ytp-event-list,
 .ytp-event-list-location::after {
 	content: ",";
 }
-.ytp-eventdate {
+.ytp-event-date {
 	font-size: 1em;
 }
 .ytp-event-list-type,
-.ytp-eventtype {
+.ytp-event-type {
 	font-size: 1em;
 	text-transform: uppercase;
 	font-weight: 700;
 }
-
-.ytp-urgency {
+.ytp-event-urgency {
 	font-size: 0.7em;
 	font-weight: 700;
 	background-color: rgba(0,0,0,0.1);
 	padding: 3px 5px;
 }
-.ytp-show-details {
-	cursor: pointer;
-}
-.ytp-location {
-	font-size: 0.8em;
-}
-.ytp-button {
+.ytp-event-row .ytp-button {
 	float: right;
+}
+.ytp-event-button-row {
+	padding: 10px;
+	text-align: center;
+}
+
+/* Button Styling */
+.ytp-button {
 	padding: 7px 15px; 
 	margin: 0 0 0 30px;
 	font-weight: 700;
 	cursor: pointer;
 	border-radius: 5px;
-}
-.ytp-button-row {
-    padding: 10px;
-    text-align: center;
 }
 .ytp-button-big {
 	margin: 10px 0 25px 0;
@@ -101,15 +95,15 @@ ol.ytp-event-list,
 	top: -2px;
 	right: -5px;
 }
-.ytp-details {
+.ytp-event-details {
 	font-size: 1em;
 	margin: 5px 0 10px 0;
 }
-.ytp-details > div {
-	padding: 15px 0 5px 18px;
-}
-.ytp-details h5 {
+.ytp-event-details h5 {
 	margin-bottom: 0;
+}
+.ytp-event-show-details {
+	cursor: pointer;
 }
 
 /* Card Container */
