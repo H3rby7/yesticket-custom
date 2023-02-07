@@ -180,13 +180,6 @@
 	line-height: 1.1 !important;
 }
 
-/* For Count=1, make card fill all the available space */
-.yt-single {
-	width: 100%;
-	padding: 0 15px;
-	box-sizing: border-box;
-}
-
 /* Light Theme */
 
 .yt-light .yt-button {

@@ -46,11 +46,7 @@ function getYesTicketEventsCards($atts) {
 function render_yesTicketEventsCards($result, $att) {
     $content = "";
     $count = 0;
-    if ((int)$att["count"] === 1) {
-        $content .= "<div class='yt-single'>\n";
-    } else {
-        $content .= "<div class='yt-container'>\n";
-    }
+    $content .= "<div class='yt-container'>\n";
     foreach($result as $item){
         if (!empty($att["grep"])) {
             if (!str_contains($item->event_name, $att["grep"])) {
