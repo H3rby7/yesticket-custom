@@ -20,23 +20,21 @@
 	font-size: 0.8em;
 	margin-left: 20px;
 }
-.ytp-list li {
+.ytp-event-list li {
 	list-style: none;
 }
-ol.ytp-list,
-.ytp-list ul {
+ol.ytp-event-list,
+.ytp-event-list ul {
 	padding-left: 0;
 }
-.ytp-list-row {
+.ytp-event-list-row {
     padding-bottom: 20px;
 }
-.ytp-list-row > * {
-	display: block;
-}
+
 .ytp-row {
     padding-bottom: 20px;
 }
-.ytp-list-eventname,
+.ytp-event-list-name,
 .ytp-eventname {
 	font-size: 1.3em;
 	line-height: 1.2;
@@ -44,13 +42,20 @@ ol.ytp-list,
 	display: block;
 	margin: 0 0 5px 0;
 }
-.ytp-list-eventdate,
-.ytp-list-eventlocation,
+.ytp-event-list-date,
+.ytp-event-list-time,
+.ytp-event-list-location,
+.ytp-event-list-city {
+	font-size: 1em;
+	display: inline-block;
+}
+.ytp-event-list-location::after {
+	content: ",";
+}
 .ytp-eventdate {
 	font-size: 1em;
-	margin-right: 10px;
 }
-.ytp-list-eventtype,
+.ytp-event-list-type,
 .ytp-eventtype {
 	font-size: 1em;
 	text-transform: uppercase;

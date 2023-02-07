@@ -37,7 +37,7 @@ function ytp_getEventList($atts)
 }
 
 function ytp_render_eventList($result, $att) {
-    $content = "<ol class='ytp-list'>";
+    $content = "<ol class='ytp-event-list'>";
     $count = 0;
     foreach ($result as $item) {
         $content .= ytp_render_eventListEntry($item, $att);
@@ -51,25 +51,28 @@ function ytp_render_eventList($result, $att) {
 }
 
 function ytp_render_eventListEntry($item, $att) {
-    $event_datetime = ytp_render_date_and_time($item->event_datetime);
+    $event_date = ytp_render_date($item->event_datetime);
+    $event_time = ytp_render_time($item->event_datetime);
     $event_name = htmlentities($item->event_name);
     $location_name = htmlentities($item->location_name);
     $location_city = htmlentities($item->location_city);
     $event_type = "";
     if ($att["type"]=="all") {
-        $event_type = "<li class='ytp-list-eventtype'>".ytp_render_eventType($item->event_type)."</li>";
+        $event_type = "<li class='ytp-event-list-type'>".ytp_render_eventType($item->event_type)."</li>";
     }
     $booking = "";
     if ($att["ticketlink"]=="yes") {
-        $booking .= '<li class="ytp-list-tickets"><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a></li>';
+        $booking .= '<li class="ytp-event-list-tickets"><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a></li>';
     }
     return <<<EOD
-    <li class='ytp-list-row'>
+    <li class='ytp-event-list-row'>
         <ul>
-            <li class='ytp-list-eventdate'>$event_datetime</li>
+            <li class='ytp-event-list-date'>$event_date</li>
+            <li class='ytp-event-list-time'>$event_time</li>
             $event_type
-            <li class='ytp-list-eventname'>$event_name</li>
-            <li class='ytp-list-eventlocation'>$location_name, $location_city</li>
+            <li class='ytp-event-list-name'>$event_name</li>
+            <li class='ytp-event-list-location'>$location_name</li>
+            <li class='ytp-event-list-city'>$location_city</li>
             $booking
         </ul>
     </li>

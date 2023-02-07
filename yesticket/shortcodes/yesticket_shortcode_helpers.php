@@ -45,3 +45,10 @@ function ytp_render_date($datetimestring) {
   $format = __("F j, Y", "yesticket");
   return wp_date($format, $date->getTimestamp());
 }
+
+function ytp_render_time($datetimestring) {
+  $date = ytp_to_local_datetime($datetimestring);
+  /* translators: time format when using only the time, see http://php.net/date */
+  $format = __("g:i A", "yesticket");
+  return wp_date($format, $date->getTimestamp());
+}
