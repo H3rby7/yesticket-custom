@@ -1,5 +1,6 @@
-/* GENERIC CSS START */
-.ytp-code { 
+/* Contains the styles for the admin/plugin-settings page of the plugin. */
+
+.ytp-code {
 	background: #fff;
 	padding: 2px 5px;
 	margin: 5px 0;

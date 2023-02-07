@@ -37,27 +37,41 @@ function ytp_getEventList($atts)
 }
 
 function ytp_render_eventList($result, $att) {
-    $content = "";
+    $content = "<div class='ytp-list'>";
     $count = 0;
     foreach ($result as $item) {
-        $add = "";
-        $content .= "<div class='ytp-row-list'>";
-        if ($att["type"]=="all") {
-            $add = "<br><span class='ytp-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
-        }
-        $content .= "<span class='ytp-eventdate'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add."</span><br>";
-        $content .= "<span class='ytp-eventname'>".htmlentities($item->event_name)."</span>";
-        $content .= "<span class='ytp-eventdate'>".htmlentities($item->location_name).", ".htmlentities($item->location_city)."</span>";
-        if ($att["ticketlink"]=="yes") {
-            $content .= '<br><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a>';
-        }
-        $content .= "</div>\n";
+        $content .= ytp_render_eventListEntry($item, $att);
         $count++;
         if ($count == (int)$att["count"]) {
             break;
         }
     }
+    $content .= "</div>";
     return $content;
+}
+
+function ytp_render_eventListEntry($item, $att) {
+    $event_datetime = ytp_render_date_and_time($item->event_datetime);
+    $event_name = htmlentities($item->event_name);
+    $location_name = htmlentities($item->location_name);
+    $location_city = htmlentities($item->location_city);
+    $event_type = "";
+    if ($att["type"]=="all") {
+        $event_type = "<span class='ytp-list-eventtype'>".ytp_render_eventType($item->event_type)."</span>";
+    }
+    $booking = "";
+    if ($att["ticketlink"]=="yes") {
+        $booking .= '<span class="ytp-list-tickets"><a href="'.$item->yesticket_booking_url.'" target="_blank">Tickets</a></span>';
+    }
+    return <<<EOD
+    <div class='ytp-list-row'>
+        <span class='ytp-list-eventdate'>$event_datetime</span>
+        $event_type
+        <span class='ytp-list-eventname'>$event_name</span>
+        <span class='ytp-list-eventlocation'>$location_name, $location_city</span>
+        $booking
+    </div>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 
 function ytp_render_eventListHelp() {?>

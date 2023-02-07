@@ -1,3 +1,5 @@
+/* Contains the styles for the visitor-facing pages of the plugin. */
+
 @font-face {
   font-family: 'Zilla Slab';
   font-style: normal;
@@ -18,24 +20,30 @@
 	font-size: 0.8em;
 	margin-left: 20px;
 }
-.ytp-row-list {
+.ytp-list-row {
     padding-bottom: 20px;
 }
-
+.ytp-list-row > * {
+	display: block;
+}
 .ytp-row {
     padding-bottom: 20px;
 }
-.ytp-eventname {
+.ytp-eventname,
+.ytp-list-eventname {
 	font-size: 1.3em;
 	line-height: 1.2;
 	font-weight: 700;
 	display: block;
 	margin: 0 0 5px 0;
 }
+.ytp-list-eventdate,
+.ytp-list-eventlocation,
 .ytp-eventdate {
 	font-size: 1em;
 	margin-right: 10px;
 }
+.ytp-list-eventtype,
 .ytp-eventtype {
 	font-size: 1em;
 	text-transform: uppercase;
