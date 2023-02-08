@@ -116,12 +116,13 @@ ol.ytp-event-list,
 }
 .ytp-event-ticket-wrap {
 	float: right;
+	text-align: right;
 }
 .ytp-event-urgency {
 	font-size: 0.7em;
 	font-weight: 700;
 	padding: 3px 5px;
-	display: block;
+	display: inline-block;
 	margin: 1em 0;
 }
 .ytp-event-urgency.rotated {

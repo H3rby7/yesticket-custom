@@ -69,7 +69,7 @@ function ytp_render_event($item, $att) {
     }
     $urgency = "";
     if (!empty($item->event_urgency_string)) {
-        $urgency = "<span class='ytp-event-urgency rotated'>".htmlentities($item->event_urgency_string)."</span>";
+        $urgency = "<span class='ytp-event-urgency'>".htmlentities($item->event_urgency_string)."</span>";
     }
     $details = "";
     if ($att["details"] == "yes") {
@@ -79,8 +79,8 @@ function ytp_render_event($item, $att) {
     <div class='ytp-event-row'>
         <h3 class='ytp-event-name'>$event_name $event_type</h3>
         <div class="ytp-event-ticket-wrap">
-            $urgency
-            <a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a>
+            <div>$urgency</div>
+            <div><a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a></div>
         </div>
         <span class='ytp-event-location'>$location_name</span>
         <span class='ytp-event-city'>$location_city</span>
