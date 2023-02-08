@@ -69,7 +69,7 @@ function ytp_render_event($item, $att) {
     }
     $urgency = "";
     if (!empty($item->event_urgency_string)) {
-        $urgency = "<div class='ytp-event-urgency'><span>".htmlentities($item->event_urgency_string)."</span></div>";
+        $urgency = "<span class='ytp-event-urgency rotated'>".htmlentities($item->event_urgency_string)."</span>";
     }
     $details = "";
     if ($att["details"] == "yes") {
@@ -77,15 +77,14 @@ function ytp_render_event($item, $att) {
     }
     return <<<EOD
     <div class='ytp-event-row'>
-        <div>
-            <a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a>
+        <h3 class='ytp-event-name'>$event_name $event_type</h3>
+        <div class="ytp-event-ticket-wrap">
             $urgency
-            <span class='ytp-event-date'>$event_datetime</span>
-            $event_type
-            <span class='ytp-event-name'>$event_name</span>
-            <span class='ytp-event-location'>$location_name</span>
-            <span class='ytp-event-city'>$location_city</span>
+            <a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a>
         </div>
+        <span class='ytp-event-location'>$location_name</span>
+        <span class='ytp-event-city'>$location_city</span>
+        <span class='ytp-event-date'>$event_datetime</span>
         $details
     </div>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!

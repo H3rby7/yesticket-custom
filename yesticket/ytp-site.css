@@ -68,8 +68,7 @@ ol.ytp-event-list,
 .ytp-event-row {
 	padding-bottom: 20px;
 }
-.ytp-event-list-name,
-.ytp-event-name {
+.ytp-event-list-name {
 	font-size: 1.3em;
 	line-height: 1.2;
 	font-weight: 700;
@@ -83,30 +82,57 @@ ol.ytp-event-list,
 	font-size: 1em;
 	display: inline-block;
 }
-.ytp-event-list-location::after,
+.ytp-event-list-type {
+	font-size: 1em;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+.ytp-event-list-location::after{
+	content: ",";
+}
+
 .ytp-event-location::after {
 	content: ",";
 }
+.ytp-event-name {
+	font-size: 1.5em;
+	line-height: 1.2;
+	font-weight: 700;
+	margin: 0 0 5px 0;
+}
+.ytp-event-type {
+	font-size: 0.4em;
+	text-transform: uppercase;
+	font-weight: 700;
+	display: inline-block;
+}
 .ytp-event-date {
 	font-size: 1em;
+	display: block;
 }
 .ytp-event-location,
 .ytp-event-city {
 	display: inline-block;
 }
-.ytp-event-list-type,
-.ytp-event-type {
-	font-size: 1em;
-	text-transform: uppercase;
-	font-weight: 700;
+.ytp-event-ticket-wrap {
+	float: right;
 }
 .ytp-event-urgency {
 	font-size: 0.7em;
 	font-weight: 700;
-	background-color: rgba(0,0,0,0.1);
 	padding: 3px 5px;
-	display: inline-block;
-	margin: 0 1em;
+	display: block;
+	margin: 1em 0;
+}
+.ytp-event-urgency.rotated {
+	transform: rotateZ(-10deg);
+	transform-origin: right;
+	position: relative;
+	right: 0px;
+	top: 0px;
+	z-index: 1;
+	text-align: center;
+	padding: 3px 15px;
 }
 .ytp-event-row .ytp-button {
 	float: right;
@@ -251,7 +277,7 @@ ol.ytp-event-list,
 	transition: background-color 300ms ease-out;
 	border: 1px solid #fff;
 }
-.ytp-light .ytp-urgency {
+.ytp-light .ytp-event-urgency {
 	background-color: #eee;
 	border: 1px solid #fff;
 }
@@ -284,7 +310,7 @@ ol.ytp-event-list,
 	transition: background-color 300ms ease-out;
 	border: 1px solid #333;
 }
-.ytp-dark .ytp-urgency {
+.ytp-dark .ytp-event-urgency {
 	color: #fff;
 	background-color: #666;
 	border: 1px solid #333;
