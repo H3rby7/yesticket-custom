@@ -52,7 +52,7 @@ function ytp_render_events($result, $att) {
         if ($att["type"]=="all") {
             $add = " <span class='ytp-event-type'>".ytp_render_eventType($item->event_type)."</span>";
         }
-        $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button">'.__("Tickets", "yesticket").' <img src="'. ytp_getImageUrl('YesTicket_260x260.png') .'" height="20" width="20"></a>';
+        $content .= '<a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button">'.__("Tickets", "yesticket").'</a>';
         $content .= "<span class='ytp-event-date'>".ytp_render_date_and_time($item->event_datetime)."</span>".$add;
         $content .= "<span class='ytp-event-name'>".htmlentities($item->event_name)."</span>";
 
@@ -69,7 +69,7 @@ function ytp_render_events($result, $att) {
             $details .= "<h5>".__("Location", "yesticket")."</h5>".htmlentities($item->location_name)."<br>".htmlentities($item->location_street)."<br>".htmlentities($item->location_zip)." ".htmlentities($item->location_city).", ".htmlentities($item->location_state).", ".htmlentities($item->location_country);
             $content .= '<br><details class="ytp-event-details">
                             <summary><u class="ytp-event-show-details">'.__("Show details", "yesticket").'</u></summary>
-                            <div>'.$details.'</div><div class="ytp-event-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button-big">'.__("Order Tickets", "yesticket").'<img src="'.ytp_getImageUrl('YesTicket_260x260.png').'" height="20" width="20">'.'</a></div>'."
+                            <div>'.$details.'</div><div class="ytp-event-button-row"><a href="'.$item->yesticket_booking_url.'" target="_blank" class="ytp-button-big">'.__("Order Tickets", "yesticket").'</a></div>'."
                         </details>";
         }
         $content .= "</div>\n";
