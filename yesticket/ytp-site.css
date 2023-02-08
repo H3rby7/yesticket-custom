@@ -83,11 +83,16 @@ ol.ytp-event-list,
 	font-size: 1em;
 	display: inline-block;
 }
-.ytp-event-list-location::after {
+.ytp-event-list-location::after,
+.ytp-event-location::after {
 	content: ",";
 }
 .ytp-event-date {
 	font-size: 1em;
+}
+.ytp-event-location,
+.ytp-event-city {
+	display: inline-block;
 }
 .ytp-event-list-type,
 .ytp-event-type {
@@ -100,6 +105,8 @@ ol.ytp-event-list,
 	font-weight: 700;
 	background-color: rgba(0,0,0,0.1);
 	padding: 3px 5px;
+	display: inline-block;
+	margin: 0 1em;
 }
 .ytp-event-row .ytp-button {
 	float: right;
@@ -118,6 +125,23 @@ ol.ytp-event-list,
 }
 .ytp-event-show-details {
 	cursor: pointer;
+	text-decoration: underline;
+}
+.ytp-event-details-location {
+	font-size: 1em;
+}
+.ytp-event-details-location-name,
+.ytp-event-details-location-street {
+	display: block;
+}
+.ytp-event-details-location-zip,
+.ytp-event-details-location-city,
+.ytp-event-details-location-country {
+	display: inline-block;
+}
+.ytp-event-details-location-city::after,
+.ytp-event-details-location-state::after {
+	content: ",";
 }
 
 /* Card Container */
