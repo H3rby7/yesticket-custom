@@ -64,25 +64,23 @@ function ytp_render_eventCard($item) {
     $event_name = htmlentities($item->event_name);
     $location_name = htmlentities($item->location_name);
     return <<<EOD
-    <div>
-        <a href="$booking_url" target="_new">
-            <div class="ytp-event-card">
-                <div class="ytp-event-card-image" style="background-image: url('$picture_url')"></div>
-                <div class="ytp-event-card-text-wrapper">
-                    <div class="ytp-event-card-date">
-                        <span class="ytp-event-card-month">$month</span><br>
-                        <span class="ytp-event-card-day">$day</span><br>
-                        <span class="ytp-event-card-year">$year</span>
-                    </div>
-                    <div class="ytp-event-card-body">
-                        <small class="ytp-event-card-location">$location_name</small><br>
-                        <strong class="ytp-event-card-title">$event_name</strong><br>
-                        <!--<span class="ytp-event-card-organizer">$organizer_name</span>-->
-                    </div>
+    <a href="$booking_url" target="_new">
+        <div class="ytp-event-card">
+            <div class="ytp-event-card-image" style="background-image: url('$picture_url')"></div>
+            <div class="ytp-event-card-text-wrapper">
+                <div class="ytp-event-card-date">
+                    <span class="ytp-event-card-month">$month</span><br>
+                    <span class="ytp-event-card-day">$day</span><br>
+                    <span class="ytp-event-card-year">$year</span>
+                </div>
+                <div class="ytp-event-card-body">
+                    <small class="ytp-event-card-location">$location_name</small><br>
+                    <strong class="ytp-event-card-title">$event_name</strong><br>
+                    <!--<span class="ytp-event-card-organizer">$organizer_name</span>-->
                 </div>
             </div>
-        </a>
-    </div>
+        </div>
+    </a>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 
