@@ -65,12 +65,19 @@
 /* Testimonials */
 /****************/
 
+.ytp-testimonials {
+	font-size: 1em;
+}
 .ytp-testimonial-row {
+	display: block;
+	width: 100%;
 	padding-bottom: 20px;
+	overflow: hidden;
 }
 .ytp-testimonial-text,
 .ytp-testimonial-source {
 	display: block;
+	text-align: left;
 }
 .ytp-testimonial-text {
 	font-size: 1em; 
@@ -78,7 +85,30 @@
 }
 .ytp-testimonial-source {
 	font-size: 0.8em;
-	margin-left: 20px;
+	margin-left: 2em;
+	margin-top: 0.5em;
+}
+@media only screen and (max-width: 420px) {
+	.ytp-testimonial-row {
+		padding-bottom: 3em;
+		text-align: center;
+	}
+	.ytp-testimonial-source {
+		margin-right: 2em;
+	}
+	.ytp-testimonial-source,
+	.ytp-testimonial-text {
+		text-align: center;
+	}
+}
+@media only screen and (min-width: 420px) {
+	.ytp-testimonial-row > div {
+		max-width: 60%;
+	}
+	.ytp-testimonial-row:nth-child(even) > div {
+		float: right;
+		text-align: right;
+	}
 }
 
 /**************/

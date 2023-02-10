@@ -34,7 +34,7 @@ function ytp_getTestimonials($atts)
 }
 
 function ytp_render_testimonials($result, $att) {
-    $content = "";
+    $content = "<div class='ytp-testimonials'>";
     $count = 0;
     foreach ($result as $item) {
         $content .= ytp_render_testimonialItem($item, $att);
@@ -43,6 +43,7 @@ function ytp_render_testimonials($result, $att) {
             break;
         }
     }
+    $content .= "</div>";
     return $content;
 }
 
@@ -51,10 +52,10 @@ function ytp_render_testimonialItem($item, $att) {
     $source = ytp_render_testimonialSource($item, $att["details"] == "yes");
     $about_event = "";
     return <<<EOD
-    <div class='ytp-testimonial-row'>
+    <div class='ytp-testimonial-row'><div>
         <span class="ytp-testimonial-text">&raquo;$text&laquo;</span>
         <span class="ytp-testimonial-source">$source</span>
-    </div>
+    </div></div>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 }
 
