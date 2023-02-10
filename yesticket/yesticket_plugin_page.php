@@ -90,7 +90,7 @@ function ytp_settings_init(  ) {
 	add_settings_field( 
 		'organizer_id',
     /* translators: Please keep the quotation marks! */
-    __("Your \"organizer-ID\"", "yesticket"),
+    __("Your 'organizer-ID'", "yesticket"),
 		'ytp_admin_render_organizer_id', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_required' 
@@ -98,7 +98,7 @@ function ytp_settings_init(  ) {
 	add_settings_field( 
 		'api_key',
     /* translators: Please keep the quotation marks! */
-    __("Your \"key\"", "yesticket"),
+    __("Your 'key'", "yesticket"),
 		'ytp_admin_render_api_key', 
 		'pluginPage', 
 		'yesticket_pluginPage_section_required' 

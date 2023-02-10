@@ -37,14 +37,7 @@ function ytp_render_testimonials($result, $att) {
     $content = "";
     $count = 0;
     foreach ($result as $item) {
-        $add = "";
-        $content .= "<div class='ytp-testimonial-row'>";
-        if (!empty($item->event_name) && $att["details"] == "yes") {
-            $add_event = '<br><span class="ytp-testimonial-source">'.__("about", "yesticket").' "'.htmlentities($item->event_name).'"</span>';
-        }
-        $content .= '<span class="ytp-testimonial-text">&raquo;'.htmlentities($item->text).'&laquo;</span><br>';
-        $content .= '<span class="ytp-testimonial-source">'.ytp_render_testimonialSource($item).'</span>';
-        $content .= '</div>';
+        $content .= ytp_render_testimonialItem($item, $att);
         $count++;
         if ($count == (int)$att["count"]) {
             break;
@@ -53,14 +46,36 @@ function ytp_render_testimonials($result, $att) {
     return $content;
 }
 
-function ytp_render_testimonialSource($item) {
+function ytp_render_testimonialItem($item, $att) {
+    $text = htmlentities($item->text);
+    $source = ytp_render_testimonialSource($item, $att["details"] == "yes");
+    $about_event = "";
+    return <<<EOD
+    <div class='ytp-testimonial-row'>
+        <span class="ytp-testimonial-text">&raquo;$text'&laquo;</span>
+        <span class="ytp-testimonial-source">$source</span>
+    </div>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+}
+
+function ytp_render_testimonialSource($item, $includeEventName) {
     $source = $item->source;
     $date = $item->date;
+    $event = $item->event_name;
+    if (!$includeEventName || $event === null || trim($event) === '') {
+        return sprintf(
+            /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
+            __('%1$s on %2$s.', "yesticket" ),
+            $source,
+            ytp_render_date($date)
+        );
+    }
     return sprintf(
-        /* translators: %1$s is replaced with the author; %2$s is replaced with the date */
-        __('%1$s on %2$s.', "yesticket" ),
+        /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
+        __('%1$s on %2$s about \'%3$s\'.', "yesticket" ),
         $source,
-        ytp_render_date($date)
+        ytp_render_date($date),
+        htmlentities($event)
     );
 }
 

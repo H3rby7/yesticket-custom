@@ -68,6 +68,10 @@
 .ytp-testimonial-row {
 	padding-bottom: 20px;
 }
+.ytp-testimonial-text,
+.ytp-testimonial-source {
+	display: block;
+}
 .ytp-testimonial-text {
 	font-size: 1em; 
 	font-weight: 700;
