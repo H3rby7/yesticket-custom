@@ -92,6 +92,5 @@ function ytp_render_testimonialsHelp() {?>
     <?php 
     echo ytp_render_optionType('testimonials');
     echo ytp_render_optionCount();
-    echo ytp_render_optionTheme();
 }
 ?>

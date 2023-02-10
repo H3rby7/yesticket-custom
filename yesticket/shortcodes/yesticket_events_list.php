@@ -86,7 +86,6 @@ function ytp_render_eventListHelp() {?>
     <?php 
     echo ytp_render_optionType('events');
     echo ytp_render_optionCount();
-    echo ytp_render_optionTheme();
 }
 
 ?>
