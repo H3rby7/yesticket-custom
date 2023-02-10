@@ -289,9 +289,18 @@
 .ytp-event-card-image {
 	width: 100%;
 	height: 100px;
-	background-size: cover;
+	background-size: 100%;
+	background-repeat: no-repeat;
 	background-position: top;
+	transition-property: background;
+	transition-duration: 0.4s;
+	transition-timing-function: ease-in-out;
 }
+
+.ytp-event-cards a:hover .ytp-event-card-image,
+.ytp-event-cards a:focus .ytp-event-card-image {
+	background-size: 105%;
+} 
 
 .ytp-event-card-text-wrapper {
 	position: relative;
