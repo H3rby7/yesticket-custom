@@ -52,7 +52,7 @@ function ytp_render_testimonialItem($item, $att) {
     $about_event = "";
     return <<<EOD
     <div class='ytp-testimonial-row'>
-        <span class="ytp-testimonial-text">&raquo;$text'&laquo;</span>
+        <span class="ytp-testimonial-text">&raquo;$text&laquo;</span>
         <span class="ytp-testimonial-source">$source</span>
     </div>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
