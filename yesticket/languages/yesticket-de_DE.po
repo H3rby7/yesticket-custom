@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2023-02-10 13:53+0000\n"
+"PO-Revision-Date: 2023-02-10 13:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: shortcodes/yesticket_testimonials.php:75
 #, php-format
 msgid "%1$s on %2$s about '%3$s'."
-msgstr "%1$s am %2$s über %3$s."
+msgstr "%1$s am %2$s über \"%3$s\"."
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
 #: shortcodes/yesticket_testimonials.php:68
@@ -87,12 +87,12 @@ msgstr "Alles, gemischt"
 #. date format when using only the date, see http://php.net/date
 #: shortcodes/yesticket_shortcode_helpers.php:45
 msgid "F j, Y"
-msgstr "d.m.y"
+msgstr "d.m.Y"
 
 #. date format when using date and time, see http://php.net/date
 #: shortcodes/yesticket_shortcode_helpers.php:38
 msgid "F j, Y \\a\\t g:i A"
-msgstr "d.m.y H:i \\U\\h\\r"
+msgstr "d.m.Y H:i \\U\\h\\r"
 
 #. Event Type 'Festival'
 #: shortcodes/yesticket_shortcode_helpers.php:26
