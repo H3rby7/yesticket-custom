@@ -17,35 +17,26 @@ function ytp_getEventCards($atts) {
 			'grep' => '',
 			'theme' => 'light',
 			), $atts );
+    $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
     try {
         $result = ytp_api_getEvents($att);
-        $content = "";
-        if ($att["theme"] == "light") {
-                $content .= "<div class='ytp-light'>";
-        }
-        else if ($att["theme"] == "dark") {
-                $content .= "<div class='ytp-dark'>";
-        }
-        else {
-            $content .= "<div class='ytp-default ".$att["theme"]."'>";
-        }
         if (!is_countable($result) or count($result) < 1) {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else {
             $content .= ytp_render_eventCards($result, $att);
         }
-        $content .= "</div>";
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
     }
+    $content .= "</div>\n";
     return $content;
 }
 
 function ytp_render_eventCards($result, $att) {
+    $content = "";
     $count = 0;
-    $content = "<div class='ytp-card-container'>\n";
     foreach($result as $item){
         if (!empty($att["grep"])) {
             if (!str_contains($item->event_name, $att["grep"])) {
@@ -57,7 +48,6 @@ function ytp_render_eventCards($result, $att) {
         $count++;
         if ($count == (int)$att["count"]) break;
     }
-    $content .= "</div>\n";
     return $content;
 }
 
@@ -76,18 +66,18 @@ function ytp_render_eventCard($item) {
     return <<<EOD
     <div>
         <a href="$booking_url" target="_new">
-            <div class="ytp-card">
-                <div class="ytp-card-image" style="background-image: url('$picture_url')"></div>
-                <div class="ytp-card-text-wrapper">
-                    <div class="ytp-card-date">
-                        <span class="ytp-card-month">$month</span></br>
-                        <span class="ytp-card-day">$day</span></br>
-                        <span class="ytp-card-year">$year</span>
+            <div class="ytp-event-card">
+                <div class="ytp-event-card-image" style="background-image: url('$picture_url')"></div>
+                <div class="ytp-event-card-text-wrapper">
+                    <div class="ytp-event-card-date">
+                        <span class="ytp-event-card-month">$month</span><br>
+                        <span class="ytp-event-card-day">$day</span><br>
+                        <span class="ytp-event-card-year">$year</span>
                     </div>
-                    <div class="ytp-card-body">
-                        <small class="ytp-card-location">$location_name</small><br>
-                        <strong class="ytp-card-title">$event_name</strong><br>
-                        <!--<span class="ytp-card-organizer">$organizer_name</span>-->
+                    <div class="ytp-event-card-body">
+                        <small class="ytp-event-card-location">$location_name</small><br>
+                        <strong class="ytp-event-card-title">$event_name</strong><br>
+                        <!--<span class="ytp-event-card-organizer">$organizer_name</span>-->
                     </div>
                 </div>
             </div>

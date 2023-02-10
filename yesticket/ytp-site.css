@@ -118,7 +118,7 @@
 .ytp-event-list li {
 	list-style: none;
 }
-ol.ytp-event-list,
+.ytp-event-list ol,
 .ytp-event-list ul {
 	padding-left: 0;
 }
@@ -239,7 +239,7 @@ ol.ytp-event-list,
 /* Cards */
 /*********/
 
-.ytp-card-container {
+.ytp-event-cards {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -249,36 +249,36 @@ ol.ytp-event-list,
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 
-.ytp-card-container * {
+.ytp-event-cards * {
   box-sizing: border-box;
 }
 
-.ytp-card-container a {
+.ytp-event-cards a {
 	text-decoration: none !important;
 }
 
-.ytp-card-container > div {
+.ytp-event-cards > div {
 	flex: 0 auto;
 	padding: 0 15px .5rem 15px;
 	line-height: 1.15;
 }
 
-.ytp-card-container .ytp-card {
+.ytp-event-cards .ytp-event-card {
 	height: 240px;
 	width: 300px;
 }
-.ytp-card-container .ytp-card-image {
+.ytp-event-cards .ytp-event-card-image {
 	height: 145px;
 }
-.ytp-card-container .ytp-card-text-wrapper {
+.ytp-event-cards .ytp-event-card-text-wrapper {
 	height: 95px;
 }
-.ytp-card-body {
+.ytp-event-card-body {
 	height: 100%;
 	overflow: hidden;
 }
 
-.ytp-card {
+.ytp-event-card {
 	width: 100%;
 	height: 100%;
 	position: relative;
@@ -286,14 +286,14 @@ ol.ytp-event-list,
 	border-radius: .25rem;
 }
 
-.ytp-card-image {
+.ytp-event-card-image {
 	width: 100%;
 	height: 100px;
 	background-size: cover;
 	background-position: top;
 }
 
-.ytp-card-text-wrapper {
+.ytp-event-card-text-wrapper {
 	position: relative;
 	padding: .5rem 1rem;
 	width: 100%;
@@ -301,15 +301,15 @@ ol.ytp-event-list,
 	box-sizing: border-box;
 }
 
-.ytp-card-date {
+.ytp-event-card-date {
 	margin-right: 1rem;
 }
 
-.ytp-card-month {
+.ytp-event-card-month {
 	text-transform: uppercase;
 }
 
-.ytp-card-day {
+.ytp-event-card-day {
 	font-family: 'Zilla Slab', serif;
 	font-weight: 700 !important;
 	font-size: 40px !important;
@@ -317,7 +317,7 @@ ol.ytp-event-list,
 	padding-bottom: 5px !important;
 }
 
-.ytp-card-captions {
+.ytp-event-card-captions {
 	font-size: 0.9rem !important;
 	line-height: 1.1 !important;
 }
@@ -359,7 +359,7 @@ ol.ytp-event-list,
 	border: 1px solid #fff;
 }
 
-.ytp-light .ytp-card {
+.ytp-light .ytp-event-card {
 	background: #fff;
 	color: #333;
 	border-color: rgba(0,0,0,.125);
@@ -395,7 +395,7 @@ ol.ytp-event-list,
 	border: 1px solid #333;
 }
 
-.ytp-dark .ytp-card {
+.ytp-dark .ytp-event-card {
 	background: #333;
 	color: #fff;
 	border-color: rgba(255, 255, 255, 0.2);

@@ -52,3 +52,12 @@ function ytp_render_time($datetimestring) {
   $format = __("g:i A", "yesticket");
   return wp_date($format, $date->getTimestamp());
 }
+
+function ytp_render_shortcode_container_div($shortcode_class, $att) {
+  if ($att["theme"] == "light") {
+    return "<div class='$shortcode_class ytp-light'>\n";
+  } elseif ($att["theme"] == "dark") {
+      return "<div class='$shortcode_class ytp-dark'>\n";
+  }
+  return "<div class='$shortcode_class ytp-default ".$att["theme"]."'>\n";
+}

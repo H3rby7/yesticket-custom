@@ -17,24 +17,25 @@ function ytp_getTestimonials($atts)
                     'env' => 'prod',
                     'theme' => 'light',
                     ), $atts);
-    $content = "";
+    $content = ytp_render_shortcode_container_div("ytp-testimonials", $att);
     try {
         $result = ytp_api_getTestimonials($att);
         if (!is_countable($result) or count($result) < 1) {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else {
             $content .= ytp_render_testimonials($result, $att);
         }
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
     }
+    $content .= "</div>\n";
     return $content;
 }
 
 function ytp_render_testimonials($result, $att) {
-    $content = "<div class='ytp-testimonials'>";
+    $content = "";
     $count = 0;
     foreach ($result as $item) {
         $content .= ytp_render_testimonialItem($item, $att);
@@ -43,7 +44,6 @@ function ytp_render_testimonials($result, $att) {
             break;
         }
     }
-    $content .= "</div>";
     return $content;
 }
 

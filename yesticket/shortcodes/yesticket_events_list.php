@@ -18,26 +18,26 @@ function ytp_getEventList($atts)
                     'count' => '100',
                     'theme' => 'light',
                     ), $atts);
+    $content = ytp_render_shortcode_container_div("ytp-event-list", $att);
     try {
         $result = ytp_api_getEvents($att);
-        $content = "";
         if (!is_countable($result) or count($result) < 1) {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else {
             $content .= ytp_render_eventList($result, $att);
         }
         //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
-        $content .= "</div>";
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
     }
+    $content .= "</div>\n";
     return $content;
 }
 
 function ytp_render_eventList($result, $att) {
-    $content = "<ol class='ytp-event-list'>";
+    $content = "<ol>\n";
     $count = 0;
     foreach ($result as $item) {
         $content .= ytp_render_eventListEntry($item, $att);
@@ -46,7 +46,7 @@ function ytp_render_eventList($result, $att) {
             break;
         }
     }
-    $content .= "</ol>";
+    $content .= "</ol>\n";
     return $content;
 }
 
