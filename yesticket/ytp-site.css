@@ -32,6 +32,7 @@
 	cursor: pointer;
 	border-radius: 5px;
 	font-size: 120%;
+	transition: background-color 300ms ease-out;
 }
 [class^="ytp-button"]::after {
 	content: "";
@@ -284,21 +285,21 @@
 	position: relative;
 	border: 1px solid;
 	border-radius: .25rem;
+	transition: color 300ms ease-in-out;
 }
 
 .ytp-event-card-image {
 	width: 100%;
 	height: 100px;
+	border-radius: .25rem .25rem 0 0;
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: top;
-	transition-property: background;
-	transition-duration: 0.4s;
-	transition-timing-function: ease-in-out;
+	transition: background 300ms ease-in-out;
 }
 
-.ytp-event-cards a:hover .ytp-event-card-image,
-.ytp-event-cards a:focus .ytp-event-card-image {
+a:hover .ytp-event-card-image,
+a:focus .ytp-event-card-image {
 	background-size: 105%;
 } 
 
@@ -343,25 +344,19 @@
 /* Light Theme */
 /***************/
 
-.ytp-light .ytp-button {
+.ytp-light [class^="ytp-button"] {
 	color: #000;
 	background: #eee; 
 	border: 1px solid #fff;
-	transition: background-color 300ms ease-out;
 }
-.ytp-light .ytp-button:hover, .ytp-light .ytp-button:active, .ytp-light .ytp-button:focus,
-.ytp-light .ytp-button-big:hover, .ytp-light .ytp-button-big:active, .ytp-light .ytp-button-big:focus {
+.ytp-light [class^="ytp-button"]:hover,
+.ytp-light [class^="ytp-button"]:active,
+.ytp-light [class^="ytp-button"]:focus {
 	background-color: #e3e3e3;
 	color: #000;
 }
 .ytp-light .ytp-button-row {
 	border-bottom: 1px solid #eee;
-}
-.ytp-light .ytp-button-big {
-	color: #000;
-	background-color: #eee;
-	transition: background-color 300ms ease-out;
-	border: 1px solid #fff;
 }
 .ytp-light .ytp-event-urgency {
 	background-color: #eee;
@@ -374,34 +369,35 @@
 	border-color: rgba(0,0,0,.125);
 }
 
+.ytp-light a:hover .ytp-event-card,
+.ytp-light a:active .ytp-event-card,
+.ytp-light a:focus .ytp-event-card {
+	background-color: #eee;
+	border-color: #fff;
+} 
+
 /**************/
 /* Dark Theme */
 /**************/
 
-.ytp-dark .ytp-button {
+.ytp-dark [class^="ytp-button"] {
 	color: #fff;
-	background: #666; 
-	border: 1px solid #333;
-	transition: background-color 300ms ease-out;
+	background: #333; 
+	border: 1px solid #222;
 }
-.ytp-dark .ytp-button:hover, .ytp-dark .ytp-button:active, .ytp-dark .ytp-button:focus,
-.ytp-dark .ytp-button-big:hover, .ytp-dark .ytp-button-big:active, .ytp-dark .ytp-button-big:focus {
-	background-color: #777;
+.ytp-dark [class^="ytp-button"]:hover,
+.ytp-dark [class^="ytp-button"]:active,
+.ytp-dark [class^="ytp-button"]:focus {
+	background-color: #444;
 	color: #fff;
 }
 .ytp-dark .ytp-button-row {
 	border-bottom: 1px solid #333;
 }
-.ytp-dark .ytp-button-big {
-	color: #fff;
-	background-color: #666;
-	transition: background-color 300ms ease-out;
-	border: 1px solid #333;
-}
 .ytp-dark .ytp-event-urgency {
 	color: #fff;
-	background-color: #666;
-	border: 1px solid #333;
+	background-color: #333;
+	border: 1px solid #222;
 }
 
 .ytp-dark .ytp-event-card {
@@ -409,6 +405,13 @@
 	color: #fff;
 	border-color: rgba(255, 255, 255, 0.2);
 }
+
+.ytp-dark a:hover .ytp-event-card,
+.ytp-dark a:active .ytp-event-card,
+.ytp-dark a:focus .ytp-event-card {
+	background-color: #444;
+	border-color: #333;
+} 
 
 /**************************************************************************************/
 /************************************************************************* END THEMES */
