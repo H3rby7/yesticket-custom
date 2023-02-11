@@ -19,7 +19,16 @@ function ytp_getEventCards($atts) {
 			), $atts );
     $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
     try {
-        $result = ytp_api_getEvents($att);
+        $result = null;
+        if (empty($att["grep"])) {
+            $result = ytp_api_getEvents($att);            
+        } else {
+            // if we 'grep' (filter events manually on our side), we make the api-call with more elements than needed.
+            $count = $att["count"];
+            $att["count"] = null;
+            $result = ytp_api_getEvents($att);
+            $att["count"] = $count;
+        }
         if (!is_countable($result) or count($result) < 1) {
             $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
@@ -39,7 +48,7 @@ function ytp_render_eventCards($result, $att) {
     $count = 0;
     foreach($result as $item){
         if (!empty($att["grep"])) {
-            if (!str_contains($item->event_name, $att["grep"])) {
+            if (mb_stripos($item->event_name, $att["grep"]) === FALSE) {
                 // Did not find the required Substring in the event_title, skip this event
                 continue;
             }
