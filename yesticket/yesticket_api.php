@@ -73,7 +73,8 @@ function ytp_api_validateArguments($att, $options) {
         __("Please configure your 'key' in the plugin settings.", "yesticket")
     );
   }
-  if (!empty($att["type"]) and $att["type"]!="all" and $att["type"]!="performance" and $att["type"]!="Workshop" and $att["type"]!="festival") {
+  $type = $att["type"];
+  if (!empty($type) and !strcasecmp($type, "all") and !strcasecmp($type, "performance") and !strcasecmp($type, "workshop") and !strcasecmp($type, "festival")) {
       throw new InvalidArgumentException(
         /* translators: Error message, if the shortcode uses wrong/invalid types*/
         __("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
