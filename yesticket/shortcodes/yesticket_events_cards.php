@@ -57,6 +57,10 @@ function ytp_render_eventCards($result, $att) {
         $count++;
         if ($count == (int)$att["count"]) break;
     }
+    if (empty($content)) {
+        // content could be empty, if everything is filtered by 'grep'
+        $content = ytp_render_no_events();
+    }
     return $content;
 }
 
