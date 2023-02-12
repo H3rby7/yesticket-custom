@@ -193,7 +193,7 @@ function ytp_clear_cache(  ) {
     foreach($cacheKeys as $k) {
         delete_transient($k);
     }
-    yesticket_render_success_message(
+    ytp_admin_render_success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket"));
 }
