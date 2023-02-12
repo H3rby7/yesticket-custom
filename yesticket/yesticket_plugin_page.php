@@ -52,7 +52,7 @@ function ytp_pluginpage_init()
           echo ytp_render_eventListHelp();
           break;
         case 'cards':
-          echo ytp_render_eventCardsHelp();
+          echo YesTicketEventsCards::getInstance()->render_help();
           break;
         case 'testimonials':
           echo ytp_render_testimonialsHelp();
