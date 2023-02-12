@@ -8,25 +8,27 @@ add_shortcode('yesticket_events_cards', 'ytp_getEventCards');
 
 function ytp_getEventCards($atts) {
 	$att = shortcode_atts( array(
-			'organizer' => '',
-			'key' => '',
-            'details' => 'no',
-			'type' => 'all',
-			'env' => 'prod',
-			'count' => '6',
-			'grep' => '',
-			'theme' => 'light',
-			), $atts );
+        'env' => 'prod',
+        'api-version' => '',
+        'organizer' => '',
+        'key' => '',
+        'type' => 'all',
+        'count' => '6',
+        'theme' => 'light',
+        'details' => 'no',
+        'grep' => '',
+    ), $atts );
     $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
+    ytp_log(__FILE__."@".__LINE__.": 'att->api-version: ".$att["api-version"]."'");
     try {
         $result = null;
         if (empty($att["grep"])) {
-            $result = ytp_api_getEvents($att);            
+            $result = YesTicketApi::getInstance()->getEvents($att);            
         } else {
             // if we 'grep' (filter events manually on our side), we make the api-call with more elements than needed.
             $count = $att["count"];
             $att["count"] = null;
-            $result = ytp_api_getEvents($att);
+            $result = YesTicketApi::getInstance()->getEvents($att);
             $att["count"] = $count;
         }
         if (!is_countable($result) or count($result) < 1) {

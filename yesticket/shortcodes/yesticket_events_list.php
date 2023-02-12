@@ -10,17 +10,18 @@ add_shortcode('yesticket_events_list', 'ytp_getEventList');
 function ytp_getEventList($atts)
 {
     $att = shortcode_atts(array(
-                    'organizer' => '',
-                    'key' => '',
-                    'ticketlink' => 'no',
-                    'type' => 'all',
-                    'env' => 'prod',
-                    'count' => '100',
-                    'theme' => 'light',
-                    ), $atts);
+        'env' => 'prod',
+        'api-version' => '',
+        'organizer' => '',
+        'key' => '',
+        'type' => 'all',
+        'count' => '100',
+        'theme' => 'light',
+        'ticketlink' => 'no',
+    ), $atts);
     $content = ytp_render_shortcode_container_div("ytp-event-list", $att);
     try {
-        $result = ytp_api_getEvents($att);
+        $result = YesTicketApi::getInstance()->getEvents($att);
         if (!is_countable($result) or count($result) < 1) {
             $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {

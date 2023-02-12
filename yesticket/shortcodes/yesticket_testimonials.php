@@ -9,17 +9,18 @@ add_shortcode('yesticket_testimonials', 'ytp_getTestimonials');
 function ytp_getTestimonials($atts)
 {
     $att = shortcode_atts(array(
-                    'organizer' => '',
-                    'key' => '',
-                    'count' => '3',
-                    'type' => 'all',
-                    'details' => 'no',
-                    'env' => 'prod',
-                    'theme' => 'light',
-                    ), $atts);
+        'env' => 'prod',
+        'api-version' => '',
+        'organizer' => '',
+        'key' => '',
+        'type' => 'all',
+        'count' => '3',
+        'theme' => 'light',
+        'details' => 'no',
+    ), $atts);
     $content = ytp_render_shortcode_container_div("ytp-testimonials", $att);
     try {
-        $result = ytp_api_getTestimonials($att);
+        $result = YesTicketApi::getInstance()->getTestimonials($att);
         if (!is_countable($result) or count($result) < 1) {
             $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
