@@ -62,7 +62,7 @@ function ytp_pluginpage_init()
           echo ytp_admin_render_clear_cache_button();
           break;
         default:
-          echo ytp_render_eventsHelp();
+          echo YesTicketEvents::getInstance()->render_help();
           break;
       endswitch; ?>
     </div>
