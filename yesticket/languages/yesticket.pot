@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-10 13:52+0000\n"
+"POT-Creation-Date: 2023-02-12 12:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -17,13 +17,13 @@ msgstr ""
 "X-Domain: yesticket"
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
-#: shortcodes/yesticket_testimonials.php:75
+#: shortcodes/yesticket_testimonials.php:91
 #, php-format
 msgid "%1$s on %2$s about '%3$s'."
 msgstr ""
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
-#: shortcodes/yesticket_testimonials.php:68
+#: shortcodes/yesticket_testimonials.php:84
 #, php-format
 msgid "%1$s on %2$s."
 msgstr ""
@@ -105,7 +105,7 @@ msgstr ""
 msgid "g:i A"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:96
+#: shortcodes/yesticket_events.php:103
 msgid "Hints"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 msgid "If your changes in YesTicket are not reflected fast enough, try to: "
 msgstr ""
 
-#: shortcodes/yesticket_events.php:100
+#: shortcodes/yesticket_events.php:107
 msgid "Location"
 msgstr ""
 
@@ -157,23 +157,23 @@ msgstr ""
 msgid "only workshops"
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:102
+#: shortcodes/yesticket_events_cards.php:119
 msgid "Options for event card shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events_list.php:85
+#: shortcodes/yesticket_events_list.php:101
 msgid "Options for event list shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:145
+#: shortcodes/yesticket_events.php:152
 msgid "Options for event shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:85
+#: shortcodes/yesticket_testimonials.php:101
 msgid "Options for testimonial shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:103
+#: shortcodes/yesticket_events.php:110
 msgid "Order Tickets"
 msgstr ""
 
@@ -183,12 +183,12 @@ msgid "Performance"
 msgstr ""
 
 #. Error message, if the plugin is not properly configured
-#: yesticket_api.php:73
+#: yesticket_api.php:107
 msgid "Please configure your 'key' in the plugin settings."
 msgstr ""
 
 #. Error message, if the plugin is not properly configured
-#: yesticket_api.php:67
+#: yesticket_api.php:101
 msgid "Please configure your 'organizer-id' in the plugin settings."
 msgstr ""
 
@@ -200,16 +200,16 @@ msgid ""
 msgstr ""
 
 #. Error message, if the shortcode uses wrong/invalid types
-#: yesticket_api.php:79
+#: yesticket_api.php:120
 msgid ""
 "Please provide a valid 'type'. If you omit the attribute it will default to "
 "'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:144
-#: shortcodes/yesticket_events_cards.php:101
-#: shortcodes/yesticket_events_list.php:84
-#: shortcodes/yesticket_testimonials.php:84
+#: shortcodes/yesticket_events.php:151
+#: shortcodes/yesticket_events_cards.php:118
+#: shortcodes/yesticket_events_list.php:100
+#: shortcodes/yesticket_testimonials.php:100
 msgid "quickstart"
 msgstr ""
 
@@ -226,23 +226,23 @@ msgstr ""
 msgid "Shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:100
+#: shortcodes/yesticket_events_cards.php:117
 msgid "Shortcodes for your events as cards."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:143
+#: shortcodes/yesticket_events.php:150
 msgid "Shortcodes for your events as interactive list."
 msgstr ""
 
-#: shortcodes/yesticket_events_list.php:83
+#: shortcodes/yesticket_events_list.php:99
 msgid "Shortcodes for your events as list."
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:83
+#: shortcodes/yesticket_testimonials.php:99
 msgid "Shortcodes for your testimonials."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:95
+#: shortcodes/yesticket_events.php:102
 msgid "Show details"
 msgstr ""
 
@@ -250,11 +250,21 @@ msgstr ""
 msgid "Technical Settings"
 msgstr ""
 
-#: yesticket_api.php:55
+#. Error message, if the shortcode uses a non-numeric api-version
+#: yesticket_api.php:129
+msgid "The hidden field 'api-version' must be numeric."
+msgstr ""
+
+#. Error message, if the shortcode uses an unknown api-version
+#: yesticket_api.php:136
+msgid "The hidden field 'api-version' must provide a valid version."
+msgstr ""
+
+#: yesticket_api.php:88
 msgid "The YesTicket service is currently unavailable. Please try again later."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:61 shortcodes/yesticket_events.php:98
+#: shortcodes/yesticket_events.php:68 shortcodes/yesticket_events.php:105
 msgid "Tickets"
 msgstr ""
 
@@ -262,13 +272,13 @@ msgstr ""
 msgid "Using <b>count</b> you can define the maximum amount of elements."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:147
+#: shortcodes/yesticket_events.php:154
 msgid ""
 "Using <b>details</b> you can include the description of your YesTicket event."
 " The description is collapsed and can be expanded."
 msgstr ""
 
-#: shortcodes/yesticket_events_cards.php:110
+#: shortcodes/yesticket_events_cards.php:127
 msgid "Using <b>grep</b> you can filter your events by their title."
 msgstr ""
 
@@ -280,22 +290,22 @@ msgstr ""
 msgid "Using <b>type</b> you can filter your testimonials by type."
 msgstr ""
 
-#: shortcodes/yesticket_testimonials.php:87
+#: shortcodes/yesticket_testimonials.php:103
 msgid "Using details you can display the corresponding event to a testimonial."
 msgstr ""
 
 #. The sentence actually starts with a non-translatable codeblock 'details="yes"'
-#: shortcodes/yesticket_testimonials.php:90
+#: shortcodes/yesticket_testimonials.php:106
 msgid "will add the event name to each testimonial, if present."
 msgstr ""
 
 #. The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'
-#: shortcodes/yesticket_events_cards.php:113
+#: shortcodes/yesticket_events_cards.php:130
 msgid "will only display events, who have \"Johnstone\" in their title."
 msgstr ""
 
 #. The sentence actually starts with a non-translatable codeblock 'details="yes"'
-#: shortcodes/yesticket_events.php:150
+#: shortcodes/yesticket_events.php:157
 msgid "will show a link to expand the details."
 msgstr ""
 
