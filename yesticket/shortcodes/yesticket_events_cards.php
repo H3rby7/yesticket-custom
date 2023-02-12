@@ -114,7 +114,7 @@ class YesTicketEventsCards
                 </div>
             </div>
         </a>
-    EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     }
 
     public function render_help()
@@ -135,4 +135,4 @@ class YesTicketEventsCards
             /* translators: The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'*/
             echo __("will only display events, who have \"Johnstone\" in their title.", "yesticket"); ?></p>
 <?php }
-}
+} ?>

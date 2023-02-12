@@ -108,4 +108,4 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
         echo ytp_render_optionType('events');
         echo ytp_render_optionCount();
     }
-}
+} ?>
