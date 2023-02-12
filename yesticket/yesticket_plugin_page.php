@@ -49,7 +49,7 @@ function ytp_pluginpage_init()
     <div class="tab-content">
       <?php switch($tab) :
         case 'list':
-          echo ytp_render_eventListHelp();
+          echo YesTicketEventsList::getInstance()->render_help();
           break;
         case 'cards':
           echo YesTicketEventsCards::getInstance()->render_help();
