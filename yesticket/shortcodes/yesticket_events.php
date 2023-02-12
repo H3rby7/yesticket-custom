@@ -2,11 +2,12 @@
 
 include_once("yesticket_options_helpers.php");
 include_once("yesticket_shortcode_helpers.php");
-include_once(__DIR__ ."/../yesticket_helpers.php");
+include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_events', 'ytp_shortcode_events');
 
-function ytp_shortcode_events($atts) {
+function ytp_shortcode_events($atts)
+{
     $att = shortcode_atts(array(
         'env' => 'prod',
         'api-version' => '',
@@ -31,7 +32,8 @@ class YesTicketEvents
         return YesTicketEvents::$instance;
     }
 
-    public function get($att) {
+    public function get($att)
+    {
         $content = ytp_render_shortcode_container_div("ytp-events", $att);
         try {
             $result = YesTicketApi::getInstance()->getEvents($att);
@@ -50,7 +52,8 @@ class YesTicketEvents
         return $content;
     }
 
-    private function render_events($result, $att) {
+    private function render_events($result, $att)
+    {
         $content = "";
         $count = 0;
         foreach ($result as $item) {
@@ -62,8 +65,9 @@ class YesTicketEvents
         }
         return $content;
     }
-    
-    private function render_single_event($item, $att) {
+
+    private function render_single_event($item, $att)
+    {
         $booking_url = $item->yesticket_booking_url;
         $ticket_text = __("Tickets", "yesticket");
         $event_datetime = ytp_render_date_and_time($item->event_datetime);
@@ -71,12 +75,12 @@ class YesTicketEvents
         $location_name = htmlentities($item->location_name);
         $location_city = htmlentities($item->location_city);
         $event_type = "";
-        if ($att["type"]=="all") {
-            $event_type = "<span class='ytp-event-type'>".ytp_render_eventType($item->event_type)."</span>";
+        if ($att["type"] == "all") {
+            $event_type = "<span class='ytp-event-type'>" . ytp_render_eventType($item->event_type) . "</span>";
         }
         $urgency = "";
         if (!empty($item->event_urgency_string)) {
-            $urgency = "<span class='ytp-event-urgency'>".htmlentities($item->event_urgency_string)."</span>";
+            $urgency = "<span class='ytp-event-urgency'>" . htmlentities($item->event_urgency_string) . "</span>";
         }
         $details = "";
         if ($att["details"] == "yes") {
@@ -96,8 +100,9 @@ class YesTicketEvents
         </div>
     EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     }
-    
-    private function render_event_details($item) {
+
+    private function render_event_details($item)
+    {
         $event_description = nl2br(htmlentities($item->event_description));
         $show_details_text = __("Show details", "yesticket");
         $hints_heading = __("Hints", "yesticket");
@@ -125,8 +130,9 @@ class YesTicketEvents
         </details>
     EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     }
-    
-    private function render_details_location_info($item) {
+
+    private function render_details_location_info($item)
+    {
         $name = htmlentities($item->location_name); //br
         $street = htmlentities($item->location_street); //br
         $zip = htmlentities($item->location_zip); //
@@ -145,20 +151,21 @@ class YesTicketEvents
         </div>
     EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     }
-    
-    public function render_help() {?>
-        <h2><?php echo __("Shortcodes for your events as interactive list.", "yesticket");?></h2>
-        <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_events type="all" count="3"]</span></p>
-        <h3><?php echo __("Options for event shortcodes", "yesticket");?></h3>
+
+    public function render_help()
+    { ?>
+        <h2><?php echo __("Shortcodes for your events as interactive list.", "yesticket"); ?></h2>
+        <p><?php echo __("quickstart", "yesticket"); ?>: <span class="ytp-code">[yesticket_events type="all" count="3"]</span></p>
+        <h3><?php echo __("Options for event shortcodes", "yesticket"); ?></h3>
         <h4>Details</h4>
-        <p><?php echo __("Using <b>details</b> you can include the description of your YesTicket event. The description is collapsed and can be expanded.", "yesticket");?></p>
-        <p class="ml-3"><span class="ytp-code">details="yes"</span><?php
-        /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
-        echo __("will show a link to expand the details.", "yesticket");?></p>
-        <?php
+        <p><?php echo __("Using <b>details</b> you can include the description of your YesTicket event. The description is collapsed and can be expanded.", "yesticket"); ?></p>
+        <p class="ml-3"><span class="ytp-code">details="yes"</span>
+            <?php
+            /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
+            echo __("will show a link to expand the details.", "yesticket"); ?></p>
+<?php
         echo ytp_render_optionType('events');
         echo ytp_render_optionCount();
         echo ytp_render_optionTheme();
     }
-
 }

@@ -1,12 +1,13 @@
 <?php
 
 include_once("yesticket_options_helpers.php");
-include_once(__DIR__ ."/../yesticket_helpers.php");
+include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_events_cards', 'ytp_shortcode_events_cards');
 
-function ytp_shortcode_events_cards($atts) {
-    $att = shortcode_atts( array(
+function ytp_shortcode_events_cards($atts)
+{
+    $att = shortcode_atts(array(
         'env' => 'prod',
         'api-version' => '',
         'organizer' => '',
@@ -16,7 +17,7 @@ function ytp_shortcode_events_cards($atts) {
         'theme' => 'light',
         'details' => 'no',
         'grep' => '',
-    ), $atts );
+    ), $atts);
     return YesTicketEventsCards::getInstance()->get($att);
 }
 
@@ -31,13 +32,14 @@ class YesTicketEventsCards
         return YesTicketEventsCards::$instance;
     }
 
-    public function get($att) {
+    public function get($att)
+    {
         $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
-        ytp_log(__FILE__."@".__LINE__.": 'att->api-version: ".$att["api-version"]."'");
+        ytp_log(__FILE__ . "@" . __LINE__ . ": 'att->api-version: " . $att["api-version"] . "'");
         try {
             $result = null;
             if (empty($att["grep"])) {
-                $result = YesTicketApi::getInstance()->getEvents($att);            
+                $result = YesTicketApi::getInstance()->getEvents($att);
             } else {
                 // if we 'grep' (filter events manually on our side), we make the api-call with more elements than needed.
                 $count = $att["count"];
@@ -59,10 +61,11 @@ class YesTicketEventsCards
         return $content;
     }
 
-    private function render_cards($result, $att) {
+    private function render_cards($result, $att)
+    {
         $content = "";
         $count = 0;
-        foreach($result as $item){
+        foreach ($result as $item) {
             if (!empty($att["grep"])) {
                 if (mb_stripos($item->event_name, $att["grep"]) === FALSE) {
                     // Did not find the required Substring in the event_title, skip this event
@@ -79,8 +82,9 @@ class YesTicketEventsCards
         }
         return $content;
     }
-    
-    private function render_single_card($item) {
+
+    private function render_single_card($item)
+    {
         $time = ytp_to_local_datetime($item->event_datetime);
         $booking_url = $item->yesticket_booking_url;
         // picture size is 1200x628 px
@@ -112,21 +116,23 @@ class YesTicketEventsCards
         </a>
     EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     }
-    
-    public function render_help() {?>
-        <h2><?php echo __("Shortcodes for your events as cards.", "yesticket");?></h2>
-        <p><?php echo __("quickstart", "yesticket");?>: <span class="ytp-code">[yesticket_events_cards count="30"]</span></p>
-        <h3><?php echo __("Options for event card shortcodes", "yesticket");?></h3>
-        <?php 
+
+    public function render_help()
+    { ?>
+        <h2><?php echo __("Shortcodes for your events as cards.", "yesticket"); ?></h2>
+        <p><?php echo __("quickstart", "yesticket"); ?>: <span class="ytp-code">[yesticket_events_cards count="30"]</span></p>
+        <h3><?php echo __("Options for event card shortcodes", "yesticket"); ?></h3>
+        <?php
         echo ytp_render_optionType('events');
         echo ytp_render_optionCount();
         echo ytp_render_optionTheme();
         ?>
         <h4>Grep</h4>
         <p><?php
-        echo __("Using <b>grep</b> you can filter your events by their title.", "yesticket");?></p>
-        <p class="ml-3"><span class="ytp-code">grep="Johnstone"</span> <?php
-        /* translators: The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'*/
-        echo __("will only display events, who have \"Johnstone\" in their title.", "yesticket");?></p>
-    <?php }
+            echo __("Using <b>grep</b> you can filter your events by their title.", "yesticket"); ?></p>
+        <p class="ml-3"><span class="ytp-code">grep="Johnstone"</span>
+            <?php
+            /* translators: The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'*/
+            echo __("will only display events, who have \"Johnstone\" in their title.", "yesticket"); ?></p>
+<?php }
 }
