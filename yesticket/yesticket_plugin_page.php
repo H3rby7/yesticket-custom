@@ -55,7 +55,7 @@ function ytp_pluginpage_init()
           echo YesTicketEventsCards::getInstance()->render_help();
           break;
         case 'testimonials':
-          echo ytp_render_testimonialsHelp();
+          echo YesTicketTestimonials::getInstance()->render_help();
           break;
         case 'settings':
           echo ytp_admin_render_settings($tab);
