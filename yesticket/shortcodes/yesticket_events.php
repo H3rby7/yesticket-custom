@@ -117,6 +117,7 @@ class YesTicketEvents
         <details class="ytp-event-details">
             <summary class="ytp-event-show-details">$show_details_text</summary>
             <div>
+                $event_description
                 <h5>$hints_heading</h5>
                 $hints_text
                 <h5>$tickets_heading</h5>
