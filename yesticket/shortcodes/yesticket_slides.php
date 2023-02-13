@@ -1,6 +1,5 @@
 <?php
 
-include_once("yesticket_options_helpers.php");
 include_once("yesticket_shortcode_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
@@ -31,7 +30,7 @@ function getYesTicketSlides($atts)
                     ), $atts);
     $content = "";
     try {
-        $result = ytp_api_getEvents($att);
+        $result = YesTicketApi::getInstance()->getEvents($att);
         $content .= render_yesTicketSlideInlineStyles($att);
         $content .= "<div id='ytp-slides' style='font-size: ".$att["text-scale"]."'>";
         if (!is_countable($result) or count($result) < 1) {
@@ -147,54 +146,3 @@ function render_yesTicketEventDescriptionForSlides($item, $att) {
     return substr($shorter, 0, $indexOfLastPunctuationMark + 1);
   }
 }
-
-function render_yesTicketSlideshowHelp() {?>
-  <h2><?php echo __("Shortcodes for your events as slides.", "yesticket");?></h2>
-  <p><?php echo __("quickstart", "yesticket");?>: <span class="yt-code">[yesticket_event_slides]</span></p>
-  <p><?php echo __("Beware: This shortcode must be placed on a separate page. Visit that page and enter fullscreen mode to view your presentation.", "yesticket");?></p>
-  <p><?php echo __("Running this presentation on a big screen, before/after a show, is a nice way to inform your audience about upcoming events.", "yesticket");?></p>
-  <h3><?php echo __("Options for slideshow shortcodes", "yesticket");?></h3>
-
-  <h4>Welcome-1 Welcome-2 Welcome-3</h4>
-  <p class='ml-3'><?php echo __("Using 'welcome-1', 'welcome-2' and 'welcome-3', you can adjust the text on the welcome splash slide.", "yesticket");?></p>
-  <p class="ml-3">
-    <span class="yt-code">
-      welcome-1="<?php echo __('welcome to our', "yesticket"); ?>"
-      welcome-2="<?php echo __('improv theatre show', "yesticket"); ?>"
-      welcome-3="<?php echo __('where everything is made up', "yesticket"); ?>"
-    </span></br><?php 
-    echo __("'welcome-2' defines the bigger text in the center.", "yesticket");?>
-  </p>
-
-  <h4>Color-1</h4>
-  <p class='ml-3'><?php echo __("'color-1' is used for the background of the welcome slide and as text color on other slides.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">color-1="#fff000"</span></p>
-  <p class="ml-3"><?php 
-    echo __("Any valid css color definiton is okay. Use this option to bring in your company's style.", "yesticket");?>
-  </p>
-  <h4>Color-2</h4>
-  <p class='ml-3'><?php echo __("'color-2' is used for the text color of the welcome slide and as box shadow color on other slides.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">color-2="rgb(0, 80, 80)"</span></p>
-  <p class="ml-3"><?php 
-    echo __("Any valid css color definiton is okay. Use this option to bring in your company's style.", "yesticket");?>
-  </p>
-  
-  <h4>Ms-Per-Slide</h4>
-  <p class='ml-3'><?php echo __("Using 'ms-per-slide', you adjust the duration of each slide. The unit is milliseconds.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">ms-per-slide="8000"</span><?php
-  /* translators: The sentence actually starts with a non-translatable codeblock 'ms-per-slide="8000"'*/
-    echo __("will display each slide for 8 seconds.", "yesticket");?></p>
-
-  <h4>Teaser-Length</h4>
-  <p class='ml-3'><?php echo __("Using 'teaser-length', you can define the maximum characters of the descriptive text. The text is cut at the end of the last sentence that fits within the limit.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">teaser-length="123"</span></p>
-  
-  <h4>Text-Scale</h4>
-  <p class='ml-3'><?php echo __("Using 'text-scale', you can change the font-size of the presentation.", "yesticket");?></p>
-  <p class="ml-3"><span class="yt-code">text-scale="120%"</span></p>
-  <p class='ml-3'><?php echo __("Check how small/big you need this value to be, so your audience can read the information well.", "yesticket");?></p><?php 
-
-  echo ytp_render_optionType('events');
-  echo ytp_render_optionCount();
-
-} ?>
