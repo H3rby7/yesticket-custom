@@ -81,7 +81,7 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     $hint_text = __("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");
     /* translators: Text on a button, use imperativ if possible. */
     $button_text = __("Clear Cache", "yesticket");
-    $pageQuery = $this->get_slug();
+    $pageQuery = $this->get_parent_slug();
     print <<<EOD
       <form action="admin.php?page=$pageQuery" method="POST">
         <input type="hidden" name="clear-cache" value="1">
@@ -106,6 +106,7 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     foreach ($cacheKeys as $k) {
       delete_transient($k);
     }
+    ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
     echo $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")
@@ -114,7 +115,7 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
 
   public function feedback()
   {
-    if (isset($_GET['clear-cache'])) {
+    if (isset($_POST['clear-cache'])) {
       $this->ytp_clear_cache();
     }
   }
