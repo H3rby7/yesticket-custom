@@ -21,19 +21,19 @@ msgstr ""
 msgid "%1$s on %2$s."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:170
+#: admin/templates/examples_slides.php:31
 msgid ""
 "'color-1' is used for the background of the welcome slide and as text color "
 "on other slides."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:176
+#: admin/templates/examples_slides.php:38
 msgid ""
 "'color-2' is used for the text color of the welcome slide and as box shadow "
 "color on other slides."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:166
+#: admin/templates/examples_slides.php:26
 msgid "'welcome-2' defines the bigger text in the center."
 msgstr ""
 
@@ -52,7 +52,8 @@ msgstr ""
 msgid "a maximum of 6 events is displayed"
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:173 shortcodes/yesticket_slides.php:179
+#: admin/templates/examples_slides.php:34
+#: admin/templates/examples_slides.php:41
 msgid ""
 "Any valid css color definiton is okay. Use this option to bring in your "
 "company's style."
@@ -72,7 +73,7 @@ msgstr ""
 msgid "Back to top"
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:154
+#: admin/templates/examples_slides.php:8
 msgid ""
 "Beware: This shortcode must be placed on a separate page. Visit that page "
 "and enter fullscreen mode to view your presentation."
@@ -100,7 +101,7 @@ msgstr ""
 msgid "Change these settings at your own risk."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:195
+#: admin/templates/examples_slides.php:66
 msgid ""
 "Check how small/big you need this value to be, so your audience can read the "
 "information well."
@@ -109,6 +110,14 @@ msgstr ""
 #. Text on a button, use imperativ if possible.
 #: admin/settings_technical.php:93
 msgid "Clear Cache"
+msgstr ""
+
+#: admin/templates/examples_slides.php:29
+msgid "Color One"
+msgstr ""
+
+#: admin/templates/examples_slides.php:36
+msgid "Color Two"
 msgstr ""
 
 #: admin/templates/shortcode_options_count.php:1
@@ -192,7 +201,7 @@ msgstr ""
 msgid "If your changes in YesTicket are not reflected fast enough, try to: "
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:29 shortcodes/yesticket_slides.php:163
+#: shortcodes/yesticket_slides.php:28 admin/templates/examples_slides.php:23
 msgid "improv theatre show"
 msgstr ""
 
@@ -203,6 +212,10 @@ msgstr ""
 
 #: shortcodes/templates/event_details.php:9
 msgid "Location"
+msgstr ""
+
+#: admin/templates/examples_slides.php:44
+msgid "Ms-Per-Slide"
 msgstr ""
 
 #. Description of the plugin
@@ -236,7 +249,7 @@ msgstr ""
 msgid "Options for event shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:156
+#: admin/templates/examples_slides.php:14
 msgid "Options for slideshow shortcodes"
 msgstr ""
 
@@ -273,9 +286,10 @@ msgid ""
 "'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:153 admin/templates/examples_events.php:2
+#: admin/templates/examples_events.php:2
 #: admin/templates/examples_events_cards.php:2
 #: admin/templates/examples_events_list.php:2
+#: admin/templates/examples_slides.php:5
 #: admin/templates/examples_testimonials.php:2
 msgid "quickstart"
 msgstr ""
@@ -289,7 +303,7 @@ msgstr ""
 msgid "Required Settings"
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:155
+#: admin/templates/examples_slides.php:11
 msgid ""
 "Running this presentation on a big screen, before/after a show, is a nice "
 "way to inform your audience about upcoming events."
@@ -316,7 +330,7 @@ msgstr ""
 msgid "Shortcodes for your events as list."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:152
+#: admin/templates/examples_slides.php:2
 msgid "Shortcodes for your events as slides."
 msgstr ""
 
@@ -326,6 +340,15 @@ msgstr ""
 
 #: shortcodes/templates/event_details.php:2
 msgid "Show details"
+msgstr ""
+
+#. Refers to the 'yesticket_slides' shortcode
+#: admin/templates/examples_wrapper.php:48
+msgid "Slides"
+msgstr ""
+
+#: admin/templates/examples_slides.php:52
+msgid "Teaser-Length"
 msgstr ""
 
 #. The word refers to settings -> e.G. "Technical [Settings]'
@@ -340,6 +363,10 @@ msgstr ""
 #. Refers to the 'yesticket_testimonials' shortcode
 #: admin/templates/examples_wrapper.php:40
 msgid "Testimonials"
+msgstr ""
+
+#: admin/templates/examples_slides.php:58
+msgid "Text-Scale"
 msgstr ""
 
 #. Error message, if the shortcode uses an invalid api-version - %1$s is replaced with the highest possible version
@@ -378,24 +405,24 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:183
+#: admin/templates/examples_slides.php:46
 msgid ""
 "Using 'ms-per-slide', you adjust the duration of each slide. The unit is "
 "milliseconds."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:189
+#: admin/templates/examples_slides.php:54
 msgid ""
 "Using 'teaser-length', you can define the maximum characters of the "
 "descriptive text. The text is cut at the end of the last sentence that fits "
 "within the limit."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:193
+#: admin/templates/examples_slides.php:60
 msgid "Using 'text-scale', you can change the font-size of the presentation."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:159
+#: admin/templates/examples_slides.php:19
 msgid ""
 "Using 'welcome-1', 'welcome-2' and 'welcome-3', you can adjust the text on "
 "the welcome splash slide."
@@ -433,11 +460,15 @@ msgstr ""
 msgid "Using <b>type</b> you can filter your testimonials by type."
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:28 shortcodes/yesticket_slides.php:162
+#: admin/templates/examples_slides.php:17
+msgid "Welcome Slide"
+msgstr ""
+
+#: shortcodes/yesticket_slides.php:27 admin/templates/examples_slides.php:22
 msgid "welcome to our"
 msgstr ""
 
-#: shortcodes/yesticket_slides.php:30 shortcodes/yesticket_slides.php:164
+#: shortcodes/yesticket_slides.php:29 admin/templates/examples_slides.php:24
 msgid "where everything is made up"
 msgstr ""
 
@@ -447,7 +478,7 @@ msgid "will add the event name to each testimonial, if present."
 msgstr ""
 
 #. The sentence actually starts with a non-translatable codeblock 'ms-per-slide="8000"'
-#: shortcodes/yesticket_slides.php:186
+#: admin/templates/examples_slides.php:50
 msgid "will display each slide for 8 seconds."
 msgstr ""
 
