@@ -8,6 +8,6 @@
   /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
   _e("will show a link to expand the details.", "yesticket"); ?></p>
 <?php
-$this->render_optionType('events');
-$this->render_optionCount();
-$this->render_optionTheme();
+$this->render_template('shortcode_options_type', array("type"=>"events"));
+$this->render_template('shortcode_options_count');
+$this->render_template('shortcode_options_theme');

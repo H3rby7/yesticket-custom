@@ -8,5 +8,6 @@
   /* translators: The sentence actually starts with a non-translatable codeblock 'details="yes"'*/
   _e("will add the event name to each testimonial, if present.", "yesticket"); ?></p>
 <?php
-$this->render_optionType('testimonials');
-$this->render_optionCount();
+$this->render_template('shortcode_options_type', array("type"=>"testimonials"));
+$this->render_template('shortcode_options_count');
+$this->render_template('shortcode_options_theme');
