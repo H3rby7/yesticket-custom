@@ -91,16 +91,16 @@ class YesTicketApi
         return $result;
     }
 
-    private function validateArguments($att, $options)
+    private function validateArguments($att)
     {
         // We prefer people setting their private info in the settings, rather than the shortcode.
-        if (empty($options["organizer_id"]) and empty($att["organizer"])) {
+        if (empty(YesTicketPluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
                 __("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
             );
         }
-        if (empty($options["api_key"]) and empty($att["key"])) {
+        if (empty(YesTicketPluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
                 __("Please configure your 'key' in the plugin settings.", "yesticket")
@@ -120,8 +120,8 @@ class YesTicketApi
                 );
             }
         }
-        if (!empty($options["api-version"])) {
-            $apiVersion = $options["api-version"];
+        if (!empty($att["api-version"])) {
+            $apiVersion = $att["api-version"];
             if (!is_numeric($apiVersion)) {
                 throw new InvalidArgumentException(
                     /* translators: Error message, if the shortcode uses a non-numeric api-version */
@@ -155,8 +155,7 @@ class YesTicketApi
         if ($att["env"] == 'dev') {
             $env_add = "/dev";
         }
-        $options = get_option('yesticket_settings_required');
-        $this->validateArguments($att, $options);
+        $this->validateArguments($att);
         // Define API Version
         $apiVersion = $this->getLatestVersion();
         if (!empty($att["api-version"])) {
@@ -167,11 +166,11 @@ class YesTicketApi
         $get_url = 'https://www.yesticket.org' . $env_add . '/api/' . $apiEndpoint;
         ytp_log(__FILE__ . "@" . __LINE__ . ": 'Calling API Endpoint: $get_url'");
         // Add query parameters
-        $get_url .= $this->buildQueryParams($att, $options);
+        $get_url .= $this->buildQueryParams($att);
         return $get_url;
     }
 
-    private function buildQueryParams($att, $options)
+    private function buildQueryParams($att)
     {
         $queryParams = '';
         if (!empty($att["count"])) {
@@ -192,12 +191,12 @@ class YesTicketApi
         if (!empty($att["organizer"])) {
             $secretQueryParams .= '?organizer=' . $att["organizer"];
         } else {
-            $secretQueryParams .= '?organizer=' . $options["organizer_id"];
+            $secretQueryParams .= '?organizer=' . YesTicketPluginOptions::getInstance()->getOrganizerID();
         }
         if (!empty($att["key"])) {
             $secretQueryParams .= '&key=' . $att["key"];
         } else {
-            $secretQueryParams .= '&key=' . $options["api_key"];
+            $secretQueryParams .= '&key=' . YesTicketPluginOptions::getInstance()->getApiKey();
         }
         return $secretQueryParams . $queryParams;
     }
