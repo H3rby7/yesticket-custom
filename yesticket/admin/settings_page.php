@@ -47,7 +47,7 @@ class YesTicketSettings extends YesTicketSettingsBase
    */
   public function get_page_title()
   {
-    return 'YesTicket ' . __("Settings");
+    return __("Yesticket Settings", "yesticket");
   }
 
   /**

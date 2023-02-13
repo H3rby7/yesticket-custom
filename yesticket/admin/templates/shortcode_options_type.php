@@ -1,4 +1,4 @@
-<h4>Type</h4>
+<h4><?php _e("Type", "yesticket");?></h4>
 <?php
 if ($type === 'events') {
 ?>
@@ -10,6 +10,7 @@ if ($type === 'events') {
     <?php _e("Using <b>type</b> you can filter your testimonials by type.", "yesticket"); ?>
   </p>
 <?php } else {
+  // Decided against a translation since this is an error for programmers editing this source code.
   throw new AssertionError('Expect argument "$type" to be either "events" or "testimonials"!');
 } ?>
 <p class="ml-3">

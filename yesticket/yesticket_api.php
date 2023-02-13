@@ -1,5 +1,6 @@
 <?php
 
+// In this array we store the keys for the wp cache, so we can clear our cache if demanded.
 add_option('yesticket_transient_keys', array());
 
 class YesTicketApi
@@ -65,7 +66,7 @@ class YesTicketApi
             $ctx = stream_context_create(array(
                 'http' =>
                 array(
-                    'timeout' => 4,  //5 seconds
+                    'timeout' => 4,  // seconds
                 )
             ));
             $get_content = file_get_contents($get_url, 0, $ctx);
@@ -78,7 +79,7 @@ class YesTicketApi
             $ctx = stream_context_create(array(
                 'http' =>
                 array(
-                    'timeout' => 4,  //5 seconds
+                    'timeout' => 4,  // seconds
                 )
             ));
             $get_content = file_get_contents($get_url, 0, $ctx);

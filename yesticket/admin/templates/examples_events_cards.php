@@ -6,7 +6,7 @@ $this->render_template('shortcode_options_type', array("type"=>"events"));
 $this->render_template('shortcode_options_count');
 $this->render_template('shortcode_options_theme');
 ?>
-<h4>Grep</h4>
+<h4><?php _e("Filter", "yesticket"); ?></h4>
 <p><?php
     _e("Using <b>grep</b> you can filter your events by their title.", "yesticket"); ?></p>
 <p class="ml-3"><span class="ytp-code">grep="Johnstone"</span>

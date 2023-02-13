@@ -46,7 +46,7 @@ class YesTicketExamples
    */
   public function get_menu_title()
   {
-    return 'Shortcodes';
+    return __('Shortcodes', 'yesticket');
   }
 
   /**
@@ -56,7 +56,7 @@ class YesTicketExamples
    */
   public function get_page_title()
   {
-    return 'YesTicket Plugin Shortcodes';
+    return __('YesTicket Plugin Shortcodes', 'yesticket');
   }
 
   /**
