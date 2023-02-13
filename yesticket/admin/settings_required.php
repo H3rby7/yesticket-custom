@@ -1,7 +1,7 @@
 <?php
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
-include_once("settings_base.php");
+include_once("settings_base_class.php");
 
 class YesTicketSettingsRequired extends YesTicketSettingsBase
 {

@@ -1,7 +1,7 @@
 <?php
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
-include_once("settings_base.php");
+include_once("settings_base_class.php");
 include_once("settings_required.php");
 include_once("settings_technical.php");
 
@@ -57,7 +57,7 @@ class YesTicketSettings extends YesTicketSettingsBase
   {
     $this->render_template('header');
     if (YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
-      $this->render_template('settings');
+      $this->render_template('settings_wrapper');
     } else {
       $this->required->render();
     }

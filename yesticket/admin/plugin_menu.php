@@ -1,8 +1,8 @@
 <?php
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
-include_once("examples.php");
-include_once("settings.php");
+include_once("examples_page.php");
+include_once("settings_page.php");
 
 class YesTicketPluginMenu
 {
