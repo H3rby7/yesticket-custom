@@ -1,0 +1,97 @@
+/* Contains the styles for the admin/plugin-settings page of the plugin. */
+
+.ytp-code {
+	background: #fff;
+	padding: 2px 5px;
+	margin: 5px 0;
+	font-family: monospace;
+	border: 1px solid #eee;
+	font-size: 1.1em;
+	display: inline-block;
+}
+
+h1 {
+	margin-top: 40px;
+}
+
+h2 {
+	margin-top: 30px;
+}
+
+h3 {
+	margin-top: 20px;
+	font-style: italic;
+}
+
+.ml-3 {
+	margin-left: 30px;
+}
+
+.ytp-admin {
+	padding-right: 20px;
+}
+
+/* GENERIC CSS END */
+
+/* TABS TABS TABS START */
+
+.ytp-admin-nav-wrapper {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	column-gap: 0.5em;
+}
+
+.ytp-admin-nav-wrapper .nav-tab {
+	flex: 1 auto;
+	margin-left: 0;
+	text-align: center;
+}
+
+.ytp-admin-nav-wrapper::after,
+.ytp-admin-nav-wrapper::before {
+	content: "";
+}
+
+/*
+.nav-tab-active {
+
+} */
+
+.ytp-admin-shortcode-preview {
+	bottom: 3rem;
+	left: 1rem;
+	padding: 0.5rem;
+	box-shadow: -5px 5px 10px;
+	background-color: #f0f0f1;
+}
+
+.ytp-admin-shortcode-preview img {
+	max-height: 25vh;
+	max-width: 100%;
+}
+
+.ytp-admin-shortcode-preview p {
+	margin: 0;
+}
+
+/* TABS TABS TABS END */
+
+/* UTILITY START */
+
+.show_on_hover {
+	position: absolute;
+	display: none;
+}
+
+.hover_trigger {
+	cursor: pointer;
+}
+
+.hover_trigger:hover+.show_on_hover,
+.hover_trigger:focus+.show_on_hover {
+	display: block;
+}
+
+/* UTILITY END */

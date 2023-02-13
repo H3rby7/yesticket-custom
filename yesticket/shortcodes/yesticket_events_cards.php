@@ -1,6 +1,5 @@
 <?php
 
-include_once("yesticket_options_helpers.php");
 include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_events_cards', 'ytp_shortcode_events_cards');
@@ -117,22 +116,4 @@ class YesTicketEventsCards
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     }
 
-    public function render_help()
-    { ?>
-        <h2><?php echo __("Shortcodes for your events as cards.", "yesticket"); ?></h2>
-        <p><?php echo __("quickstart", "yesticket"); ?>: <span class="ytp-code">[yesticket_events_cards count="30"]</span></p>
-        <h3><?php echo __("Options for event card shortcodes", "yesticket"); ?></h3>
-        <?php
-        echo ytp_render_optionType('events');
-        echo ytp_render_optionCount();
-        echo ytp_render_optionTheme();
-        ?>
-        <h4>Grep</h4>
-        <p><?php
-            echo __("Using <b>grep</b> you can filter your events by their title.", "yesticket"); ?></p>
-        <p class="ml-3"><span class="ytp-code">grep="Johnstone"</span>
-            <?php
-            /* translators: The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'*/
-            echo __("will only display events, who have \"Johnstone\" in their title.", "yesticket"); ?></p>
-<?php }
 } ?>
