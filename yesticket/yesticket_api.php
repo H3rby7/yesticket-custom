@@ -33,8 +33,7 @@ class YesTicketApi
 
     private function getDataCached($get_url)
     {
-        $options = get_option('yesticket_settings');
-        $CACHE_TIME_IN_MINUTES = $options['cache_time_in_minutes'];
+        $CACHE_TIME_IN_MINUTES = YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes();
         $CACHE_KEY = ytp_cacheKey($get_url);
 
         // check if we have cached information
@@ -107,7 +106,7 @@ class YesTicketApi
                 __("Please configure your 'key' in the plugin settings.", "yesticket")
             );
         }
-        if (!empty($type)) {
+        if (!empty($att["type"])) {
             $type = $att["type"];
             if (
                 !strcasecmp($type, "all") and
@@ -156,7 +155,7 @@ class YesTicketApi
         if ($att["env"] == 'dev') {
             $env_add = "/dev";
         }
-        $options = get_option('yesticket_settings');
+        $options = get_option('yesticket_settings_required');
         $this->validateArguments($att, $options);
         // Define API Version
         $apiVersion = $this->getLatestVersion();

@@ -1,6 +1,6 @@
 <?php
 
-include_once("yesticket_options_helpers.php");
+include_once("yesticket_shortcode_options_helpers.php");
 include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_testimonials', 'ytp_shortcode_testimonials');

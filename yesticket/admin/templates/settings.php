@@ -1,11 +1,11 @@
+<?php $activeTab = isset($_GET['tab']) ? $_GET['tab'] : null;?>
 <div class="ytp-admin">
   <?php echo $this->feedback(); ?>
-  <form method="post" action="<?php echo $action; ?>">
-    <?php
-    settings_fields($this->get_slug());
-    do_settings_sections($this->get_slug());
-    submit_button();
-    ?>
-  </form>
-  <?php $this->render_clear_cache_button(); ?>
+  <nav class="nav-tab-wrapper ytp-admin-nav-wrapper">
+    <?php $this->render_navigation_tab("", $activeTab, "Required"); ?>
+    <?php $this->render_navigation_tab("technical", $activeTab, "Technical"); ?>
+  </nav>
+  <div class="ytp-admin-tab-content">
+    <?php $this->render_tabContent($activeTab); ?>
+  </div>
 </div>
