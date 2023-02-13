@@ -1,6 +1,5 @@
 <?php
 
-include_once("yesticket_shortcode_options_helpers.php");
 include_once("yesticket_shortcode_helpers.php");
 include_once(__DIR__ . "/../yesticket_helpers.php");
 include_once(__DIR__ . "/../yesticket_api.php");
@@ -97,15 +96,5 @@ class YesTicketEventsList
             </ul>
         </li>
 EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-    }
-
-    public function render_help()
-    { ?>
-        <h2><?php echo __("Shortcodes for your events as list.", "yesticket"); ?></h2>
-        <p><?php echo __("quickstart", "yesticket"); ?>: <span class="ytp-code">[yesticket_events_list type="all" count="3"]</span></p>
-        <h3><?php echo __("Options for event list shortcodes", "yesticket"); ?></h3>
-<?php
-        echo ytp_render_optionType('events');
-        echo ytp_render_optionCount();
     }
 } ?>

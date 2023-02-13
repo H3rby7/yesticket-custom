@@ -1,3 +1,4 @@
+<?php $activeTab = isset($_GET['tab']) ? $_GET['tab'] : null;?>
 <div class="ytp-admin">
   <h2><?php _e("Shortcodes", "yesticket"); ?></h2>
   <p>
