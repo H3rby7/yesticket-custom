@@ -13,21 +13,38 @@ h1 { margin-top: 40px; }
 h2 { margin-top: 30px; }
 h3 { margin-top: 20px; font-style: italic; }
 .ml-3 { margin-left: 30px; }
+
+.ytp-admin {
+	padding-right: 20px;
+}
 /* GENERIC CSS END */
 
 /* TABS TABS TABS START */
 
-.nav-tab-wrapper {
+.ytp-admin-nav-wrapper {
 	position: relative;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	column-gap: 0.5em;
 }
-/* .nav-tab {
 
+.ytp-admin-nav-wrapper .nav-tab {
+	flex: 1 auto;
+	margin-left: 0;
+	text-align: center;
 }
+.ytp-admin-nav-wrapper::after,
+.ytp-admin-nav-wrapper::before {
+	content: "";
+}
+
+/*
 .nav-tab-active {
 
 } */
 
-.shortcode_preview {
+.ytp-admin-shortcode-preview {
 	bottom: 3rem;
 	left: 1rem;
 	padding: 0.5rem;
@@ -35,11 +52,12 @@ h3 { margin-top: 20px; font-style: italic; }
 	background-color: #f0f0f1;
 }
 
-.shortcode_preview img {
-	height: 20vh;
+.ytp-admin-shortcode-preview img {
+	max-height: 25vh;
+	max-width: 100%;
 }
 
-.shortcode_preview p {
+.ytp-admin-shortcode-preview p {
 	margin: 0;
 }
 

@@ -1,0 +1,163 @@
+<?php
+
+include_once(__DIR__ . "/../yesticket_helpers.php");
+
+class YesTicketExamples
+{
+  /**
+   * Path to the example templates.
+   *
+   * @var string
+   */
+  private $template_path;
+
+  /**
+   * Slug of the parent menu entry
+   *
+   * @var string
+   */
+  private $parent_slug;
+
+  /**
+   * Constructor.
+   *
+   * @param string $template_path
+   */
+  public function __construct($parent_slug, $template_path)
+  {
+    $this->parent_slug = $parent_slug;
+    $this->template_path = rtrim($template_path, '/');
+  }
+
+  /**
+   * Get the capability required to view the examples page.
+   *
+   * @return string
+   */
+  public function get_capability()
+  {
+    return 'install_plugins';
+  }
+
+  /**
+   * Get the title of the admin page in the WordPress admin menu.
+   *
+   * @return string
+   */
+  public function get_menu_title()
+  {
+    return 'Shortcodes';
+  }
+
+  /**
+   * Get the title of the admin page.
+   *
+   * @return string
+   */
+  public function get_page_title()
+  {
+    return 'YesTicket Plugin Shortcodes';
+  }
+
+  /**
+   * Get the parent slug of the admin page.
+   *
+   * @return string
+   */
+  public function get_parent_slug()
+  {
+    return $this->parent_slug;
+  }
+
+  /**
+   * Get the slug used by the admin page.
+   *
+   * @return string
+   */
+  public function get_slug()
+  {
+    return $this->parent_slug . '-examples';
+  }
+
+  /**
+   * Render the example page.
+   */
+  public function render_page()
+  {
+    $activeTab = isset($_GET['tab']) ? $_GET['tab'] : null;
+    $this->render_template('header');
+    $this->render_template('examples', compact("activeTab"));
+  }
+
+  /**
+   * Renders the given template if it's readable.
+   *
+   * @param string $template
+   */
+  private function render_template($template, $variables = array())
+  {
+    $template_path = $this->template_path . '/' . $template . '.php';
+
+    if (!is_readable($template_path)) {
+      ytp_log(__FILE__ . "@" . __LINE__ . ": 'Template not found: $template_path'");
+      return;
+    }
+    // Extract the variables to a local namespace
+    extract($variables);
+
+    include $template_path;
+  }
+
+  private function ytp_render_shortcode_preview($shortcode, $previewImageFileName)
+  {
+    $image_url = ytp_getImageUrl($previewImageFileName);
+    $alt_text = sprintf(
+      /* translators: %s is replaced with the shortcode, e.G. 'yesticket_events' */
+      __('[%s] preview', "yesticket"),
+      $shortcode
+    );
+    return <<<EOD
+          <div class="show_on_hover ytp-admin-shortcode-preview">
+            <img src="$image_url" alt="$alt_text">
+          </div>
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+  }
+
+  public function render_navigation_tab($tab, $activeTab, $tabName, $shortcode, $image)
+  {
+    $page = $this->get_parent_slug();
+    $preview = "";
+    if (isset($shortcode) and isset($image)) {
+      $preview = $this->ytp_render_shortcode_preview($shortcode, $image);
+    }
+    $classIfActive = "";
+    if ($activeTab == $tab) {
+      $classIfActive = "nav-tab-active";
+    }
+    if (!empty($tab)) {
+      $tab = "&tab=" . $tab;
+    }
+    print <<<EOD
+          <a href="?page=$page$tab" 
+             class="hover_trigger nav-tab $classIfActive">$tabName</a>
+          $preview
+EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+  }
+
+  public function render_tabContent($activeTab)
+  {
+    switch ($activeTab):
+      case 'list':
+        echo YesTicketEventsList::getInstance()->render_help();
+        break;
+      case 'cards':
+        echo YesTicketEventsCards::getInstance()->render_help();
+        break;
+      case 'testimonials':
+        echo YesTicketTestimonials::getInstance()->render_help();
+        break;
+      default:
+        echo YesTicketEvents::getInstance()->render_help();
+    endswitch;
+  }
+}
