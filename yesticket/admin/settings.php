@@ -56,7 +56,11 @@ class YesTicketSettings extends YesTicketSettingsBase
   public function render_page()
   {
     $this->render_template('header');
-    $this->render_template('settings');
+    if (YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+      $this->render_template('settings');
+    } else {
+      $this->required->render();
+    }
   }
 
   function feedback()

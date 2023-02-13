@@ -56,30 +56,35 @@ function ytp_add_plugin_menu()
 {
   $template_dir = __DIR__ . '/templates';
   $admin_page = new YesTicketPluginMenu();
+  $examples_page = new YesTicketExamples($admin_page->get_slug(), $template_dir);
+  $settings_page = new YesTicketSettings($admin_page->get_slug(), $template_dir);
+  $admin_page_slug = $admin_page->get_slug();
 
   add_action('admin_enqueue_scripts', array($admin_page, 'get_styles'));
+
+  if (!YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+    $admin_page_slug = $settings_page->get_slug();
+  }
 
   add_menu_page(
     $admin_page->get_page_title(),
     $admin_page->get_menu_title(),
     $admin_page->get_capability(),
-    $admin_page->get_slug(),
+    $admin_page_slug,
     '',
     ytp_getImageUrl('YesTicket_icon_small.png')
   );
 
-  $examples_page = new YesTicketExamples($admin_page->get_slug(), $template_dir);
-
-  add_submenu_page(
-    $admin_page->get_slug(),
-    $examples_page->get_page_title(),
-    $examples_page->get_menu_title(),
-    $examples_page->get_capability(),
-    $admin_page->get_slug(),
-    array($examples_page, 'render_page')
-  );
-
-  $settings_page = new YesTicketSettings($admin_page->get_slug(), $template_dir);
+  if (YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+    add_submenu_page(
+      $admin_page->get_slug(),
+      $examples_page->get_page_title(),
+      $examples_page->get_menu_title(),
+      $examples_page->get_capability(),
+      $admin_page->get_slug(),
+      array($examples_page, 'render_page')
+    );
+  }
 
   add_submenu_page(
     $admin_page->get_slug(),

@@ -127,4 +127,16 @@ class YesTicketPluginOptions
       $this->settings_technical_args['default']['cache_time_in_minutes']
     );
   }
+
+  public function areNecessarySettingsSet() {
+    $organizer_id = $this->getOrganizerID();
+    $api_key = $this->getApiKey();
+    if ($organizer_id === null || trim($organizer_id) === '') {
+      return false;
+    }
+    if ($api_key === null || trim($api_key) === '') {
+      return false;
+    }
+    return true;
+  }
 }
