@@ -232,7 +232,7 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
    */
   public function render_technical_section()
   {
-    $this->render_template('technical_section');
+    _e("Change these settings at your own risk.", "yesticket");
   }
 
   private function ytp_clear_cache()
