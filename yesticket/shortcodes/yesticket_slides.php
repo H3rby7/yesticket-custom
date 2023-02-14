@@ -1,8 +1,8 @@
 <?php
 
 include_once("yesticket_shortcode_helpers.php");
-include_once(__DIR__ ."/../yesticket_helpers.php");
-include_once(__DIR__ ."/../yesticket_api.php");
+include_once(__DIR__ . "/../yesticket_helpers.php");
+include_once(__DIR__ . "/../yesticket_api.php");
 
 add_shortcode('yesticket_slides', 'ytp_shortcode_slides');
 
@@ -20,8 +20,8 @@ function ytp_shortcode_slides($atts)
     'welcome-1' => __('welcome to our', "yesticket"),
     'welcome-2' => __('improv theatre show', "yesticket"),
     'welcome-3' => __('where everything is made up', "yesticket"),
-    ), $atts);
-    return YesTicketSlides::getInstance()->get($att);
+  ), $atts);
+  return YesTicketSlides::getInstance()->get($att);
 }
 
 class YesTicketSlides
@@ -29,10 +29,10 @@ class YesTicketSlides
   static private $instance;
   static public function getInstance()
   {
-      if (!isset(YesTicketSlides::$instance)) {
-        YesTicketSlides::$instance = new YesTicketSlides(__DIR__ . '/webslides');
-      }
-      return YesTicketSlides::$instance;
+    if (!isset(YesTicketSlides::$instance)) {
+      YesTicketSlides::$instance = new YesTicketSlides(__DIR__ . '/webslides');
+    }
+    return YesTicketSlides::$instance;
   }
 
   /**
@@ -63,37 +63,40 @@ class YesTicketSlides
   {
     $content = "";
     try {
-        $result = YesTicketApi::getInstance()->getEvents($att);
-        $content .= $this->inlineStyles($att);
-        $content .= "<div id='ytp-slides' style='font-size: ".$att["text-scale"]."'>";
-        if (!is_countable($result) or count($result) < 1) {
-            $content .= ytp_render_no_events();
-        } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-            $content .= ytp_render_no_events();
-        } else {
-            $content .= $this->render_slides($result, $att);
-        }
+      $result = YesTicketApi::getInstance()->getEvents($att);
+      $content .= $this->inlineStyles($att);
+      $content .= "<div id='ytp-slides' style='font-size: " . $att["text-scale"] . "'>";
+      if (!is_countable($result) or count($result) < 1) {
+        $content .= ytp_render_no_events();
+      } else if (array_key_exists('message', $result) && $result->message == "no items found") {
+        $content .= ytp_render_no_events();
+      } else {
+        $content .= $this->render_slides($result, $att);
+      }
     } catch (Exception $e) {
-        $content .= __($e->getMessage(), 'yesticket');
+      $content .= __($e->getMessage(), 'yesticket');
     }
     $content .= "</div>";
     return $content;
   }
 
-  function inlineStyles($att) {
-  $color1 = $att['color-1'];
-  $color2 = $att['color-2'];
-  return <<<EOD
-  <style>
-    #ytp-slides {
-      --ytp--color--primary: $color1;
-      --ytp--color--contrast: $color2;
-    }
-  </style>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+  function inlineStyles($att)
+  {
+    $color1 = $att['color-1'];
+    $color2 = $att['color-2'];
+    return <<<EOD
+      <style>
+        #ytp-slides {
+          --ytp--color--primary: $color1;
+          --ytp--color--contrast: $color2;
+        }
+      </style>
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
   }
 
-  function render_slides($result, $att) {
+  function render_slides($result, $att)
+  {
     $content = $this->render_template("slides_header", compact("att"));
     $count = 0;
     foreach ($result as $event) {
@@ -107,11 +110,13 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     return $content;
   }
 
-  function dateAndTime($dateTimeString) {
+  function dateAndTime($dateTimeString)
+  {
     echo ytp_render_date_and_time($dateTimeString);
   }
-  
-  function eventDescription($item, $att) {
+
+  function eventDescription($item, $att)
+  {
     $descr = $item->event_description;
     if (strlen($descr) < $att["teaser-length"]) {
       return $descr;
