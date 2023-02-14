@@ -97,7 +97,8 @@ class YesTicketEvents
             <span class='ytp-event-date'>$event_datetime</span>
             $details
         </div>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+        // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
 
     private function render_event_details($item)
@@ -128,7 +129,8 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
                 <a href="$booking_url" target="_blank" class="ytp-button-big">$order_ticketes_text</a>
             </div>
         </details>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+        // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
 
     private function render_details_location_info($item)
@@ -149,7 +151,7 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
             <span class="ytp-event-details-location-state">$state</span>
             <span class="ytp-event-details-location-country">$country</span>
         </div>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+        // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
-
-} ?>
+}

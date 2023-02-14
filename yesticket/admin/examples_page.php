@@ -119,7 +119,8 @@ class YesTicketExamples
           <div class="show_on_hover ytp-admin-shortcode-preview">
             <img src="$image_url" alt="$alt_text">
           </div>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
   }
 
   public function render_navigation_tab($tab, $activeTab, $tabName, $shortcode, $image)
@@ -137,7 +138,8 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
           <a href="?page=$page$tab" 
              class="hover_trigger nav-tab $classIfActive">$tabName</a>
           $preview
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
   }
 
   public function render_tabContent($activeTab)

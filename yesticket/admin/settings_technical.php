@@ -72,7 +72,8 @@ class YesTicketSettingsTechnical extends YesTicketSettingsBase
                min="0" 
                step="1" 
                value='$cache_time'>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
   }
 
   public function render_clear_cache_button()
@@ -88,7 +89,8 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
         <label for="clear-cache_submit">$hint_text</label>
         <input type="submit" name="clear-cache_submit" value="$button_text">
       </form>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
   }
 
   /**
@@ -119,5 +121,4 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
       $this->ytp_clear_cache();
     }
   }
-
 }

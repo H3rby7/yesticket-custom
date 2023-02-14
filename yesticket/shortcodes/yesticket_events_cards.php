@@ -113,7 +113,7 @@ class YesTicketEventsCards
                 </div>
             </div>
         </a>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+        // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
-
-} ?>
+}

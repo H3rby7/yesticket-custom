@@ -73,7 +73,8 @@ class YesTicketTestimonials
             <span class="ytp-testimonial-text">&raquo;$text&laquo;</span>
             <span class="ytp-testimonial-source">$source</span>
         </div></div>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+        // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
 
     private function render_source($item, $includeEventName)
@@ -97,4 +98,4 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
             htmlentities($event)
         );
     }
-} ?>
+}

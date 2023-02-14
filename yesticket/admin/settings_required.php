@@ -22,7 +22,7 @@ class YesTicketSettingsRequired extends YesTicketSettingsBase
    */
   public function configure()
   {
-    
+
     YesTicketPluginOptions::getInstance()->register_settings_required($this->get_slug());
 
     // Register required section and fields
@@ -71,7 +71,8 @@ class YesTicketSettingsRequired extends YesTicketSettingsBase
                placeholder='61dc12e43225e22add15ff1b'
                name='yesticket_settings_required[api_key]'
                value='$api_key'>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
   }
 
   /**
@@ -86,7 +87,8 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
              step='1'
              name='yesticket_settings_required[organizer_id]'
              value='$organizer_id'>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+EOD;
+    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
   }
 
   /**
