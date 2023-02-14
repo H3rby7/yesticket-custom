@@ -53,6 +53,8 @@ Zip the files inside the `yesticket` folder. It should contain the following fil
     |_yesticket_helpers.php
     |_yesticket_plugin_page.php
     |_yesticket.php
+    |_admin/*
+        |_(whole folder)
     |_img/*
         |_(whole folder)
     |_languages/*
