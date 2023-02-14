@@ -119,14 +119,17 @@ EOD;
   {
     $descr = $item->event_description;
     if (strlen($descr) < $att["teaser-length"]) {
-      return $descr;
+      print $descr;
+      return;
     }
     $shorter = substr($descr, 0, $att["teaser-length"]);
     $indexOfLastPunctuationMark = strpos_findLast_viaRegex($shorter, "/[!.?]/i");
     if (!$indexOfLastPunctuationMark) {
-      return $shorter . "[...]";
+      print $shorter . "[...]";
+      return;
     } else {
-      return substr($shorter, 0, $indexOfLastPunctuationMark + 1);
+      print substr($shorter, 0, $indexOfLastPunctuationMark + 1);
+      return;
     }
   }
 
