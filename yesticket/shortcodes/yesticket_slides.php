@@ -4,8 +4,6 @@ include_once("yesticket_shortcode_helpers.php");
 include_once(__DIR__ ."/../yesticket_helpers.php");
 include_once(__DIR__ ."/../yesticket_api.php");
 
-
-
 add_shortcode('yesticket_slides', 'ytp_shortcode_slides');
 
 function ytp_shortcode_slides($atts)
@@ -69,17 +67,16 @@ class YesTicketSlides
         $content .= $this->inlineStyles($att);
         $content .= "<div id='ytp-slides' style='font-size: ".$att["text-scale"]."'>";
         if (!is_countable($result) or count($result) < 1) {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-            $content = ytp_render_no_events();
+            $content .= ytp_render_no_events();
         } else {
             $content .= $this->render_slides($result, $att);
         }
-        //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
-        $content .= "</div>";
     } catch (Exception $e) {
         $content .= __($e->getMessage(), 'yesticket');
     }
+    $content .= "</div>";
     return $content;
   }
 
@@ -97,75 +94,21 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
   }
 
   function render_slides($result, $att) {
-    $content = <<<EOD
-    <main role="main">
-      <article id="webslides">
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-    $content .= $this->welcomeSlide($att["welcome-1"], $att["welcome-2"], $att["welcome-3"]);
+    $content = $this->render_template("slides_header", compact("att"));
     $count = 0;
-    foreach ($result as $item) {
-      $content .= $this->eventSlide($item, $att);
+    foreach ($result as $event) {
+      $content .= $this->render_template("slide_event", compact("event", "att"));
       $count++;
       if ($count == (int)$att["count"]) {
-          break;
+        break;
       }
     }
-    $content .= <<<EOD
-      </article>
-    </main>
-    <!--main-->
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-    $autoslide = $att["ms-per-slide"];
-    $content .= $this->webslidesJS($autoslide);
+    $content .= $this->render_template("slides_footer", compact("att"));
     return $content;
   }
-  
-  function welcomeSlide($row1, $row2, $row3) {
-  return <<<EOD
-        <section class="">
-          <div class="wrap aligncenter slow">
-            <p class="text-symbols">$row1</p>
-            <h1 class="text-landing">$row2</h1>
-            <p class="text-symbols">$row3</p>
-          </div>
-        </section>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-  }
-  
-  function webslidesJS($autoslide) {
-  return <<<EOD
-  <script>
-  window.addEventListener('load', function () {
-    window.ws = new WebSlides(
-      { autoslide: $autoslide }
-    );
-  }, false);
-  </script>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
-  }
-  
-  function eventSlide($event, $att) {
-    $bg_image_url = $event->event_picture_url;
-    $event_name = $event->event_name;
-    $date_and_location = ytp_render_date_and_time($event->event_datetime) . ", " . $event->location_name;
-    $description = $this->eventDescription($event, $att);
-    return <<<EOD
-    <section class="yesticket-slide">
-      <span class="background fadeIn" style="background-image:url('$bg_image_url')"></span>
-      <div class="wrap">
-        <div class="yesticket-event-meta slide-top slideInLeft delay">
-          <h2 class="yesticket-event-name">$event_name</h2>
-          <p>$date_and_location</p>
-          <div class="backdrop-dark"><div></div></div>
-        </div>
-        <div class="yesticket-event-teaser slideInRight delay delay2">
-          <p>$description</p>
-          <div class="backdrop-dark"><div></div></div>
-        </div>
-      </div>
-      <!-- end .yesticket-slide-->
-    </section>
-EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
+
+  function dateAndTime($dateTimeString) {
+    echo ytp_render_date_and_time($dateTimeString);
   }
   
   function eventDescription($item, $att) {
@@ -180,5 +123,27 @@ EOD; // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
     } else {
       return substr($shorter, 0, $indexOfLastPunctuationMark + 1);
     }
+  }
+
+  /**
+   * Renders the given template if it's readable.
+   *
+   * @param string $template
+   */
+  function render_template($template, $variables = array())
+  {
+    $template_path = $this->template_path . '/' . $template . '.php';
+
+    if (!is_readable($template_path)) {
+      ytp_log(__FILE__ . "@" . __LINE__ . ": 'Template not found: $template_path'");
+      return;
+    }
+    // Extract the variables to a local namespace
+    extract($variables);
+
+    ob_start();
+    include $template_path;
+    $result = ob_get_clean();
+    return $result;
   }
 }
