@@ -71,13 +71,25 @@ class YesTicketPluginOptions
     ),
   );
 
-  private function getOption($object_name, $option_key, $default)
+  private function getOptionString($object_name, $option_key, $default)
   {
     $options = get_option($object_name);
     if (!$options) {
       return $default;
     }
     if (empty($options[$option_key])) {
+      return $default;
+    }
+    return $options[$option_key];
+  }
+
+  private function getOptionNumber($object_name, $option_key, $default)
+  {
+    $options = get_option($object_name);
+    if (!$options) {
+      return $default;
+    }
+    if (!is_numeric($options[$option_key])) {
       return $default;
     }
     return $options[$option_key];
@@ -103,7 +115,7 @@ class YesTicketPluginOptions
 
   public function getOrganizerID()
   {
-    return $this->getOption(
+    return $this->getOptionNumber(
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
       'organizer_id',
       $this->settings_required_args['default']['organizer_id']
@@ -112,7 +124,7 @@ class YesTicketPluginOptions
 
   public function getApiKey()
   {
-    return $this->getOption(
+    return $this->getOptionString(
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
       'api_key',
       $this->settings_required_args['default']['api_key']
@@ -121,7 +133,7 @@ class YesTicketPluginOptions
 
   public function getCacheTimeInMinutes()
   {
-    return $this->getOption(
+    return $this->getOptionNumber(
       YesTicketPluginOptions::SETTINGS_TECHNICAL_KEY,
       'cache_time_in_minutes',
       $this->settings_technical_args['default']['cache_time_in_minutes']
