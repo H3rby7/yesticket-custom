@@ -5,7 +5,11 @@ include_once("settings_base_class.php");
 include_once("settings_required.php");
 include_once("settings_technical.php");
 
-class YesTicketSettings extends YesTicketSettingsBase
+
+/**
+ * The admin page where settings can be adjusted
+ */
+class YesTicketSettingsPage extends YesTicketSettingsSection
 {
 
   protected $required;
@@ -63,12 +67,22 @@ class YesTicketSettings extends YesTicketSettingsBase
     }
   }
 
+  /**
+   * Render feedback from setting actions.
+   */
   function feedback()
   {
     echo $this->required->feedback();
     echo $this->technical->feedback();
   }
 
+  /**
+   * Prints the navigation tab for the given section
+   * 
+   * @param string $tab the tab id for this tab
+   * @param string $activeTab the currently active tab
+   * @param string $tabName the displayed name for this tab
+   */
   public function render_navigation_tab($tab, $activeTab, $tabName)
   {
     $page = $this->get_slug();
@@ -82,6 +96,11 @@ class YesTicketSettings extends YesTicketSettingsBase
     print "<a href='?page=$page$tab' class='hover_trigger nav-tab $classIfActive'>$tabName</a>";
   }
 
+  /**
+   * Prints the tab content of the active Tab
+   * 
+   * @param string $activeTab the currently active tab
+   */
   public function render_tabContent($activeTab)
   {
     switch ($activeTab):

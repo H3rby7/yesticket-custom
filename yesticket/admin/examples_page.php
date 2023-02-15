@@ -2,6 +2,9 @@
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
 
+/**
+ * Shortcode Examples and instructions for YesTicket plugin
+ */
 class YesTicketExamples
 {
   /**
@@ -36,11 +39,11 @@ class YesTicketExamples
    */
   public function get_capability()
   {
-    return 'install_plugins';
+    return 'edit_pages';
   }
 
   /**
-   * Get the title of the admin page in the WordPress admin menu.
+   * Get the title of the yesticket examples page in the WordPress admin menu.
    *
    * @return string
    */
@@ -50,7 +53,7 @@ class YesTicketExamples
   }
 
   /**
-   * Get the title of the admin page.
+   * Get the title of the yesticket examples page.
    *
    * @return string
    */
@@ -89,9 +92,10 @@ class YesTicketExamples
   }
 
   /**
-   * Renders the given template if it's readable.
+   * Prints the given template if it's readable.
    *
-   * @param string $template
+   * @param string $template to render
+   * @param array $variables to be extracted and used to render the template
    */
   function render_template($template, $variables = array())
   {
@@ -107,7 +111,13 @@ class YesTicketExamples
     include $template_path;
   }
 
-  private function ytp_render_shortcode_preview($shortcode, $previewImageFileName)
+  /**
+   * Print the preview image html for the shortcode
+   * 
+   * @param string $shortcode corresponding shortcode
+   * @param string $previewImageFileName fileName of the image inside the plugin's 'img' directory
+   */
+  private function render_shortcode_preview($shortcode, $previewImageFileName)
   {
     $image_url = ytp_getImageUrl($previewImageFileName);
     $alt_text = sprintf(
@@ -115,7 +125,7 @@ class YesTicketExamples
       __('[%s] preview', "yesticket"),
       $shortcode
     );
-    return <<<EOD
+    print <<<EOD
           <div class="show_on_hover ytp-admin-shortcode-preview">
             <img src="$image_url" alt="$alt_text">
           </div>
@@ -123,10 +133,18 @@ EOD;
     // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
   }
 
+  /**
+   * Prints the navigation tab for the given shortcode
+   * 
+   * @param string $tab the tab id for this tab
+   * @param string $activeTab the currently active tab
+   * @param string $tabName the displayed name for this tab
+   * @param string $shortcode the corresponding shortcode for this tab
+   * @param string $image fileName of the preview image inside the plugin's 'img' directory
+   */
   public function render_navigation_tab($tab, $activeTab, $tabName, $shortcode, $image)
   {
     $page = $this->get_parent_slug();
-    $preview = $this->ytp_render_shortcode_preview($shortcode, $image);
     $classIfActive = "";
     if ($activeTab == $tab) {
       $classIfActive = "nav-tab-active";
@@ -137,11 +155,16 @@ EOD;
     print <<<EOD
           <a href="?page=$page$tab" 
              class="hover_trigger nav-tab $classIfActive">$tabName</a>
-          $preview
 EOD;
     // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
+    $this->render_shortcode_preview($shortcode, $image);
   }
 
+  /**
+   * Prints the tab content of the active Tab
+   * 
+   * @param string $activeTab the currently active tab
+   */
   public function render_tabContent($activeTab)
   {
     switch ($activeTab):

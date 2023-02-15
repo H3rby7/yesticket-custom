@@ -1,14 +1,18 @@
 <?php
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
-include_once("settings_base_class.php");
+include_once("settings_section.php");
 
-class YesTicketSettingsTechnical extends YesTicketSettingsBase
+/**
+ * YesTicket's technical settings
+ */
+class YesTicketSettingsTechnical extends YesTicketSettingsSection
 {
 
   /**
    * Constructor.
    *
+   * @param string $parent_slug for the menu hirarchy
    * @param string $template_path
    */
   public function __construct($parent_slug, $template_path)
@@ -18,7 +22,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsBase
   }
 
   /**
-   * Configure the admin page using the Settings API.
+   * Configure the technical settings using the Settings API.
    */
   public function configure()
   {
@@ -42,7 +46,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsBase
   }
 
   /**
-   * Get the slug used by the admin page.
+   * Get the slug used by the technical settings page.
    *
    * @return string
    */
@@ -52,7 +56,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsBase
   }
 
   /**
-   * Render the settings page.
+   * Prints the technical settings.
    */
   public function render()
   {
@@ -61,7 +65,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsBase
   }
 
   /**
-   * Renders the cache_time field.
+   * Prints the cache_time field.
    */
   public function render_cache_time()
   {
@@ -76,6 +80,9 @@ EOD;
     // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
   }
 
+  /**
+   * Prints the Clear Cache Button
+   */
   public function render_clear_cache_button()
   {
     /* translators: The sentence ends with a button 'Clear Cache' (can be translated at that msgId) */
@@ -94,14 +101,19 @@ EOD;
   }
 
   /**
-   * Render the technical settings section of the plugin's admin page.
+   * Prints the technical settings section header.
    */
   public function render_technical_section()
   {
     _e("Change these settings at your own risk.", "yesticket");
   }
 
-  private function ytp_clear_cache()
+  /**
+   * Clears the YesTicket cached API requests.
+   * 
+   * @return string the corresponding success message as html elements
+   */
+  private function clear_cache()
   {
     $cacheKeys = get_option('yesticket_transient_keys');
     update_option('yesticket_transient_keys', array());
@@ -109,16 +121,21 @@ EOD;
       delete_transient($k);
     }
     ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
-    echo $this->success_message(
+    return $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")
     );
   }
 
+  /**
+   * Check to clear cache and return success feedback
+   * 
+   * @return string feedback as html elements
+   */
   public function feedback()
   {
     if (isset($_POST['clear-cache'])) {
-      $this->ytp_clear_cache();
+      return $this->clear_cache();
     }
   }
 }

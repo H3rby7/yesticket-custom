@@ -31,6 +31,11 @@ h3 {
 	padding-right: 20px;
 }
 
+.ytp-admin-success {
+	background-color: #97ff00;
+	padding: 1rem;
+}
+
 /* GENERIC CSS END */
 
 /* TABS TABS TABS START */

@@ -2,7 +2,10 @@
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
 
-class YesTicketSettingsBase
+/**
+ * Base class for YesTicketSettings
+ */
+abstract class YesTicketSettingsSection
 {
 
   /**
@@ -69,8 +72,15 @@ class YesTicketSettingsBase
     include $template_path;
   }
 
+  /**
+   * Return html for success message
+   * 
+   * @param string $msg the message content
+   * 
+   * @return string html for success message
+   */
   function success_message($msg)
   {
-    return "<p style='background-color: #97ff00; padding: 1rem'>$msg</p>";
+    return "<p class='ytp-admin-success'>$msg</p>";
   }
 }

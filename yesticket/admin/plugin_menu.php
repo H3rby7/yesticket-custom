@@ -4,6 +4,9 @@ include_once(__DIR__ . "/../yesticket_helpers.php");
 include_once("examples_page.php");
 include_once("settings_page.php");
 
+/**
+ * Builds the menu entries for the YesTicket plugin
+ */
 class YesTicketPluginMenu
 {
   /**
@@ -27,7 +30,7 @@ class YesTicketPluginMenu
   }
 
   /**
-   * Get the title of the admin page.
+   * Get the title of the admin page (displayed as browser tab name)
    *
    * @return string
    */
@@ -46,18 +49,24 @@ class YesTicketPluginMenu
     return 'yesticket';
   }
 
+  /**
+   * Enqueue the custom styles for the admin page.
+   */
   public function get_styles()
   {
     wp_enqueue_style($this->get_slug(), plugins_url('styles.css', __FILE__), false, 'all');
   }
 }
 
+/**
+ * Register the menu pages using the Settings API.
+ */
 function ytp_add_plugin_menu()
 {
   $template_dir = __DIR__ . '/templates';
   $admin_page = new YesTicketPluginMenu();
   $examples_page = new YesTicketExamples($admin_page->get_slug(), $template_dir);
-  $settings_page = new YesTicketSettings($admin_page->get_slug(), $template_dir);
+  $settings_page = new YesTicketSettingsPage($admin_page->get_slug(), $template_dir);
   $admin_page_slug = $admin_page->get_slug();
 
   add_action('admin_enqueue_scripts', array($admin_page, 'get_styles'));

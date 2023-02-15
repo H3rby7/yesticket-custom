@@ -1,14 +1,18 @@
 <?php
 
 include_once(__DIR__ . "/../yesticket_helpers.php");
-include_once("settings_base_class.php");
+include_once("settings_section.php");
 
-class YesTicketSettingsRequired extends YesTicketSettingsBase
+/**
+ * YesTicket's required settings
+ */
+class YesTicketSettingsRequired extends YesTicketSettingsSection
 {
 
   /**
    * Constructor.
    *
+   * @param string $parent_slug for the menu hirarchy
    * @param string $template_path
    */
   public function __construct($parent_slug, $template_path)
@@ -18,7 +22,7 @@ class YesTicketSettingsRequired extends YesTicketSettingsBase
   }
 
   /**
-   * Configure the admin page using the Settings API.
+   * Configure the required settings using the Settings API.
    */
   public function configure()
   {
@@ -51,7 +55,7 @@ class YesTicketSettingsRequired extends YesTicketSettingsBase
   }
 
   /**
-   * Get the slug used by the admin page.
+   * Get the slug used by the required settings page.
    *
    * @return string
    */
@@ -61,7 +65,16 @@ class YesTicketSettingsRequired extends YesTicketSettingsBase
   }
 
   /**
-   * Renders the api_key field.
+   * Prints the required settings.
+   */
+  public function render()
+  {
+    $action = esc_url(admin_url('options.php'));
+    $this->render_template('settings_required', compact("action"));
+  }
+
+  /**
+   * Prints the api_key field.
    */
   public function render_api_key()
   {
@@ -76,7 +89,7 @@ EOD;
   }
 
   /**
-   * Renders the organizer_id field.
+   * Prints the organizer_id field.
    */
   public function render_organizer_id()
   {
@@ -92,26 +105,22 @@ EOD;
   }
 
   /**
-   * Render the settings page.
-   */
-  public function render()
-  {
-    $action = esc_url(admin_url('options.php'));
-    $this->render_template('settings_required', compact("action"));
-  }
-
-  /**
-   * Render the required settings section of the plugin's admin page.
+   * Prints the required settings section header.
    */
   public function render_heading()
   {
     $this->render_template('settings_required_heading');
   }
 
+  /**
+   * Return feedback from saving changes
+   * 
+   * @return string feedback as html elements
+   */
   public function feedback()
   {
     if (isset($_GET['settings-updated'])) {
-      echo $this->success_message(
+      return $this->success_message(
         /* translators: Success Message after updating settings */
         __("Settings saved.", "yesticket")
       );
