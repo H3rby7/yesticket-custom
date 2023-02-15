@@ -4,6 +4,9 @@ include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_events_cards', 'ytp_shortcode_events_cards');
 
+/**
+ * Callback to add_shortcode [yesticket_events_cards]
+ */
 function ytp_shortcode_events_cards($atts)
 {
     $att = shortcode_atts(array(
@@ -20,9 +23,23 @@ function ytp_shortcode_events_cards($atts)
     return YesTicketEventsCards::getInstance()->get($att);
 }
 
+/**
+ * Shortcode [yesticket_events_cards]
+ */
 class YesTicketEventsCards
 {
+    /**
+     * The $instance
+     *
+     * @var YesTicketEventsCards
+     */
     static private $instance;
+
+    /**
+     * Get the $instance
+     * 
+     * @return YesTicketEventsCards $instance
+     */
     static public function getInstance()
     {
         if (!isset(YesTicketEventsCards::$instance)) {
@@ -31,6 +48,13 @@ class YesTicketEventsCards
         return YesTicketEventsCards::$instance;
     }
 
+    /**
+     * Return the rendered shortcode content as html elements
+     * 
+     * @param array $att shortcode attributes
+     * 
+     * @return string shortcode content
+     */
     public function get($att)
     {
         $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
@@ -60,6 +84,14 @@ class YesTicketEventsCards
         return $content;
     }
 
+    /**
+     * Return the events as html cards
+     * 
+     * @param array $result of the YesTicket API call for events
+     * @param array $att shortcode attributes
+     * 
+     * @return string html for the events as cards
+     */
     private function render_cards($result, $att)
     {
         $content = "";
@@ -82,6 +114,13 @@ class YesTicketEventsCards
         return $content;
     }
 
+    /**
+     * Return an event as html card
+     * 
+     * @param object $item one YesTicket Event
+     * 
+     * @return string html for the event as card
+     */
     private function render_single_card($item)
     {
         $time = ytp_to_local_datetime($item->event_datetime);

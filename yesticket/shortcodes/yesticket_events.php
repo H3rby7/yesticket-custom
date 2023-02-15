@@ -5,6 +5,9 @@ include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_events', 'ytp_shortcode_events');
 
+/**
+ * Callback to add_shortcode [yesticket_events]
+ */
 function ytp_shortcode_events($atts)
 {
     $att = shortcode_atts(array(
@@ -20,9 +23,23 @@ function ytp_shortcode_events($atts)
     return YesTicketEvents::getInstance()->get($att);
 }
 
+/**
+ * Shortcode [yesticket_events]
+ */
 class YesTicketEvents
 {
+    /**
+     * The $instance
+     *
+     * @var YesTicketEvents
+     */
     static private $instance;
+
+    /**
+     * Get the $instance
+     * 
+     * @return YesTicketEvents $instance
+     */
     static public function getInstance()
     {
         if (!isset(YesTicketEvents::$instance)) {
@@ -31,6 +48,13 @@ class YesTicketEvents
         return YesTicketEvents::$instance;
     }
 
+    /**
+     * Return the rendered shortcode content as html elements
+     * 
+     * @param array $att shortcode attributes
+     * 
+     * @return string shortcode content
+     */
     public function get($att)
     {
         $content = ytp_render_shortcode_container_div("ytp-events", $att);
@@ -51,6 +75,14 @@ class YesTicketEvents
         return $content;
     }
 
+    /**
+     * Return the events as html
+     * 
+     * @param array $result of the YesTicket API call for events
+     * @param array $att shortcode attributes
+     * 
+     * @return string html for the events
+     */
     private function render_events($result, $att)
     {
         $content = "";
@@ -65,6 +97,14 @@ class YesTicketEvents
         return $content;
     }
 
+    /**
+     * Return an event as html
+     * 
+     * @param object $item one YesTicket Event
+     * @param array $att shortcode attributes
+     * 
+     * @return string html for the event
+     */
     private function render_single_event($item, $att)
     {
         $booking_url = $item->yesticket_booking_url;
@@ -101,6 +141,13 @@ EOD;
         // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
 
+    /**
+     * Return the details of an event as html
+     * 
+     * @param object $item one YesTicket Event
+     * 
+     * @return string html for the details of this event
+     */
     private function render_event_details($item)
     {
         $event_description = nl2br(htmlentities($item->event_description));
@@ -133,6 +180,13 @@ EOD;
         // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
 
+    /**
+     * Return the location details of an event as html
+     * 
+     * @param object $item one YesTicket Event
+     * 
+     * @return string html for the location details of this event
+     */
     private function render_details_location_info($item)
     {
         $name = htmlentities($item->location_name); //br

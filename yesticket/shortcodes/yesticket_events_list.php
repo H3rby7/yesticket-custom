@@ -6,6 +6,9 @@ include_once(__DIR__ . "/../yesticket_api.php");
 
 add_shortcode('yesticket_events_list', 'ytp_shortcode_events_list');
 
+/**
+ * Callback to add_shortcode [yesticket_events_list]
+ */
 function ytp_shortcode_events_list($atts)
 {
     $att = shortcode_atts(array(
@@ -21,9 +24,23 @@ function ytp_shortcode_events_list($atts)
     return YesTicketEventsList::getInstance()->get($att);
 }
 
+/**
+ * Shortcode [yesticket_events_list]
+ */
 class YesTicketEventsList
 {
+    /**
+     * The $instance
+     *
+     * @var YesTicketEventsList
+     */
     static private $instance;
+
+    /**
+     * Get the $instance
+     * 
+     * @return YesTicketEventsList $instance
+     */
     static public function getInstance()
     {
         if (!isset(YesTicketEventsList::$instance)) {
@@ -32,6 +49,13 @@ class YesTicketEventsList
         return YesTicketEventsList::$instance;
     }
 
+    /**
+     * Return the rendered shortcode content as html elements
+     * 
+     * @param array $att shortcode attributes
+     * 
+     * @return string shortcode content
+     */
     public function get($att)
     {
         $content = ytp_render_shortcode_container_div("ytp-event-list", $att);
@@ -52,7 +76,14 @@ class YesTicketEventsList
         return $content;
     }
 
-
+    /**
+     * Return the events as html list
+     * 
+     * @param array $result of the YesTicket API call for events
+     * @param array $att shortcode attributes
+     * 
+     * @return string html for the events as list
+     */
     private function render_list($result, $att)
     {
         $content = "<ol>\n";
@@ -68,6 +99,13 @@ class YesTicketEventsList
         return $content;
     }
 
+    /**
+     * Return an event as html list item
+     * 
+     * @param object $item one YesTicket Event
+     * 
+     * @return string html for the event as list item
+     */
     private function render_list_item($item, $att)
     {
         $event_date = ytp_render_date($item->event_datetime);

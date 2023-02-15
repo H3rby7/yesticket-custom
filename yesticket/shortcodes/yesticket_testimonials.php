@@ -4,6 +4,9 @@ include_once(__DIR__ . "/../yesticket_helpers.php");
 
 add_shortcode('yesticket_testimonials', 'ytp_shortcode_testimonials');
 
+/**
+ * Callback to add_shortcode [yesticket_testimonials]
+ */
 function ytp_shortcode_testimonials($atts)
 {
     $att = shortcode_atts(array(
@@ -19,9 +22,23 @@ function ytp_shortcode_testimonials($atts)
     return YesTicketTestimonials::getInstance()->get($att);
 }
 
+/**
+ * Shortcode [yesticket_testimonials]
+ */
 class YesTicketTestimonials
 {
+    /**
+     * The $instance
+     *
+     * @var YesTicketTestimonials
+     */
     static private $instance;
+
+    /**
+     * Get the $instance
+     * 
+     * @return YesTicketTestimonials $instance
+     */
     static public function getInstance()
     {
         if (!isset(YesTicketTestimonials::$instance)) {
@@ -30,6 +47,13 @@ class YesTicketTestimonials
         return YesTicketTestimonials::$instance;
     }
 
+    /**
+     * Return the rendered shortcode content as html elements
+     * 
+     * @param array $att shortcode attributes
+     * 
+     * @return string shortcode content
+     */
     public function get($att)
     {
         $content = ytp_render_shortcode_container_div("ytp-testimonials", $att);
@@ -49,6 +73,14 @@ class YesTicketTestimonials
         return $content;
     }
 
+    /**
+     * Return the testimonials as html
+     * 
+     * @param array $result of the YesTicket API call for testimonials
+     * @param array $att shortcode attributes
+     * 
+     * @return string html for the testimonials
+     */
     private function render_testimonials($result, $att)
     {
         $content = "";
@@ -63,6 +95,14 @@ class YesTicketTestimonials
         return $content;
     }
 
+    /**
+     * Return one testimonial as html
+     * 
+     * @param object $item of the YesTicket API call for testimonials
+     * @param array $att shortcode attributes
+     * 
+     * @return string html for the testimonial
+     */
     private function render_single_testimonial($item, $att)
     {
         $text = htmlentities($item->text);
@@ -77,6 +117,14 @@ EOD;
         // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
     }
 
+    /**
+     * Return the source of a testimonial as html
+     * 
+     * @param object $item of the YesTicket API call for testimonials
+     * @param array $includeEventName whether or not to include the corresponding event name
+     * 
+     * @return string html for the source
+     */
     private function render_source($item, $includeEventName)
     {
         $source = $item->source;
