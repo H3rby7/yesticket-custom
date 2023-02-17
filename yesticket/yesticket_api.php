@@ -2,11 +2,23 @@
 
 include_once "yesticket_cache.php";
 
+/**
+ * Grants simplified access to the YesTicket API
+ */
 class YesTicketApi
 {
-
+    /**
+     * The $instance
+     *
+     * @var YesTicketApi
+     */
     static private $instance;
 
+    /**
+     * Get the $instance
+     * 
+     * @return YesTicketApi $instance
+     */
     static public function getInstance()
     {
         if (!isset(YesTicketApi::$instance)) {
@@ -15,7 +27,13 @@ class YesTicketApi
         return YesTicketApi::$instance;
     }
 
+    /**
+     * The $instance
+     *
+     * @var YesTicketCache
+     */
     private $cache;
+
     /**
      * Constructor.
      */
@@ -24,6 +42,11 @@ class YesTicketApi
         $this->cache = YesTicketCache::getInstance();
     }
 
+    /**
+     * $apiEndpoints versioned
+     *
+     * @var array(array)
+     */
     private $apiEndpoints = array(
         '1' => array(
             'events' => 'events-endpoint.php',
@@ -35,11 +58,23 @@ class YesTicketApi
         ),
     );
 
+    /**
+     * Get the latest API version
+     * 
+     * @return number the latest version, derived from $apiEndpoints
+     */
     private function getLatestApiVersion()
     {
         return count($this->apiEndpoints);
     }
 
+    /**
+     * Validates the given $att and saved options to make sure we can build a valid API-call.
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @throws InvalidArgumentException if anything is missing or wrong
+     */
     private function validateArguments($att)
     {
         $this->throw_on_missing_organizer_id($att);
@@ -48,6 +83,13 @@ class YesTicketApi
         $this->throw_on_invalid_api_version($att);
     }
 
+    /**
+     * Validate we have an organizer from settings or shortcode.
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @throws InvalidArgumentException if no organizer-id is configured
+     */
     private function throw_on_missing_organizer_id($att)
     {
         if (empty(YesTicketPluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
@@ -58,6 +100,13 @@ class YesTicketApi
         }
     }
 
+    /**
+     * Validate we have an api key from settings or shortcode.
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @throws InvalidArgumentException if no key is configured
+     */
     private function throw_on_missing_api_key($att)
     {
         if (empty(YesTicketPluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
@@ -68,6 +117,13 @@ class YesTicketApi
         }
     }
 
+    /**
+     * Validate the specified 'type' is valid.
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @throws InvalidArgumentException if type is not valid.
+     */
     private function throw_on_invalid_att_type($att)
     {
         if (!empty($att["type"])) {
@@ -86,6 +142,13 @@ class YesTicketApi
         }
     }
 
+    /**
+     * Validate the api version is valid. (numeric and smaller than the latest version)
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @throws InvalidArgumentException if the api-version is invalid
+     */
     private function throw_on_invalid_api_version($att)
     {
         if (!empty($att["api-version"])) {
@@ -106,6 +169,13 @@ class YesTicketApi
         }
     }
 
+    /**
+     * Validate API call and get events from API
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @return array the events
+     */
     public function getEvents($att)
     {
         $this->validateArguments($att);
@@ -113,6 +183,13 @@ class YesTicketApi
         return $this->cache->getFromCacheOrFresh($apiCall);
     }
 
+    /**
+     * Validate API call and get testimonials from API
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @return array the testimonials
+     */
     public function getTestimonials($att)
     {
         $this->validateArguments($att);
@@ -120,6 +197,14 @@ class YesTicketApi
         return $this->cache->getFromCacheOrFresh($apiCall);
     }
 
+    /**
+     * Build URL for API call
+     * 
+     * @param mixed $att of shortcode
+     * @param string $type {events|testimonials}
+     * 
+     * @return string the API URL
+     */
     private function buildUrl($att, $type)
     {
         // Check to add 'env' path to API call
@@ -138,6 +223,14 @@ class YesTicketApi
         return $get_url;
     }
 
+    /**
+     * Build endpoint URL (no query params)
+     * 
+     * @param mixed $att of shortcode
+     * @param string $type {events|testimonials}
+     * 
+     * @return string the endpoint URL
+     */
     private function getApiEndpoint($att, $type)
     {
         $apiVersion = $this->getLatestApiVersion();
@@ -147,6 +240,13 @@ class YesTicketApi
         return $this->apiEndpoints[$apiVersion][$type];
     }
 
+    /**
+     * Build query string
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @return string the query string
+     */
     private function buildQueryParams($att)
     {
         $queryParams = array(
@@ -159,6 +259,14 @@ class YesTicketApi
         return "?" . http_build_query($queryParams);
     }
 
+    /**
+     * Get $key of shortcode $att
+     * 
+     * @param mixed $att of shortcode
+     * @param string $key which key of the $att
+     * 
+     * @return string the value in lowercase
+     */
     private function getAttLC($att, $key)
     {
         if (!empty($att[$key])) {
@@ -167,6 +275,11 @@ class YesTicketApi
         return '';
     }
 
+    /**
+     * Get the current locale in short format (only part before first _underscore_)
+     * 
+     * @return string the shortened locale
+     */
     private function getLocale()
     {
         $lang = get_locale();
@@ -177,6 +290,15 @@ class YesTicketApi
         return $lang;
     }
 
+    /**
+     * Get organizer
+     * Usually takes option value as set for plugin
+     * Prefers deprecated value from $att
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @return string organizer
+     */
     private function getOrganizer($att)
     {
         if (!empty($att["organizer"])) {
@@ -186,6 +308,15 @@ class YesTicketApi
         }
     }
 
+    /**
+     * Get api key
+     * Usually takes option value as set for plugin
+     * Prefers deprecated value from $att
+     * 
+     * @param mixed $att of shortcode
+     * 
+     * @return string api key
+     */
     private function getApiKey($att)
     {
         if (!empty($att["key"])) {
