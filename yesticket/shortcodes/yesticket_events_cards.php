@@ -58,7 +58,6 @@ class YesTicketEventsCards
     public function get($att)
     {
         $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'att->api-version: " . $att["api-version"] . "'");
         try {
             $result = null;
             if (empty($att["grep"])) {

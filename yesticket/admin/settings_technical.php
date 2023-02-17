@@ -9,6 +9,7 @@ include_once("settings_section.php");
 class YesTicketSettingsTechnical extends YesTicketSettingsSection
 {
 
+  private $cache;
   /**
    * Constructor.
    *
@@ -18,6 +19,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsSection
   public function __construct($parent_slug, $template_path)
   {
     parent::__construct($parent_slug, $template_path);
+    $this->cache = YesTicketCache::getInstance();
     $this->configure();
   }
 
@@ -115,12 +117,7 @@ EOD;
    */
   private function clear_cache()
   {
-    $cacheKeys = get_option('yesticket_transient_keys');
-    update_option('yesticket_transient_keys', array());
-    foreach ($cacheKeys as $k) {
-      delete_transient($k);
-    }
-    ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
+    $this->cache->clear();
     return $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")

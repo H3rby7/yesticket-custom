@@ -1,7 +1,6 @@
 <?php
 
-// In this array we store the keys for the wp cache, so we can clear our cache if demanded.
-add_option('yesticket_transient_keys', array());
+include_once "yesticket_cache.php";
 
 class YesTicketApi
 {
@@ -14,6 +13,15 @@ class YesTicketApi
             YesTicketApi::$instance = new YesTicketApi();
         }
         return YesTicketApi::$instance;
+    }
+
+    private $cache;
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->cache = YesTicketCache::getInstance();
     }
 
     private $apiEndpoints = array(
@@ -32,66 +40,6 @@ class YesTicketApi
         return count($this->apiEndpoints);
     }
 
-    private function getDataCached($get_url)
-    {
-        $CACHE_TIME_IN_MINUTES = YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes();
-        $CACHE_KEY = ytp_cacheKey($get_url);
-
-        // check if we have cached information
-        $data = get_transient($CACHE_KEY);
-        if (false === $data) {
-            // Cache not present, we make the API call
-            $data = $this->getData($get_url);
-            set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS);
-            // save cache key to options, so we can delete the transient, if necessary
-            ytp_addCacheKeyToOptions($CACHE_KEY);
-        }
-        // at this time we have our data, either from cache or after an API call.
-        return $data;
-    }
-
-    private function getData($get_url)
-    {
-        if (function_exists('curl_version')) {
-            $ch = curl_init();
-            $timeout = 4;
-            curl_setopt($ch, CURLOPT_URL, $get_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            $get_content = curl_exec($ch);
-            curl_close($ch);
-        } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-            ini_set('default_socket_timeout', 4);
-            $ctx = stream_context_create(array(
-                'http' =>
-                array(
-                    'timeout' => 4,  // seconds
-                )
-            ));
-            $get_content = file_get_contents($get_url, 0, $ctx);
-        } else {
-            throw new Exception('We require "cURL" or "allow_url_fopen". Please contact your web hosting provider to install/activate one of the features.');
-        }
-        if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-            // in Case of a CURL-error
-            ini_set('default_socket_timeout', 4);
-            $ctx = stream_context_create(array(
-                'http' =>
-                array(
-                    'timeout' => 4,  // seconds
-                )
-            ));
-            $get_content = file_get_contents($get_url, 0, $ctx);
-        }
-        if (empty($get_content)) {
-            throw new RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
-        }
-        $result = json_decode($get_content);
-        //return(json_last_error());
-        return $result;
-    }
-
     private function validateArguments($att)
     {
         $this->throw_on_missing_organizer_id($att);
@@ -100,7 +48,8 @@ class YesTicketApi
         $this->throw_on_invalid_api_version($att);
     }
 
-    private function throw_on_missing_organizer_id($att) {
+    private function throw_on_missing_organizer_id($att)
+    {
         if (empty(YesTicketPluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
@@ -109,7 +58,8 @@ class YesTicketApi
         }
     }
 
-    private function throw_on_missing_api_key($att) {
+    private function throw_on_missing_api_key($att)
+    {
         if (empty(YesTicketPluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
@@ -118,7 +68,8 @@ class YesTicketApi
         }
     }
 
-    private function throw_on_invalid_att_type($att) {
+    private function throw_on_invalid_att_type($att)
+    {
         if (!empty($att["type"])) {
             $type = $att["type"];
             if (
@@ -135,7 +86,8 @@ class YesTicketApi
         }
     }
 
-    private function throw_on_invalid_api_version($att) {
+    private function throw_on_invalid_api_version($att)
+    {
         if (!empty($att["api-version"])) {
             $apiVersion = $att["api-version"];
             if (!is_numeric($apiVersion)) {
@@ -158,14 +110,14 @@ class YesTicketApi
     {
         $this->validateArguments($att);
         $apiCall = $this->buildUrl($att, "events");
-        return $this->getDataCached($apiCall);
+        return $this->cache->getFromCacheOrFresh($apiCall);
     }
 
     public function getTestimonials($att)
     {
         $this->validateArguments($att);
         $apiCall = $this->buildUrl($att, "testimonials");
-        return $this->getDataCached($apiCall);
+        return $this->cache->getFromCacheOrFresh($apiCall);
     }
 
     private function buildUrl($att, $type)
@@ -180,14 +132,14 @@ class YesTicketApi
 
         // Build endpoint url
         $get_url = "https://www.yesticket.org$env_add/api/$api_endpoint";
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Calling API Endpoint: $get_url'");
 
         // Add query parameters
         $get_url .= $this->buildQueryParams($att);
         return $get_url;
     }
 
-    private function getApiEndpoint($att, $type) {
+    private function getApiEndpoint($att, $type)
+    {
         $apiVersion = $this->getLatestApiVersion();
         if (!empty($att["api-version"])) {
             $apiVersion = $att["api-version"];
@@ -201,12 +153,9 @@ class YesTicketApi
         $queryParams .= $this->getAttLC($att, "count");
         $queryParams .= $this->getAttLC($att, "type");
         $queryParams .= $this->getLocaleQuery();
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Public query params for API Call: " . $queryParams . "'");
-        // We keep organizedID and key out of the ytp_log.
-        $secretQueryParams = '';
-        $secretQueryParams .= $this->getOrganizerQuery($att);
-        $secretQueryParams .= $this->getApiKeyQuery($att);
-        return $secretQueryParams . $queryParams;
+        $queryParams .= $this->getOrganizerQuery($att);
+        $queryParams .= $this->getApiKeyQuery($att);
+        return $queryParams;
     }
 
     private function getAttLC($att, $key)
