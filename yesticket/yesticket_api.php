@@ -149,48 +149,49 @@ class YesTicketApi
 
     private function buildQueryParams($att)
     {
-        $queryParams = '';
-        $queryParams .= $this->getAttLC($att, "count");
-        $queryParams .= $this->getAttLC($att, "type");
-        $queryParams .= $this->getLocaleQuery();
-        $queryParams .= $this->getOrganizerQuery($att);
-        $queryParams .= $this->getApiKeyQuery($att);
-        return $queryParams;
+        $queryParams = array(
+            "count" => $this->getAttLC($att, "count"),
+            "type" => $this->getAttLC($att, "type"),
+            "lang" => $this->getLocale(),
+            "organizer" => $this->getOrganizer($att),
+            "key" => $this->getApiKey($att),
+        );
+        return "?" . http_build_query($queryParams);
     }
 
     private function getAttLC($att, $key)
     {
         if (!empty($att[$key])) {
-            return "&$key=" . strtolower($att[$key]);
+            return strtolower($att[$key]);
         }
         return '';
     }
 
-    private function getLocaleQuery()
+    private function getLocale()
     {
         $lang = get_locale();
         $langUnderscorePos = strpos($lang, "_");
         if ($langUnderscorePos != false and $langUnderscorePos > -1) {
             $lang = substr($lang, 0, $langUnderscorePos);
         }
-        return "&lang=$lang";
+        return $lang;
     }
 
-    private function getOrganizerQuery($att)
+    private function getOrganizer($att)
     {
         if (!empty($att["organizer"])) {
-            return '?organizer=' . $att["organizer"];
+            return $att["organizer"];
         } else {
-            return '?organizer=' . YesTicketPluginOptions::getInstance()->getOrganizerID();
+            return YesTicketPluginOptions::getInstance()->getOrganizerID();
         }
     }
 
-    private function getApiKeyQuery($att)
+    private function getApiKey($att)
     {
         if (!empty($att["key"])) {
-            return '&key=' . $att["key"];
+            return $att["key"];
         } else {
-            return '&key=' . YesTicketPluginOptions::getInstance()->getApiKey();
+            return YesTicketPluginOptions::getInstance()->getApiKey();
         }
     }
 }
