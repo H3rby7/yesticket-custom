@@ -2,7 +2,7 @@
   <?php _e("Shortcodes for your events as slides.", "yesticket"); ?>
 </h2>
 <p>
-  <?php _e("quickstart", "yesticket"); ?>: <span class="ytp-code">[yesticket_event_slides]</span>
+  <?php _e("quickstart", "yesticket"); ?>: <span class="ytp-code">[yesticket_slides]</span>
 </p>
 <p>
   <?php _e("Beware: This shortcode must be placed on a separate page. Visit that page and enter fullscreen mode to view your presentation.", "yesticket"); ?>
