@@ -1,7 +1,16 @@
 <?php
 include_once("functions.php");
 
-function strpos_findLast_viaRegex($haystack, $needlePattern) {
+/**
+ * Find the last occurence of a regex within a string
+ * 
+ * @param string $haystack
+ * @param string $needlePattern
+ * 
+ * @return integer starting position of last occurence
+ */
+function strpos_findLast_viaRegex($haystack, $needlePattern)
+{
   // https://www.php.net/manual/de/function.preg-match-all.php
   preg_match_all($needlePattern, $haystack, $matches, PREG_OFFSET_CAPTURE);
   // $matches is an array containing the matches
@@ -13,6 +22,7 @@ function strpos_findLast_viaRegex($haystack, $needlePattern) {
   $lastMatch = $matches[count($matches) - 1];
   return $lastMatch[0][1];
 }
+
 /**
  * Manage the plugin's wp options
  */
