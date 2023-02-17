@@ -1,13 +1,22 @@
 <?php
 
-// In this array we store the keys for the wp cache, so we can clear our cache if demanded.
-add_option('yesticket_transient_keys', array());
-
+/**
+ * Cache for YesTicket API Calls
+ */
 class YesTicketCache
 {
-
+    /**
+     * The $instance
+     *
+     * @var YesTicketCache
+     */
     static private $instance;
 
+    /**
+     * Get the $instance
+     * 
+     * @return YesTicketCache $instance
+     */
     static public function getInstance()
     {
         if (!isset(YesTicketCache::$instance)) {
@@ -16,6 +25,22 @@ class YesTicketCache
         return YesTicketCache::$instance;
     }
 
+    /**
+     * Constructor, use add_option to register the array of cached keys
+     */
+    public function __construct()
+    {
+        add_option('yesticket_transient_keys', array());
+    }
+
+    /**
+     * Get data from the specified $get_url. 
+     * Use cached response, if present, else we make a new call and sve the data to cache
+     * 
+     * @param string $get_url the full api call URL
+     * 
+     * @return mixed data as JSON.
+     */
     public function getFromCacheOrFresh($get_url)
     {
         $CACHE_TIME_IN_MINUTES = YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes();
@@ -34,6 +59,13 @@ class YesTicketCache
         return $data;
     }
 
+    /**
+     * Get data from the specified $get_url. 
+     * 
+     * @param string $get_url the full api call URL
+     * 
+     * @return mixed data as JSON.
+     */
     private function getData($get_url)
     {
         $this->logRequestMasked($get_url);
@@ -77,12 +109,23 @@ class YesTicketCache
         return $result;
     }
 
+    /**
+     * Transform the $get_url into a key used for WP_TRANSIENTS
+     * 
+     * @param string $get_url the full api call URL
+     * 
+     * @return string Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
+     */
     private function cacheKey($get_url)
     {
-        // common key specific to yesticket to set and retrieve WP_TRANSIENTS
         return 'yesticket_' . md5($get_url);
     }
 
+    /**
+     * Ensure the WP_TRANSIENTS $CACHE_KEY is in our active cache keys
+     * 
+     * @param string $CACHE_KEY Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
+     */
     private function addKeyToActiveCaches($CACHE_KEY)
     {
         $cacheKeys = get_option('yesticket_transient_keys', array());
@@ -95,6 +138,7 @@ class YesTicketCache
 
     /**
      * Clears the cached API request responses.
+     * Resets the 'yesticket_transient_keys' option to an empty array.
      */
     public function clear()
     {
@@ -106,7 +150,13 @@ class YesTicketCache
         }
     }
 
-    private function logRequestMasked($url) {
+    /**
+     * Log out a request for new data, masking sensitive query args.
+     * 
+     * @param string $url the full api call URL
+     */
+    private function logRequestMasked($url)
+    {
         // https://www.php.net/manual/en/function.preg-replace.php
         $masked_url = preg_replace('/organizer=\w+/', 'organizer=****', $url);
         $masked_url = preg_replace('/key=\w+/', 'key=****', $masked_url);
