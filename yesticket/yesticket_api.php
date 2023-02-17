@@ -174,7 +174,7 @@ class YesTicketApi
      * 
      * @param mixed $att of shortcode
      * 
-     * @return array the events
+     * @return mixed the events
      */
     public function getEvents($att)
     {
@@ -188,7 +188,7 @@ class YesTicketApi
      * 
      * @param mixed $att of shortcode
      * 
-     * @return array the testimonials
+     * @return mixed the testimonials
      */
     public function getTestimonials($att)
     {
