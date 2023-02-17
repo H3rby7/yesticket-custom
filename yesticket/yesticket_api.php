@@ -27,7 +27,7 @@ class YesTicketApi
         ),
     );
 
-    private function getLatestVersion()
+    private function getLatestApiVersion()
     {
         return count($this->apiEndpoints);
     }
@@ -94,19 +94,31 @@ class YesTicketApi
 
     private function validateArguments($att)
     {
-        // We prefer people setting their private info in the settings, rather than the shortcode.
+        $this->throw_on_missing_organizer_id($att);
+        $this->throw_on_missing_api_key($att);
+        $this->throw_on_invalid_att_type($att);
+        $this->throw_on_invalid_api_version($att);
+    }
+
+    private function throw_on_missing_organizer_id($att) {
         if (empty(YesTicketPluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
                 __("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
             );
         }
+    }
+
+    private function throw_on_missing_api_key($att) {
         if (empty(YesTicketPluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
                 __("Please configure your 'key' in the plugin settings.", "yesticket")
             );
         }
+    }
+
+    private function throw_on_invalid_att_type($att) {
         if (!empty($att["type"])) {
             $type = $att["type"];
             if (
@@ -121,6 +133,9 @@ class YesTicketApi
                 );
             }
         }
+    }
+
+    private function throw_on_invalid_api_version($att) {
         if (!empty($att["api-version"])) {
             $apiVersion = $att["api-version"];
             if (!is_numeric($apiVersion)) {
@@ -129,7 +144,7 @@ class YesTicketApi
                     __("The hidden field 'api-version' must be numeric.", "yesticket")
                 );
             }
-            $latestApiVersion = $this->getLatestVersion();
+            $latestApiVersion = $this->getLatestApiVersion();
             if ($apiVersion > $latestApiVersion) {
                 throw new InvalidArgumentException(
                     /* translators: Error message, if the shortcode uses an unknown api-version */
@@ -137,68 +152,96 @@ class YesTicketApi
                 );
             }
         }
-        return true;
     }
 
     public function getEvents($att)
     {
-        return $this->getDataCached($this->validateAndBuildUrl($att, "events"));
+        $this->validateArguments($att);
+        $apiCall = $this->buildUrl($att, "events");
+        return $this->getDataCached($apiCall);
     }
 
     public function getTestimonials($att)
     {
-        return $this->getDataCached($this->validateAndBuildUrl($att, "testimonials"));
+        $this->validateArguments($att);
+        $apiCall = $this->buildUrl($att, "testimonials");
+        return $this->getDataCached($apiCall);
     }
 
-    private function validateAndBuildUrl($att, $type)
+    private function buildUrl($att, $type)
     {
+        // Check to add 'env' path to API call
         $env_add = "";
         if ($att["env"] == 'dev') {
             $env_add = "/dev";
         }
-        $this->validateArguments($att);
-        // Define API Version
-        $apiVersion = $this->getLatestVersion();
-        if (!empty($att["api-version"])) {
-            $apiVersion = $att["api-version"];
-        }
-        $apiEndpoint = $this->apiEndpoints[$apiVersion][$type];
+
+        $api_endpoint = $this->getApiEndpoint($att, $type);
+
         // Build endpoint url
-        $get_url = 'https://www.yesticket.org' . $env_add . '/api/' . $apiEndpoint;
+        $get_url = "https://www.yesticket.org$env_add/api/$api_endpoint";
         ytp_log(__FILE__ . "@" . __LINE__ . ": 'Calling API Endpoint: $get_url'");
+
         // Add query parameters
         $get_url .= $this->buildQueryParams($att);
         return $get_url;
     }
 
+    private function getApiEndpoint($att, $type) {
+        $apiVersion = $this->getLatestApiVersion();
+        if (!empty($att["api-version"])) {
+            $apiVersion = $att["api-version"];
+        }
+        return $this->apiEndpoints[$apiVersion][$type];
+    }
+
     private function buildQueryParams($att)
     {
         $queryParams = '';
-        if (!empty($att["count"])) {
-            $queryParams .= '&count=' . strtolower($att["count"]);
+        $queryParams .= $this->getAttLC($att, "count");
+        $queryParams .= $this->getAttLC($att, "type");
+        $queryParams .= $this->getLocaleQuery();
+        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Public query params for API Call: " . $queryParams . "'");
+        // We keep organizedID and key out of the ytp_log.
+        $secretQueryParams = '';
+        $secretQueryParams .= $this->getOrganizerQuery($att);
+        $secretQueryParams .= $this->getApiKeyQuery($att);
+        return $secretQueryParams . $queryParams;
+    }
+
+    private function getAttLC($att, $key)
+    {
+        if (!empty($att[$key])) {
+            return "&$key=" . strtolower($att[$key]);
         }
-        if (!empty($att["type"])) {
-            $queryParams .= '&type=' . strtolower($att["type"]);
-        }
+        return '';
+    }
+
+    private function getLocaleQuery()
+    {
         $lang = get_locale();
         $langUnderscorePos = strpos($lang, "_");
         if ($langUnderscorePos != false and $langUnderscorePos > -1) {
             $lang = substr($lang, 0, $langUnderscorePos);
         }
-        $queryParams .= '&lang=' . $lang;
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Public query params for API Call: " . $queryParams . "'");
-        // We keep organizedID and key out of the ytp_log.
-        $secretQueryParams = '';
-        if (!empty($att["organizer"])) {
-            $secretQueryParams .= '?organizer=' . $att["organizer"];
-        } else {
-            $secretQueryParams .= '?organizer=' . YesTicketPluginOptions::getInstance()->getOrganizerID();
-        }
-        if (!empty($att["key"])) {
-            $secretQueryParams .= '&key=' . $att["key"];
-        } else {
-            $secretQueryParams .= '&key=' . YesTicketPluginOptions::getInstance()->getApiKey();
-        }
-        return $secretQueryParams . $queryParams;
+        return "&lang=$lang";
     }
-} ?>
+
+    private function getOrganizerQuery($att)
+    {
+        if (!empty($att["organizer"])) {
+            return '?organizer=' . $att["organizer"];
+        } else {
+            return '?organizer=' . YesTicketPluginOptions::getInstance()->getOrganizerID();
+        }
+    }
+
+    private function getApiKeyQuery($att)
+    {
+        if (!empty($att["key"])) {
+            return '&key=' . $att["key"];
+        } else {
+            return '&key=' . YesTicketPluginOptions::getInstance()->getApiKey();
+        }
+    }
+}
