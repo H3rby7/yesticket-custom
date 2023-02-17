@@ -9,6 +9,7 @@ add_shortcode('yesticket_events_cards', 'ytp_shortcode_events_cards');
  */
 function ytp_shortcode_events_cards($atts)
 {
+    wp_enqueue_style('yesticket');
     $att = shortcode_atts(array(
         'env' => 'prod',
         'api-version' => '',

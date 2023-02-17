@@ -9,6 +9,7 @@ add_shortcode('yesticket_testimonials', 'ytp_shortcode_testimonials');
  */
 function ytp_shortcode_testimonials($atts)
 {
+    wp_enqueue_style('yesticket');
     $att = shortcode_atts(array(
         'env' => 'prod',
         'api-version' => '',

@@ -11,6 +11,7 @@ add_shortcode('yesticket_events_list', 'ytp_shortcode_events_list');
  */
 function ytp_shortcode_events_list($atts)
 {
+    wp_enqueue_style('yesticket');
     $att = shortcode_atts(array(
         'env' => 'prod',
         'api-version' => '',
