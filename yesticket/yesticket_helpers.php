@@ -1,36 +1,78 @@
 <?php
 if (!function_exists('is_countable')) {
+  /**
+   * Verify that the contents of a variable is a countable value.
+   * 
+   * @param mixed $var
+   * 
+   * @return boolean TRUE if countable; else FALSE
+   */
   function is_countable($var)
   {
     return (is_array($var) || $var instanceof Countable);
   }
 }
 
+/**
+ * Get the URL of an image to be accessed via browser.
+ * 
+ * @param string $fileName of the image inside this plugin's '/img' directory
+ * 
+ * @return string the browser-accessible URL
+ */
 function ytp_getImageUrl($fileName)
 {
   return plugin_dir_url(__FILE__) . 'img/' . $fileName;
 }
 
-if (!function_exists('ytp_log')) {
-
-  function ytp_log($log)
-  {
-    if (true === WP_DEBUG) {
-      if (is_array($log) || is_object($log)) {
-        error_log("YESTICKET: " . print_r($log, true));
-      } else {
-        error_log("YESTICKET: " . $log);
-      }
+/**
+ * Log output from YesTicket plugin if WP_DEBUG is true.
+ * 
+ * @param string $log content to be logged
+ * 
+ */
+function ytp_log($log)
+{
+  if (true === WP_DEBUG) {
+    if (is_array($log) || is_object($log)) {
+      error_log("YESTICKET: " . print_r($log, true));
+    } else {
+      error_log("YESTICKET: " . $log);
     }
   }
 }
 
+/**
+ * Manage the plugin's wp options
+ */
 class YesTicketPluginOptions
 {
+  /**
+   * The $instance
+   *
+   * @var YesTicketCache
+   */
   static private $instance;
+
+  /**
+   * Option_Name of the technical settings
+   *
+   * @var SETTINGS_TECHNICAL_KEY
+   */
   private const SETTINGS_TECHNICAL_KEY = 'yesticket_settings_technical';
+
+  /**
+   * Option_Name of the required settings
+   *
+   * @var SETTINGS_REQUIRED_KEY
+   */
   private const SETTINGS_REQUIRED_KEY = 'yesticket_settings_required';
 
+  /**
+   * Get the $instance
+   * 
+   * @return YesTicketPluginOptions $instance
+   */
   static public function getInstance()
   {
     if (!isset(YesTicketPluginOptions::$instance)) {
@@ -39,7 +81,9 @@ class YesTicketPluginOptions
     return YesTicketPluginOptions::$instance;
   }
 
-  /// Register settings
+  /**
+   * @var $settings_required_args Data used to describe the required settings when registered.
+   */
   private $settings_required_args = array(
     'type' => 'object',
     'default' => array(
@@ -48,6 +92,9 @@ class YesTicketPluginOptions
     ),
   );
 
+  /**
+   * @var $settings_technical_args Data used to describe the technical settings when registered.
+   */
   private $settings_technical_args = array(
     'type' => 'object',
     'default' => array(
@@ -55,9 +102,18 @@ class YesTicketPluginOptions
     ),
   );
 
-  private function getOptionString($object_name, $option_key, $default)
+  /**
+   * Get the option or the default as string
+   * 
+   * @param string $option_name of the containing option object
+   * @param string $option_key to get the wanted attribute
+   * @param string $default is returned in case the requested option was not set
+   * 
+   * @return string the option's content or the $default
+   */
+  private function getOptionString($option_name, $option_key, $default)
   {
-    $options = get_option($object_name);
+    $options = get_option($option_name);
     if (!$options) {
       return $default;
     }
@@ -67,9 +123,18 @@ class YesTicketPluginOptions
     return $options[$option_key];
   }
 
-  private function getOptionNumber($object_name, $option_key, $default)
+  /**
+   * Get the option or the default as number
+   * 
+   * @param string $option_name of the containing option object
+   * @param string $option_key to get the wanted attribute
+   * @param string $default is returned in case the requested option was not set
+   * 
+   * @return number the option's content or the $default
+   */
+  private function getOptionNumber($option_name, $option_key, $default)
   {
-    $options = get_option($object_name);
+    $options = get_option($option_name);
     if (!$options) {
       return $default;
     }
@@ -79,42 +144,67 @@ class YesTicketPluginOptions
     return $options[$option_key];
   }
 
-  public function register_settings_technical($slug)
+  /**
+   * Use wp settings api to register technical settings
+   * 
+   * @param string $option_group
+   */
+  public function register_settings_technical($option_group)
   {
     register_setting(
-      $slug,
+      $option_group,
       YesTicketPluginOptions::SETTINGS_TECHNICAL_KEY,
       $this->settings_technical_args
     );
   }
 
-  public function register_settings_required($slug)
+  /**
+   * Use wp settings api to register required settings
+   * 
+   * @param string $option_group
+   */
+  public function register_settings_required($option_group)
   {
     register_setting(
-      $slug,
+      $option_group,
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
       $this->settings_required_args
     );
   }
 
+  /**
+   * Get the organizer ID
+   * 
+   * @return number organizer_id or NULL
+   */
   public function getOrganizerID()
   {
     return $this->getOptionNumber(
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
       'organizer_id',
-      $this->settings_required_args['default']['organizer_id']
+      NULL
     );
   }
 
+  /**
+   * Get the API key
+   * 
+   * @return string api_key or NULL
+   */
   public function getApiKey()
   {
     return $this->getOptionString(
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
       'api_key',
-      $this->settings_required_args['default']['api_key']
+      NULL
     );
   }
 
+  /**
+   * Get the cache time in minutes
+   * 
+   * @return string cache time or default, see $settings_technical_args
+   */
   public function getCacheTimeInMinutes()
   {
     return $this->getOptionNumber(
@@ -124,10 +214,16 @@ class YesTicketPluginOptions
     );
   }
 
-  public function areNecessarySettingsSet() {
+  /**
+   * Check if organizer_id and api_key have been configured.
+   * 
+   * @return boolean FALSE, if any necessary setting is missing; else TRUE
+   */
+  public function areNecessarySettingsSet()
+  {
     $organizer_id = $this->getOrganizerID();
     $api_key = $this->getApiKey();
-    if ($organizer_id === null || trim($organizer_id) === '') {
+    if ($organizer_id === null) {
       return false;
     }
     if ($api_key === null || trim($api_key) === '') {
