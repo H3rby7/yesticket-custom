@@ -49,13 +49,6 @@ class YesTicketPluginMenu
     return 'yesticket';
   }
 
-  /**
-   * Enqueue the custom styles for the admin page.
-   */
-  public function get_styles()
-  {
-    wp_enqueue_style($this->get_slug(), plugins_url('styles.css', __FILE__), false, 'all');
-  }
 }
 
 /**
@@ -68,8 +61,6 @@ function ytp_add_plugin_menu()
   $examples_page = new YesTicketExamples($admin_page->get_slug(), $template_dir);
   $settings_page = new YesTicketSettingsPage($admin_page->get_slug(), $template_dir);
   $admin_page_slug = $admin_page->get_slug();
-
-  add_action('admin_enqueue_scripts', array($admin_page, 'get_styles'));
 
   if (!YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
     $admin_page_slug = $settings_page->get_slug();
@@ -106,4 +97,5 @@ function ytp_add_plugin_menu()
 
   add_action('admin_init', [$settings_page, 'configure']);
 }
+
 add_action('admin_menu', 'ytp_add_plugin_menu');

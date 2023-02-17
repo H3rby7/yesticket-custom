@@ -87,6 +87,7 @@ class YesTicketExamples
    */
   public function render_page()
   {
+    wp_enqueue_style('yesticket-admin');
     $this->render_template('header');
     $this->render_template('examples_wrapper');
   }

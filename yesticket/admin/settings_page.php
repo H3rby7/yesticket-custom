@@ -59,6 +59,7 @@ class YesTicketSettingsPage extends YesTicketSettingsSection
    */
   public function render_page()
   {
+    wp_enqueue_style('yesticket-admin');
     $this->render_template('header');
     if (YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
       $this->render_template('settings_wrapper');
