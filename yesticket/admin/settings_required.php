@@ -70,7 +70,11 @@ class YesTicketSettingsRequired extends YesTicketSettingsSection
   public function render()
   {
     $action = esc_url(admin_url('options.php'));
-    $this->render_template('settings_required', compact("action"));
+    $request_url   = remove_query_arg('_wp_http_referer');
+    if (!YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+      $request_url = preg_replace('/-settings/', '', $request_url);
+    }
+    $this->render_template('settings_required', compact("action", "request_url"));
   }
 
   /**
