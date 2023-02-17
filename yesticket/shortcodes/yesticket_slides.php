@@ -8,6 +8,8 @@ add_shortcode('yesticket_slides', 'ytp_shortcode_slides');
 
 function ytp_shortcode_slides($atts)
 {
+  wp_enqueue_style('yesticket_slides');
+  wp_enqueue_script('yesticket_slides');
   $att = shortcode_atts(array(
     'type' => 'all',
     'env' => 'prod',
@@ -35,6 +37,12 @@ class YesTicketSlides
     return YesTicketSlides::$instance;
   }
 
+  static public function registerFiles()
+  {
+    wp_register_style('yesticket_slides', plugins_url('webslides/webslides.css', __FILE__), false, 'all');
+    wp_register_script('yesticket_slides', plugins_url('webslides/webslides.min.js', __FILE__), false, 'all');
+  }
+
   /**
    * Path to the example templates.
    *
@@ -50,13 +58,6 @@ class YesTicketSlides
   public function __construct($template_path)
   {
     $this->template_path = rtrim($template_path, '/');
-    add_action('wp_enqueue_scripts', [$this, 'getStyles']);
-  }
-
-  public function getStyles()
-  {
-    wp_enqueue_style('yesticket_slides', plugins_url('webslides/webslides.css', __FILE__), false, 'all');
-    wp_enqueue_script('yesticket_slides', plugins_url('webslides/webslides.min.js', __FILE__));
   }
 
   public function get($att)
