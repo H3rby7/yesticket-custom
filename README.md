@@ -136,8 +136,8 @@ Make sure the scripts in `bin` have `LF` line-endings!
 
 ### Running automated Tests
 
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit [args...]
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit tests
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug [args...]
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug
 
 ### Stop automated Test Container
 
