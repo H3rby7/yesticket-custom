@@ -127,6 +127,8 @@ TODO:
 
 [Credits to chriszarate](https://github.com/chriszarate/docker-compose-wordpress)
 
+For a list of common assertions [see this](https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#using-assertions).
+
 ### Setup automated Tests
 
 Make sure the scripts in `bin` have `LF` line-endings!
