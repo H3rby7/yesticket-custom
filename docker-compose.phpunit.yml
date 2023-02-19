@@ -2,7 +2,13 @@ version: "3"
 
 services:
   wordpress_phpunit:
-    image: "chriszarate/wordpress-phpunit:6.0.6"
+    build:
+      context: tools
+      dockerfile: phpunit.dockerfile
+      args:
+        VERSION_PHP: 7.3
+        VERSION_PHP_UNIT: 8
+    working_dir: /app
     volumes:
       - "./yesticket/:/app"
       - "./bin/:/mount/bin"

@@ -3,7 +3,8 @@
     "type": "wp-plugin",
     "require": {},
     "require-dev": {
-        "yoast/phpunit-polyfills": "^1.0"
+        "yoast/phpunit-polyfills": "^1.0",
+        "10up/wp_mock": "^0.5.0"
     },
     "config": {
         "discard-changes": true,
