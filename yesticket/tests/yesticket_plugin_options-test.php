@@ -6,6 +6,10 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
   {
     $this->assertTrue(class_exists("YesTicketPluginOptions"));
   }
+
+  /**
+   * @covers YesTicketPluginOptions::getInstance
+   */
   function test_get_instance()
   {
     $this->assertNotEmpty(YesTicketPluginOptions::getInstance());
@@ -31,6 +35,9 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     YesTicketPluginOptions::getInstance()->register_settings_required($opt_group);
   }
 
+  /**
+   * @covers YesTicketPluginOptions::register_settings_technical
+   */
   function test_register_settings_technical()
   {
     // Given
@@ -58,6 +65,9 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->assertEmpty(get_option($opt_key));
   }
 
+  /**
+   * @covers YesTicketPluginOptions::register_settings_required
+   */
   function test_register_settings_required()
   {
     // Given
@@ -85,6 +95,9 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->assertEmpty(get_option($opt_key));
   }
 
+  /**
+   * @covers YesTicketPluginOptions::getCacheTimeInMinutes
+   */
   function test_getCacheTimeInMinutes()
   {
     // Setup
@@ -100,6 +113,9 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->assertSame(69, YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes(), "Value should have changed");
   }
 
+  /**
+   * @covers YesTicketPluginOptions::getApiKey
+   */
   function test_getApiKey()
   {
     // Setup
@@ -116,6 +132,9 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->assertSame('testkey', YesTicketPluginOptions::getInstance()->getApiKey(), "Value should have changed");
   }
 
+  /**
+   * @covers YesTicketPluginOptions::getOrganizerID
+   */
   function test_getOrganizerID()
   {
     // Setup
@@ -132,6 +151,9 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->assertSame('161', YesTicketPluginOptions::getInstance()->getOrganizerID(), "Value should have changed");
   }
 
+  /**
+   * @covers YesTicketPluginOptions::areNecessarySettingsSet
+   */
   function test_areNecessarySettingsSet()
   {
     // Given

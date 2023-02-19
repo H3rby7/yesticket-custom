@@ -8,6 +8,10 @@ class YesTicketCacheTest extends WP_UnitTestCase
   {
     $this->assertTrue(class_exists("YesTicketCache"));
   }
+
+  /**
+   * @covers YesTicketCache::getInstance
+   */
   function test_get_instance()
   {
     $this->assertNotEmpty(YesTicketCache::getInstance());
@@ -15,6 +19,10 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $this->assertIsArray($opt);
     $this->assertCount(0, $opt);
   }
+
+  /**
+   * @covers YesTicketCache::clear
+   */
   function test_clear()
   {
     // Empty option, expect no error
@@ -62,6 +70,9 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $this->assertFalse(get_transient('test-B'));
   }
 
+  /**
+   * @covers YesTicketCache::getFromCacheOrFresh
+   */
   function test_getFromCacheOrFresh()
   {
     // constants
