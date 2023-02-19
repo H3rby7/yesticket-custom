@@ -21,6 +21,22 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
+   * @covers YesTicketCache::cacheKey
+   */
+  function test_cacheKey()
+  {
+    $very_long_url = 'https://yesticket.org/some/very/long/url/with/more/than/172/characters/to/verify/the/method/keeps/its/limit/omg/that/requires/a/lot/of/text/I/did/not/think/that/far/but/now/I/got/it';
+    $cacheKey = YesTicketCache::getInstance()->cacheKey($very_long_url);
+    $this->assertNotEmpty($cacheKey);
+    $this->assertTrue(strlen($cacheKey) < 172, "Transient key must be <172 characters!");
+    $this->assertSame($cacheKey, YesTicketCache::getInstance()->cacheKey($very_long_url), "Should be deterministic.");
+    $this->assertFalse(
+      YesTicketCache::getInstance()->cacheKey('a') == YesTicketCache::getInstance()->cacheKey('b'),
+      "Should return different results for different inputs"
+    );
+  }
+
+  /**
    * @covers YesTicketCache::clear
    */
   function test_clear()
