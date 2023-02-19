@@ -86,7 +86,7 @@ class YesTicketCache
      * 
      * @return string Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
      */
-    private function cacheKey($get_url)
+    public function cacheKey($get_url)
     {
         return 'yesticket_' . md5($get_url);
     }
