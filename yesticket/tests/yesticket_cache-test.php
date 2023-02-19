@@ -1,6 +1,6 @@
 <?php
 
-class YesTicketCacheTest extends \WP_Mock\Tools\TestCase
+class YesTicketCacheTest extends WP_UnitTestCase
 {
 
   function test_class_exists()
@@ -13,15 +13,7 @@ class YesTicketCacheTest extends \WP_Mock\Tools\TestCase
   }
   function test_clear()
   {
-    \WP_Mock::setUp();
-    \WP_Mock::userFunction( 'get_option', array(
-      'times' => 1,
-      'args' => array('*'),
-      'return' => array(),
-    ) );
-    get_option('aaa');
     YesTicketCache::getInstance()->clear();
-    \WP_Mock::tearDown();
   }
 
 }
