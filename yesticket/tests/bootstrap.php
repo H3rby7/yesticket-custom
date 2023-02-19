@@ -20,8 +20,6 @@ require_once $_tests_dir . '/includes/functions.php';
 // Autoload
 require_once $_composer_home . '/vendor/autoload.php';
 
-// require_once $_tests_dir . '/includes/testcase.php';
-
 /**
  * Manually load the plugin being tested.
  */
