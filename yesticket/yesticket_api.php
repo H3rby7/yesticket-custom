@@ -209,7 +209,7 @@ class YesTicketApi
     {
         // Check to add 'env' path to API call
         $env_add = "";
-        if ($att["env"] == 'dev') {
+        if (!empty($att["env"]) && $att["env"] == 'dev') {
             $env_add = "/dev";
         }
 
@@ -249,14 +249,19 @@ class YesTicketApi
      */
     private function buildQueryParams($att)
     {
-        $queryParams = array(
-            "count" => $this->getAttLC($att, "count"),
-            "type" => $this->getAttLC($att, "type"),
-            "lang" => $this->getLocale(),
-            "organizer" => $this->getOrganizer($att),
-            "key" => $this->getApiKey($att),
-        );
-        return "?" . http_build_query($queryParams);
+        $params = array();
+        $this->addToArrayIfValueNotEmpty($params, "count", $this->getAttLC($att, "count"));
+        $this->addToArrayIfValueNotEmpty($params, "type", $this->getAttLC($att, "type"));
+        $this->addToArrayIfValueNotEmpty($params, "lang", $this->getLocale());
+        $this->addToArrayIfValueNotEmpty($params, "organizer", $this->getOrganizer($att));
+        $this->addToArrayIfValueNotEmpty($params, "key", $this->getApiKey($att));
+        return "?" . http_build_query($params);
+    }
+
+    private function addToArrayIfValueNotEmpty(&$arr, $key, $value) {
+        if (!empty($value)) {
+            $arr[$key] = $value;
+        }
     }
 
     /**
@@ -276,18 +281,13 @@ class YesTicketApi
     }
 
     /**
-     * Get the current locale in short format (only part before first _underscore_)
+     * Get the primary language of the current locale
      * 
-     * @return string the shortened locale
+     * @return string primary language
      */
     private function getLocale()
     {
-        $lang = get_locale();
-        $langUnderscorePos = strpos($lang, "_");
-        if ($langUnderscorePos != false and $langUnderscorePos > -1) {
-            $lang = substr($lang, 0, $langUnderscorePos);
-        }
-        return $lang;
+        return locale_get_primary_language(get_locale());
     }
 
     /**
