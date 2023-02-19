@@ -9,6 +9,9 @@ services:
         VERSION_PHP: 7.3
         VERSION_PHP_UNIT: 8
     working_dir: /app
+    environment:
+      WP_CORE_DIR: "/tmp/vendor/johnpbloch/wordpress-core"
+      WP_TESTS_PHPUNIT_POLYFILLS_PATH: "/tmp/vendor/yoast/phpunit-polyfills/"
     volumes:
       - "./yesticket/:/app"
       - "./bin/:/mount/bin"

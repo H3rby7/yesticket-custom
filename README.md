@@ -129,6 +129,8 @@ TODO:
 
 For a list of common assertions [see this](https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#using-assertions).
 
+See [here](https://github.com/10up/wp_mock) for mocking wp functions.
+
 ### Setup automated Tests
 
 Make sure the scripts in `bin` have `LF` line-endings!
