@@ -69,43 +69,13 @@ class YesTicketCache
     private function getData($get_url)
     {
         $this->logRequestMasked($get_url);
-        if (function_exists('curl_version')) {
-            $ch = curl_init();
-            $timeout = 4;
-            curl_setopt($ch, CURLOPT_URL, $get_url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            $get_content = curl_exec($ch);
-            curl_close($ch);
-        } elseif (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-            ini_set('default_socket_timeout', 4);
-            $ctx = stream_context_create(array(
-                'http' =>
-                array(
-                    'timeout' => 4,  // seconds
-                )
-            ));
-            $get_content = file_get_contents($get_url, 0, $ctx);
-        } else {
-            throw new Exception('We require "cURL" or "allow_url_fopen". Please contact your web hosting provider to install/activate one of the features.');
-        }
-        if (empty($get_content) && file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
-            // in Case of a CURL-error
-            ini_set('default_socket_timeout', 4);
-            $ctx = stream_context_create(array(
-                'http' =>
-                array(
-                    'timeout' => 4,  // seconds
-                )
-            ));
-            $get_content = file_get_contents($get_url, 0, $ctx);
-        }
-        if (empty($get_content)) {
+        $http = new WP_Http;
+        $result = $http->get($get_url);
+        $get_content = $result['body'];
+        if (empty($get_content) || $result['response']['code'] != 200) {
             throw new RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
         }
         $result = json_decode($get_content);
-        //return(json_last_error());
         return $result;
     }
 
