@@ -41,6 +41,13 @@ class YesTicketApiTest extends WP_UnitTestCase
     $this->assertNotEmpty(YesTicketApi::getInstance());
   }
 
+  private function setOptions($organizer_id, $api_key) {
+    update_option('yesticket_settings_required', array(
+      'organizer_id' => $organizer_id,
+      'api_key' => $api_key,
+    ));
+  }
+
   private function expect($url)
   {
     $mock_result = 'mocked-body';
@@ -145,10 +152,10 @@ class YesTicketApiTest extends WP_UnitTestCase
       return 'en_EN';
     });
     $att = array();
-    // TODO: update_options!
+    $this->setOptions('1', 'key1');
     
     // Prepare our mock
-    $mock_result = $this->expect("https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1");
+    $mock_result = $this->expect("https://www.yesticket.org/api/v2/events.php?lang=en&organizer=1&key=key1");
     
     $result = YesTicketApi::getInstance()->getEvents($att);
     $this->assertSame($mock_result, $result);
