@@ -15,6 +15,12 @@ class YesTicketApiTest extends WP_UnitTestCase
     $this->assertNotEmpty(YesTicketApi::getInstance());
   }
 
+  /**
+   * Initiate Mock for @see YesTicketCache
+   * 
+   * @param string $expected_url
+   * @return string the response the mock will return
+   */
   private function initMock($expected_url)
   {
     $_cache_property = new ReflectionProperty(YesTicketApi::class, "cache");
