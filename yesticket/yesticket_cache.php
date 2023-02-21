@@ -22,15 +22,10 @@ class YesTicketCache
         if (!isset(YesTicketCache::$instance)) {
             YesTicketCache::$instance = new YesTicketCache();
         }
+        if (!get_option('yesticket_transient_keys', false)) {
+            add_option('yesticket_transient_keys', array());
+        }
         return YesTicketCache::$instance;
-    }
-
-    /**
-     * Constructor, use add_option to register the array of cached keys
-     */
-    public function __construct()
-    {
-        add_option('yesticket_transient_keys', array());
     }
 
     /**

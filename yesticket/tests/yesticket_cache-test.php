@@ -42,7 +42,6 @@ class YesTicketCacheTest extends WP_UnitTestCase
   function test_clear()
   {
     // Empty option, expect no error
-    update_option($this->opt_key, array());
     YesTicketCache::getInstance()->clear();
     $this->assertIsArray(get_option($this->opt_key));
     $this->assertCount(0, get_option($this->opt_key));
