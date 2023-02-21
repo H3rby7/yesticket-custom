@@ -10,18 +10,23 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketCache::getInstance
+   * @covers YesTicketCache
    */
   function test_get_instance()
   {
+    $_class = new ReflectionClass(YesTicketCache::class);
+    $_instance_prop = $_class->getProperty("instance");
+    $_instance_prop->setAccessible(true);
+    $_instance_prop->setValue(NULL);
     $this->assertNotEmpty(YesTicketCache::getInstance());
     $opt = get_option($this->opt_key);
     $this->assertIsArray($opt);
     $this->assertCount(0, $opt);
+    $_instance_prop->setAccessible(false);
   }
 
   /**
-   * @covers YesTicketCache::cacheKey
+   * @covers YesTicketCache
    */
   function test_cacheKey()
   {
@@ -37,7 +42,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketCache::clear
+   * @covers YesTicketCache
    */
   function test_clear()
   {
@@ -86,7 +91,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketCache::getFromCacheOrFresh
+   * @covers YesTicketCache
    */
   function test_getFromCacheOrFresh()
   {
