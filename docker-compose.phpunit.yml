@@ -8,10 +8,11 @@ services:
       args:
         VERSION_PHP: 7.3
         VERSION_PHP_UNIT: 8
-    working_dir: /app
+    working_dir: /app/yesticket
+    environment:
+      XDEBUG_MODE: "coverage"
     volumes:
-      - "./yesticket/:/app"
-      - "./bin/:/mount/bin"
+      - "./:/app"
       - "testsuite:/tmp"
   mysql_phpunit:
     image: "mariadb:10.2"

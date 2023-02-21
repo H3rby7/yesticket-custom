@@ -134,7 +134,7 @@ For a list of common assertions [see this](https://make.wordpress.org/core/handb
 Make sure the scripts in `bin` have `LF` line-endings!
 
     docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d --build
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /mount/bin/install-wp-tests.sh wordpress_test root test mysql_phpunit latest true
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /app/bin/install-wp-tests.sh wordpress_test root test mysql_phpunit latest true
 
 ### Running automated Tests
 
