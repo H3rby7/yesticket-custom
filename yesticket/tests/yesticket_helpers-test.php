@@ -3,7 +3,7 @@
 class YesTicketHelpersTest extends WP_UnitTestCase
 {
   /**
-   * @covers ytp_getImageUrl
+   * @covers ::ytp_getImageUrl
    */
   function test_ytp_getImageUrl()
   {
@@ -12,7 +12,7 @@ class YesTicketHelpersTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers is_countable
+   * @covers ::is_countable
    */
   function test_is_countable()
   {
