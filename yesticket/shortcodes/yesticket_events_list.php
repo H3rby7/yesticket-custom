@@ -88,13 +88,8 @@ class YesTicketEventsList
     private function render_list($result, $att)
     {
         $content = "<ol>\n";
-        $count = 0;
         foreach ($result as $item) {
             $content .= $this->render_list_item($item, $att);
-            $count++;
-            if ($count == (int)$att["count"]) {
-                break;
-            }
         }
         $content .= "</ol>\n";
         return $content;

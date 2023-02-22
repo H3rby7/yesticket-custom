@@ -179,8 +179,32 @@ class YesTicketApi
     public function getEvents($att)
     {
         $this->validateArguments($att);
-        $apiCall = $this->buildUrl($att, "events");
-        return $this->cache->getFromCacheOrFresh($apiCall);
+        $result = null;
+        if (empty($att["grep"])) {
+            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events'");
+            // We don't  filter on our side. Easy API call.
+            $apiCall = $this->buildUrl($att, "events");
+            $result = $this->cache->getFromCacheOrFresh($apiCall);
+        } else {
+            // if we 'grep' (filter events manually on our side)
+            $_count = $att["count"];
+            // we unset 'count' to call the api for more elements than needed.
+            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events without \"count\", because \"grep\" is in use.'");
+            $att["count"] = null;
+            $apiCall = $this->buildUrl($att, "events");
+            $unfiltered = $this->cache->getFromCacheOrFresh($apiCall);
+            $att["count"] = $_count;
+            // we filter the items
+            $result = $this->applyGrep($unfiltered, $att);
+        }
+        if (empty($att["count"]) || !is_numeric($att["count"]) || !is_countable($result)) {
+            // no count set or $result uncountable, just return list
+            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all events'");
+            return $result;
+        }
+        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning only " . $att["count"] . " events'");
+        // apply count to the list (because of 'grep' and to support counted events in case of v1 api call)
+        return array_slice($result, 0, $att["count"]);
     }
 
     /**
@@ -194,7 +218,32 @@ class YesTicketApi
     {
         $this->validateArguments($att);
         $apiCall = $this->buildUrl($att, "testimonials");
-        return $this->cache->getFromCacheOrFresh($apiCall);
+        $result = $this->cache->getFromCacheOrFresh($apiCall);
+        if (empty($att["count"]) || !is_numeric($att["count"]) || !is_countable($result)) {
+            // no count set or $result uncountable, just return list
+            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all testimonials'");
+            return $result;
+        }
+        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning only " . $att["count"] . " testimonials'");
+        // apply count to the list (to support counted events in case of v1 api call)
+        return array_slice($result, 0, $att["count"]);
+    }
+
+    /**
+     * Filter events by their event_name containing the string defined in $att["grep"]
+     * 
+     * @param mixed $eventList the list of events
+     * @param array $att of shortcode
+     * @return mixed the filtered list
+     */
+    private function applyGrep($eventList, $att)
+    {
+        if (!isset($att["grep"]) || empty($att["grep"])) {
+            return $eventList;
+        }
+        return array_filter($eventList, function ($item) use ($att) {
+            return mb_stripos($item->event_name, $att["grep"]) !== FALSE;
+        });
     }
 
     /**
@@ -258,7 +307,8 @@ class YesTicketApi
         return "?" . http_build_query($params);
     }
 
-    private function addToArrayIfValueNotEmpty(&$arr, $key, $value) {
+    private function addToArrayIfValueNotEmpty(&$arr, $key, $value)
+    {
         if (!empty($value)) {
             $arr[$key] = $value;
         }

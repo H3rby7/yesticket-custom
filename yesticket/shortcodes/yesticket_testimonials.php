@@ -105,13 +105,8 @@ class YesTicketTestimonials
     private function render_testimonials($result, $att)
     {
         $content = "";
-        $count = 0;
         foreach ($result as $item) {
             $content .= $this->render_single_testimonial($item, $att);
-            $count++;
-            if ($count == (int)$att["count"]) {
-                break;
-            }
         }
         return $content;
     }

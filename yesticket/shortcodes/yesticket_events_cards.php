@@ -60,16 +60,7 @@ class YesTicketEventsCards
     {
         $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
         try {
-            $result = null;
-            if (empty($att["grep"])) {
-                $result = YesTicketApi::getInstance()->getEvents($att);
-            } else {
-                // if we 'grep' (filter events manually on our side), we make the api-call with more elements than needed.
-                $count = $att["count"];
-                $att["count"] = null;
-                $result = YesTicketApi::getInstance()->getEvents($att);
-                $att["count"] = $count;
-            }
+            $result = YesTicketApi::getInstance()->getEvents($att);
             if (!is_countable($result) or count($result) < 1) {
                 $content .= ytp_render_no_events();
             } else if (array_key_exists('message', $result) && $result->message == "no items found") {
@@ -95,7 +86,6 @@ class YesTicketEventsCards
     private function render_cards($result, $att)
     {
         $content = "";
-        $count = 0;
         foreach ($result as $item) {
             if (!empty($att["grep"])) {
                 if (mb_stripos($item->event_name, $att["grep"]) === FALSE) {
@@ -104,8 +94,6 @@ class YesTicketEventsCards
                 }
             }
             $content .= $this->render_single_card($item);
-            $count++;
-            if ($count == (int)$att["count"]) break;
         }
         if (empty($content)) {
             // content could be empty, if everything is filtered by 'grep'

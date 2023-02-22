@@ -87,13 +87,8 @@ class YesTicketEvents
     private function render_events($result, $att)
     {
         $content = "";
-        $count = 0;
         foreach ($result as $item) {
             $content .= $this->render_single_event($item, $att);
-            $count++;
-            if ($count == (int)$att["count"]) {
-                break;
-            }
         }
         return $content;
     }
