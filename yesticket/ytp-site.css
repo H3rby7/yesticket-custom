@@ -121,8 +121,10 @@
 	list-style: none;
 }
 .ytp-event-list ol,
-.ytp-event-list ul {
+.ytp-event-list ul,
+.ytp-event-list li {
 	padding-left: 0;
+	margin-left: 0;
 }
 .ytp-event-list-row {
 	padding-bottom: 20px;
