@@ -322,8 +322,8 @@ a:focus .ytp-event-card-image {
 
 .ytp-light {
 	--ytp-theme-light-color: #333;
-	--ytp-theme-light-color-background: #fff;
-	--ytp-theme-light-color-background-hover: #eee;
+	--ytp-theme-light-color-background: #eee;
+	--ytp-theme-light-color-background-hover: #ddd;
 	--ytp-theme-light-color-border: #fff;
 	--ytp-theme-light-color-border-hover: #eee;
 }
