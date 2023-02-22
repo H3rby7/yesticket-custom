@@ -127,17 +127,19 @@ TODO:
 
 [Credits to chriszarate](https://github.com/chriszarate/docker-compose-wordpress)
 
+For a list of common assertions [see this](https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#using-assertions).
+
 ### Setup automated Tests
 
 Make sure the scripts in `bin` have `LF` line-endings!
 
-    docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /mount/bin/install-wp-tests.sh wordpress_test root test mysql_phpunit latest true
+    docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d --build
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /app/bin/install-wp-tests.sh wordpress_test root test mysql_phpunit latest true
 
 ### Running automated Tests
 
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit [args...]
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit tests
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug [args...]
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug
 
 ### Stop automated Test Container
 

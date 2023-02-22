@@ -111,13 +111,15 @@ class YesTicketPluginOptions
    * 
    * @return string the option's content or the $default
    */
-  private function getOptionString($option_name, $option_key, $default)
+  private function getOptionString($option_name, $option_key, $default = NULL)
   {
     $options = get_option($option_name);
     if (!$options) {
+      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name was not found, returning default: $default'");
       return $default;
     }
-    if (empty($options[$option_key])) {
+    if (!isset($options[$option_key]) || empty($options[$option_key])) {
+      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name does not contain key $option_key, returning default: $default'");
       return $default;
     }
     return $options[$option_key];
@@ -132,13 +134,15 @@ class YesTicketPluginOptions
    * 
    * @return number the option's content or the $default
    */
-  private function getOptionNumber($option_name, $option_key, $default)
+  private function getOptionNumber($option_name, $option_key, $default = NULL)
   {
     $options = get_option($option_name);
     if (!$options) {
+      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name was not found, returning default: $default'");
       return $default;
     }
-    if (!is_numeric($options[$option_key])) {
+    if (!isset($options[$option_key]) || !is_numeric($options[$option_key])) {
+      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name does not contain key $option_key, returning default: $default'");
       return $default;
     }
     return $options[$option_key];
@@ -181,8 +185,7 @@ class YesTicketPluginOptions
   {
     return $this->getOptionNumber(
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
-      'organizer_id',
-      NULL
+      'organizer_id'
     );
   }
 
@@ -195,8 +198,7 @@ class YesTicketPluginOptions
   {
     return $this->getOptionString(
       YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
-      'api_key',
-      NULL
+      'api_key'
     );
   }
 
@@ -209,8 +211,7 @@ class YesTicketPluginOptions
   {
     return $this->getOptionNumber(
       YesTicketPluginOptions::SETTINGS_TECHNICAL_KEY,
-      'cache_time_in_minutes',
-      $this->settings_technical_args['default']['cache_time_in_minutes']
+      'cache_time_in_minutes'
     );
   }
 

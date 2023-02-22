@@ -1,4 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
 	bootstrap="tests/bootstrap.php"
 	backupGlobals="false"
 	colors="true"
@@ -7,8 +10,26 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite>
-			<directory prefix="class-test-" suffix=".php">./tests/</directory>
+		<testsuite name="standard">
+			<directory suffix="-test.php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./</directory>
+			<exclude>
+				<directory suffix=".php">*/templates/</directory>
+				<directory suffix=".php">./tests/</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+	<logging>
+		<log type="coverage-html" target="/app/coverage-reports/html" lowUpperBound="35" highLowerBound="70"/>
+		<log type="coverage-clover" target="/app/coverage-reports/coverage.xml"/>
+		<log type="coverage-php" target="/app/coverage-reports/coverage.serialized"/>
+		<log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+		<log type="junit" target="/app/coverage-reports/logfile.xml"/>
+		<log type="testdox-html" target="/app/coverage-reports/testdox.html"/>
+		<log type="testdox-text" target="/app/coverage-reports/testdox.txt"/>
+	</logging>
 </phpunit>
