@@ -129,10 +129,10 @@ class YesTicketApi
         if (!empty($att["type"])) {
             $type = $att["type"];
             if (
-                !strcasecmp($type, "all") and
-                !strcasecmp($type, "performance") and
-                !strcasecmp($type, "workshop") and
-                !strcasecmp($type, "festival")
+                strcasecmp($type, "all") != 0 and
+                strcasecmp($type, "performance") != 0 and
+                strcasecmp($type, "workshop") != 0 and
+                strcasecmp($type, "festival") != 0
             ) {
                 throw new InvalidArgumentException(
                     /* translators: Error message, if the shortcode uses wrong/invalid types*/
