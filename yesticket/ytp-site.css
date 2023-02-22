@@ -103,11 +103,17 @@
 		text-align: center;
 	}
 }
-@media only screen and (min-width: 420px) {
-	.ytp-testimonial-row > div {
-		max-width: 60%;
+@media only screen and (min-width: 600px) {
+	.ytp-jump .ytp-testimonial-row > div {
+		/* Reduce %-age of taken space as screen is bigger. */
+		max-width: 60% !important;
 	}
-	.ytp-testimonial-row:nth-child(even) > div {
+}
+@media only screen and (min-width: 420px) {
+	.ytp-jump .ytp-testimonial-row > div {
+		max-width: 80%;
+	}
+	.ytp-jump .ytp-testimonial-row:nth-child(even) > div {
 		float: right;
 		text-align: right;
 	}

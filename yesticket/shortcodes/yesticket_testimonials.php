@@ -18,6 +18,7 @@ function ytp_shortcode_testimonials($atts)
         'type' => 'all',
         'count' => '3',
         'theme' => 'light',
+        'design' => 'basic',
         'details' => 'no',
     ), $atts);
     return YesTicketTestimonials::getInstance()->get($att);
@@ -57,7 +58,8 @@ class YesTicketTestimonials
      */
     public function get($att)
     {
-        $content = ytp_render_shortcode_container_div("ytp-testimonials", $att);
+        $classes = $this->getDesignClasses($att);
+        $content = ytp_render_shortcode_container_div($classes, $att);
         try {
             $result = YesTicketApi::getInstance()->getTestimonials($att);
             if (!is_countable($result) or count($result) < 1) {
@@ -72,6 +74,24 @@ class YesTicketTestimonials
         }
         $content .= "</div>\n";
         return $content;
+    }
+
+    /**
+     * Get css classes for the shortcode container
+     * @param array $att the shortcode parameters
+     * @return string css classes to put in attribute 'class=...'
+     */
+    private function getDesignClasses($att)
+    {
+        $shortcode_class = "ytp-testimonials";
+        if (!isset($att["design"])) {
+            return $shortcode_class;
+        }
+        $design = $att["design"];
+        if (strcasecmp($design, "basic") == 0 || strcasecmp($design, "jump") == 0) {
+            return "$shortcode_class ytp-$design";
+        }
+        return $shortcode_class . " design-must-be-basic-or-jump";
     }
 
     /**
@@ -108,7 +128,6 @@ class YesTicketTestimonials
     {
         $text = htmlentities($item->text);
         $source = $this->render_source($item, $att["details"] == "yes");
-        $about_event = "";
         return <<<EOD
         <div class='ytp-testimonial-row'><div>
             <span class="ytp-testimonial-text">&raquo;$text&laquo;</span>

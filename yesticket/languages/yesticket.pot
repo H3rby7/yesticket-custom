@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 22:07+0000\n"
+"POT-Creation-Date: 2023-02-22 15:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -17,13 +17,13 @@ msgstr ""
 "X-Domain: yesticket"
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
-#: shortcodes/yesticket_testimonials.php:94
+#: shortcodes/yesticket_testimonials.php:163
 #, php-format
 msgid "%1$s on %2$s about '%3$s'."
 msgstr ""
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
-#: shortcodes/yesticket_testimonials.php:87
+#: shortcodes/yesticket_testimonials.php:156
 #, php-format
 msgid "%1$s on %2$s."
 msgstr ""
@@ -33,7 +33,7 @@ msgid "?page=yesticket-plugin"
 msgstr ""
 
 #. %s is replaced with the shortcode, e.G. 'yesticket_events'
-#: admin/examples_page.php:115
+#: admin/examples_page.php:126
 #, php-format
 msgid "[%s] preview"
 msgstr ""
@@ -44,25 +44,25 @@ msgid "a maximum of 6 events is displayed"
 msgstr ""
 
 #. When no audience feedback can be found.
-#: shortcodes/yesticket_shortcode_helpers.php:12
+#: shortcodes/yesticket_shortcode_helpers.php:18
 msgid "At this time no audience feedback is present."
 msgstr ""
 
 #. When no upcoming events can be found.
-#: shortcodes/yesticket_shortcode_helpers.php:7
+#: shortcodes/yesticket_shortcode_helpers.php:10
 msgid "At this time no upcoming events are available."
 msgstr ""
 
-#: admin/templates/shortcode_options_theme.php:4
+#: admin/templates/shortcode_options_theme.php:5
 msgid "Buttons will be in a dark grey and match darker backgrounds"
 msgstr ""
 
 #: admin/templates/shortcode_options_theme.php:2
-#: admin/templates/shortcode_options_theme.php:3
+#: admin/templates/shortcode_options_theme.php:4
 msgid "Buttons will be in a light grey and match lighter backgrounds"
 msgstr ""
 
-#: admin/settings_technical.php:37
+#: admin/settings_technical.php:43
 msgid "Cache time in minutes"
 msgstr ""
 
@@ -71,12 +71,12 @@ msgstr ""
 msgid "Cards"
 msgstr ""
 
-#: admin/settings_technical.php:99
+#: admin/settings_technical.php:110
 msgid "Change these settings at your own risk."
 msgstr ""
 
 #. Text on a button, use imperativ if possible.
-#: admin/settings_technical.php:83
+#: admin/settings_technical.php:93
 msgid "Clear Cache"
 msgstr ""
 
@@ -85,8 +85,12 @@ msgid "Count"
 msgstr ""
 
 #. Success Message after clearing cache
-#: admin/settings_technical.php:112
+#: admin/settings_technical.php:123
 msgid "Deleted the cache."
+msgstr ""
+
+#: admin/templates/examples_testimonials.php:10
+msgid "Design"
 msgstr ""
 
 #: admin/templates/examples_events.php:4
@@ -105,17 +109,17 @@ msgid "Everything, mixed"
 msgstr ""
 
 #. date format when using only the date, see http://php.net/date
-#: shortcodes/yesticket_shortcode_helpers.php:45
+#: shortcodes/yesticket_shortcode_helpers.php:79
 msgid "F j, Y"
 msgstr ""
 
 #. date format when using date and time, see http://php.net/date
-#: shortcodes/yesticket_shortcode_helpers.php:38
+#: shortcodes/yesticket_shortcode_helpers.php:65
 msgid "F j, Y \\a\\t g:i A"
 msgstr ""
 
 #. Event Type 'Festival'
-#: shortcodes/yesticket_shortcode_helpers.php:26
+#: shortcodes/yesticket_shortcode_helpers.php:39
 msgid "Festival"
 msgstr ""
 
@@ -124,11 +128,11 @@ msgid "Filter"
 msgstr ""
 
 #. time format when using only the time, see http://php.net/date
-#: shortcodes/yesticket_shortcode_helpers.php:52
+#: shortcodes/yesticket_shortcode_helpers.php:93
 msgid "g:i A"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:107
+#: shortcodes/yesticket_events.php:156
 msgid "Hints"
 msgstr ""
 
@@ -146,14 +150,14 @@ msgstr ""
 msgid "https://www.yesticket.org/login/en/integration.php#wp-plugin"
 msgstr ""
 
-#: admin/templates/shortcode_options_theme.php:5
+#: admin/templates/shortcode_options_theme.php:6
 msgid ""
 "If you do not provide a theme only basic formatting is applied. This is an "
 "option to provide your own clean CSS. Maybe you are a Webdesigner after all?"
 msgstr ""
 
 #. The sentence ends with a button 'Clear Cache' (can be translated at that msgId)
-#: admin/settings_technical.php:81
+#: admin/settings_technical.php:91
 msgid "If your changes in YesTicket are not reflected fast enough, try to: "
 msgstr ""
 
@@ -162,7 +166,7 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:111
+#: shortcodes/yesticket_events.php:160
 msgid "Location"
 msgstr ""
 
@@ -201,22 +205,22 @@ msgstr ""
 msgid "Options for testimonial shortcodes"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:114
+#: shortcodes/yesticket_events.php:163
 msgid "Order Tickets"
 msgstr ""
 
 #. Event Type 'Performance'
-#: shortcodes/yesticket_shortcode_helpers.php:18
+#: shortcodes/yesticket_shortcode_helpers.php:31
 msgid "Performance"
 msgstr ""
 
 #. Error message, if the plugin is not properly configured
-#: yesticket_api.php:107
+#: yesticket_api.php:115
 msgid "Please configure your 'key' in the plugin settings."
 msgstr ""
 
 #. Error message, if the plugin is not properly configured
-#: yesticket_api.php:101
+#: yesticket_api.php:98
 msgid "Please configure your 'organizer-id' in the plugin settings."
 msgstr ""
 
@@ -228,7 +232,7 @@ msgid ""
 msgstr ""
 
 #. Error message, if the shortcode uses wrong/invalid types
-#: yesticket_api.php:120
+#: yesticket_api.php:139
 msgid ""
 "Please provide a valid 'type'. If you omit the attribute it will default to "
 "'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'."
@@ -246,16 +250,16 @@ msgstr ""
 msgid "Required"
 msgstr ""
 
-#: admin/settings_required.php:31
+#: admin/settings_required.php:35
 msgid "Required Settings"
 msgstr ""
 
 #. Success Message after updating settings
-#: admin/settings_required.php:114
+#: admin/settings_required.php:129
 msgid "Settings saved."
 msgstr ""
 
-#: admin/examples_page.php:49 admin/templates/examples_wrapper.php:3
+#: admin/examples_page.php:52 admin/templates/examples_wrapper.php:3
 msgid "Shortcodes"
 msgstr ""
 
@@ -275,7 +279,7 @@ msgstr ""
 msgid "Shortcodes for your testimonials."
 msgstr ""
 
-#: shortcodes/yesticket_events.php:106
+#: shortcodes/yesticket_events.php:155
 msgid "Show details"
 msgstr ""
 
@@ -284,7 +288,7 @@ msgstr ""
 msgid "Technical"
 msgstr ""
 
-#: admin/settings_technical.php:31
+#: admin/settings_technical.php:37
 msgid "Technical Settings"
 msgstr ""
 
@@ -294,16 +298,26 @@ msgid "Testimonials"
 msgstr ""
 
 #. Error message, if the shortcode uses a non-numeric api-version
-#: yesticket_api.php:129
+#: yesticket_api.php:159
 msgid "The hidden field 'api-version' must be numeric."
 msgstr ""
 
 #. Error message, if the shortcode uses an unknown api-version
-#: yesticket_api.php:136
+#: yesticket_api.php:166
 msgid "The hidden field 'api-version' must provide a valid version."
 msgstr ""
 
-#: yesticket_api.php:88
+#. Explanation of using the shortcode option 'design="basic"' for testimonials
+#: admin/templates/examples_testimonials.php:16
+msgid "the testimonials are aligned left"
+msgstr ""
+
+#. Explanation of using the shortcode option 'design="jump"' for testimonials
+#: admin/templates/examples_testimonials.php:20
+msgid "the testimonials are aligned left/right in turns."
+msgstr ""
+
+#: yesticket_cache.php:71
 msgid "The YesTicket service is currently unavailable. Please try again later."
 msgstr ""
 
@@ -311,7 +325,7 @@ msgstr ""
 msgid "Theme"
 msgstr ""
 
-#: shortcodes/yesticket_events.php:71 shortcodes/yesticket_events.php:109
+#: shortcodes/yesticket_events.php:112 shortcodes/yesticket_events.php:158
 msgid "Tickets"
 msgstr ""
 
@@ -321,6 +335,16 @@ msgstr ""
 
 #: admin/templates/shortcode_options_count.php:2
 msgid "Using <b>count</b> you can define the maximum amount of elements."
+msgstr ""
+
+#: admin/templates/examples_testimonials.php:11
+msgid "Using <b>design</b> you can choose between different preset layouts."
+msgstr ""
+
+#: admin/templates/examples_testimonials.php:5
+msgid ""
+"Using <b>details</b> you can display the corresponding event to a "
+"testimonial."
 msgstr ""
 
 #: admin/templates/examples_events.php:5
@@ -341,10 +365,6 @@ msgstr ""
 msgid "Using <b>type</b> you can filter your testimonials by type."
 msgstr ""
 
-#: admin/templates/examples_testimonials.php:5
-msgid "Using details you can display the corresponding event to a testimonial."
-msgstr ""
-
 #. The sentence actually starts with a non-translatable codeblock 'details="yes"'
 #: admin/templates/examples_testimonials.php:9
 msgid "will add the event name to each testimonial, if present."
@@ -361,7 +381,7 @@ msgid "will show a link to expand the details."
 msgstr ""
 
 #. Event Type 'Workshop'
-#: shortcodes/yesticket_shortcode_helpers.php:22
+#: shortcodes/yesticket_shortcode_helpers.php:35
 msgid "Workshop"
 msgstr ""
 
@@ -379,11 +399,11 @@ msgid ""
 "creative!"
 msgstr ""
 
-#: admin/examples_page.php:59
+#: admin/examples_page.php:62
 msgid "YesTicket Plugin Shortcodes"
 msgstr ""
 
-#: admin/settings_page.php:50
+#: admin/settings_page.php:54
 msgid "Yesticket Settings"
 msgstr ""
 
@@ -403,11 +423,11 @@ msgid ""
 msgstr ""
 
 #. Please keep the quotation marks!
-#: admin/settings_required.php:46
+#: admin/settings_required.php:50
 msgid "Your 'key'"
 msgstr ""
 
 #. Please keep the quotation marks!
-#: admin/settings_required.php:38
+#: admin/settings_required.php:42
 msgid "Your 'organizer-ID'"
 msgstr ""
