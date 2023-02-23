@@ -65,7 +65,7 @@ class YesTicketApi
      */
     private function getLatestApiVersion()
     {
-        return count($this->apiEndpoints);
+        return max(array_keys($this->apiEndpoints));
     }
 
     /**
@@ -151,19 +151,14 @@ class YesTicketApi
      */
     private function throw_on_invalid_api_version($att)
     {
-        if (!empty($att["api-version"])) {
-            $apiVersion = $att["api-version"];
-            if (!is_numeric($apiVersion)) {
+        if (array_key_exists("api-version", $att)) {
+            if (!array_key_exists($att["api-version"], $this->apiEndpoints)) {
                 throw new InvalidArgumentException(
-                    /* translators: Error message, if the shortcode uses a non-numeric api-version */
-                    __("The hidden field 'api-version' must be numeric.", "yesticket")
-                );
-            }
-            $latestApiVersion = $this->getLatestApiVersion();
-            if ($apiVersion > $latestApiVersion) {
-                throw new InvalidArgumentException(
-                    /* translators: Error message, if the shortcode uses an unknown api-version */
-                    __("The hidden field 'api-version' must provide a valid version.", "yesticket")
+                    sprintf(
+                        /* translators: Error message, if the shortcode uses an invalid api-version - %1$s is replaced with the highest possible version */
+                        __('The hidden field "api-version" must be an int bigger or equal to 1 and smaller or equal to %1$s.', "yesticket"),
+                        $this->getLatestApiVersion()
+                    )
                 );
             }
         }

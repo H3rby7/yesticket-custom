@@ -8,7 +8,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi::getInstance
+   * @covers YesTicketApi
    */
   function test_get_instance()
   {
@@ -19,6 +19,7 @@ class YesTicketApiTest extends WP_UnitTestCase
    * Initiate Mock for @see YesTicketCache
    * 
    * @param string $expected_url
+   * @param PHPUnit_Framework_MockObject_Matcher_InvokedCount $expected_times
    * @return string the response the mock will return
    */
   private function initMock($expected_url)
@@ -41,7 +42,8 @@ class YesTicketApiTest extends WP_UnitTestCase
   /**
    * Prepare Mocks, filters and options for call
    */
-  private function prepare($locale = 'en_EN', $opt_organizer = NULL, $opt_key = NULL, $expected) {
+  private function prepare($locale = 'en_EN', $opt_organizer = NULL, $opt_key = NULL, $expected)
+  {
     // Mock locale
     add_filter('locale', function () use (&$locale) {
       return $locale;
@@ -69,7 +71,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi::getEvents
+   * @covers YesTicketApi
    */
   function test_getEvents()
   {
@@ -91,7 +93,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi::getTestimonials
+   * @covers YesTicketApi
    */
   function test_getTestimonials()
   {
@@ -106,9 +108,190 @@ class YesTicketApiTest extends WP_UnitTestCase
     $this->run_testimonials('en_EN', array('env' => 'dev'), '1', 'key1', "https://www.yesticket.org/dev/api/v2/testimonials.php?lang=en&organizer=1&key=key1");
     // count = 50
     $this->run_testimonials('en_EN', array('count' => '50'), '1', 'key1', "$base_uri?count=50&lang=en&organizer=1&key=key1");
-    // type = all
+    // types
     $this->run_testimonials('en_EN', array('type' => 'all'), '1', 'key1', "$base_uri?type=all&lang=en&organizer=1&key=key1");
+    $this->run_testimonials('en_EN', array('type' => 'performance'), '1', 'key1', "$base_uri?type=performance&lang=en&organizer=1&key=key1");
+    $this->run_testimonials('en_EN', array('type' => 'workshop'), '1', 'key1', "$base_uri?type=workshop&lang=en&organizer=1&key=key1");
+    $this->run_testimonials('en_EN', array('type' => 'festival'), '1', 'key1', "$base_uri?type=festival&lang=en&organizer=1&key=key1");
     // api-version = 1
     $this->run_testimonials('en_EN', array('api-version' => '1'), '1', 'key1', "https://www.yesticket.org/api/testimonials-endpoint.php?lang=en&organizer=1&key=key1");
+  }
+
+  private function run_events_forThrows($req_settings, $att, $exception, $exception_msg)
+  {
+    add_filter('locale', function () {
+      return 'en_EN';
+    });
+    update_option('yesticket_settings_required', $req_settings);
+    $this->expectException($exception);
+    $this->expectExceptionMessage($exception_msg);
+    YesTicketApi::getInstance()->getEvents($att);
+  }
+
+  private function run_testimonials_forThrows($req_settings, $att, $exception, $exception_msg)
+  {
+    add_filter('locale', function () {
+      return 'en_EN';
+    });
+    update_option('yesticket_settings_required', $req_settings);
+    $this->expectException($exception);
+    $this->expectExceptionMessage($exception_msg);
+    YesTicketApi::getInstance()->getTestimonials($att);
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getEventsMissingOrganizer_expectThrows()
+  {
+    $this->run_events_forThrows(
+      array('organizer_id' => NULL, 'api_key' => NULL),
+      array('key' => 'anyApiKey'),
+      InvalidArgumentException::class,
+      "Please configure your 'organizer-id'"
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getEventsMissingApiKey_expectThrows()
+  {
+    $this->run_events_forThrows(
+      array('organizer_id' => NULL, 'api_key' => NULL),
+      array('organizer' => '1'),
+      InvalidArgumentException::class,
+      "Please configure your 'key'"
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getEventsInvalidType_expectThrows()
+  {
+    $this->run_events_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('type' => 'an-invalid-type'),
+      InvalidArgumentException::class,
+      "Please provide a valid 'type'"
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getEventsApiVersionNonNumeric_expectThrows()
+  {
+    $this->run_events_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('api-version' => 'a string'),
+      InvalidArgumentException::class,
+      '"api-version" must be an int bigger or equal to 1 and smaller or equal to'
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getEventsApiVersionLowerThan1_expectThrows()
+  {
+    $this->run_events_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('api-version' => 0),
+      InvalidArgumentException::class,
+      '"api-version" must be an int bigger or equal to 1 and smaller or equal to'
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getEventsApiVersionBiggerThan2_expectThrows()
+  {
+    $this->run_events_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('api-version' => '3'),
+      InvalidArgumentException::class,
+      '"api-version" must be an int bigger or equal to 1 and smaller or equal to'
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getTestimonialsMissingOrganizer_expectThrows()
+  {
+    $this->run_testimonials_forThrows(
+      array('organizer_id' => NULL, 'api_key' => NULL),
+      array('key' => 'anyApiKey'),
+      InvalidArgumentException::class,
+      "Please configure your 'organizer-id'"
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getTestimonialsMissingApiKey_expectThrows()
+  {
+    $this->run_testimonials_forThrows(
+      array('organizer_id' => NULL, 'api_key' => NULL),
+      array('organizer' => '1'),
+      InvalidArgumentException::class,
+      "Please configure your 'key'"
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getTestimonialsInvalidType_expectThrows()
+  {
+    $this->run_testimonials_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('type' => 'an-invalid-type'),
+      InvalidArgumentException::class,
+      "Please provide a valid 'type'"
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getTestimonialsApiVersionNonNumeric_expectThrows()
+  {
+    $this->run_testimonials_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('api-version' => 'a string'),
+      InvalidArgumentException::class,
+      '"api-version" must be an int bigger or equal to 1 and smaller or equal to'
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getTestimonialsApiVersionLowerThan1_expectThrows()
+  {
+    $this->run_testimonials_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('api-version' => 0),
+      InvalidArgumentException::class,
+      '"api-version" must be an int bigger or equal to 1 and smaller or equal to'
+    );
+  }
+
+  /**
+   * @covers YesTicketApi
+   */
+  function test_getTestimonialsApiVersionBiggerThan2_expectThrows()
+  {
+    $this->run_testimonials_forThrows(
+      array('organizer_id' => '1', 'api_key' => 'key1'),
+      array('api-version' => '3'),
+      InvalidArgumentException::class,
+      '"api-version" must be an int bigger or equal to 1 and smaller or equal to'
+    );
   }
 }
