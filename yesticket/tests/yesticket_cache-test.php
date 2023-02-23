@@ -103,6 +103,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $pre_http_request_filter_has_run = false;
     $external_call_url = '';
     // Setup MOCK for HTTP call
+    remove_all_filters('pre_http_request');
     add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use (&$pre_http_request_filter_has_run, &$external_call_url) {
       $pre_http_request_filter_has_run = true;
       $external_call_url = $url;
@@ -111,7 +112,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
         'cookies'     => array(),
         'filename'    => null,
         'response'    => array('code' => WP_Http::OK, 'message' => 'OK'),
-        'status_code' => 200,
+        'status_code' => WP_Http::OK,
         'success'     => 1,
         'body'        => '{"a-key": "a-value"}',
       );
@@ -122,10 +123,10 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $external_call_url = '';
     delete_transient($cacheKey);
     // Call
-    $result = YesTicketCache::getInstance()->getFromCacheOrFresh('test-url');
+    $result = YesTicketCache::getInstance()->getFromCacheOrFresh($get_url);
     // Check Mock was invoked
     $this->assertTrue($pre_http_request_filter_has_run, "Should make HTTP call.");
-    $this->assertSame($external_call_url, "test-url", "Called wrong url");
+    $this->assertSame($external_call_url, $get_url, "Called wrong url");
     // Check response from Mock was used
     $this->assertNotEmpty($result);
     $this->assertNotEmpty($result->{'a-key'}, "Expect result to match mocked response");
@@ -140,10 +141,35 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $pre_http_request_filter_has_run = false;
     $external_call_url = '';
     // Call
-    $result = YesTicketCache::getInstance()->getFromCacheOrFresh('test-url');
+    $result = YesTicketCache::getInstance()->getFromCacheOrFresh($get_url);
     $this->assertFalse($pre_http_request_filter_has_run, "Should have used the cache.");
     $this->assertNotEmpty($result);
     $this->assertNotEmpty($result->{'a-key'}, "Expect result to match cached response");
     $this->assertSame('a-value', $result->{'a-key'}, "Expect result to match cached response");
+  }
+
+  /**
+   * @covers YesTicketCache
+   */
+  function test_gettingErrorFromApi()
+  {
+    $get_url = 'test-url';
+    delete_transient(YesTicketCache::getInstance()->cacheKey($get_url));
+
+    // Setup MOCK for HTTP call
+    remove_all_filters('pre_http_request');
+    add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
+      return array(
+        'headers'     => array(),
+        'cookies'     => array(),
+        'filename'    => null,
+        'response'    => array('code' => WP_Http::SERVICE_UNAVAILABLE, 'message' => 'API down for maintainance'),
+        'status_code' => WP_Http::SERVICE_UNAVAILABLE,
+        'success'     => 0,
+        'body'        => '',
+      );
+    }, 10, 3);
+    $this->expectException(RuntimeException::class);
+    YesTicketCache::getInstance()->getFromCacheOrFresh($get_url);
   }
 }
