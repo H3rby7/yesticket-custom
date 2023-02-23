@@ -110,6 +110,15 @@ class YesTicketApiTest extends WP_UnitTestCase
     $base_uri = 'https://www.yesticket.org/api/v2/testimonials.php';
     // Basic
     $this->run_testimonials('en_EN', array(), '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    // Defaults of shortcode
+    $this->run_testimonials('en_EN', array(
+      'env' => NULL,
+      'api-version' => NULL,
+      'organizer' => NULL,
+      'key' => NULL,
+      'type' => 'all',
+      'count' => '9',
+    ), '1', 'key1', "$base_uri?count=9&type=all&lang=en&organizer=1&key=key1");
     // locale de_DE
     $this->run_testimonials('de_DE', array(), '1', 'key1', "$base_uri?lang=de&organizer=1&key=key1");
     // Different organizer & key
