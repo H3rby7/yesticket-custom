@@ -124,15 +124,19 @@ class YesTicketEvents
         }
         return <<<EOD
         <div class='ytp-event-row'>
-            <h3 class='ytp-event-name'>$event_name $event_type</h3>
-            <div class="ytp-event-ticket-wrap">
+            <div class='ytp-event-info'>
+                <h3 class='ytp-event-name'>$event_name $event_type</h3>
+                <span class='ytp-event-location'>$location_name</span>
+                <span class='ytp-event-city'>$location_city</span>
+                <span class='ytp-event-date'>$event_datetime</span>
                 <div>$urgency</div>
-                <div><a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a></div>
+                <div class='ytp-event-details'>
+                    $details
+                </div>
             </div>
-            <span class='ytp-event-location'>$location_name</span>
-            <span class='ytp-event-city'>$location_city</span>
-            <span class='ytp-event-date'>$event_datetime</span>
-            $details
+            <div class='ytp-event-ticket'>
+                <a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a>
+            </div>
         </div>
 EOD;
         // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
@@ -158,8 +162,8 @@ EOD;
         $booking_url = $item->yesticket_booking_url;
         $order_ticketes_text = __("Order Tickets", "yesticket");
         return <<<EOD
-        <details class="ytp-event-details">
-            <summary class="ytp-event-show-details">$show_details_text</summary>
+        <details class="ytp-event-details-details">
+            <summary class="ytp-event-details-summary">$show_details_text</summary>
             <div>
                 $event_description
                 <h5>$hints_heading</h5>

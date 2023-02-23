@@ -27,13 +27,13 @@
 [class^="ytp-button"] {
 	position: relative;
 	padding: 7px 7px 7px 15px; 
-	margin: 0 0 0 30px;
 	font-weight: 700;
 	cursor: pointer;
 	border-radius: 5px;
 	border: 1px solid;
 	font-size: 120%;
 	transition: background-color 300ms ease-out;
+	line-height: 2em;
 }
 [class^="ytp-button"]::after {
 	content: "";
@@ -163,7 +163,21 @@
 /*********/
 
 .ytp-event-row {
-	padding-bottom: 20px;
+	padding: 20px 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	column-gap: 2em;
+	row-gap: 0.5em;
+	border-bottom: 1px solid;
+}
+.ytp-event-info {
+	flex: 99999 1 min-content;
+	min-width: 24em;
+}
+.ytp-event-ticket {
+	flex: 1 0 auto;
+	text-align: center;
 }
 .ytp-event-location::after {
 	content: ",";
@@ -201,23 +215,23 @@
 	border: 1px solid
 }
 .ytp-event-row .ytp-button {
-	float: right;
+	box-sizing: border-box;
 }
 .ytp-event-button-row {
 	padding: 10px;
 	text-align: center;
-	border-bottom: 1px solid;
 }
-.ytp-event-details {
+.ytp-event-details-details {
 	font-size: 1em;
-	margin: 5px 0 10px 0;
+	margin-top: 0.5em;
 }
-.ytp-event-details h5 {
+.ytp-event-details-details h5 {
 	margin-bottom: 0;
 }
-.ytp-event-show-details {
+.ytp-event-details-summary {
 	cursor: pointer;
 	text-decoration: underline;
+	width: fit-content;
 }
 .ytp-event-details-location {
 	font-size: 1em;
@@ -338,20 +352,20 @@ a:focus .ytp-event-card-image {
 .ytp-light [class^="ytp-button"] {
 	color: var(--ytp-theme-light-color);
 	background: var(--ytp-theme-light-color-background); 
-	border: var(--ytp-theme-light-color-border);
+	border-color: var(--ytp-theme-light-color-border);
 }
 .ytp-light [class^="ytp-button"]:hover,
 .ytp-light [class^="ytp-button"]:active,
 .ytp-light [class^="ytp-button"]:focus {
 	background-color: var(--ytp-theme-light-color-background-hover);
 }
-.ytp-light .ytp-event-button-row {
+.ytp-light .ytp-event-row {
 	border-color: var(--ytp-theme-light-color-background);
 }
 .ytp-light .ytp-event-urgency {
 	color: var(--ytp-theme-light-color);
 	background-color: var(--ytp-theme-light-color-background);
-	border: var(--ytp-theme-light-color-border);
+	border-color: var(--ytp-theme-light-color-border);
 }
 
 .ytp-light .ytp-event-card {
@@ -388,13 +402,13 @@ a:focus .ytp-event-card-image {
 .ytp-dark [class^="ytp-button"]:focus {
 	background-color: var(--ytp-theme-dark-color-background-hover);
 }
-.ytp-dark .ytp-event-button-row {
+.ytp-dark .ytp-event-row {
 	border-color: var(--ytp-theme-dark-color-background);
 }
 .ytp-dark .ytp-event-urgency {
 	color: var(--ytp-theme-dark-color);
 	background-color: var(--ytp-theme-dark-color-background);
-	border: var(--ytp-theme-dark-color-border);
+	border-color: var(--ytp-theme-dark-color-border);
 }
 .ytp-dark .ytp-event-card {
 	background: var(--ytp-theme-dark-color-background);
