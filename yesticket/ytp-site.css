@@ -315,6 +315,7 @@ a:focus .ytp-event-card-image {
 	padding: 8px 16px;
 	width: 100%;
 	box-sizing: border-box;
+	min-height: 92px;
 	height: 92px;
 	display: flex;
 	align-items: center;
@@ -327,6 +328,12 @@ a:focus .ytp-event-card-image {
 	flex: 0 1 auto;
 	max-height: 100%;
 	overflow: hidden;
+}
+a:hover .ytp-event-card,
+a:focus .ytp-event-card,
+a:hover .ytp-event-card-text-wrapper,
+a:focus .ytp-event-card-text-wrapper {
+	height: fit-content;
 }
 .ytp-event-card-month {
 	text-transform: uppercase;
