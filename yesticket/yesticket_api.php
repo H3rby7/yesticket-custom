@@ -151,7 +151,7 @@ class YesTicketApi
      */
     private function throw_on_invalid_api_version($att)
     {
-        if (array_key_exists("api-version", $att)) {
+        if (isset($att["api-version"])) {
             if (!array_key_exists($att["api-version"], $this->apiEndpoints)) {
                 throw new InvalidArgumentException(
                     sprintf(
