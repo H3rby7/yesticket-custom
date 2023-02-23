@@ -359,6 +359,10 @@ a:focus .ytp-event-card-text-wrapper {
 	line-height: 0.7 !important;
 	padding-bottom: 5px !important;
 }
+.ytp-event-card-location,
+.ytp-event-card-title {
+	display: block;
+}
 
 /**************************************************************************************/
 /********************************************************************* END SHORTCODES */
