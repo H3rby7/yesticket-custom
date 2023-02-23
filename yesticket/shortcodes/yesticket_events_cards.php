@@ -133,6 +133,7 @@ class YesTicketEventsCards
                         <span class="ytp-event-card-year">$year</span>
                     </div>
                     <div class="ytp-event-card-body">
+                        <div class="ytp-event-card-body-fade-out"></div>
                         <small class="ytp-event-card-location">$location_name</small>
                         <strong class="ytp-event-card-title">$event_name</strong>
                     </div>
