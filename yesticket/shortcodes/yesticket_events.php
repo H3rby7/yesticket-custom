@@ -104,6 +104,7 @@ class YesTicketEvents
      */
     private function render_single_event($item, $att)
     {
+        $event_id = 'ytp-event-' . $item->event_id;
         $booking_url = $item->yesticket_booking_url;
         $ticket_text = __("Tickets", "yesticket");
         $event_datetime = ytp_render_date_and_time($item->event_datetime);
@@ -123,7 +124,7 @@ class YesTicketEvents
             $details = $this->render_event_details($item);
         }
         return <<<EOD
-        <div class='ytp-event-row'>
+        <div class='ytp-event-row' id="$event_id">
             <div class='ytp-event-info'>
                 <h3 class='ytp-event-name'>$event_name $event_type</h3>
                 <span class='ytp-event-location'>$location_name</span>
@@ -151,6 +152,7 @@ EOD;
      */
     private function render_event_details($item)
     {
+        $event_id = 'ytp-event-' . $item->event_id;
         $event_description = nl2br(htmlentities($item->event_description));
         $show_details_text = __("Show details", "yesticket");
         $hints_heading = __("Hints", "yesticket");
@@ -159,8 +161,7 @@ EOD;
         $ticket_text = htmlentities($item->tickets);
         $location_heading = __("Location", "yesticket");
         $location_info = $this->render_details_location_info($item);
-        $booking_url = $item->yesticket_booking_url;
-        $order_ticketes_text = __("Order Tickets", "yesticket");
+        $back_to_top_text = __("Back to top", "yesticket");
         return <<<EOD
         <details class="ytp-event-details-details">
             <summary class="ytp-event-details-summary">$show_details_text</summary>
@@ -173,9 +174,7 @@ EOD;
                 <h5>$location_heading</h5>
                 $location_info
             </div>
-            <div class="ytp-event-button-row">
-                <a href="$booking_url" target="_blank" class="ytp-button-big">$order_ticketes_text</a>
-            </div>
+            <a class="ytp-event-details-back-to-top" href="#$event_id">$back_to_top_text</a>
         </details>
 EOD;
         // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!

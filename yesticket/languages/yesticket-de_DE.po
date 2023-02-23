@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: YesTicket\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-15 22:21+0000\n"
-"PO-Revision-Date: 2023-02-22 15:11+0000\n"
+"PO-Revision-Date: 2023-02-23 20:58+0000\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -16,13 +16,13 @@ msgstr ""
 "X-Domain: yesticket"
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
-#: shortcodes/yesticket_testimonials.php:163
+#: shortcodes/yesticket_testimonials.php:158
 #, php-format
 msgid "%1$s on %2$s about '%3$s'."
 msgstr "%1$s am %2$s über \"%3$s\"."
 
 #. Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name
-#: shortcodes/yesticket_testimonials.php:156
+#: shortcodes/yesticket_testimonials.php:151
 #, php-format
 msgid "%1$s on %2$s."
 msgstr "%1$s am %2$s."
@@ -51,6 +51,10 @@ msgstr "Momentan sind leider keine Zuschauerstimmen vorhanden."
 #: shortcodes/yesticket_shortcode_helpers.php:10
 msgid "At this time no upcoming events are available."
 msgstr "Momentan sind leider keine kommenden Veranstaltungen vorhanden."
+
+#: shortcodes/yesticket_events.php:164
+msgid "Back to top"
+msgstr "Zurück nach oben"
 
 #: admin/templates/shortcode_options_theme.php:5
 msgid "Buttons will be in a dark grey and match darker backgrounds"
@@ -122,7 +126,7 @@ msgstr "d.m.Y H:i \\U\\h\\r"
 msgid "Festival"
 msgstr "Festival"
 
-#: admin/templates/examples_events_cards.php:9
+#: admin/templates/shortcode_options_grep.php:1
 msgid "Filter"
 msgstr "Filter"
 
@@ -131,7 +135,7 @@ msgstr "Filter"
 msgid "g:i A"
 msgstr "H:i \\U\\h\\r"
 
-#: shortcodes/yesticket_events.php:156
+#: shortcodes/yesticket_events.php:158
 msgid "Hints"
 msgstr "Hinweise"
 
@@ -169,7 +173,7 @@ msgstr ""
 msgid "List"
 msgstr "Liste"
 
-#: shortcodes/yesticket_events.php:160
+#: shortcodes/yesticket_events.php:162
 msgid "Location"
 msgstr "Ort"
 
@@ -207,10 +211,6 @@ msgstr "Optionen für Event-Shortcodes"
 #: admin/templates/examples_testimonials.php:3
 msgid "Options for testimonial shortcodes"
 msgstr "Optionen für Testimonial-Shortcodes"
-
-#: shortcodes/yesticket_events.php:163
-msgid "Order Tickets"
-msgstr "Tickets bestellen"
 
 #. Event Type 'Performance'
 #: shortcodes/yesticket_shortcode_helpers.php:31
@@ -292,7 +292,7 @@ msgstr "Shortcodes für deine Events als Liste"
 msgid "Shortcodes for your testimonials."
 msgstr "Shortcodes für Zuschauerstimmen"
 
-#: shortcodes/yesticket_events.php:155
+#: shortcodes/yesticket_events.php:157
 msgid "Show details"
 msgstr "Details anzeigen"
 
@@ -310,16 +310,15 @@ msgstr "Technische Einstellungen"
 msgid "Testimonials"
 msgstr "Zuschauerstimmen"
 
-#. Error message, if the shortcode uses a non-numeric api-version
+#. Error message, if the shortcode uses an invalid api-version - %1$s is replaced with the highest possible version
 #: yesticket_api.php:159
-msgid "The hidden field 'api-version' must be numeric."
-msgstr "Das versteckte Feld 'api-version' muss eine Zahl enthalten."
-
-#. Error message, if the shortcode uses an unknown api-version
-#: yesticket_api.php:166
-msgid "The hidden field 'api-version' must provide a valid version."
+#, php-format
+msgid ""
+"The hidden field \"api-version\" must be an int bigger or equal to 1 and "
+"smaller or equal to %1$s."
 msgstr ""
-"Das versteckte Feld 'api-version' muss eine valide API Version angeben."
+"Das versteckte Feld 'api-version' muss eine ganze Zahl zwischen 1 und %1$s "
+"(inklusive) sein."
 
 #. Explanation of using the shortcode option 'design="basic"' for testimonials
 #: admin/templates/examples_testimonials.php:16
@@ -341,7 +340,7 @@ msgstr ""
 msgid "Theme"
 msgstr "Design"
 
-#: shortcodes/yesticket_events.php:112 shortcodes/yesticket_events.php:158
+#: shortcodes/yesticket_events.php:109 shortcodes/yesticket_events.php:160
 msgid "Tickets"
 msgstr "Tickets"
 
@@ -377,7 +376,7 @@ msgstr ""
 "Mit <b>details</b> kannst du die Beschreibung zu den Events anzeigen, die in "
 "YesTicket hinterlegt ist. Die sind per Link auf- und zuklappbar."
 
-#: admin/templates/examples_events_cards.php:11
+#: admin/templates/shortcode_options_grep.php:3
 msgid "Using <b>grep</b> you can filter your events by their title."
 msgstr "Mit <b>grep</b> kannst du die Liste der Events über den Titel filtern."
 
@@ -396,7 +395,7 @@ msgstr ""
 "ergänzt das Testimonial um die zugehörige Veranstaltung, sofern vorhanden."
 
 #. The sentence actually starts with a non-translatable codeblock 'grep="Johnstone"'
-#: admin/templates/examples_events_cards.php:15
+#: admin/templates/shortcode_options_grep.php:8
 #| msgid "will only display events, who have \\\"Johnstone\\\" in their title."
 msgid "will only display events, who have \"Johnstone\" in their title."
 msgstr ""

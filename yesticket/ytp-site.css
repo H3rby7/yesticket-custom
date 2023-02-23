@@ -218,7 +218,7 @@
 	box-sizing: border-box;
 }
 .ytp-event-button-row {
-	padding: 10px;
+	padding: 0 10px;
 	text-align: center;
 }
 .ytp-event-details-details {
@@ -248,6 +248,15 @@
 .ytp-event-details-location-city::after,
 .ytp-event-details-location-state::after {
 	content: ",";
+}
+.ytp-event-details-back-to-top {
+	display: inline-block;
+	margin-top: 1em;
+	color: inherit !important;
+}
+.ytp-event-details-back-to-top::before {
+	content: "\25B4 ";
+	display: inline;
 }
 
 /*********/
