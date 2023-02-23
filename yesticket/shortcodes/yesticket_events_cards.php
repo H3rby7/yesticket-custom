@@ -123,7 +123,7 @@ class YesTicketEventsCards
         $event_name = htmlentities($item->event_name);
         $location_name = htmlentities($item->location_name);
         return <<<EOD
-        <a href="$booking_url" target="_new">
+        <a href="$booking_url" target="_blank">
             <div class="ytp-event-card">
                 <div class="ytp-event-card-image" style="background-image: url('$picture_url')"></div>
                 <div class="ytp-event-card-text-wrapper">
