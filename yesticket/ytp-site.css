@@ -349,6 +349,10 @@ a:focus .ytp-event-card-text-wrapper {
 	height: fit-content;
 	z-index: 1;
 }
+a:hover .ytp-event-card-body,
+a:focus .ytp-event-card-body {
+	overflow: visible;
+}
 .ytp-event-card-month {
 	text-transform: uppercase;
 }
