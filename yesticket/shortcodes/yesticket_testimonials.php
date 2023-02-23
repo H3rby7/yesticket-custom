@@ -11,12 +11,12 @@ function ytp_shortcode_testimonials($atts)
 {
     wp_enqueue_style('yesticket');
     $att = shortcode_atts(array(
-        'env' => 'prod',
-        'api-version' => '',
-        'organizer' => '',
-        'key' => '',
+        'env' => NULL,
+        'api-version' => NULL,
+        'organizer' => NULL,
+        'key' => NULL,
         'type' => 'all',
-        'count' => '3',
+        'count' => '9',
         'theme' => 'light',
         'design' => 'basic',
         'details' => 'no',

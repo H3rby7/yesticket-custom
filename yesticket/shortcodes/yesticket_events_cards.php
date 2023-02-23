@@ -11,15 +11,15 @@ function ytp_shortcode_events_cards($atts)
 {
     wp_enqueue_style('yesticket');
     $att = shortcode_atts(array(
-        'env' => 'prod',
-        'api-version' => '',
-        'organizer' => '',
-        'key' => '',
-        'type' => 'all',
-        'count' => '6',
+        'env' => NULL,
+        'api-version' => NULL,
+        'organizer' => NULL,
+        'key' => NULL,
+        'type' => NULL,
+        'count' => 9,
         'theme' => 'light',
         'details' => 'no',
-        'grep' => '',
+        'grep' => NULL,
     ), $atts);
     return YesTicketEventsCards::getInstance()->get($att);
 }
