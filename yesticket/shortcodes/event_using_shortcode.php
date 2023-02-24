@@ -2,11 +2,12 @@
 
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
+include_once(__DIR__ . "/../helpers/templater.php");
 
 /**
  * Shortcode [yesticket_events]
  */
-abstract class YesTicketEventUsingShortcode
+abstract class YesTicketEventUsingShortcode extends YesTicketTemplater
 {
     /**
      * Get the $instance
@@ -24,6 +25,7 @@ abstract class YesTicketEventUsingShortcode
 
     protected function __construct()
     {
+        parent::__construct(__DIR__ . '/templates');
     }
 
     /**
