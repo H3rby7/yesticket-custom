@@ -101,7 +101,7 @@ class YesTicketEvents extends YesTicketEventUsingShortcode
                 </div>
             </div>
             <div class='ytp-event-ticket'>
-                <a href="'.$booking_url.'" target="_blank" class="ytp-button">$ticket_text</a>
+                <a href="$booking_url" target="_blank" class="ytp-button">$ticket_text</a>
             </div>
         </div>
 EOD;
