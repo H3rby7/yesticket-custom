@@ -57,10 +57,9 @@ class YesTicketPluginMenu
  */
 function ytp_add_plugin_menu()
 {
-  $template_dir = __DIR__ . '/templates';
   $admin_page = new YesTicketPluginMenu();
-  $examples_page = new YesTicketExamples($admin_page->get_slug(), $template_dir);
-  $settings_page = new YesTicketSettingsPage($admin_page->get_slug(), $template_dir);
+  $examples_page = new YesTicketExamples($admin_page->get_slug());
+  $settings_page = new YesTicketSettingsPage($admin_page->get_slug());
   $admin_page_slug = $admin_page->get_slug();
 
   if (!YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {

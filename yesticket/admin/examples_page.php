@@ -21,9 +21,9 @@ class YesTicketExamples extends YesTicketTemplater
    *
    * @param string $template_path
    */
-  public function __construct($parent_slug, $template_path)
+  public function __construct($parent_slug)
   {
-    parent::__construct($template_path);
+    parent::__construct(__DIR__ . '/templates');
     $this->parent_slug = $parent_slug;
   }
 

@@ -20,8 +20,8 @@ class YesTicketSettingsPage extends YesTicketSettingsSection
    */
   public function configure()
   {
-    $this->required = new YesTicketSettingsRequired($this->get_slug(), $this->template_path);
-    $this->technical = new YesTicketSettingsTechnical($this->get_slug(), $this->template_path);
+    $this->required = new YesTicketSettingsRequired($this->get_slug());
+    $this->technical = new YesTicketSettingsTechnical($this->get_slug());
   }
 
   /**

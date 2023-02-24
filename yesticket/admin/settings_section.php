@@ -19,11 +19,11 @@ abstract class YesTicketSettingsSection extends YesTicketTemplater
   /**
    * Constructor.
    *
-   * @param string $template_path
+   * @param string $parent_slug for the menu hirarchy
    */
-  public function __construct($parent_slug, $template_path)
+  public function __construct($parent_slug)
   {
-    parent::__construct($template_path);
+    parent::__construct(__DIR__ . '/templates');
     $this->parent_slug = $parent_slug;
   }
 

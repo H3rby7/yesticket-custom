@@ -14,9 +14,9 @@ abstract class YesTicketTemplater
   protected $template_path;
 
   /**
-   * Constructor.
+   * Constructor
    *
-   * @param string $template_path
+   * @param string $template_path to the directory containing the templates
    */
   protected function __construct($template_path)
   {

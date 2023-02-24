@@ -9,15 +9,9 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
 class YesTicketSettingsRequired extends YesTicketSettingsSection
 {
 
-  /**
-   * Constructor.
-   *
-   * @param string $parent_slug for the menu hirarchy
-   * @param string $template_path
-   */
-  public function __construct($parent_slug, $template_path)
+  public function __construct($parent_slug)
   {
-    parent::__construct($parent_slug, $template_path);
+    parent::__construct($parent_slug);
     $this->configure();
   }
 
