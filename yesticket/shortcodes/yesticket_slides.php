@@ -23,6 +23,10 @@ class YesTicketSlides extends YesTicketEventUsingShortcode
     return YesTicketSlides::getInstance()->get($atts);
   }
 
+  /**
+   * Register needed CSS and JS files with wordpress using wp_register_xxxx
+   * Call this in the plugin init
+   */
   static public function registerFiles()
   {
     wp_register_style('yesticket_slides', plugins_url('webslides/webslides.css', __FILE__), false, 'all');
@@ -81,6 +85,11 @@ EOD;
     return $content;
   }
 
+  /**
+   * Print the (shortened) event description
+   * @param mixed $item the event
+   * @param array $att shortcode attributes
+   */
   function eventDescription($item, $att)
   {
     $descr = $item->event_description;
