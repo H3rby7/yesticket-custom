@@ -12,7 +12,7 @@ class YesTicketEventsCards extends YesTicketEventUsingShortcode
 {
     /**
      * The $instance
-     * @var YesTicketEvents
+     * @var YesTicketEventsCards
      */
     static private $instance;
     static public function getInstance()
