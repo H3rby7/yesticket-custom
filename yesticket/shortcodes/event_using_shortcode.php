@@ -92,6 +92,19 @@ abstract class YesTicketEventUsingShortcode extends YesTicketTemplater
     }
 
     /**
+     * Return the given template as string, if it's readable.
+     *
+     * @param string $template
+     * @param array $variables passed via 'compact', to be used via 'extract'
+     */
+    protected function render_template($template, $variables = array())
+    {
+        ob_start();
+        parent::render_template($template, $variables);
+        return ob_get_clean();
+    }
+
+    /**
      * Return html for the content as string.
      * 
      * @param array $result of the YesTicket API call for events
