@@ -48,6 +48,7 @@ abstract class YesTicketEventUsingShortcode extends YesTicketTemplater
      */
     protected function shortCodeArgs($atts)
     {
+        // List all 'att' here, eventhough some 'att' are only used by some shortcodes
         return shortcode_atts(array(
             'env' => NULL,
             'api-version' => NULL,
