@@ -3,7 +3,7 @@
   <div class="wrap">
     <div class="yesticket-event-meta slide-top slideInLeft delay">
       <h2 class="yesticket-event-name"><?php echo $event->event_name; ?></h2>
-      <p><?php $this->dateAndTime($event->event_datetime); ?>,
+      <p><?php ytp_render_date_and_time($event->event_datetime); ?>,
         <?php echo $event->location_name; ?></p>
       <div class="backdrop-dark">
         <div></div>
