@@ -142,10 +142,13 @@ function ytp_render_time($datetimestring) {
  * @return string <div>
  */
 function ytp_render_shortcode_container_div($shortcode_class, $att) {
+  if (!isset($att["theme"])) {
+    return "<div class='$shortcode_class ytp-default'>\n";
+  }
   if ($att["theme"] == "light") {
     return "<div class='$shortcode_class ytp-light'>\n";
   } elseif ($att["theme"] == "dark") {
       return "<div class='$shortcode_class ytp-dark'>\n";
   }
-  return "<div class='$shortcode_class ytp-default ".$att["theme"]."'>\n";
+  return "<div class='$shortcode_class ".$att["theme"]."'>\n";
 }
