@@ -60,26 +60,26 @@ function ytp_render_no_testimonials() {
 }
 
 /**
- * Workaround to make the event $type available
+ * Print event type localized.
+ * (Workaround to make the event $type translatable)
  * 
  * @param string $type of the event
  * 
- * @return string the translated event type or the input
  */
 function ytp_render_eventType($type) {
   if (strcasecmp('auftritt', $type) === 0) {
     /* translators: Event Type 'Performance' */
-    return __("Performance", "yesticket");
+    return _e("Performance", "yesticket");
   }
   if ((strcasecmp('workshop', $type) === 0) or (strcasecmp('kurs', $type) === 0)) {
     /* translators: Event Type 'Workshop' */
-    return __("Workshop", "yesticket");
+    return _e("Workshop", "yesticket");
   }
   if (strcasecmp('festival', $type) === 0) {
     /* translators: Event Type 'Festival' */
-    return __("Festival", "yesticket");
+    return _e("Festival", "yesticket");
   }
-  return __($type, 'yesticket');
+  _e($type, 'yesticket');
 }
 
 /**

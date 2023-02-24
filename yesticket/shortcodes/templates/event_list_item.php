@@ -3,7 +3,7 @@
     <li class='ytp-event-list-date'><?php echo ytp_render_date($item->event_datetime); ?></li>
     <li class='ytp-event-list-time'><?php echo ytp_render_time($item->event_datetime); ?></li>
     <?php if ($att["type"] == "all") { ?>
-      <li class='ytp-event-list-type'><?php echo ytp_render_eventType($item->event_type) ?></li>
+      <li class='ytp-event-list-type'><?php ytp_render_eventType($item->event_type) ?></li>
     <?php } ?>
     <li class='ytp-event-list-name'><?php echo htmlentities($item->event_name); ?></li>
     <li class='ytp-event-list-location'><?php echo htmlentities($item->location_name); ?></li>
