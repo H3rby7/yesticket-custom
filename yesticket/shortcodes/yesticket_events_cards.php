@@ -28,20 +28,13 @@ function ytp_shortcode_events_cards($atts)
 /**
  * Shortcode [yesticket_events_cards]
  */
-class YesTicketEventsCards
+class YesTicketEventsCards extends YesTicketEventUsingShortcode
 {
     /**
      * The $instance
-     *
-     * @var YesTicketEventsCards
+     * @var YesTicketEvents
      */
     static private $instance;
-
-    /**
-     * Get the $instance
-     * 
-     * @return YesTicketEventsCards $instance
-     */
     static public function getInstance()
     {
         if (!isset(YesTicketEventsCards::$instance)) {
@@ -50,41 +43,13 @@ class YesTicketEventsCards
         return YesTicketEventsCards::$instance;
     }
 
-    /**
-     * Return the rendered shortcode content as html elements
-     * 
-     * @param array $att shortcode attributes
-     * 
-     * @return string shortcode content
-     */
-    public function get($att)
+    protected $cssClass = 'ytp-event-cards';
+    public function __construct()
     {
-        $content = ytp_render_shortcode_container_div("ytp-event-cards", $att);
-        try {
-            $result = YesTicketApi::getInstance()->getEvents($att);
-            if (!is_countable($result) or count($result) < 1) {
-                $content .= ytp_render_no_events();
-            } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-                $content .= ytp_render_no_events();
-            } else {
-                $content .= $this->render_cards($result, $att);
-            }
-        } catch (Exception $e) {
-            $content .= __($e->getMessage(), 'yesticket');
-        }
-        $content .= "</div>\n";
-        return $content;
+        parent::__construct();
     }
 
-    /**
-     * Return the events as html cards
-     * 
-     * @param array $result of the YesTicket API call for events
-     * @param array $att shortcode attributes
-     * 
-     * @return string html for the events as cards
-     */
-    private function render_cards($result, $att)
+    function render_contents($result, $att)
     {
         $content = "";
         foreach ($result as $item) {

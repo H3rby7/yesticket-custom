@@ -28,20 +28,13 @@ function ytp_shortcode_events_list($atts)
 /**
  * Shortcode [yesticket_events_list]
  */
-class YesTicketEventsList
+class YesTicketEventsList extends YesTicketEventUsingShortcode
 {
     /**
      * The $instance
-     *
-     * @var YesTicketEventsList
+     * @var YesTicketEvents
      */
     static private $instance;
-
-    /**
-     * Get the $instance
-     * 
-     * @return YesTicketEventsList $instance
-     */
     static public function getInstance()
     {
         if (!isset(YesTicketEventsList::$instance)) {
@@ -50,42 +43,13 @@ class YesTicketEventsList
         return YesTicketEventsList::$instance;
     }
 
-    /**
-     * Return the rendered shortcode content as html elements
-     * 
-     * @param array $att shortcode attributes
-     * 
-     * @return string shortcode content
-     */
-    public function get($att)
+    protected $cssClass = 'ytp-event-list';
+    public function __construct()
     {
-        $content = ytp_render_shortcode_container_div("ytp-event-list", $att);
-        try {
-            $result = YesTicketApi::getInstance()->getEvents($att);
-            if (!is_countable($result) or count($result) < 1) {
-                $content .= ytp_render_no_events();
-            } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-                $content .= ytp_render_no_events();
-            } else {
-                $content .= $this->render_list($result, $att);
-            }
-            //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
-        } catch (Exception $e) {
-            $content .= __($e->getMessage(), 'yesticket');
-        }
-        $content .= "</div>\n";
-        return $content;
+        parent::__construct();
     }
 
-    /**
-     * Return the events as html list
-     * 
-     * @param array $result of the YesTicket API call for events
-     * @param array $att shortcode attributes
-     * 
-     * @return string html for the events as list
-     */
-    private function render_list($result, $att)
+    function render_contents($result, $att)
     {
         $content = "<ol>\n";
         foreach ($result as $item) {
