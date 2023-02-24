@@ -56,33 +56,9 @@ class YesTicketSlides extends YesTicketEventUsingShortcode
     parent::__construct();
   }
 
-  function inlineStyles($att)
-  {
-    $color1 = $att['color-1'];
-    $color2 = $att['color-2'];
-    return <<<EOD
-      <style>
-        #ytp-slides {
-          --ytp--color--primary: $color1;
-          --ytp--color--contrast: $color2;
-        }
-      </style>
-EOD;
-    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
-  }
-
   function render_contents($result, $att)
   {
-    $content = $this->inlineStyles($att);
-    $content .= "<div id='ytp-slides' style='font-size: " . $att["text-scale"] . "'>";
-    $content .= $this->render_template("slides_header", compact("att"));
-    $count = 0;
-    foreach ($result as $event) {
-      $content .= $this->render_template("slides_item", compact("event", "att"));
-    }
-    $content .= $this->render_template("slides_footer", compact("att"));
-    $content .= "</div>\n";
-    return $content;
+    return $this->render_template("slides", compact("result", "att"));
   }
 
   /**
@@ -107,5 +83,4 @@ EOD;
       return;
     }
   }
-
 }
