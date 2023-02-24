@@ -1,6 +1,7 @@
 <?php
 
-include_once(__DIR__ . "/../yesticket_helpers.php");
+include_once(__DIR__ . "/../helpers/api.php");
+include_once(__DIR__ . "/../helpers/functions.php");
 
 add_shortcode('yesticket_events_cards', 'ytp_shortcode_events_cards');
 

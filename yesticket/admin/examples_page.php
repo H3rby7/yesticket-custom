@@ -1,6 +1,6 @@
 <?php
 
-include_once(__DIR__ . "/../yesticket_helpers.php");
+include_once(__DIR__ . "/../helpers/functions.php");
 
 /**
  * Shortcode Examples and instructions for YesTicket plugin

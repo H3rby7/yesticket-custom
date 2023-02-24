@@ -1,8 +1,9 @@
 <?php
 
-include_once(__DIR__ . "/../yesticket_helpers.php");
 include_once("examples_page.php");
 include_once("settings_page.php");
+include_once(__DIR__ . "/../helpers/functions.php");
+include_once(__DIR__ . "/../helpers/plugin_options.php");
 
 /**
  * Builds the menu entries for the YesTicket plugin

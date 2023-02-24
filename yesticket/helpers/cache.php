@@ -1,5 +1,6 @@
 <?php
-
+include_once("functions.php");
+include_once("plugin_options.php");
 /**
  * Cache for YesTicket API Calls
  */

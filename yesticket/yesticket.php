@@ -11,11 +11,11 @@
 * Domain Path: /languages
 */
 
-include_once "admin/plugin_menu.php";
-include_once "shortcodes/yesticket_events.php";
-include_once "shortcodes/yesticket_events_list.php";
-include_once "shortcodes/yesticket_events_cards.php";
-include_once "shortcodes/yesticket_testimonials.php";
+include_once("admin/plugin_menu.php");
+include_once("shortcodes/yesticket_events.php");
+include_once("shortcodes/yesticket_events_list.php");
+include_once("shortcodes/yesticket_events_cards.php");
+include_once("shortcodes/yesticket_testimonials.php");
 
 add_action('init', 'ytp_init_callback');
 

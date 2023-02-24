@@ -1,6 +1,8 @@
 <?php
 
-include_once "yesticket_cache.php";
+include_once("cache.php");
+include_once("functions.php");
+include_once("plugin_options.php");
 
 /**
  * Grants simplified access to the YesTicket API

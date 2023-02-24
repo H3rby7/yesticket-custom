@@ -1,46 +1,5 @@
 <?php
-if (!function_exists('is_countable')) {
-  /**
-   * Verify that the contents of a variable is a countable value.
-   * 
-   * @param mixed $var
-   * 
-   * @return boolean TRUE if countable; else FALSE
-   */
-  function is_countable($var)
-  {
-    return (is_array($var) || $var instanceof Countable);
-  }
-}
-
-/**
- * Get the URL of an image to be accessed via browser.
- * 
- * @param string $fileName of the image inside this plugin's '/img' directory
- * 
- * @return string the browser-accessible URL
- */
-function ytp_getImageUrl($fileName)
-{
-  return plugin_dir_url(__FILE__) . 'img/' . $fileName;
-}
-
-/**
- * Log output from YesTicket plugin if WP_DEBUG is true.
- * 
- * @param string $log content to be logged
- * 
- */
-function ytp_log($log)
-{
-  if (true === WP_DEBUG) {
-    if (is_array($log) || is_object($log)) {
-      error_log("YESTICKET: " . print_r($log, true));
-    } else {
-      error_log("YESTICKET: " . $log);
-    }
-  }
-}
+include_once("functions.php");
 
 /**
  * Manage the plugin's wp options
