@@ -3,27 +3,7 @@
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 
-add_shortcode('yesticket_events_list', 'ytp_shortcode_events_list');
-
-/**
- * Callback to add_shortcode [yesticket_events_list]
- */
-function ytp_shortcode_events_list($atts)
-{
-    wp_enqueue_style('yesticket');
-    $att = shortcode_atts(array(
-        'env' => NULL,
-        'api-version' => NULL,
-        'organizer' => NULL,
-        'key' => NULL,
-        'type' => 'all',
-        'count' => 9,
-        'theme' => 'light',
-        'ticketlink' => 'no',
-        'grep' => NULL,
-    ), $atts);
-    return YesTicketEventsList::getInstance()->get($att);
-}
+add_shortcode('yesticket_events_list', array('YesTicketEventsList', 'shortCode'));
 
 /**
  * Shortcode [yesticket_events_list]
@@ -41,6 +21,10 @@ class YesTicketEventsList extends YesTicketEventUsingShortcode
             YesTicketEventsList::$instance = new YesTicketEventsList();
         }
         return YesTicketEventsList::$instance;
+    }
+    static public function shortCode($atts)
+    {
+        return YesTicketEventsList::getInstance()->get($atts);
     }
 
     protected $cssClass = 'ytp-event-list';

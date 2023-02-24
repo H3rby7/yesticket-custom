@@ -3,27 +3,7 @@
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 
-add_shortcode('yesticket_events_cards', 'ytp_shortcode_events_cards');
-
-/**
- * Callback to add_shortcode [yesticket_events_cards]
- */
-function ytp_shortcode_events_cards($atts)
-{
-    wp_enqueue_style('yesticket');
-    $att = shortcode_atts(array(
-        'env' => NULL,
-        'api-version' => NULL,
-        'organizer' => NULL,
-        'key' => NULL,
-        'type' => NULL,
-        'count' => 9,
-        'theme' => 'light',
-        'details' => 'no',
-        'grep' => NULL,
-    ), $atts);
-    return YesTicketEventsCards::getInstance()->get($att);
-}
+add_shortcode('yesticket_events_cards', array('YesTicketEventsCards', 'shortCode'));
 
 /**
  * Shortcode [yesticket_events_cards]
@@ -41,6 +21,10 @@ class YesTicketEventsCards extends YesTicketEventUsingShortcode
             YesTicketEventsCards::$instance = new YesTicketEventsCards();
         }
         return YesTicketEventsCards::$instance;
+    }
+    static public function shortCode($atts)
+    {
+        return YesTicketEventsCards::getInstance()->get($atts);
     }
 
     protected $cssClass = 'ytp-event-cards';
