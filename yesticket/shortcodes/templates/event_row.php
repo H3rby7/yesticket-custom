@@ -8,7 +8,7 @@
     </h3>
     <span class='ytp-event-location'><?php echo htmlentities($item->location_name); ?></span>
     <span class='ytp-event-city'><?php echo htmlentities($item->location_city); ?></span>
-    <span class='ytp-event-date'><?php echo ytp_render_date_and_time($item->event_datetime); ?></span>
+    <span class='ytp-event-date'><?php ytp_render_date_and_time($item->event_datetime); ?></span>
     <?php if (!empty($item->event_urgency_string)) { ?>
       <span class='ytp-event-urgency'><?php echo htmlentities($item->event_urgency_string); ?></span>
     <?php } ?>

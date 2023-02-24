@@ -94,17 +94,15 @@ function ytp_to_local_datetime($datetimestring) {
 }
 
 /**
- * Render date and time in localized format
+ * Print date and time in localized format
  * 
  * @param string $datetimestring
- * 
- * @return string
  */
 function ytp_render_date_and_time($datetimestring) {
   $date = ytp_to_local_datetime($datetimestring);
   /* translators: date format when using date and time, see http://php.net/date */
   $format = __("F j, Y \a\\t g:i A", "yesticket");
-  return wp_date($format, $date->getTimestamp());
+  echo wp_date($format, $date->getTimestamp());
 }
 
 /**
