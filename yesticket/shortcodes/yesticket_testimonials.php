@@ -2,6 +2,7 @@
 
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
+include_once(__DIR__ . "/../helpers/templater.php");
 
 add_shortcode('yesticket_testimonials', 'ytp_shortcode_testimonials');
 
@@ -28,7 +29,7 @@ function ytp_shortcode_testimonials($atts)
 /**
  * Shortcode [yesticket_testimonials]
  */
-class YesTicketTestimonials
+class YesTicketTestimonials extends YesTicketTemplater
 {
     /**
      * The $instance
@@ -48,6 +49,24 @@ class YesTicketTestimonials
             YesTicketTestimonials::$instance = new YesTicketTestimonials();
         }
         return YesTicketTestimonials::$instance;
+    }
+
+    protected function __construct()
+    {
+        parent::__construct(__DIR__ . '/templates');
+    }
+
+    /**
+     * Return the given template as string, if it's readable.
+     *
+     * @param string $template
+     * @param array $variables passed via 'compact', to be used via 'extract'
+     */
+    protected function render_template($template, $variables = array())
+    {
+        ob_start();
+        parent::render_template($template, $variables);
+        return ob_get_clean();
     }
 
     /**
@@ -107,54 +126,32 @@ class YesTicketTestimonials
     {
         $content = "";
         foreach ($result as $item) {
-            $content .= $this->render_single_testimonial($item, $att);
+            $content .= $this->render_template('testimonial_row', compact("item", "att"));
         }
         return $content;
     }
 
     /**
-     * Return one testimonial as html
-     * 
-     * @param object $item of the YesTicket API call for testimonials
-     * @param array $att shortcode attributes
-     * 
-     * @return string html for the testimonial
-     */
-    private function render_single_testimonial($item, $att)
-    {
-        $text = htmlentities($item->text);
-        $source = $this->render_source($item, $att["details"] == "yes");
-        return <<<EOD
-        <div class='ytp-testimonial-row'><div>
-            <span class="ytp-testimonial-text">&raquo;$text&laquo;</span>
-            <span class="ytp-testimonial-source">$source</span>
-        </div></div>
-EOD;
-        // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
-    }
-
-    /**
-     * Return the source of a testimonial as html
+     * Print the source of a testimonial as html
      * 
      * @param object $item of the YesTicket API call for testimonials
      * @param array $includeEventName whether or not to include the corresponding event name
      * 
-     * @return string html for the source
      */
-    private function render_source($item, $includeEventName)
+    function render_source($item, $includeEventName)
     {
         $source = $item->source;
         $date = $item->date;
         $event = $item->event_name;
         if (!$includeEventName || $event === null || trim($event) === '') {
-            return sprintf(
+            printf(
                 /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
                 __('%1$s on %2$s.', "yesticket"),
                 $source,
                 ytp_render_date($date)
             );
         }
-        return sprintf(
+        printf(
             /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
             __('%1$s on %2$s about \'%3$s\'.', "yesticket"),
             $source,
