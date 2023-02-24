@@ -1,18 +1,13 @@
 <?php
 
 include_once(__DIR__ . "/../helpers/functions.php");
+include_once(__DIR__ . "/../helpers/templater.php");
 
 /**
  * Shortcode Examples and instructions for YesTicket plugin
  */
-class YesTicketExamples
+class YesTicketExamples extends YesTicketTemplater
 {
-  /**
-   * Path to the example templates.
-   *
-   * @var string
-   */
-  private $template_path;
 
   /**
    * Slug of the parent menu entry
@@ -28,8 +23,8 @@ class YesTicketExamples
    */
   public function __construct($parent_slug, $template_path)
   {
+    parent::__construct($template_path);
     $this->parent_slug = $parent_slug;
-    $this->template_path = rtrim($template_path, '/');
   }
 
   /**
@@ -90,26 +85,6 @@ class YesTicketExamples
     wp_enqueue_style('yesticket-admin');
     $this->render_template('header');
     $this->render_template('examples_wrapper');
-  }
-
-  /**
-   * Prints the given template if it's readable.
-   *
-   * @param string $template to render
-   * @param array $variables to be extracted and used to render the template
-   */
-  function render_template($template, $variables = array())
-  {
-    $template_path = $this->template_path . '/' . $template . '.php';
-
-    if (!is_readable($template_path)) {
-      ytp_log(__FILE__ . "@" . __LINE__ . ": 'Template not found: $template_path'");
-      return;
-    }
-    // Extract the variables to a local namespace
-    extract($variables);
-
-    include $template_path;
   }
 
   /**
