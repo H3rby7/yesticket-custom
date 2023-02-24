@@ -10,9 +10,7 @@
     <span class='ytp-event-city'><?php echo htmlentities($item->location_city); ?></span>
     <span class='ytp-event-date'><?php echo ytp_render_date_and_time($item->event_datetime); ?></span>
     <?php if (!empty($item->event_urgency_string)) { ?>
-      <div>
-        <span class='ytp-event-urgency'><?php echo htmlentities($item->event_urgency_string); ?></span>
-      </div>
+      <span class='ytp-event-urgency'><?php echo htmlentities($item->event_urgency_string); ?></span>
     <?php } ?>
     <?php if ($att["details"] == "yes") { ?>
       <div class='ytp-event-details'>
