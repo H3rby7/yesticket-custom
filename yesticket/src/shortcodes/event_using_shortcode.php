@@ -1,5 +1,7 @@
 <?php
 
+namespace YesTicket;
+
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
@@ -7,12 +9,12 @@ include_once(__DIR__ . "/../helpers/templater.php");
 /**
  * Shortcode [yesticket_events]
  */
-abstract class YesTicketEventUsingShortcode extends YesTicketTemplater
+abstract class EventUsingShortcode extends Templater
 {
     /**
      * Get the $instance
      * 
-     * @return YesTicketEventUsingShortcode $instance
+     * @return EventUsingShortcode $instance
      */
     abstract static public function getInstance();
 
@@ -76,7 +78,7 @@ abstract class YesTicketEventUsingShortcode extends YesTicketTemplater
         $att = $this->shortCodeArgs($atts);
         $content = ytp_render_shortcode_container_div($this->cssClass, $att);
         try {
-            $result = YesTicketApi::getInstance()->getEvents($att);
+            $result = Api::getInstance()->getEvents($att);
             if (!is_countable($result) or count($result) < 1) {
                 $content .= ytp_render_no_events();
             } else if (array_key_exists('message', $result) && $result->message == "no items found") {
@@ -85,7 +87,7 @@ abstract class YesTicketEventUsingShortcode extends YesTicketTemplater
                 $content .= $this->render_contents($result, $att);
             }
             //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $content .= __($e->getMessage(), 'yesticket');
         }
         $content .= "</div>\n";

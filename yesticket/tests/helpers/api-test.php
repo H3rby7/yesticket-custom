@@ -1,33 +1,36 @@
 <?php
 
-class YesTicketApiTest extends WP_UnitTestCase
+namespace YesTicket;
+use \InvalidArgumentException;
+
+class ApiTest extends \WP_UnitTestCase
 {
   function test_class_exists()
   {
-    $this->assertTrue(class_exists("YesTicketApi"));
+    $this->assertTrue(class_exists("YesTicket\Api"));
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_get_instance()
   {
-    $this->assertNotEmpty(YesTicketApi::getInstance());
+    $this->assertNotEmpty(Api::getInstance());
   }
 
   /**
-   * Initiate Mock for @see YesTicketCache
+   * Initiate Mock for @see Cache
    * 
    * @param string $expected_url
-   * @param PHPUnit_Framework_MockObject_Matcher_InvokedCount $expected_times
+   * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expected_times
    * @return string the response the mock will return
    */
   private function initMock($expected_url)
   {
-    $_cache_property = new ReflectionProperty(YesTicketApi::class, "cache");
+    $_cache_property = new \ReflectionProperty(Api::class, "cache");
     $_cache_property->setAccessible(true);
-    $instance = YesTicketApi::getInstance();
-    $cache_mock = $this->getMockBuilder(YesTicketCache::class)
+    $instance = Api::getInstance();
+    $cache_mock = $this->getMockBuilder(Cache::class)
       ->setMethods(['getFromCacheOrFresh'])
       ->getMock();
     $_cache_property->setValue($instance, $cache_mock);
@@ -59,19 +62,19 @@ class YesTicketApiTest extends WP_UnitTestCase
   private function run_events($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
   {
     $mock_result = $this->prepare($locale, $opt_organizer, $opt_key, $expected);
-    $result = YesTicketApi::getInstance()->getEvents($att);
+    $result = Api::getInstance()->getEvents($att);
     $this->assertSame($mock_result, $result);
   }
 
   private function run_testimonials($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
   {
     $mock_result = $this->prepare($locale, $opt_organizer, $opt_key, $expected);
-    $result = YesTicketApi::getInstance()->getTestimonials($att);
+    $result = Api::getInstance()->getTestimonials($att);
     $this->assertSame($mock_result, $result);
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEvents()
   {
@@ -103,7 +106,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonials()
   {
@@ -144,7 +147,7 @@ class YesTicketApiTest extends WP_UnitTestCase
     update_option('yesticket_settings_required', $req_settings);
     $this->expectException($exception);
     $this->expectExceptionMessage($exception_msg);
-    YesTicketApi::getInstance()->getEvents($att);
+    Api::getInstance()->getEvents($att);
   }
 
   private function run_testimonials_forThrows($req_settings, $att, $exception, $exception_msg)
@@ -155,11 +158,11 @@ class YesTicketApiTest extends WP_UnitTestCase
     update_option('yesticket_settings_required', $req_settings);
     $this->expectException($exception);
     $this->expectExceptionMessage($exception_msg);
-    YesTicketApi::getInstance()->getTestimonials($att);
+    Api::getInstance()->getTestimonials($att);
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEventsMissingOrganizer_expectThrows()
   {
@@ -172,7 +175,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEventsMissingApiKey_expectThrows()
   {
@@ -185,7 +188,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEventsInvalidType_expectThrows()
   {
@@ -198,7 +201,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEventsApiVersionNonNumeric_expectThrows()
   {
@@ -211,7 +214,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEventsApiVersionLowerThan1_expectThrows()
   {
@@ -224,7 +227,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getEventsApiVersionBiggerThan2_expectThrows()
   {
@@ -237,7 +240,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonialsMissingOrganizer_expectThrows()
   {
@@ -250,7 +253,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonialsMissingApiKey_expectThrows()
   {
@@ -263,7 +266,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonialsInvalidType_expectThrows()
   {
@@ -276,7 +279,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonialsApiVersionNonNumeric_expectThrows()
   {
@@ -289,7 +292,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonialsApiVersionLowerThan1_expectThrows()
   {
@@ -302,7 +305,7 @@ class YesTicketApiTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketApi
+   * @covers YesTicket\Api
    */
   function test_getTestimonialsApiVersionBiggerThan2_expectThrows()
   {

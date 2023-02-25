@@ -1,12 +1,15 @@
 <?php
 
+namespace YesTicket\Admin;
+use YesTicket\PluginOptions;
+
 include_once("settings_section.php");
 include_once(__DIR__ . "/../helpers/plugin_options.php");
 
 /**
  * YesTicket's required settings
  */
-class YesTicketSettingsRequired extends YesTicketSettingsSection
+class SettingsRequired extends SettingsSection
 {
 
   public function __construct($parent_slug)
@@ -21,7 +24,7 @@ class YesTicketSettingsRequired extends YesTicketSettingsSection
   public function configure()
   {
 
-    YesTicketPluginOptions::getInstance()->register_settings_required($this->get_slug());
+    PluginOptions::getInstance()->register_settings_required($this->get_slug());
 
     // Register required section and fields
     add_settings_section(
@@ -65,7 +68,7 @@ class YesTicketSettingsRequired extends YesTicketSettingsSection
   {
     $action = esc_url(admin_url('options.php'));
     $request_url   = remove_query_arg('_wp_http_referer');
-    if (!YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+    if (!PluginOptions::getInstance()->areNecessarySettingsSet()) {
       $request_url = preg_replace('/-settings/', '', $request_url);
     }
     $this->render_template('settings_required', compact("action", "request_url"));
@@ -76,7 +79,7 @@ class YesTicketSettingsRequired extends YesTicketSettingsSection
    */
   public function render_api_key()
   {
-    $api_key = YesTicketPluginOptions::getInstance()->getApiKey();
+    $api_key = PluginOptions::getInstance()->getApiKey();
     print <<<EOD
         <input type='text'
                placeholder='61dc12e43225e22add15ff1b'
@@ -91,7 +94,7 @@ EOD;
    */
   public function render_organizer_id()
   {
-    $organizer_id = YesTicketPluginOptions::getInstance()->getOrganizerID();
+    $organizer_id = PluginOptions::getInstance()->getOrganizerID();
     print <<<EOD
       <input type='number'
              min='1'

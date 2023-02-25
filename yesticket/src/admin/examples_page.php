@@ -1,12 +1,15 @@
 <?php
 
+namespace YesTicket\Admin;
+use YesTicket\Templater;
+
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
 
 /**
  * Shortcode Examples and instructions for YesTicket plugin
  */
-class YesTicketExamples extends YesTicketTemplater
+class Examples extends Templater
 {
 
   /**

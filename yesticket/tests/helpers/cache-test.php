@@ -1,24 +1,27 @@
 <?php
 
-class YesTicketCacheTest extends WP_UnitTestCase
+namespace YesTicket;
+use WP_Http;
+
+class CacheTest extends \WP_UnitTestCase
 {
   private $opt_key = 'yesticket_transient_keys';
 
   function test_class_exists()
   {
-    $this->assertTrue(class_exists("YesTicketCache"));
+    $this->assertTrue(class_exists("YesTicket\Cache"));
   }
 
   /**
-   * @covers YesTicketCache
+   * @covers YesTicket\Cache
    */
   function test_get_instance()
   {
-    $_class = new ReflectionClass(YesTicketCache::class);
+    $_class = new \ReflectionClass(Cache::class);
     $_instance_prop = $_class->getProperty("instance");
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);
-    $this->assertNotEmpty(YesTicketCache::getInstance());
+    $this->assertNotEmpty(Cache::getInstance());
     $opt = get_option($this->opt_key);
     $this->assertIsArray($opt);
     $this->assertCount(0, $opt);
@@ -26,28 +29,28 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketCache
+   * @covers YesTicket\Cache
    */
   function test_cacheKey()
   {
     $very_long_url = 'https://yesticket.org/some/very/long/url/with/more/than/172/characters/to/verify/the/method/keeps/its/limit/omg/that/requires/a/lot/of/text/I/did/not/think/that/far/but/now/I/got/it';
-    $cacheKey = YesTicketCache::getInstance()->cacheKey($very_long_url);
+    $cacheKey = Cache::getInstance()->cacheKey($very_long_url);
     $this->assertNotEmpty($cacheKey);
     $this->assertTrue(strlen($cacheKey) < 172, "Transient key must be <172 characters!");
-    $this->assertSame($cacheKey, YesTicketCache::getInstance()->cacheKey($very_long_url), "Should be deterministic.");
+    $this->assertSame($cacheKey, Cache::getInstance()->cacheKey($very_long_url), "Should be deterministic.");
     $this->assertFalse(
-      YesTicketCache::getInstance()->cacheKey('a') == YesTicketCache::getInstance()->cacheKey('b'),
+      Cache::getInstance()->cacheKey('a') == Cache::getInstance()->cacheKey('b'),
       "Should return different results for different inputs"
     );
   }
 
   /**
-   * @covers YesTicketCache
+   * @covers YesTicket\Cache
    */
   function test_clear()
   {
     // Empty option, expect no error
-    YesTicketCache::getInstance()->clear();
+    Cache::getInstance()->clear();
     $this->assertIsArray(get_option($this->opt_key));
     $this->assertCount(0, get_option($this->opt_key));
 
@@ -55,7 +58,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
     set_transient('test-A', 'value-A', 0);
     update_option($this->opt_key,  ['test-A']);
     // clear cache
-    YesTicketCache::getInstance()->clear();
+    Cache::getInstance()->clear();
     // expect option [] and transient gone (FALSE)
     $this->assertIsArray(get_option($this->opt_key));
     $this->assertCount(0, get_option($this->opt_key));
@@ -67,7 +70,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
     set_transient('unrelated-B', 'value-B', 0);
     update_option($this->opt_key,  ['test-A']);
     // clear cache
-    YesTicketCache::getInstance()->clear();
+    Cache::getInstance()->clear();
     // expect option [] and transient 'test-A' gone (FALSE)
     // and unrelated transient to live on.
     $this->assertIsArray(get_option($this->opt_key));
@@ -82,7 +85,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
     set_transient('test-B', 'value-B', 0);
     update_option($this->opt_key,  ['test-A', 'test-B']);
     // clear cache
-    YesTicketCache::getInstance()->clear();
+    Cache::getInstance()->clear();
     // expect option [] and transients gone (FALSE)
     $this->assertIsArray(get_option($this->opt_key));
     $this->assertCount(0, get_option($this->opt_key));
@@ -91,13 +94,13 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketCache
+   * @covers YesTicket\Cache
    */
   function test_getFromCacheOrFresh()
   {
     // constants
     $get_url = 'test-url';
-    $cacheKey = YesTicketCache::getInstance()->cacheKey($get_url);
+    $cacheKey = Cache::getInstance()->cacheKey($get_url);
 
     // General Setup
     $pre_http_request_filter_has_run = false;
@@ -123,7 +126,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $external_call_url = '';
     delete_transient($cacheKey);
     // Call
-    $result = YesTicketCache::getInstance()->getFromCacheOrFresh($get_url);
+    $result = Cache::getInstance()->getFromCacheOrFresh($get_url);
     // Check Mock was invoked
     $this->assertTrue($pre_http_request_filter_has_run, "Should make HTTP call.");
     $this->assertSame($external_call_url, $get_url, "Called wrong url");
@@ -141,7 +144,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
     $pre_http_request_filter_has_run = false;
     $external_call_url = '';
     // Call
-    $result = YesTicketCache::getInstance()->getFromCacheOrFresh($get_url);
+    $result = Cache::getInstance()->getFromCacheOrFresh($get_url);
     $this->assertFalse($pre_http_request_filter_has_run, "Should have used the cache.");
     $this->assertNotEmpty($result);
     $this->assertNotEmpty($result->{'a-key'}, "Expect result to match cached response");
@@ -149,12 +152,12 @@ class YesTicketCacheTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketCache
+   * @covers YesTicket\Cache
    */
   function test_gettingErrorFromApi()
   {
     $get_url = 'test-url';
-    delete_transient(YesTicketCache::getInstance()->cacheKey($get_url));
+    delete_transient(Cache::getInstance()->cacheKey($get_url));
 
     // Setup MOCK for HTTP call
     remove_all_filters('pre_http_request');
@@ -169,7 +172,7 @@ class YesTicketCacheTest extends WP_UnitTestCase
         'body'        => '',
       );
     }, 10, 3);
-    $this->expectException(RuntimeException::class);
-    YesTicketCache::getInstance()->getFromCacheOrFresh($get_url);
+    $this->expectException(\RuntimeException::class);
+    Cache::getInstance()->getFromCacheOrFresh($get_url);
   }
 }

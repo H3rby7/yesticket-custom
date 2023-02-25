@@ -1,15 +1,17 @@
 <?php
+namespace YesTicket;
+
 include_once("functions.php");
 
 /**
  * Manage the plugin's wp options
  */
-class YesTicketPluginOptions
+class PluginOptions
 {
   /**
    * The $instance
    *
-   * @var YesTicketCache
+   * @var Cache
    */
   static private $instance;
 
@@ -30,14 +32,14 @@ class YesTicketPluginOptions
   /**
    * Get the $instance
    * 
-   * @return YesTicketPluginOptions $instance
+   * @return PluginOptions $instance
    */
   static public function getInstance()
   {
-    if (!isset(YesTicketPluginOptions::$instance)) {
-      YesTicketPluginOptions::$instance = new YesTicketPluginOptions();
+    if (!isset(PluginOptions::$instance)) {
+      PluginOptions::$instance = new PluginOptions();
     }
-    return YesTicketPluginOptions::$instance;
+    return PluginOptions::$instance;
   }
 
   /**
@@ -116,7 +118,7 @@ class YesTicketPluginOptions
   {
     register_setting(
       $option_group,
-      YesTicketPluginOptions::SETTINGS_TECHNICAL_KEY,
+      PluginOptions::SETTINGS_TECHNICAL_KEY,
       $this->settings_technical_args
     );
   }
@@ -130,7 +132,7 @@ class YesTicketPluginOptions
   {
     register_setting(
       $option_group,
-      YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
+      PluginOptions::SETTINGS_REQUIRED_KEY,
       $this->settings_required_args
     );
   }
@@ -143,7 +145,7 @@ class YesTicketPluginOptions
   public function getOrganizerID()
   {
     return $this->getOptionNumber(
-      YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
+      PluginOptions::SETTINGS_REQUIRED_KEY,
       'organizer_id'
     );
   }
@@ -156,7 +158,7 @@ class YesTicketPluginOptions
   public function getApiKey()
   {
     return $this->getOptionString(
-      YesTicketPluginOptions::SETTINGS_REQUIRED_KEY,
+      PluginOptions::SETTINGS_REQUIRED_KEY,
       'api_key'
     );
   }
@@ -169,7 +171,7 @@ class YesTicketPluginOptions
   public function getCacheTimeInMinutes()
   {
     return $this->getOptionNumber(
-      YesTicketPluginOptions::SETTINGS_TECHNICAL_KEY,
+      PluginOptions::SETTINGS_TECHNICAL_KEY,
       'cache_time_in_minutes'
     );
   }

@@ -1,5 +1,8 @@
 <?php
 
+namespace YesTicket\Admin;
+use YesTicket\PluginOptions;
+
 include_once("examples_page.php");
 include_once("settings_page.php");
 include_once(__DIR__ . "/../helpers/functions.php");
@@ -8,7 +11,7 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
 /**
  * Builds the menu entries for the YesTicket plugin
  */
-class YesTicketPluginMenu
+class PluginMenu
 {
   /**
    * Get the capability required to view the admin page.
@@ -55,14 +58,14 @@ class YesTicketPluginMenu
 /**
  * Register the menu pages using the Settings API.
  */
-function ytp_add_plugin_menu()
+function add_plugin_menu()
 {
-  $admin_page = new YesTicketPluginMenu();
-  $examples_page = new YesTicketExamples($admin_page->get_slug());
-  $settings_page = new YesTicketSettingsPage($admin_page->get_slug());
+  $admin_page = new PluginMenu();
+  $examples_page = new Examples($admin_page->get_slug());
+  $settings_page = new SettingsPage($admin_page->get_slug());
   $admin_page_slug = $admin_page->get_slug();
 
-  if (!YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+  if (!PluginOptions::getInstance()->areNecessarySettingsSet()) {
     $admin_page_slug = $settings_page->get_slug();
   }
 
@@ -75,7 +78,7 @@ function ytp_add_plugin_menu()
     ytp_getImageUrl('YesTicket_icon_small.png')
   );
 
-  if (YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+  if (PluginOptions::getInstance()->areNecessarySettingsSet()) {
     add_submenu_page(
       $admin_page->get_slug(),
       $examples_page->get_page_title(),
@@ -98,4 +101,4 @@ function ytp_add_plugin_menu()
   add_action('admin_init', [$settings_page, 'configure']);
 }
 
-add_action('admin_menu', 'ytp_add_plugin_menu');
+add_action('admin_menu', 'YesTicket\Admin\add_plugin_menu');

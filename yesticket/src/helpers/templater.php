@@ -1,9 +1,11 @@
 <?php
 
+namespace YesTicket;
+
 /**
  * Base class for anything that uses Templates
  */
-abstract class YesTicketTemplater
+abstract class Templater
 {
 
   /**

@@ -1,32 +1,35 @@
 <?php
+
+namespace YesTicket;
+
 include_once("functions.php");
 include_once("plugin_options.php");
 /**
  * Cache for YesTicket API Calls
  */
-class YesTicketCache
+class Cache
 {
     /**
      * The $instance
      *
-     * @var YesTicketCache
+     * @var Cache
      */
     static private $instance;
 
     /**
      * Get the $instance
      * 
-     * @return YesTicketCache $instance
+     * @return Cache $instance
      */
     static public function getInstance()
     {
-        if (!isset(YesTicketCache::$instance)) {
-            YesTicketCache::$instance = new YesTicketCache();
+        if (!isset(Cache::$instance)) {
+            Cache::$instance = new Cache();
         }
         if (!get_option('yesticket_transient_keys', false)) {
             add_option('yesticket_transient_keys', array());
         }
-        return YesTicketCache::$instance;
+        return Cache::$instance;
     }
 
     /**
@@ -39,7 +42,7 @@ class YesTicketCache
      */
     public function getFromCacheOrFresh($get_url)
     {
-        $CACHE_TIME_IN_MINUTES = YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes();
+        $CACHE_TIME_IN_MINUTES = PluginOptions::getInstance()->getCacheTimeInMinutes();
         $CACHE_KEY = $this->cacheKey($get_url);
 
         // check if we have cached information
@@ -65,11 +68,11 @@ class YesTicketCache
     private function getData($get_url)
     {
         $this->logRequestMasked($get_url);
-        $http = new WP_Http;
+        $http = new \WP_Http;
         $result = $http->get($get_url);
         $get_content = $result['body'];
         if (empty($get_content) || $result['response']['code'] != 200) {
-            throw new RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
+            throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
         }
         $result = json_decode($get_content);
         return $result;

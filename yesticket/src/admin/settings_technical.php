@@ -1,5 +1,9 @@
 <?php
 
+namespace YesTicket\Admin;
+use YesTicket\Cache;
+use YesTicket\PluginOptions;
+
 include_once("settings_section.php");
 include_once(__DIR__ . "/../helpers/cache.php");
 include_once(__DIR__ . "/../helpers/plugin_options.php");
@@ -7,7 +11,7 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
 /**
  * YesTicket's technical settings
  */
-class YesTicketSettingsTechnical extends YesTicketSettingsSection
+class SettingsTechnical extends SettingsSection
 {
 
   private $cache;
@@ -19,7 +23,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsSection
   public function __construct($parent_slug)
   {
     parent::__construct($parent_slug);
-    $this->cache = YesTicketCache::getInstance();
+    $this->cache = Cache::getInstance();
     $this->configure();
   }
 
@@ -29,7 +33,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsSection
   public function configure()
   {
 
-    YesTicketPluginOptions::getInstance()->register_settings_technical($this->get_slug());
+    PluginOptions::getInstance()->register_settings_technical($this->get_slug());
 
     // Register technical section and fields
     add_settings_section(
@@ -71,7 +75,7 @@ class YesTicketSettingsTechnical extends YesTicketSettingsSection
    */
   public function render_cache_time()
   {
-    $cache_time = YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes();
+    $cache_time = PluginOptions::getInstance()->getCacheTimeInMinutes();
     print <<<EOD
         <input type='number' 
                name='yesticket_settings_technical[cache_time_in_minutes]' 

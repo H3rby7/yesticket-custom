@@ -1,18 +1,20 @@
 <?php
 
-class YesTicketPluginOptionsTest extends WP_UnitTestCase
+namespace YesTicket;
+
+class PluginOptionsTest extends \WP_UnitTestCase
 {
   function test_class_exists()
   {
-    $this->assertTrue(class_exists("YesTicketPluginOptions"));
+    $this->assertTrue(class_exists("YesTicket\PluginOptions"));
   }
 
   /**
-   * @covers YesTicketPluginOptions::getInstance
+   * @covers YesTicket\PluginOptions
    */
   function test_get_instance()
   {
-    $this->assertNotEmpty(YesTicketPluginOptions::getInstance());
+    $this->assertNotEmpty(PluginOptions::getInstance());
   }
 
   /**
@@ -22,7 +24,7 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
    */
   private function register_settings_technical($opt_group = 'test-slug')
   {
-    YesTicketPluginOptions::getInstance()->register_settings_technical($opt_group);
+    PluginOptions::getInstance()->register_settings_technical($opt_group);
   }
 
   /**
@@ -32,11 +34,11 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
    */
   private function register_settings_required($opt_group = 'test-slug')
   {
-    YesTicketPluginOptions::getInstance()->register_settings_required($opt_group);
+    PluginOptions::getInstance()->register_settings_required($opt_group);
   }
 
   /**
-   * @covers YesTicketPluginOptions::register_settings_technical
+   * @covers YesTicket\PluginOptions
    */
   function test_register_settings_technical()
   {
@@ -66,7 +68,7 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketPluginOptions::register_settings_required
+   * @covers YesTicket\PluginOptions
    */
   function test_register_settings_required()
   {
@@ -96,7 +98,7 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers YesTicketPluginOptions::getCacheTimeInMinutes
+   * @covers YesTicket\PluginOptions
    */
   function test_getCacheTimeInMinutes()
   {
@@ -104,17 +106,17 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->register_settings_technical();
 
     // Basic Call
-    $this->assertSame(60, YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes(), "Expected option's default value");
+    $this->assertSame(60, PluginOptions::getInstance()->getCacheTimeInMinutes(), "Expected option's default value");
 
     // Test update propagates
     $this->assertTrue(update_option('yesticket_settings_technical', array(
       'cache_time_in_minutes' => 69
     )));
-    $this->assertSame(69, YesTicketPluginOptions::getInstance()->getCacheTimeInMinutes(), "Value should have changed");
+    $this->assertSame(69, PluginOptions::getInstance()->getCacheTimeInMinutes(), "Value should have changed");
   }
 
   /**
-   * @covers YesTicketPluginOptions::getApiKey
+   * @covers YesTicket\PluginOptions
    */
   function test_getApiKey()
   {
@@ -123,17 +125,17 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->register_settings_required();
 
     // Basic Call
-    $this->assertNull(YesTicketPluginOptions::getInstance()->getApiKey(), "Expected option's default value");
+    $this->assertNull(PluginOptions::getInstance()->getApiKey(), "Expected option's default value");
 
     // Test update propagates
     $this->assertTrue(update_option($opt_key, array(
       'api_key' => 'testkey'
     )));
-    $this->assertSame('testkey', YesTicketPluginOptions::getInstance()->getApiKey(), "Value should have changed");
+    $this->assertSame('testkey', PluginOptions::getInstance()->getApiKey(), "Value should have changed");
   }
 
   /**
-   * @covers YesTicketPluginOptions::getOrganizerID
+   * @covers YesTicket\PluginOptions
    */
   function test_getOrganizerID()
   {
@@ -142,17 +144,17 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     $this->register_settings_required();
 
     // Basic Call
-    $this->assertNull(YesTicketPluginOptions::getInstance()->getOrganizerID(), "Expected option's default value");
+    $this->assertNull(PluginOptions::getInstance()->getOrganizerID(), "Expected option's default value");
 
     // Test update propagates
     $this->assertTrue(update_option($opt_key, array(
       'organizer_id' => '161'
     )));
-    $this->assertSame('161', YesTicketPluginOptions::getInstance()->getOrganizerID(), "Value should have changed");
+    $this->assertSame('161', PluginOptions::getInstance()->getOrganizerID(), "Value should have changed");
   }
 
   /**
-   * @covers YesTicketPluginOptions::areNecessarySettingsSet
+   * @covers YesTicket\PluginOptions
    */
   function test_areNecessarySettingsSet()
   {
@@ -164,29 +166,29 @@ class YesTicketPluginOptionsTest extends WP_UnitTestCase
     unregister_setting($opt_group, $opt_key);
 
     // Settings not registered, expect false
-    $this->assertFalse(YesTicketPluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because settings were not registered.");
+    $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because settings were not registered.");
 
     // Register settings AND params are NULL, expect false
     $this->register_settings_required($opt_group);
-    $this->assertFalse(YesTicketPluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because organizer_id and api_key are NULL.");
+    $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because organizer_id and api_key are NULL.");
 
     // only organizer_id is set, expect false
     $this->assertTrue(update_option($opt_key, array(
       'organizer_id' => '161'
     )));
-    $this->assertFalse(YesTicketPluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because api_key is NULL.");
+    $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because api_key is NULL.");
 
     // only api_key is set, expect false
     $this->assertTrue(update_option($opt_key, array(
       'api_key' => 'testkey'
     )));
-    $this->assertFalse(YesTicketPluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because organizer_id is NULL.");
+    $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because organizer_id is NULL.");
 
     // All set, expect true
     $this->assertTrue(update_option($opt_key, array(
       'organizer_id' => '161',
       'api_key' => 'testkey'
     )));
-    $this->assertTrue(YesTicketPluginOptions::getInstance()->areNecessarySettingsSet());
+    $this->assertTrue(PluginOptions::getInstance()->areNecessarySettingsSet());
   }
 }

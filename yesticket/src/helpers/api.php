@@ -1,5 +1,7 @@
 <?php
 
+namespace YesTicket;
+
 include_once("cache.php");
 include_once("functions.php");
 include_once("plugin_options.php");
@@ -7,32 +9,32 @@ include_once("plugin_options.php");
 /**
  * Grants simplified access to the YesTicket API
  */
-class YesTicketApi
+class Api
 {
     /**
      * The $instance
      *
-     * @var YesTicketApi
+     * @var Api
      */
     static private $instance;
 
     /**
      * Get the $instance
      * 
-     * @return YesTicketApi $instance
+     * @return Api $instance
      */
     static public function getInstance()
     {
-        if (!isset(YesTicketApi::$instance)) {
-            YesTicketApi::$instance = new YesTicketApi();
+        if (!isset(Api::$instance)) {
+            Api::$instance = new Api();
         }
-        return YesTicketApi::$instance;
+        return Api::$instance;
     }
 
     /**
      * The $instance
      *
-     * @var YesTicketCache
+     * @var Cache
      */
     private $cache;
 
@@ -41,7 +43,7 @@ class YesTicketApi
      */
     public function __construct()
     {
-        $this->cache = YesTicketCache::getInstance();
+        $this->cache = Cache::getInstance();
     }
 
     /**
@@ -94,8 +96,8 @@ class YesTicketApi
      */
     private function throw_on_missing_organizer_id($att)
     {
-        if (empty(YesTicketPluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
-            throw new InvalidArgumentException(
+        if (empty(PluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
+            throw new \InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
                 __("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
             );
@@ -111,8 +113,8 @@ class YesTicketApi
      */
     private function throw_on_missing_api_key($att)
     {
-        if (empty(YesTicketPluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
-            throw new InvalidArgumentException(
+        if (empty(PluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
+            throw new \InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
                 __("Please configure your 'key' in the plugin settings.", "yesticket")
             );
@@ -136,7 +138,7 @@ class YesTicketApi
                 strcasecmp($type, "workshop") != 0 and
                 strcasecmp($type, "festival") != 0
             ) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     /* translators: Error message, if the shortcode uses wrong/invalid types*/
                     __("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
                 );
@@ -155,7 +157,7 @@ class YesTicketApi
     {
         if (isset($att["api-version"])) {
             if (!array_key_exists($att["api-version"], $this->apiEndpoints)) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     sprintf(
                         /* translators: Error message, if the shortcode uses an invalid api-version - %1$s is replaced with the highest possible version */
                         __('The hidden field "api-version" must be an int bigger or equal to 1 and smaller or equal to %1$s.', "yesticket"),
@@ -351,7 +353,7 @@ class YesTicketApi
         if (!empty($att["organizer"])) {
             return $att["organizer"];
         } else {
-            return YesTicketPluginOptions::getInstance()->getOrganizerID();
+            return PluginOptions::getInstance()->getOrganizerID();
         }
     }
 
@@ -369,7 +371,7 @@ class YesTicketApi
         if (!empty($att["key"])) {
             return $att["key"];
         } else {
-            return YesTicketPluginOptions::getInstance()->getApiKey();
+            return PluginOptions::getInstance()->getApiKey();
         }
     }
 }

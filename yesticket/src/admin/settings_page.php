@@ -1,5 +1,8 @@
 <?php
 
+namespace YesTicket\Admin;
+use YesTicket\PluginOptions;
+
 include_once("settings_required.php");
 include_once("settings_section.php");
 include_once("settings_technical.php");
@@ -9,7 +12,7 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
 /**
  * The admin page where settings can be adjusted
  */
-class YesTicketSettingsPage extends YesTicketSettingsSection
+class SettingsPage extends SettingsSection
 {
 
   protected $required;
@@ -20,8 +23,8 @@ class YesTicketSettingsPage extends YesTicketSettingsSection
    */
   public function configure()
   {
-    $this->required = new YesTicketSettingsRequired($this->get_slug());
-    $this->technical = new YesTicketSettingsTechnical($this->get_slug());
+    $this->required = new SettingsRequired($this->get_slug());
+    $this->technical = new SettingsTechnical($this->get_slug());
   }
 
   /**
@@ -61,7 +64,7 @@ class YesTicketSettingsPage extends YesTicketSettingsSection
   {
     wp_enqueue_style('yesticket-admin');
     $this->render_template('header');
-    if (YesTicketPluginOptions::getInstance()->areNecessarySettingsSet()) {
+    if (PluginOptions::getInstance()->areNecessarySettingsSet()) {
       $this->render_template('settings_wrapper');
     } else {
       $this->required->render();

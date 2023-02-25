@@ -1,30 +1,32 @@
 <?php
 
+namespace YesTicket;
+
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 
-add_shortcode('yesticket_events_list', array('YesTicketEventsList', 'shortCode'));
+add_shortcode('yesticket_events_list', array('YesTicket\EventsList', 'shortCode'));
 
 /**
  * Shortcode [yesticket_events_list]
  */
-class YesTicketEventsList extends YesTicketEventUsingShortcode
+class EventsList extends EventUsingShortcode
 {
     /**
      * The $instance
-     * @var YesTicketEventsList
+     * @var EventsList
      */
     static private $instance;
     static public function getInstance()
     {
-        if (!isset(YesTicketEventsList::$instance)) {
-            YesTicketEventsList::$instance = new YesTicketEventsList();
+        if (!isset(EventsList::$instance)) {
+            EventsList::$instance = new EventsList();
         }
-        return YesTicketEventsList::$instance;
+        return EventsList::$instance;
     }
     static public function shortCode($atts)
     {
-        return YesTicketEventsList::getInstance()->get($atts);
+        return EventsList::getInstance()->get($atts);
     }
 
     protected $cssClass = 'ytp-event-list';

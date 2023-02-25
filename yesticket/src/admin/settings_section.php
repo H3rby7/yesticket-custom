@@ -1,12 +1,15 @@
 <?php
 
+namespace YesTicket\Admin;
+use YesTicket\Templater;
+
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
 
 /**
- * Base class for YesTicketSettings
+ * Base class for Settings
  */
-abstract class YesTicketSettingsSection extends YesTicketTemplater
+abstract class SettingsSection extends Templater
 {
 
   /**

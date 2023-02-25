@@ -1,15 +1,17 @@
 <?php
 
+namespace YesTicket;
+
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
 
-add_shortcode('yesticket_testimonials', 'ytp_shortcode_testimonials');
+add_shortcode('yesticket_testimonials', 'YesTicket\shortcode_testimonials');
 
 /**
  * Callback to add_shortcode [yesticket_testimonials]
  */
-function ytp_shortcode_testimonials($atts)
+function shortcode_testimonials($atts)
 {
     wp_enqueue_style('yesticket');
     $att = shortcode_atts(array(
@@ -23,32 +25,32 @@ function ytp_shortcode_testimonials($atts)
         'design' => 'basic',
         'details' => 'no',
     ), $atts);
-    return YesTicketTestimonials::getInstance()->get($att);
+    return Testimonials::getInstance()->get($att);
 }
 
 /**
  * Shortcode [yesticket_testimonials]
  */
-class YesTicketTestimonials extends YesTicketTemplater
+class Testimonials extends Templater
 {
     /**
      * The $instance
      *
-     * @var YesTicketTestimonials
+     * @var Testimonials
      */
     static private $instance;
 
     /**
      * Get the $instance
      * 
-     * @return YesTicketTestimonials $instance
+     * @return Testimonials $instance
      */
     static public function getInstance()
     {
-        if (!isset(YesTicketTestimonials::$instance)) {
-            YesTicketTestimonials::$instance = new YesTicketTestimonials();
+        if (!isset(Testimonials::$instance)) {
+            Testimonials::$instance = new Testimonials();
         }
-        return YesTicketTestimonials::$instance;
+        return Testimonials::$instance;
     }
 
     protected function __construct()
@@ -81,7 +83,7 @@ class YesTicketTestimonials extends YesTicketTemplater
         $classes = $this->getDesignClasses($att);
         $content = ytp_render_shortcode_container_div($classes, $att);
         try {
-            $result = YesTicketApi::getInstance()->getTestimonials($att);
+            $result = Api::getInstance()->getTestimonials($att);
             if (!is_countable($result) or count($result) < 1) {
                 $content .= ytp_render_no_events();
             } else if (array_key_exists('message', $result) && $result->message == "no items found") {
@@ -89,7 +91,7 @@ class YesTicketTestimonials extends YesTicketTemplater
             } else {
                 $content .= $this->render_testimonials($result, $att);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $content .= __($e->getMessage(), 'yesticket');
         }
         $content .= "</div>\n";
