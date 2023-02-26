@@ -59,4 +59,28 @@ class YesTicketHelpersTest extends WP_UnitTestCase
     $this->assertStringContainsString('YESTICKET: Array', $result);
     $this->assertStringContainsString('[my-key] => my-value', $result);
   }
+
+  function run_ytp_render_eventType($expected, $input)
+  {
+    ob_start();
+    ytp_render_eventType($input);
+    $this->assertSame($expected, ob_get_clean(), "should be translated to 'EN'");
+  }
+
+  /**
+   * @covers ::ytp_render_eventType
+   */
+  function test_ytp_render_eventType()
+  {
+    add_filter('locale', function () {
+      return 'en_EN';
+    });
+    $this->run_ytp_render_eventType("Performance", "auftritt");
+    $this->run_ytp_render_eventType("Performance", "Auftritt");
+    $this->run_ytp_render_eventType("Workshop", "workshop");
+    $this->run_ytp_render_eventType("Workshop", "Workshop");
+    $this->run_ytp_render_eventType("Festival", "festival");
+    $this->run_ytp_render_eventType("Festival", "Festival");
+    $this->run_ytp_render_eventType("unknownEventType", "unknownEventType");
+  }
 }
