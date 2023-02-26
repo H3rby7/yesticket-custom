@@ -83,4 +83,36 @@ class YesTicketHelpersTest extends WP_UnitTestCase
     $this->run_ytp_render_eventType("Festival", "Festival");
     $this->run_ytp_render_eventType("unknownEventType", "unknownEventType");
   }
+
+  /**
+   * @param string $timezone a valid timezone descriptor. If $gmt_offset is used, this will be the expected value.
+   * @param string $datetime_string in format 'Y-m-d H:i:s'
+   * @param string $gmt_offset in format '+-HH:MM'
+   */
+  function run_ytp_to_local_datetime($timezone, $datetime_string, $gmt_offset = NULL)
+  {
+    delete_option('timezone_string');
+    delete_option('gmt_offset');
+    if (isset($gmt_offset)) {
+      $this->assertTrue(add_option('gmt_offset', $gmt_offset), "Should have changed timezone");
+    } else {
+      $this->assertTrue(add_option('timezone_string', $timezone), "Should have changed timezone");
+    }
+    $this->assertSame($timezone, wp_timezone()->getName());
+    $result = ytp_to_local_datetime($datetime_string);
+    $this->assertSame($timezone, $result->getTimezone()->getName(), "Timezone should be '$timezone'");
+    $this->assertSame($datetime_string, wp_date('Y-m-d H:i:s', $result->getTimestamp()));
+  }
+
+  /**
+   * @covers ::ytp_to_local_datetime
+   */
+  function test_ytp_to_local_datetime()
+  {
+    $this->run_ytp_to_local_datetime('UTC', '2022-03-27 20:00:00');
+    $this->run_ytp_to_local_datetime('Europe/Berlin', '2022-03-27 20:00:00');
+    $this->run_ytp_to_local_datetime('+01:00', '2022-03-27 20:00:00', '1');
+    $this->run_ytp_to_local_datetime('-01:00', '2022-03-27 20:00:00', '-1');
+    $this->run_ytp_to_local_datetime('+01:15', '2022-03-27 20:00:00', '1.25');
+  }
 }
