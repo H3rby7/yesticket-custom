@@ -34,7 +34,7 @@ class ApiTest extends \WP_UnitTestCase
       ->setMethods(['getFromCacheOrFresh'])
       ->getMock();
     $_cache_property->setValue($instance, $cache_mock);
-    $mock_result = 'mocked-body';
+    $mock_result = json_decode('[{"event_name": "My mocked event #1"}, {"event_name": "My other mocked event (#2)"}]');
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
       ->with($expected_url)
@@ -103,6 +103,15 @@ class ApiTest extends \WP_UnitTestCase
     $this->run_events('en_EN', array('type' => 'all'), '1', 'key1', "$base_uri?type=all&lang=en&organizer=1&key=key1");
     // api-version = 1
     $this->run_events('en_EN', array('api-version' => '1'), '1', 'key1', "https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1");
+    // grep = 'mocked'
+    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    $result = Api::getInstance()->getEvents(array('grep' => 'mocked'));
+    $this->assertCount(2, $result);
+    // grep = '#1'
+    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    $result = Api::getInstance()->getEvents(array('grep' => '#1'));
+    $this->assertCount(1, $result);
+    $this->assertSame('My mocked event #1', $result[0]->event_name);
   }
 
   /**
