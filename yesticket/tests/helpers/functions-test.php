@@ -1,5 +1,7 @@
 <?php
 
+include_once(__DIR__ . "/../utility.php");
+
 class YesTicketHelpersTest extends WP_UnitTestCase
 {
   /**
@@ -114,5 +116,40 @@ class YesTicketHelpersTest extends WP_UnitTestCase
     $this->run_ytp_to_local_datetime('+01:00', '2022-03-27 20:00:00', '1');
     $this->run_ytp_to_local_datetime('-01:00', '2022-03-27 20:00:00', '-1');
     $this->run_ytp_to_local_datetime('+01:15', '2022-03-27 20:00:00', '1.25');
+  }
+
+  /**
+   * @covers ::ytp_render_date_and_time
+   */
+  function test_ytp_render_date_and_time()
+  {
+    $translated = false;
+    assertTranslate($translated, 'F j, Y \a\\t g:i A');
+    ob_start();
+    ytp_render_date_and_time('2022-02-01 20:00:00');
+    $this->assertSame('February 1, 2022 at 8:00 PM', ob_get_clean());
+    $this->assertTrue($translated, "Should have called translate");
+  }
+
+  /**
+   * @covers ::ytp_render_date
+   */
+  function test_ytp_render_date()
+  {
+    $translated = false;
+    assertTranslate($translated, 'F j, Y');
+    $this->assertSame('February 1, 2022', ytp_render_date('2022-02-01 20:00:00'));
+    $this->assertTrue($translated, "Should have called translate");
+  }
+
+  /**
+   * @covers ::ytp_render_time
+   */
+  function test_ytp_render_time()
+  {
+    $translated = false;
+    assertTranslate($translated, 'g:i A');
+    $this->assertSame('8:00 PM', ytp_render_time('2022-02-01 20:00:00'));
+    $this->assertTrue($translated, "Should have called translate");
   }
 }
