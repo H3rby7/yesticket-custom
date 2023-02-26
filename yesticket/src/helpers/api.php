@@ -186,7 +186,7 @@ class Api
             $result = $this->cache->getFromCacheOrFresh($apiCall);
         } else {
             // if we 'grep' (filter events manually on our side)
-            $_count = $att["count"];
+            $_count = empty($att["count"]) ? null : $att["count"];
             // we unset 'count' to call the api for more elements than needed.
             ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events without \"count\", because \"grep\" is in use.'");
             $att["count"] = null;
@@ -194,7 +194,7 @@ class Api
             $unfiltered = $this->cache->getFromCacheOrFresh($apiCall);
             $att["count"] = $_count;
             // we filter the items
-            $result = $this->applyGrep($unfiltered, $att);
+            $result = $this->applyGrep($unfiltered, $att["grep"]);
         }
         if (empty($att["count"]) || !is_numeric($att["count"]) || !is_countable($result)) {
             // no count set or $result uncountable, just return list
@@ -232,16 +232,13 @@ class Api
      * Filter events by their event_name containing the string defined in $att["grep"]
      * 
      * @param mixed $eventList the list of events
-     * @param array $att of shortcode
+     * @param array $grep string to find
      * @return mixed the filtered list
      */
-    private function applyGrep($eventList, $att)
+    private function applyGrep($eventList, $grep = '')
     {
-        if (!isset($att["grep"]) || empty($att["grep"])) {
-            return $eventList;
-        }
-        return array_filter($eventList, function ($item) use ($att) {
-            return mb_stripos($item->event_name, $att["grep"]) !== FALSE;
+        return array_filter($eventList, function ($item) use ($grep) {
+            return mb_stripos($item->event_name, $grep) !== FALSE;
         });
     }
 
