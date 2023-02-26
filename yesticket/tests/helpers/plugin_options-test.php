@@ -14,7 +14,12 @@ class PluginOptionsTest extends \WP_UnitTestCase
    */
   function test_get_instance()
   {
+    $_class = new \ReflectionClass(PluginOptions::class);
+    $_instance_prop = $_class->getProperty("instance");
+    $_instance_prop->setAccessible(true);
+    $_instance_prop->setValue(NULL);
     $this->assertNotEmpty(PluginOptions::getInstance());
+    $_instance_prop->setAccessible(false);
   }
 
   /**
