@@ -1,5 +1,6 @@
 <?php
 if (!function_exists('is_countable')) {
+  // For PHP < 7.3.0
   /**
    * Verify that the contents of a variable is a countable value.
    * 
