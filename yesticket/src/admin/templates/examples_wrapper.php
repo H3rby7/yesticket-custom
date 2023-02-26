@@ -41,6 +41,14 @@
       "yesticket_testimonials",
       "sample_testimonials.png"
     ); ?>
+    <?php $this->render_navigation_tab(
+      "slides",
+      $activeTab,
+      /* translators: Refers to the 'yesticket_slides' shortcode */
+      \__("Slides", "yesticket"),
+      "yesticket_slides",
+      "sample_slides.png"
+    ); ?>
   </nav>
   <div class="ytp-admin-tab-content">
     <?php $this->render_tabContent($activeTab); ?>

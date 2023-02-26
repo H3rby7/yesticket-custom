@@ -8,7 +8,8 @@ services:
     # image: wordpress:5.9.2-php7.3
     # image: wordpress:6.1.1-php7.4
     # image: wordpress:6.1.1-php8.0
-    image: wordpress:6.1.1-php8.1
+    # image: wordpress:6.1.1-php8.1
+    image: wordpress:6.1.1-php8.2
     ports:
       - ${IP}:80:80 # change ip if required
     volumes:

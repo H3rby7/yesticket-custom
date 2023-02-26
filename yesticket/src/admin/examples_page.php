@@ -156,6 +156,9 @@ EOD;
       case 'testimonials':
         $this->render_template('examples_testimonials');
         break;
+      case 'slides':
+        $this->render_template('examples_slides');
+        break;
       default:
         $this->render_template('examples_events');
     endswitch;

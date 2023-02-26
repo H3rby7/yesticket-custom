@@ -1,0 +1,348 @@
+/*!
+ * Heavily stripped version of webslides css.
+ * And adjusted to our specific needs.
+ * URL: https://github.com/webslides/webslides#readme
+ * Credits: @jlantunez, @LuisSacristan, @Belelros
+ */
+@charset "UTF-8";
+/*
+=========================================
+0. CSS Reset & Normalize
+=========================================
+*/
+#ytp-slides main,
+#ytp-slides section {
+  display: block; }
+
+/*=========================================
+=========================================== */
+/* -- Disable elastic scrolling/bounce:
+webslides.js will add .ws-ready automatically. Don't worry :) -- */
+.ws-ready,
+.ws-ready body {
+  height: 100%;
+  overflow: hidden;
+  width: 100%; }
+
+.ws-ready.ws-ready-zoom {
+  overflow: visible; }
+  .ws-ready.ws-ready-zoom body {
+    overflow: auto; }
+
+#webslides {
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll; }
+  #webslides::-webkit-scrollbar {
+    display: none; }
+
+#ytp-slides .aligncenter {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
+
+/* === 1.2 Animations ================
+Just 5 basic animations:
+.fadeIn, .fadeInUp, .zoomIn, .slideInLeft, and .slideInRight
+https://github.com/daneden/animate.css */
+/*-- fadeIn -- */
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+@keyframes fadeIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+#ytp-slides .fadeIn {
+  -webkit-animation: fadeIn 1s;
+          animation: fadeIn 1s; }
+
+/*-- fadeInUp -- */
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100vh, 0);
+            transform: translate3d(0, 100vh, 0); }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+            transform: none; } }
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100vh, 0);
+            transform: translate3d(0, 100vh, 0); }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+            transform: none; } }
+
+#ytp-slides .fadeInUp {
+  -webkit-animation: fadeInUp 1s;
+          animation: fadeInUp 1s; }
+
+/*-- zoomIn -- */
+@-webkit-keyframes zoomIn {
+  from {
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+            transform: scale3d(0.3, 0.3, 0.3); }
+  50% {
+    opacity: 1; } }
+@keyframes zoomIn {
+  from {
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+            transform: scale3d(0.3, 0.3, 0.3); }
+  50% {
+    opacity: 1; } }
+
+#ytp-slides .zoomIn {
+  -webkit-animation: zoomIn 1s;
+          animation: zoomIn 1s; }
+
+/*-- slideInLeft -- */
+@-webkit-keyframes slideInLeft {
+  from {
+    -webkit-transform: translate3d(-100vw, 0, 0);
+            transform: translate3d(-100vw, 0, 0);
+    visibility: visible; }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); } }
+@keyframes slideInLeft {
+  from {
+    -webkit-transform: translate3d(-100vw, 0, 0);
+            transform: translate3d(-100vw, 0, 0);
+    visibility: visible; }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); } }
+
+#ytp-slides .slideInLeft {
+  -webkit-animation: slideInLeft 1s;
+          animation: slideInLeft 1s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both; }
+
+/*-- slideInRight -- */
+@-webkit-keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100vw, 0, 0);
+            transform: translate3d(100vw, 0, 0);
+    visibility: visible; }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); } }
+@keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100vw, 0, 0);
+            transform: translate3d(100vw, 0, 0);
+    visibility: visible; }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); } }
+
+#ytp-slides .slideInRight {
+  -webkit-animation: slideInRight 1s;
+          animation: slideInRight 1s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both; }
+
+/* Duration */
+#ytp-slides .slow {
+  -webkit-animation-duration: 4s;
+  animation-duration: 4s; }
+  #ytp-slides .slow + .slow {
+    -webkit-animation-duration: 5s;
+    animation-duration: 5s; }
+
+/* Delay */
+#ytp-slides .delay {animation-delay: 1.5s;}
+#ytp-slides .delay + .delay,
+#ytp-slides .delay2 {animation-delay: 3s;}
+#ytp-slides .delay2 + .delay,
+#ytp-slides .delay + .delay2 {animation-delay: 4.5s;}
+#ytp-slides .delay2 + .delay2 {animation-delay: 6s;}
+            
+/*============================
+2. TYPOGRAPHY & LISTS
+============================== */
+/* -- h1,h2... Promo/Landings -- */
+#ytp-slides .text-landing {
+  letter-spacing: .4rem;
+  text-transform: uppercase; }
+
+/* -- Separator/Symbols (stars ***...) -- */
+#ytp-slides .text-symbols {
+  font-weight: 600;
+  letter-spacing: .8rem;
+  text-align: center; }
+
+/*============================================
+5. SLIDES (Full Screen)
+Vertically and horizontally centered
+============================================== */
+/* Fade transition to all slides.
+* = All HTML elements will have those styles.*/
+#ytp-slides section * {
+  -webkit-animation: fadeIn .6s ease-in-out;
+          animation: fadeIn .6s ease-in-out; }
+
+#ytp-slides section .background {
+  -webkit-animation-duration: 0s;
+          animation-duration: 0s; }
+
+/*=== Section = Slide === */
+#ytp-slides section,
+#ytp-slides .slide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  min-height: 100vh;
+  page-break-after: always;
+  position: relative;
+  word-wrap: break-word; }
+
+/* slide alignment - top */
+#ytp-slides .slide-top {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start; }
+
+/* slide alignment - bottom */
+#ytp-slides .slide-bottom {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end; }
+
+
+/*=== 5.3 Slides - Background Images/Videos === */
+#ytp-slides .background,
+#ytp-slides [class*='background-'] {
+  background-repeat: no-repeat;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+/*=== BG Positions === */
+#ytp-slides .background {
+  background-position: center;
+  background-size: cover;
+}
+
+/*
+=========================================
+6. Wordpress & Yesticket Plugin Specifics
+=========================================
+*/
+
+#ytp-slides,
+#ytp-slides * {
+  z-index: 140000;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+#ytp-slides .background,
+#ytp-slides [class*='background-'] {
+  z-index: 120000;}
+#ytp-slides [class*='backdrop-'] {
+  z-index: 130000;}
+
+#ytp-slides {
+  --ytp--color--primary: white;
+  --ytp--color--contrast: black;
+  background-color: var(--ytp--color--primary);
+  color: var(--ytp--color--contrast);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+#ytp-slides #navigation {
+  display: none;
+}
+
+#ytp-slides .yesticket-slide {
+  justify-content: initial;
+  color: var(--ytp--color--primary);
+  height: 100%;
+}
+
+#ytp-slides .wrap {
+  margin: 2vw;
+  max-width: 100%;
+  position: relative;
+  height: 100%;}
+
+#ytp-slides .yesticket-slide .background {
+  height: 105%;
+  animation-duration: 1s;
+}
+
+#ytp-slides .yesticket-event-meta {
+  color: var(--ytp--color--primary);
+  padding: 2vw;
+  display: inline-block !important;
+  width: fit-content;
+}
+#ytp-slides .yesticket-event-meta h2 {
+  font-size: 200%;
+}
+
+#ytp-slides .yesticket-event-name {
+  color: var(--ytp--color--primary);
+  margin-bottom: 1rem;
+  display: inline-block !important;
+}
+
+#ytp-slides .yesticket-event-teaser {
+  position: absolute;
+  padding: 2vw;
+  bottom: 0;
+  right: 0;
+}
+
+#ytp-slides .yesticket-event-meta,
+#ytp-slides .yesticket-event-teaser {
+  max-width: 50%;
+}
+
+#ytp-slides .yesticket-event-teaser > p {
+  text-align: center;
+  float: right;
+}
+
+#ytp-slides .backdrop-dark {
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#ytp-slides .backdrop-dark > * {
+  background-color: var(--ytp--color--contrast);
+  width: 100%;
+  height: 100%;
+  z-index: inherit;
+}
