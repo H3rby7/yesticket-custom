@@ -9,7 +9,9 @@
  * Description: Online Ticketing
  * License: GPL2
  * Text Domain: yesticket
- * Domain Path: /languages
+ * Domain Path: /src/languages
+ * Requires at least: 5.6.0
+ * Requires PHP: 7.3
  */
 
 include_once("src/functions.php");
