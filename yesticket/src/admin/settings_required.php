@@ -69,6 +69,8 @@ class SettingsRequired extends SettingsSection
     $action = \esc_url(\admin_url('options.php'));
     $request_url   = \remove_query_arg('_wp_http_referer');
     if (!PluginOptions::getInstance()->areNecessarySettingsSet()) {
+      // TODO: If we redirect to examples page, we might redirect although the settings are not set and the user lands on an error page.
+      // reproduce: visit the site without necessary settings set; update only one option.
       $request_url = \preg_replace('/-settings/', '', $request_url);
     }
     $this->render_template('settings_required', \compact("action", "request_url"));
