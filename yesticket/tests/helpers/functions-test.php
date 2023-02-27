@@ -185,4 +185,34 @@ class YesTicketHelpersTest extends WP_UnitTestCase
     $this->assertSame('8:00 PM', ytp_render_time('2022-02-01 20:00:00'));
     $this->assertTrue($translated, "Should have called translate");
   }
+
+  /**
+   * @covers ::strpos_findLast_viaRegex
+   */
+  function test_strpos_findLast_viaRegex()
+  {
+    // Look for 'n'; given it only occurs once.
+    $this->assertSame(
+      15,
+      \strpos_findLast_viaRegex("this is my string", "/n/i"),
+      "Letter 'n' is at position 15!"
+    );
+    // Look for 't'; occuring two times
+    $this->assertSame(
+      12,
+      \strpos_findLast_viaRegex("this is my string", "/t/i"),
+      "Letter 't' is at position 12!"
+    );
+    // Look for r or y '[ry]'; 
+    $this->assertSame(
+      13,
+      \strpos_findLast_viaRegex("this is my string", "/[ry]/i"),
+      "Letter 'r' is last and at position 13!"
+    );
+    // Look for 'x'; expecting FALSE
+    $this->assertFalse(
+      \strpos_findLast_viaRegex("this is my string", "/x/i"),
+      "Letter 'x' is not present, Should return FALSE"
+    );
+  }
 }

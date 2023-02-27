@@ -160,18 +160,22 @@ function ytp_render_shortcode_container_div($shortcode_class, $att) {
  * @param string $haystack
  * @param string $needlePattern
  * 
- * @return integer starting position of last occurence
+ * @return integer|false starting position of last occurence or FALSE if none was found.
  */
 function strpos_findLast_viaRegex($haystack, $needlePattern)
 {
   // https://www.php.net/manual/de/function.preg-match-all.php
-  \preg_match_all($needlePattern, $haystack, $matches, PREG_OFFSET_CAPTURE);
-  // $matches is an array containing the matches
+  \preg_match_all($needlePattern, $haystack, $findings, PREG_OFFSET_CAPTURE);
+  // $findings is an array containing the findings
   // each match is an array of size 1, containing at [0] an array of 
   // [0] being the match and [1] the corresponding index.
-  if (\count($matches) < 0) {
-    return false;
+  $highestIndex = -1;
+  foreach ($findings as $pattern) {
+    foreach ($pattern as $match) {
+      if ($match[1] > $highestIndex) {
+        $highestIndex = $match[1];
+      }
+    }
   }
-  $lastMatch = $matches[\count($matches) - 1];
-  return $lastMatch[0][1];
+  return $highestIndex > -1 ? $highestIndex : false;
 }
