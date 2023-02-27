@@ -47,7 +47,7 @@ class Examples extends Templater
    */
   public function get_menu_title()
   {
-    return __('Shortcodes', 'yesticket');
+    return \__('Shortcodes', 'yesticket');
   }
 
   /**
@@ -57,7 +57,7 @@ class Examples extends Templater
    */
   public function get_page_title()
   {
-    return __('YesTicket Plugin Shortcodes', 'yesticket');
+    return \__('YesTicket Plugin Shortcodes', 'yesticket');
   }
 
   /**
@@ -85,7 +85,7 @@ class Examples extends Templater
    */
   public function render_page()
   {
-    wp_enqueue_style('yesticket-admin');
+    \wp_enqueue_style('yesticket-admin');
     $this->render_template('header');
     $this->render_template('examples_wrapper');
   }
@@ -98,10 +98,10 @@ class Examples extends Templater
    */
   private function render_shortcode_preview($shortcode, $previewImageFileName)
   {
-    $image_url = ytp_getImageUrl($previewImageFileName);
-    $alt_text = sprintf(
+    $image_url = \ytp_getImageUrl($previewImageFileName);
+    $alt_text = \sprintf(
       /* translators: %s is replaced with the shortcode, e.G. 'yesticket_events' */
-      __('[%s] preview', "yesticket"),
+      \__('[%s] preview', "yesticket"),
       $shortcode
     );
     print <<<EOD

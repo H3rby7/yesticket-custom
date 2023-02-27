@@ -22,7 +22,7 @@ abstract class Templater
    */
   protected function __construct($template_path)
   {
-    $this->template_path = rtrim($template_path, '/');
+    $this->template_path = \rtrim($template_path, '/');
   }
 
   /**
@@ -36,11 +36,11 @@ abstract class Templater
     $template_path = $this->template_path . '/' . $template . '.php';
 
     if (!is_readable($template_path)) {
-      ytp_log(__FILE__ . "@" . __LINE__ . ": 'Template not found: $template_path'");
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Template not found: $template_path'");
       return;
     }
     // Extract the variables to a local namespace
-    extract($variables);
+    \extract($variables);
 
     include $template_path;
   }

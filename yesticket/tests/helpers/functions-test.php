@@ -9,8 +9,8 @@ class YesTicketHelpersTest extends WP_UnitTestCase
    */
   function test_ytp_getImageUrl()
   {
-    $this->assertSame('http://example.org/wp-content/plugins/app/yesticket/src/img/', ytp_getImageUrl(''));
-    $this->assertSame('http://example.org/wp-content/plugins/app/yesticket/src/img/my-image.png', ytp_getImageUrl('my-image.png'));
+    $this->assertSame('http://example.org/wp-content/plugins/app/yesticket/src/img/', \ytp_getImageUrl(''));
+    $this->assertSame('http://example.org/wp-content/plugins/app/yesticket/src/img/my-image.png', \ytp_getImageUrl('my-image.png'));
   }
 
   /**
@@ -18,7 +18,7 @@ class YesTicketHelpersTest extends WP_UnitTestCase
    */
   function test_ytp_render_no_events()
   {
-    $text = ytp_render_no_events();
+    $text = \ytp_render_no_events();
     libxml_clear_errors();
     simplexml_load_string($text);
     $this->assertCount(0, libxml_get_errors(), 'Should produce valid HTML');
@@ -69,7 +69,7 @@ class YesTicketHelpersTest extends WP_UnitTestCase
   {
     $errorLogTmpfile = tmpfile();
     $errorLogLocationBackup = ini_set('error_log', stream_get_meta_data($errorLogTmpfile)['uri']);
-    ytp_log("my log content");
+    \ytp_log("my log content");
     ini_set('error_log', $errorLogLocationBackup);
     $result = stream_get_contents($errorLogTmpfile);
     $this->assertStringContainsString("YESTICKET: my log content", $result);
@@ -82,7 +82,7 @@ class YesTicketHelpersTest extends WP_UnitTestCase
   {
     $errorLogTmpfile = tmpfile();
     $errorLogLocationBackup = ini_set('error_log', stream_get_meta_data($errorLogTmpfile)['uri']);
-    ytp_log(array("my-key" => "my-value"));
+    \ytp_log(array("my-key" => "my-value"));
     ini_set('error_log', $errorLogLocationBackup);
     $result = stream_get_contents($errorLogTmpfile);
     $this->assertStringContainsString('YESTICKET: Array', $result);
@@ -101,7 +101,7 @@ class YesTicketHelpersTest extends WP_UnitTestCase
    */
   function test_ytp_render_eventType()
   {
-    add_filter('locale', function () {
+    \add_filter('locale', function () {
       return 'en_EN';
     });
     $this->run_ytp_render_eventType("Performance", "auftritt");
@@ -123,14 +123,14 @@ class YesTicketHelpersTest extends WP_UnitTestCase
     delete_option('timezone_string');
     delete_option('gmt_offset');
     if (isset($gmt_offset)) {
-      $this->assertTrue(add_option('gmt_offset', $gmt_offset), "Should have changed timezone");
+      $this->assertTrue(\add_option('gmt_offset', $gmt_offset), "Should have changed timezone");
     } else {
-      $this->assertTrue(add_option('timezone_string', $timezone), "Should have changed timezone");
+      $this->assertTrue(\add_option('timezone_string', $timezone), "Should have changed timezone");
     }
     $this->assertSame($timezone, wp_timezone()->getName());
     $result = ytp_to_local_datetime($datetime_string);
     $this->assertSame($timezone, $result->getTimezone()->getName(), "Timezone should be '$timezone'");
-    $this->assertSame($datetime_string, wp_date('Y-m-d H:i:s', $result->getTimestamp()));
+    $this->assertSame($datetime_string, \wp_date('Y-m-d H:i:s', $result->getTimestamp()));
   }
 
   /**

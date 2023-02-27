@@ -36,15 +36,15 @@ class SettingsTechnical extends SettingsSection
     PluginOptions::getInstance()->register_settings_technical($this->get_slug());
 
     // Register technical section and fields
-    add_settings_section(
+    \add_settings_section(
       $this->get_slug(),
-      __("Technical Settings", "yesticket"),
+      \__("Technical Settings", "yesticket"),
       array($this, 'render_technical_section'),
       $this->get_slug()
     );
-    add_settings_field(
+    \add_settings_field(
       $this->get_slug() . '-cache_time',
-      __("Cache time in minutes", "yesticket"),
+      \__("Cache time in minutes", "yesticket"),
       array($this, 'render_cache_time'),
       $this->get_slug(),
       $this->get_slug()
@@ -66,8 +66,8 @@ class SettingsTechnical extends SettingsSection
    */
   public function render()
   {
-    $action = esc_url(admin_url('options.php'));
-    $this->render_template('settings_technical', compact("action"));
+    $action = \esc_url(\admin_url('options.php'));
+    $this->render_template('settings_technical', \compact("action"));
   }
 
   /**
@@ -92,9 +92,9 @@ EOD;
   public function render_clear_cache_button()
   {
     /* translators: The sentence ends with a button 'Clear Cache' (can be translated at that msgId) */
-    $hint_text = __("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");
+    $hint_text = \__("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");
     /* translators: Text on a button, use imperativ if possible. */
-    $button_text = __("Clear Cache", "yesticket");
+    $button_text = \__("Clear Cache", "yesticket");
     $pageQuery = $this->get_parent_slug();
     print <<<EOD
       <form action="admin.php?page=$pageQuery" method="POST">
@@ -111,7 +111,7 @@ EOD;
    */
   public function render_technical_section()
   {
-    _e("Change these settings at your own risk.", "yesticket");
+    \_e("Change these settings at your own risk.", "yesticket");
   }
 
   /**
@@ -124,7 +124,7 @@ EOD;
     $this->cache->clear();
     return $this->success_message(
       /* translators: Success Message after clearing cache */
-      __("Deleted the cache.", "yesticket")
+      \__("Deleted the cache.", "yesticket")
     );
   }
 

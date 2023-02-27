@@ -5,7 +5,7 @@ namespace YesTicket;
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 
-add_shortcode('yesticket_events_list', array('YesTicket\EventsList', 'shortCode'));
+\add_shortcode('yesticket_events_list', array('YesTicket\EventsList', 'shortCode'));
 
 /**
  * Shortcode [yesticket_events_list]
@@ -39,7 +39,7 @@ class EventsList extends EventUsingShortcode
     {
         $content = "<ol>\n";
         foreach ($result as $item) {
-            $content .= $this->render_template('event_list_item', compact("item", "att"));
+            $content .= $this->render_template('event_list_item', \compact("item", "att"));
         }
         $content .= "</ol>\n";
         return $content;

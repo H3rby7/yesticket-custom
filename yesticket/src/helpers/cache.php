@@ -26,8 +26,8 @@ class Cache
         if (!isset(Cache::$instance)) {
             Cache::$instance = new Cache();
         }
-        if (!get_option('yesticket_transient_keys', false)) {
-            add_option('yesticket_transient_keys', array());
+        if (!\get_option('yesticket_transient_keys', false)) {
+            \add_option('yesticket_transient_keys', array());
         }
         return Cache::$instance;
     }
@@ -50,7 +50,7 @@ class Cache
         if (false === $data) {
             // Cache not present, we make the API call
             $data = $this->getData($get_url);
-            set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS);
+            \set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS);
             // save cache key to options, so we can delete the transient, if necessary
             $this->addKeyToActiveCaches($CACHE_KEY);
         }
@@ -72,9 +72,9 @@ class Cache
         $result = $http->get($get_url);
         $get_content = $result['body'];
         if (empty($get_content) || $result['response']['code'] != 200) {
-            throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
+            throw new \RuntimeException(\__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
         }
-        $result = json_decode($get_content);
+        $result = \json_decode($get_content);
         return $result;
     }
 
@@ -87,7 +87,7 @@ class Cache
      */
     public function cacheKey($get_url)
     {
-        return 'yesticket_' . md5($get_url);
+        return 'yesticket_' . \md5($get_url);
     }
 
     /**
@@ -97,11 +97,11 @@ class Cache
      */
     private function addKeyToActiveCaches($CACHE_KEY)
     {
-        $cacheKeys = get_option('yesticket_transient_keys', array());
-        if (!in_array($CACHE_KEY, $cacheKeys)) {
+        $cacheKeys = \get_option('yesticket_transient_keys', array());
+        if (!\in_array($CACHE_KEY, $cacheKeys)) {
             // unknown cache key, add to known keys
             $cacheKeys[] = $CACHE_KEY;
-            update_option('yesticket_transient_keys', $cacheKeys);
+            \update_option('yesticket_transient_keys', $cacheKeys);
         }
     }
 
@@ -111,11 +111,11 @@ class Cache
      */
     public function clear()
     {
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
-        $cacheKeys = get_option('yesticket_transient_keys');
-        update_option('yesticket_transient_keys', array());
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
+        $cacheKeys = \get_option('yesticket_transient_keys');
+        \update_option('yesticket_transient_keys', array());
         foreach ($cacheKeys as $k) {
-            delete_transient($k);
+            \delete_transient($k);
         }
     }
 
@@ -127,8 +127,8 @@ class Cache
     private function logRequestMasked($url)
     {
         // https://www.php.net/manual/en/function.preg-replace.php
-        $masked_url = preg_replace('/organizer=\w+/', 'organizer=****', $url);
-        $masked_url = preg_replace('/key=\w+/', 'key=****', $masked_url);
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'No cache present, getting new data from: $masked_url'");
+        $masked_url = \preg_replace('/organizer=\w+/', 'organizer=****', $url);
+        $masked_url = \preg_replace('/key=\w+/', 'key=****', $masked_url);
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'No cache present, getting new data from: $masked_url'");
     }
 }

@@ -7,7 +7,7 @@ class ApiTest extends \WP_UnitTestCase
 {
   function test_class_exists()
   {
-    $this->assertTrue(class_exists("YesTicket\Api"));
+    $this->assertTrue(\class_exists("YesTicket\Api"));
   }
 
   /**
@@ -34,7 +34,7 @@ class ApiTest extends \WP_UnitTestCase
       ->setMethods(['getFromCacheOrFresh'])
       ->getMock();
     $_cache_property->setValue($instance, $cache_mock);
-    $mock_result = json_decode('[{"event_name": "My mocked event #1"}, {"event_name": "My other mocked event (#2)"}]');
+    $mock_result = \json_decode('[{"event_name": "My mocked event #1"}, {"event_name": "My other mocked event (#2)"}]');
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
       ->with($expected_url)
@@ -48,10 +48,10 @@ class ApiTest extends \WP_UnitTestCase
   private function prepare($locale = 'en_EN', $opt_organizer = NULL, $opt_key = NULL, $expected)
   {
     // Mock locale
-    add_filter('locale', function () use (&$locale) {
+    \add_filter('locale', function () use (&$locale) {
       return $locale;
     });
-    update_option('yesticket_settings_required', array(
+    \update_option('yesticket_settings_required', array(
       'organizer_id' => $opt_organizer,
       'api_key' => $opt_key,
     ));
@@ -150,10 +150,10 @@ class ApiTest extends \WP_UnitTestCase
 
   private function run_events_forThrows($req_settings, $att, $exception, $exception_msg)
   {
-    add_filter('locale', function () {
+    \add_filter('locale', function () {
       return 'en_EN';
     });
-    update_option('yesticket_settings_required', $req_settings);
+    \update_option('yesticket_settings_required', $req_settings);
     $this->expectException($exception);
     $this->expectExceptionMessage($exception_msg);
     Api::getInstance()->getEvents($att);
@@ -161,10 +161,10 @@ class ApiTest extends \WP_UnitTestCase
 
   private function run_testimonials_forThrows($req_settings, $att, $exception, $exception_msg)
   {
-    add_filter('locale', function () {
+    \add_filter('locale', function () {
       return 'en_EN';
     });
-    update_option('yesticket_settings_required', $req_settings);
+    \update_option('yesticket_settings_required', $req_settings);
     $this->expectException($exception);
     $this->expectExceptionMessage($exception_msg);
     Api::getInstance()->getTestimonials($att);

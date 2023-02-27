@@ -51,7 +51,7 @@ abstract class EventUsingShortcode extends Templater
     protected function shortCodeArgs($atts)
     {
         // List all 'att' here, eventhough some 'att' are only used by some shortcodes
-        return shortcode_atts(array(
+        return \shortcode_atts(array(
             'env' => NULL,
             'api-version' => NULL,
             'organizer' => NULL,
@@ -74,21 +74,21 @@ abstract class EventUsingShortcode extends Templater
      */
     public function get($atts)
     {
-        wp_enqueue_style('yesticket');
+        \wp_enqueue_style('yesticket');
         $att = $this->shortCodeArgs($atts);
-        $content = ytp_render_shortcode_container_div($this->cssClass, $att);
+        $content = \ytp_render_shortcode_container_div($this->cssClass, $att);
         try {
             $result = Api::getInstance()->getEvents($att);
-            if (!is_countable($result) or count($result) < 1) {
-                $content .= ytp_render_no_events();
-            } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-                $content .= ytp_render_no_events();
+            if (!\is_countable($result) or \count($result) < 1) {
+                $content .= \ytp_render_no_events();
+            } else if (\array_key_exists('message', $result) && $result->message == "no items found") {
+                $content .= \ytp_render_no_events();
             } else {
                 $content .= $this->render_contents($result, $att);
             }
             //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         } catch (\Exception $e) {
-            $content .= __($e->getMessage(), 'yesticket');
+            $content .= \__($e->getMessage(), 'yesticket');
         }
         $content .= "</div>\n";
         return $content;
@@ -102,9 +102,9 @@ abstract class EventUsingShortcode extends Templater
      */
     protected function render_template($template, $variables = array())
     {
-        ob_start();
+        \ob_start();
         parent::render_template($template, $variables);
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     /**

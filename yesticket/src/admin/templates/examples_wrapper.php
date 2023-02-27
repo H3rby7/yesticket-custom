@@ -1,19 +1,19 @@
 <?php $activeTab = isset($_GET['tab']) ? $_GET['tab'] : null; ?>
 <div class="ytp-admin">
-  <h2><?php _e("Shortcodes", "yesticket"); ?></h2>
+  <h2><?php \_e("Shortcodes", "yesticket"); ?></h2>
   <p>
-    <?php _e("You can use multiple shortcodes on your page. For example you might start with a list of your shows, followed by your workshops and finish with testimonials of your audience.", "yesticket"); ?>
+    <?php \_e("You can use multiple shortcodes on your page. For example you might start with a list of your shows, followed by your workshops and finish with testimonials of your audience.", "yesticket"); ?>
   </p>
   <p><?php
       /* translators: Hint text on plugin-page to preview different shortcodes */
-      _e("Hover above the tabs for a preview.", "yesticket");
+      \_e("Hover above the tabs for a preview.", "yesticket");
       ?></p>
   <nav class="nav-tab-wrapper ytp-admin-nav-wrapper">
     <?php $this->render_navigation_tab(
       "",
       $activeTab,
       /* translators: Refers to the 'yesticket_events' shortcode */
-      __("Events", "yesticket"),
+      \__("Events", "yesticket"),
       "yesticket_events",
       "sample_events.png"
     ); ?>
@@ -21,7 +21,7 @@
       "cards",
       $activeTab,
       /* translators: Refers to the 'yesticket_events_cards' shortcode */
-      __("Cards", "yesticket"),
+      \__("Cards", "yesticket"),
       "yesticket_events_cards",
       "sample_events_cards.png"
     ); ?>
@@ -29,7 +29,7 @@
       "list",
       $activeTab,
       /* translators: Refers to the 'yesticket_events_list' shortcode */
-      __("List", "yesticket"),
+      \__("List", "yesticket"),
       "sample_events_list",
       "sample_events_list.png"
     ); ?>
@@ -37,7 +37,7 @@
       "testimonials",
       $activeTab,
       /* translators: Refers to the 'yesticket_testimonials' shortcode */
-      __("Testimonials", "yesticket"),
+      \__("Testimonials", "yesticket"),
       "yesticket_testimonials",
       "sample_testimonials.png"
     ); ?>

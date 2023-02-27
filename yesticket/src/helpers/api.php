@@ -2,6 +2,8 @@
 
 namespace YesTicket;
 
+use \InvalidArgumentException;
+
 include_once("cache.php");
 include_once("functions.php");
 include_once("plugin_options.php");
@@ -69,7 +71,7 @@ class Api
      */
     private function getLatestApiVersion()
     {
-        return max(array_keys($this->apiEndpoints));
+        return \max(\array_keys($this->apiEndpoints));
     }
 
     /**
@@ -97,9 +99,9 @@ class Api
     private function throw_on_missing_organizer_id($att)
     {
         if (empty(PluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
-                __("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
+                \__("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
             );
         }
     }
@@ -114,9 +116,9 @@ class Api
     private function throw_on_missing_api_key($att)
     {
         if (empty(PluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
-                __("Please configure your 'key' in the plugin settings.", "yesticket")
+                \__("Please configure your 'key' in the plugin settings.", "yesticket")
             );
         }
     }
@@ -133,14 +135,14 @@ class Api
         if (!empty($att["type"])) {
             $type = $att["type"];
             if (
-                strcasecmp($type, "all") != 0 and
-                strcasecmp($type, "performance") != 0 and
-                strcasecmp($type, "workshop") != 0 and
-                strcasecmp($type, "festival") != 0
+                \strcasecmp($type, "all") != 0 and
+                \strcasecmp($type, "performance") != 0 and
+                \strcasecmp($type, "workshop") != 0 and
+                \strcasecmp($type, "festival") != 0
             ) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     /* translators: Error message, if the shortcode uses wrong/invalid types*/
-                    __("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
+                    \__("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
                 );
             }
         }
@@ -156,11 +158,11 @@ class Api
     private function throw_on_invalid_api_version($att)
     {
         if (isset($att["api-version"])) {
-            if (!array_key_exists($att["api-version"], $this->apiEndpoints)) {
-                throw new \InvalidArgumentException(
-                    sprintf(
+            if (!\array_key_exists($att["api-version"], $this->apiEndpoints)) {
+                throw new InvalidArgumentException(
+                    \sprintf(
                         /* translators: Error message, if the shortcode uses an invalid api-version - %1$s is replaced with the highest possible version */
-                        __('The hidden field "api-version" must be an int bigger or equal to 1 and smaller or equal to %1$s.', "yesticket"),
+                        \__('The hidden field "api-version" must be an int bigger or equal to 1 and smaller or equal to %1$s.', "yesticket"),
                         $this->getLatestApiVersion()
                     )
                 );
@@ -180,7 +182,7 @@ class Api
         $this->validateArguments($att);
         $result = null;
         if (empty($att["grep"])) {
-            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events'");
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events'");
             // We don't  filter on our side. Easy API call.
             $apiCall = $this->buildUrl($att, "events");
             $result = $this->cache->getFromCacheOrFresh($apiCall);
@@ -188,7 +190,7 @@ class Api
             // if we 'grep' (filter events manually on our side)
             $_count = empty($att["count"]) ? null : $att["count"];
             // we unset 'count' to call the api for more elements than needed.
-            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events without \"count\", because \"grep\" is in use.'");
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events without \"count\", because \"grep\" is in use.'");
             $att["count"] = null;
             $apiCall = $this->buildUrl($att, "events");
             $unfiltered = $this->cache->getFromCacheOrFresh($apiCall);
@@ -196,14 +198,14 @@ class Api
             // we filter the items
             $result = $this->applyGrep($unfiltered, $att["grep"]);
         }
-        if (empty($att["count"]) || !is_numeric($att["count"]) || !is_countable($result)) {
+        if (empty($att["count"]) || !\is_numeric($att["count"]) || !\is_countable($result)) {
             // no count set or $result uncountable, just return list
-            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all events'");
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all events'");
             return $result;
         }
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning only " . $att["count"] . " events'");
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning only " . $att["count"] . " events'");
         // apply count to the list (because of 'grep' and to support counted events in case of v1 api call)
-        return array_slice($result, 0, $att["count"]);
+        return \array_slice($result, 0, $att["count"]);
     }
 
     /**
@@ -218,14 +220,14 @@ class Api
         $this->validateArguments($att);
         $apiCall = $this->buildUrl($att, "testimonials");
         $result = $this->cache->getFromCacheOrFresh($apiCall);
-        if (empty($att["count"]) || !is_numeric($att["count"]) || !is_countable($result)) {
+        if (empty($att["count"]) || !\is_numeric($att["count"]) || !\is_countable($result)) {
             // no count set or $result uncountable, just return list
-            ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all testimonials'");
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all testimonials'");
             return $result;
         }
-        ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning only " . $att["count"] . " testimonials'");
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning only " . $att["count"] . " testimonials'");
         // apply count to the list (to support counted events in case of v1 api call)
-        return array_slice($result, 0, $att["count"]);
+        return \array_slice($result, 0, $att["count"]);
     }
 
     /**
@@ -237,8 +239,8 @@ class Api
      */
     private function applyGrep($eventList, $grep = '')
     {
-        return array_filter($eventList, function ($item) use ($grep) {
-            return mb_stripos($item->event_name, $grep) !== FALSE;
+        return \array_filter($eventList, function ($item) use ($grep) {
+            return \mb_stripos($item->event_name, $grep) !== FALSE;
         });
     }
 
@@ -321,7 +323,7 @@ class Api
     private function getAttLC($att, $key)
     {
         if (!empty($att[$key])) {
-            return strtolower($att[$key]);
+            return \strtolower($att[$key]);
         }
         return '';
     }
@@ -333,7 +335,7 @@ class Api
      */
     private function getLocale()
     {
-        return locale_get_primary_language(get_locale());
+        return \locale_get_primary_language(\get_locale());
     }
 
     /**

@@ -27,24 +27,24 @@ class SettingsRequired extends SettingsSection
     PluginOptions::getInstance()->register_settings_required($this->get_slug());
 
     // Register required section and fields
-    add_settings_section(
+    \add_settings_section(
       $this->get_slug(),
-      __("Required Settings", "yesticket"),
+      \__("Required Settings", "yesticket"),
       array($this, 'render_heading'),
       $this->get_slug()
     );
-    add_settings_field(
+    \add_settings_field(
       $this->get_slug() . '-organizer_id',
       /* translators: Please keep the quotation marks! */
-      __("Your 'organizer-ID'", "yesticket"),
+      \__("Your 'organizer-ID'", "yesticket"),
       array($this, 'render_organizer_id'),
       $this->get_slug(),
       $this->get_slug()
     );
-    add_settings_field(
+    \add_settings_field(
       $this->get_slug() . '-api_key',
       /* translators: Please keep the quotation marks! */
-      __("Your 'key'", "yesticket"),
+      \__("Your 'key'", "yesticket"),
       array($this, 'render_api_key'),
       $this->get_slug(),
       $this->get_slug()
@@ -66,12 +66,12 @@ class SettingsRequired extends SettingsSection
    */
   public function render()
   {
-    $action = esc_url(admin_url('options.php'));
-    $request_url   = remove_query_arg('_wp_http_referer');
+    $action = \esc_url(\admin_url('options.php'));
+    $request_url   = \remove_query_arg('_wp_http_referer');
     if (!PluginOptions::getInstance()->areNecessarySettingsSet()) {
-      $request_url = preg_replace('/-settings/', '', $request_url);
+      $request_url = \preg_replace('/-settings/', '', $request_url);
     }
-    $this->render_template('settings_required', compact("action", "request_url"));
+    $this->render_template('settings_required', \compact("action", "request_url"));
   }
 
   /**
@@ -123,7 +123,7 @@ EOD;
     if (isset($_GET['settings-updated'])) {
       return $this->success_message(
         /* translators: Success Message after updating settings */
-        __("Settings saved.", "yesticket")
+        \__("Settings saved.", "yesticket")
       );
     }
   }

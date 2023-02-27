@@ -9,7 +9,7 @@ class CacheTest extends \WP_UnitTestCase
 
   function test_class_exists()
   {
-    $this->assertTrue(class_exists("YesTicket\Cache"));
+    $this->assertTrue(\class_exists("YesTicket\Cache"));
   }
 
   /**
@@ -22,7 +22,7 @@ class CacheTest extends \WP_UnitTestCase
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);
     $this->assertNotEmpty(Cache::getInstance());
-    $opt = get_option($this->opt_key);
+    $opt = \get_option($this->opt_key);
     $this->assertIsArray($opt);
     $this->assertCount(0, $opt);
     $_instance_prop->setAccessible(false);
@@ -51,44 +51,44 @@ class CacheTest extends \WP_UnitTestCase
   {
     // Empty option, expect no error
     Cache::getInstance()->clear();
-    $this->assertIsArray(get_option($this->opt_key));
-    $this->assertCount(0, get_option($this->opt_key));
+    $this->assertIsArray(\get_option($this->opt_key));
+    $this->assertCount(0, \get_option($this->opt_key));
 
     // given transient 'test-A', enlisted in the option
-    set_transient('test-A', 'value-A', 0);
-    update_option($this->opt_key,  ['test-A']);
+    \set_transient('test-A', 'value-A', 0);
+    \update_option($this->opt_key,  ['test-A']);
     // clear cache
     Cache::getInstance()->clear();
     // expect option [] and transient gone (FALSE)
-    $this->assertIsArray(get_option($this->opt_key));
-    $this->assertCount(0, get_option($this->opt_key));
+    $this->assertIsArray(\get_option($this->opt_key));
+    $this->assertCount(0, \get_option($this->opt_key));
     $this->assertFalse(get_transient('test-A'));
 
     // given transient 'test-A', enlisted in the option
     // and an unrelated transient
-    set_transient('test-A', 'value-A', 0);
-    set_transient('unrelated-B', 'value-B', 0);
-    update_option($this->opt_key,  ['test-A']);
+    \set_transient('test-A', 'value-A', 0);
+    \set_transient('unrelated-B', 'value-B', 0);
+    \update_option($this->opt_key,  ['test-A']);
     // clear cache
     Cache::getInstance()->clear();
     // expect option [] and transient 'test-A' gone (FALSE)
     // and unrelated transient to live on.
-    $this->assertIsArray(get_option($this->opt_key));
-    $this->assertCount(0, get_option($this->opt_key));
+    $this->assertIsArray(\get_option($this->opt_key));
+    $this->assertCount(0, \get_option($this->opt_key));
     $this->assertFalse(get_transient('test-A'));
     $this->assertNotEmpty(get_transient('unrelated-B'));
     // clean up
-    delete_transient('unrelated-B');
+    \delete_transient('unrelated-B');
 
     // given two transients, both enlisted in the option
-    set_transient('test-A', 'value-A', 0);
-    set_transient('test-B', 'value-B', 0);
-    update_option($this->opt_key,  ['test-A', 'test-B']);
+    \set_transient('test-A', 'value-A', 0);
+    \set_transient('test-B', 'value-B', 0);
+    \update_option($this->opt_key,  ['test-A', 'test-B']);
     // clear cache
     Cache::getInstance()->clear();
     // expect option [] and transients gone (FALSE)
-    $this->assertIsArray(get_option($this->opt_key));
-    $this->assertCount(0, get_option($this->opt_key));
+    $this->assertIsArray(\get_option($this->opt_key));
+    $this->assertCount(0, \get_option($this->opt_key));
     $this->assertFalse(get_transient('test-A'));
     $this->assertFalse(get_transient('test-B'));
   }
@@ -107,7 +107,7 @@ class CacheTest extends \WP_UnitTestCase
     $external_call_url = '';
     // Setup MOCK for HTTP call
     remove_all_filters('pre_http_request');
-    add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use (&$pre_http_request_filter_has_run, &$external_call_url) {
+    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use (&$pre_http_request_filter_has_run, &$external_call_url) {
       $pre_http_request_filter_has_run = true;
       $external_call_url = $url;
       return array(
@@ -124,7 +124,7 @@ class CacheTest extends \WP_UnitTestCase
     // Given no cached item
     $pre_http_request_filter_has_run = false;
     $external_call_url = '';
-    delete_transient($cacheKey);
+    \delete_transient($cacheKey);
     // Call
     $result = Cache::getInstance()->getFromCacheOrFresh($get_url);
     // Check Mock was invoked
@@ -157,11 +157,11 @@ class CacheTest extends \WP_UnitTestCase
   function test_gettingErrorFromApi()
   {
     $get_url = 'test-url';
-    delete_transient(Cache::getInstance()->cacheKey($get_url));
+    \delete_transient(Cache::getInstance()->cacheKey($get_url));
 
     // Setup MOCK for HTTP call
     remove_all_filters('pre_http_request');
-    add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
+    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
       return array(
         'headers'     => array(),
         'cookies'     => array(),

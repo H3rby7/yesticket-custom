@@ -74,13 +74,13 @@ class PluginOptions
    */
   private function getOptionString($option_name, $option_key, $default = NULL)
   {
-    $options = get_option($option_name);
+    $options = \get_option($option_name);
     if (!$options) {
-      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name was not found, returning default: $default'");
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name was not found, returning default: $default'");
       return $default;
     }
     if (!isset($options[$option_key]) || empty($options[$option_key])) {
-      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name does not contain key $option_key, returning default: $default'");
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name does not contain key $option_key, returning default: $default'");
       return $default;
     }
     return $options[$option_key];
@@ -97,13 +97,13 @@ class PluginOptions
    */
   private function getOptionNumber($option_name, $option_key, $default = NULL)
   {
-    $options = get_option($option_name);
+    $options = \get_option($option_name);
     if (!$options) {
-      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name was not found, returning default: $default'");
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name was not found, returning default: $default'");
       return $default;
     }
-    if (!isset($options[$option_key]) || !is_numeric($options[$option_key])) {
-      ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name does not contain key $option_key, returning default: $default'");
+    if (!isset($options[$option_key]) || !\is_numeric($options[$option_key])) {
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": '$option_name does not contain key $option_key, returning default: $default'");
       return $default;
     }
     return $options[$option_key];
@@ -116,7 +116,7 @@ class PluginOptions
    */
   public function register_settings_technical($option_group)
   {
-    register_setting(
+    \register_setting(
       $option_group,
       PluginOptions::SETTINGS_TECHNICAL_KEY,
       $this->settings_technical_args
@@ -130,7 +130,7 @@ class PluginOptions
    */
   public function register_settings_required($option_group)
   {
-    register_setting(
+    \register_setting(
       $option_group,
       PluginOptions::SETTINGS_REQUIRED_KEY,
       $this->settings_required_args
@@ -188,7 +188,7 @@ class PluginOptions
     if ($organizer_id === null) {
       return false;
     }
-    if ($api_key === null || trim($api_key) === '') {
+    if ($api_key === null || \trim($api_key) === '') {
       return false;
     }
     return true;

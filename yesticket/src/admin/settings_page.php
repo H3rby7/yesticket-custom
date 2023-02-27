@@ -44,7 +44,7 @@ class SettingsPage extends SettingsSection
    */
   public function get_menu_title()
   {
-    return __("Settings");
+    return \__("Settings");
   }
 
   /**
@@ -54,7 +54,7 @@ class SettingsPage extends SettingsSection
    */
   public function get_page_title()
   {
-    return __("Yesticket Settings", "yesticket");
+    return \__("Yesticket Settings", "yesticket");
   }
 
   /**
@@ -62,7 +62,7 @@ class SettingsPage extends SettingsSection
    */
   public function render_page()
   {
-    wp_enqueue_style('yesticket-admin');
+    \wp_enqueue_style('yesticket-admin');
     $this->render_template('header');
     if (PluginOptions::getInstance()->areNecessarySettingsSet()) {
       $this->render_template('settings_wrapper');

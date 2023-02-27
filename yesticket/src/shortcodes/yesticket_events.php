@@ -6,7 +6,7 @@ include_once("event_using_shortcode.php");
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 
-add_shortcode('yesticket_events', array('YesTicket\Events', 'shortCode'));
+\add_shortcode('yesticket_events', array('YesTicket\Events', 'shortCode'));
 
 /**
  * Shortcode [yesticket_events]
@@ -40,7 +40,7 @@ class Events extends EventUsingShortcode
     {
         $content = "";
         foreach ($result as $item) {
-            $content .= $this->render_template('event_row', compact("item", "att"));
+            $content .= $this->render_template('event_row', \compact("item", "att"));
         }
         return $content;
     }

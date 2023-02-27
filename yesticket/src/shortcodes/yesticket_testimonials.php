@@ -6,15 +6,15 @@ include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
 
-add_shortcode('yesticket_testimonials', 'YesTicket\shortcode_testimonials');
+\add_shortcode('yesticket_testimonials', 'YesTicket\shortcode_testimonials');
 
 /**
  * Callback to add_shortcode [yesticket_testimonials]
  */
 function shortcode_testimonials($atts)
 {
-    wp_enqueue_style('yesticket');
-    $att = shortcode_atts(array(
+    \wp_enqueue_style('yesticket');
+    $att = \shortcode_atts(array(
         'env' => NULL,
         'api-version' => NULL,
         'organizer' => NULL,
@@ -66,9 +66,9 @@ class Testimonials extends Templater
      */
     protected function render_template($template, $variables = array())
     {
-        ob_start();
+        \ob_start();
         parent::render_template($template, $variables);
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     /**
@@ -81,18 +81,18 @@ class Testimonials extends Templater
     public function get($att)
     {
         $classes = $this->getDesignClasses($att);
-        $content = ytp_render_shortcode_container_div($classes, $att);
+        $content = \ytp_render_shortcode_container_div($classes, $att);
         try {
             $result = Api::getInstance()->getTestimonials($att);
-            if (!is_countable($result) or count($result) < 1) {
-                $content .= ytp_render_no_events();
-            } else if (array_key_exists('message', $result) && $result->message == "no items found") {
-                $content .= ytp_render_no_events();
+            if (!\is_countable($result) or \count($result) < 1) {
+                $content .= \ytp_render_no_events();
+            } else if (\array_key_exists('message', $result) && $result->message == "no items found") {
+                $content .= \ytp_render_no_events();
             } else {
                 $content .= $this->render_testimonials($result, $att);
             }
         } catch (\Exception $e) {
-            $content .= __($e->getMessage(), 'yesticket');
+            $content .= \__($e->getMessage(), 'yesticket');
         }
         $content .= "</div>\n";
         return $content;
@@ -110,7 +110,7 @@ class Testimonials extends Templater
             return $shortcode_class;
         }
         $design = $att["design"];
-        if (strcasecmp($design, "basic") == 0 || strcasecmp($design, "jump") == 0) {
+        if (\strcasecmp($design, "basic") == 0 || \strcasecmp($design, "jump") == 0) {
             return "$shortcode_class ytp-$design";
         }
         return $shortcode_class . " design-must-be-basic-or-jump";
@@ -128,7 +128,7 @@ class Testimonials extends Templater
     {
         $content = "";
         foreach ($result as $item) {
-            $content .= $this->render_template('testimonial_row', compact("item", "att"));
+            $content .= $this->render_template('testimonial_row', \compact("item", "att"));
         }
         return $content;
     }
@@ -145,20 +145,20 @@ class Testimonials extends Templater
         $source = $item->source;
         $date = $item->date;
         $event = $item->event_name;
-        if (!$includeEventName || $event === null || trim($event) === '') {
-            printf(
+        if (!$includeEventName || $event === null || \trim($event) === '') {
+            \printf(
                 /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
-                __('%1$s on %2$s.', "yesticket"),
+                \__('%1$s on %2$s.', "yesticket"),
                 $source,
-                ytp_render_date($date)
+                \ytp_render_date($date)
             );
         }
-        printf(
+        \printf(
             /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
-            __('%1$s on %2$s about \'%3$s\'.', "yesticket"),
+            \__('%1$s on %2$s about \'%3$s\'.', "yesticket"),
             $source,
-            ytp_render_date($date),
-            htmlentities($event)
+            \ytp_render_date($date),
+            \htmlentities($event)
         );
     }
 }
