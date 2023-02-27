@@ -45,7 +45,7 @@
       "slides",
       $activeTab,
       /* translators: Refers to the 'yesticket_slides' shortcode */
-      \__("Slides", "yesticket"),
+      __("Slides", "yesticket"),
       "yesticket_slides",
       "sample_slides.png"
     ); ?>
