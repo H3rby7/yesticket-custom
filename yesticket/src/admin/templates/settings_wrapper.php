@@ -6,13 +6,13 @@
       "",
       $activeTab,
       /* translators: The word refers to settings -> e.G. "Required [Settings]'*/
-      \__("Required", "yesticket")
+      __("Required", "yesticket")
     ); ?>
     <?php $this->render_navigation_tab(
       "technical",
       $activeTab,
       /* translators: The word refers to settings -> e.G. "Technical [Settings]'*/
-      \__("Technical", "yesticket")
+      __("Technical", "yesticket")
     ); ?>
   </nav>
   <div class="ytp-admin-tab-content">

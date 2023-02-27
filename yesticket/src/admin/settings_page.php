@@ -44,7 +44,7 @@ class SettingsPage extends SettingsSection
    */
   public function get_menu_title()
   {
-    return \__("Settings");
+    return __("Settings");
   }
 
   /**
@@ -54,7 +54,7 @@ class SettingsPage extends SettingsSection
    */
   public function get_page_title()
   {
-    return \__("Yesticket Settings", "yesticket");
+    return __("Yesticket Settings", "yesticket");
   }
 
   /**

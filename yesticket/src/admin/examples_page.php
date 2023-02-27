@@ -47,7 +47,7 @@ class Examples extends Templater
    */
   public function get_menu_title()
   {
-    return \__('Shortcodes', 'yesticket');
+    return __('Shortcodes', 'yesticket');
   }
 
   /**
@@ -57,7 +57,7 @@ class Examples extends Templater
    */
   public function get_page_title()
   {
-    return \__('YesTicket Plugin Shortcodes', 'yesticket');
+    return __('YesTicket Plugin Shortcodes', 'yesticket');
   }
 
   /**
@@ -101,7 +101,7 @@ class Examples extends Templater
     $image_url = \ytp_getImageUrl($previewImageFileName);
     $alt_text = \sprintf(
       /* translators: %s is replaced with the shortcode, e.G. 'yesticket_events' */
-      \__('[%s] preview', "yesticket"),
+      __('[%s] preview', "yesticket"),
       $shortcode
     );
     print <<<EOD

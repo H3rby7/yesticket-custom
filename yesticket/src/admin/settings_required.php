@@ -29,14 +29,14 @@ class SettingsRequired extends SettingsSection
     // Register required section and fields
     \add_settings_section(
       $this->get_slug(),
-      \__("Required Settings", "yesticket"),
+      __("Required Settings", "yesticket"),
       array($this, 'render_heading'),
       $this->get_slug()
     );
     \add_settings_field(
       $this->get_slug() . '-organizer_id',
       /* translators: Please keep the quotation marks! */
-      \__("Your 'organizer-ID'", "yesticket"),
+      __("Your 'organizer-ID'", "yesticket"),
       array($this, 'render_organizer_id'),
       $this->get_slug(),
       $this->get_slug()
@@ -44,7 +44,7 @@ class SettingsRequired extends SettingsSection
     \add_settings_field(
       $this->get_slug() . '-api_key',
       /* translators: Please keep the quotation marks! */
-      \__("Your 'key'", "yesticket"),
+      __("Your 'key'", "yesticket"),
       array($this, 'render_api_key'),
       $this->get_slug(),
       $this->get_slug()
@@ -125,7 +125,7 @@ EOD;
     if (isset($_GET['settings-updated'])) {
       return $this->success_message(
         /* translators: Success Message after updating settings */
-        \__("Settings saved.", "yesticket")
+        __("Settings saved.", "yesticket")
       );
     }
   }

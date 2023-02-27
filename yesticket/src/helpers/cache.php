@@ -72,7 +72,7 @@ class Cache
         $result = $http->get($get_url);
         $get_content = $result['body'];
         if (empty($get_content) || $result['response']['code'] != 200) {
-            throw new \RuntimeException(\__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
+            throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
         }
         $result = \json_decode($get_content);
         return $result;

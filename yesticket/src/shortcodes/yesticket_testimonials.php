@@ -92,7 +92,7 @@ class Testimonials extends Templater
                 $content .= $this->render_testimonials($result, $att);
             }
         } catch (\Exception $e) {
-            $content .= \__($e->getMessage(), 'yesticket');
+            $content .= __($e->getMessage(), 'yesticket');
         }
         $content .= "</div>\n";
         return $content;
@@ -148,14 +148,14 @@ class Testimonials extends Templater
         if (!$includeEventName || $event === null || \trim($event) === '') {
             \printf(
                 /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
-                \__('%1$s on %2$s.', "yesticket"),
+                __('%1$s on %2$s.', "yesticket"),
                 $source,
                 \ytp_render_date($date)
             );
         }
         \printf(
             /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
-            \__('%1$s on %2$s about \'%3$s\'.', "yesticket"),
+            __('%1$s on %2$s about \'%3$s\'.', "yesticket"),
             $source,
             \ytp_render_date($date),
             \htmlentities($event)

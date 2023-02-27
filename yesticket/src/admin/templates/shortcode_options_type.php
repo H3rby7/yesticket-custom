@@ -1,13 +1,13 @@
-<h4><?php \_e("Type", "yesticket");?></h4>
+<h4><?php _e("Type", "yesticket");?></h4>
 <?php
 if ($type === 'events') {
 ?>
   <p>
-    <?php \_e("Using <b>type</b> you can filter your events by type.", "yesticket"); ?>
+    <?php _e("Using <b>type</b> you can filter your events by type.", "yesticket"); ?>
   </p>
 <?php } elseif ($type === 'testimonials') { ?>
   <p>
-    <?php \_e("Using <b>type</b> you can filter your testimonials by type.", "yesticket"); ?>
+    <?php _e("Using <b>type</b> you can filter your testimonials by type.", "yesticket"); ?>
   </p>
 <?php } else {
   // Decided against a translation since this is an error for programmers editing this source code.
@@ -17,17 +17,17 @@ if ($type === 'events') {
   <span class="ytp-code">type="performance"</span>
   <?php
   /* translators: Explanation of using the shortcode option 'type="performance"'*/
-  \_e("only shows/performances", "yesticket"); ?><br>
+  _e("only shows/performances", "yesticket"); ?><br>
   <span class="ytp-code">type="workshop"</span>
   <?php
   /* translators: Explanation of using the shortcode option 'type="workshop"'*/
-  \_e("only workshops", "yesticket"); ?><br>
+  _e("only workshops", "yesticket"); ?><br>
   <span class="ytp-code">type="festivals"</span>
   <?php
   /* translators: Explanation of using the shortcode option 'type="festivals"'*/
-  \_e("only festivals", "yesticket"); ?><br>
+  _e("only festivals", "yesticket"); ?><br>
   <span class="ytp-code">type="all"</span>
   <?php
   /* translators: Explanation of using the shortcode option 'type="all"'*/
-  \_e("Everything, mixed", "yesticket"); ?>
+  _e("Everything, mixed", "yesticket"); ?>
 </p>

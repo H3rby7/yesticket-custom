@@ -101,7 +101,7 @@ class Api
         if (empty(PluginOptions::getInstance()->getOrganizerID()) and empty($att["organizer"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
-                \__("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
+                __("Please configure your 'organizer-id' in the plugin settings.", "yesticket")
             );
         }
     }
@@ -118,7 +118,7 @@ class Api
         if (empty(PluginOptions::getInstance()->getApiKey()) and empty($att["key"])) {
             throw new InvalidArgumentException(
                 /* translators: Error message, if the plugin is not properly configured*/
-                \__("Please configure your 'key' in the plugin settings.", "yesticket")
+                __("Please configure your 'key' in the plugin settings.", "yesticket")
             );
         }
     }
@@ -142,7 +142,7 @@ class Api
             ) {
                 throw new InvalidArgumentException(
                     /* translators: Error message, if the shortcode uses wrong/invalid types*/
-                    \__("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
+                    __("Please provide a valid 'type'. If you omit the attribute it will default to 'all'. Possible options are 'all', 'performance', 'workshop' and 'festival'.", "yesticket")
                 );
             }
         }
@@ -162,7 +162,7 @@ class Api
                 throw new InvalidArgumentException(
                     \sprintf(
                         /* translators: Error message, if the shortcode uses an invalid api-version - %1$s is replaced with the highest possible version */
-                        \__('The hidden field "api-version" must be an int bigger or equal to 1 and smaller or equal to %1$s.', "yesticket"),
+                        __('The hidden field "api-version" must be an int bigger or equal to 1 and smaller or equal to %1$s.', "yesticket"),
                         $this->getLatestApiVersion()
                     )
                 );

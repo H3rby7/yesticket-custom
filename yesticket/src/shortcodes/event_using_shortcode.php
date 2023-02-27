@@ -88,7 +88,7 @@ abstract class EventUsingShortcode extends Templater
             }
             //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
         } catch (\Exception $e) {
-            $content .= \__($e->getMessage(), 'yesticket');
+            $content .= __($e->getMessage(), 'yesticket');
         }
         $content .= "</div>\n";
         return $content;

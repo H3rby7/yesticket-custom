@@ -20,7 +20,7 @@
   </div>
   <div class='ytp-event-ticket'>
     <a href="<?php echo $item->yesticket_booking_url; ?>" target="_blank" class="ytp-button">
-      <?php \_e("Tickets", "yesticket"); ?>
+      <?php _e("Tickets", "yesticket"); ?>
     </a>
   </div>
 </div>

@@ -11,7 +11,7 @@
     <?php if ($att["ticketlink"] == "yes") { ?>
       <li class="ytp-event-list-tickets">
         <a href="<?php echo $item->yesticket_booking_url; ?>" target="_blank">
-          <?php \_e("Tickets", "yesticket"); ?>
+          <?php _e("Tickets", "yesticket"); ?>
         </a>
       </li>
     <?php } ?>
