@@ -194,5 +194,3 @@ class PluginOptions
     return true;
   }
 }
-
-?>

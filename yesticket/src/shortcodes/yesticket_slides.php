@@ -43,7 +43,7 @@ class Slides extends EventUsingShortcode
 
   protected function shortCodeArgs($atts)
   {
-    return shortcode_atts(array(
+    return \shortcode_atts(array(
       'type' => 'all',
       'env' => 'prod',
       'count' => '10',

@@ -39,6 +39,15 @@ class YesTicketHelpersTest extends WP_UnitTestCase
   /**
    * @covers ::ytp_render_shortcode_container_div
    */
+  function test_ytp_render_shortcode_container_div_theme_default()
+  {
+    $text = ytp_render_shortcode_container_div('ytp-test', array());
+    $this->assertStringContainsString("<div class='ytp-test ytp-default'>", $text);
+  }
+
+  /**
+   * @covers ::ytp_render_shortcode_container_div
+   */
   function test_ytp_render_shortcode_container_div_theme_light()
   {
     $text = ytp_render_shortcode_container_div('ytp-test', array('theme' => 'light'));
@@ -60,7 +69,7 @@ class YesTicketHelpersTest extends WP_UnitTestCase
   function test_ytp_render_shortcode_container_div_theme_custom()
   {
     $text = ytp_render_shortcode_container_div('ytp-test', array('theme' => 'whatever'));
-    $this->assertStringContainsString("<div class='ytp-test ytp-default whatever'>", $text);
+    $this->assertStringContainsString("<div class='ytp-test whatever'>", $text);
   }
 
   /**
