@@ -34,6 +34,21 @@ class ImageEndpoint
     return ImageEndpoint::$instance;
   }
 
+  /**
+   * The $instance
+   *
+   * @var ImageCache
+   */
+  private $cache;
+
+  /**
+   * Constructor.
+   */
+  public function __construct()
+  {
+    $this->cache = ImageCache::getInstance();
+  }
+
   public function registerRoute()
   {
     // 127.0.0.1/wp-json/yesticket/v1/picture/123
@@ -45,20 +60,22 @@ class ImageEndpoint
       },
       'args' => array(
         'event_id' => array(
-          'validate_callback' => function ($param, $request, $key) {
-            if (!is_numeric($param) || $param < 1) {
-              return false;
-            }
-            if (((int)$param != $param)) {
-              // is not a whole number (e.G. 32.5 = true; 32 = false)
-              return false;
-            }
-            // \header('Content-Type: image/jpeg', true);
-            return true;
-          }
+          'validate_callback' => [$this, 'validationCallback']
         ),
       ),
     ));
+  }
+
+  public function validationCallback($param, $request = null, $key = null) {
+    if (!is_numeric($param) || $param < 1) {
+      return false;
+    }
+    if (((int)$param != $param)) {
+      // is not a whole number (e.G. 32.5 = true; 32 = false)
+      return false;
+    }
+    // \header('Content-Type: image/jpeg', true);
+    return true;
   }
 
   public function handleRequest($data)
@@ -66,14 +83,14 @@ class ImageEndpoint
     \header('Content-Type: image/jpeg', true);
     try {
       $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
-      $result = ImageCache::getInstance()->getFromCacheOrFresh($yesTicketImageUrl);
+      $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl);
       if (!$result || !@\imagejpeg($result, null, 100)) {
         \status_header(404);
-        return new \WP_Error('', "Could not create image for $yesTicketImageUrl");
+        return new \WP_Error(404, "Could not create image for $yesTicketImageUrl");
       }
     } catch (\Exception $e) {
       \status_header(404);
-      return new \WP_Error('', $e->getMessage());
+      return new \WP_Error(404, $e->getMessage());
     }
     return null;
   }

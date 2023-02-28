@@ -23,7 +23,7 @@ class ApiTest extends \WP_UnitTestCase
    * Initiate Mock for @see Cache
    * 
    * @param string $expected_url
-   * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expected_times
+   * @param mixed $mock_result
    */
   private function initMock($expected_url, $mock_result)
   {
