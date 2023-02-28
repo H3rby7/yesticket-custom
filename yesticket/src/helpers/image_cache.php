@@ -79,4 +79,17 @@ class ImageCache extends Cache
         }
         return $image;
     }
+
+    public function clear()
+    {
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing cached image files, triggered by user.'");
+        $cachedImageFiles = \array_filter(\scandir(\get_temp_dir()), function ($item) {
+            return \mb_stripos($item, 'yesticket_') !== FALSE;
+        });
+        foreach ($cachedImageFiles as $file) {
+            $filePath = \get_temp_dir() . $file;
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Removing image $filePath'");
+            \unlink($filePath);
+        }
+    }
 }

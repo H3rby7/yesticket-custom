@@ -2,6 +2,7 @@
 
 namespace YesTicket\Admin;
 use YesTicket\Cache;
+use YesTicket\ImageCache;
 use YesTicket\PluginOptions;
 
 include_once("settings_section.php");
@@ -14,7 +15,6 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
 class SettingsTechnical extends SettingsSection
 {
 
-  private $cache;
   /**
    * Constructor.
    *
@@ -23,7 +23,6 @@ class SettingsTechnical extends SettingsSection
   public function __construct($parent_slug)
   {
     parent::__construct($parent_slug);
-    $this->cache = Cache::getInstance();
     $this->configure();
   }
 
@@ -121,7 +120,8 @@ EOD;
    */
   private function clear_cache()
   {
-    $this->cache->clear();
+    ImageCache::getInstance()->clear();
+    Cache::getInstance()->clear();
     return $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")
