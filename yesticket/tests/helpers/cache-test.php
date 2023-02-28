@@ -132,13 +132,11 @@ class CacheTest extends \WP_UnitTestCase
     $this->assertSame($external_call_url, $get_url, "Called wrong url");
     // Check response from Mock was used
     $this->assertNotEmpty($result);
-    $this->assertNotEmpty($result->{'a-key'}, "Expect result to match mocked response");
-    $this->assertSame('a-value', $result->{'a-key'}, "Expect result to match mocked response");
+    $this->assertSame('{"a-key": "a-value"}', $result, "Expect result to match mocked response");
     // Check new cache item equals Mock response
     $cache = get_transient($cacheKey);
     $this->assertNotEmpty($cache);
-    $this->assertNotEmpty($cache->{'a-key'}, "Expect new cache to match mocked response");
-    $this->assertSame('a-value', $cache->{'a-key'}, "Expect new cache to match mocked response");
+    $this->assertSame('{"a-key": "a-value"}', $cache, "Expect new cache to match mocked response");
 
     // Given cached item is present (from previous test)
     $pre_http_request_filter_has_run = false;
@@ -147,8 +145,7 @@ class CacheTest extends \WP_UnitTestCase
     $result = Cache::getInstance()->getFromCacheOrFresh($get_url);
     $this->assertFalse($pre_http_request_filter_has_run, "Should have used the cache.");
     $this->assertNotEmpty($result);
-    $this->assertNotEmpty($result->{'a-key'}, "Expect result to match cached response");
-    $this->assertSame('a-value', $result->{'a-key'}, "Expect result to match cached response");
+    $this->assertSame('{"a-key": "a-value"}', $result, "Expect result to match mocked response");
   }
 
   /**

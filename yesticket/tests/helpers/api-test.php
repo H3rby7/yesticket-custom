@@ -1,6 +1,7 @@
 <?php
 
 namespace YesTicket;
+
 use \InvalidArgumentException;
 
 class ApiTest extends \WP_UnitTestCase
@@ -23,10 +24,10 @@ class ApiTest extends \WP_UnitTestCase
    * 
    * @param string $expected_url
    * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expected_times
-   * @return string the response the mock will return
    */
-  private function initMock($expected_url)
+  private function initMock($expected_url, $mock_result)
   {
+    // Inject Mock into API::$instance
     $_cache_property = new \ReflectionProperty(Api::class, "cache");
     $_cache_property->setAccessible(true);
     $instance = Api::getInstance();
@@ -34,18 +35,18 @@ class ApiTest extends \WP_UnitTestCase
       ->setMethods(['getFromCacheOrFresh'])
       ->getMock();
     $_cache_property->setValue($instance, $cache_mock);
-    $mock_result = \json_decode('[{"event_name": "My mocked event #1"}, {"event_name": "My other mocked event (#2)"}]');
+
+    // Set up mock for call
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
       ->with($expected_url)
-      ->will($this->returnValue($mock_result));
-    return $mock_result;
+      ->will($this->returnValue(\json_encode($mock_result)));
   }
 
   /**
    * Prepare Mocks, filters and options for call
    */
-  private function prepare($locale = 'en_EN', $opt_organizer = NULL, $opt_key = NULL, $expected)
+  private function prepare($locale = 'en_EN', $opt_organizer = NULL, $opt_key = NULL, $expected, $mock_result)
   {
     // Mock locale
     \add_filter('locale', function () use (&$locale) {
@@ -56,21 +57,29 @@ class ApiTest extends \WP_UnitTestCase
       'api_key' => $opt_key,
     ));
     // Prepare
-    return $this->initMock($expected);
+    $this->initMock($expected, $mock_result);
   }
 
   private function run_events($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
   {
-    $mock_result = $this->prepare($locale, $opt_organizer, $opt_key, $expected);
+    // Generate a Mock Result
+    $evt1 = new \YesTicket\Model\Event();
+    $evt1->event_name = "My mocked event #1";
+    $evt2 = new \YesTicket\Model\Event();
+    $evt2->event_name = "My other mocked event (#2)";
+    $mock_result = array($evt1, $evt2);
+
+    $this->prepare($locale, $opt_organizer, $opt_key, $expected, $mock_result);
     $result = Api::getInstance()->getEvents($att);
-    $this->assertSame($mock_result, $result);
+    $this->assertEqualSets($mock_result, $result, "Should be equal.");
   }
 
   private function run_testimonials($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
   {
-    $mock_result = $this->prepare($locale, $opt_organizer, $opt_key, $expected);
+    $mock_result = array(\json_decode("{'event_name': 'something'}"));
+    $this->prepare($locale, $opt_organizer, $opt_key, $expected, $mock_result);
     $result = Api::getInstance()->getTestimonials($att);
-    $this->assertSame($mock_result, $result);
+    $this->assertEqualSets($mock_result, $result);
   }
 
   /**
@@ -103,12 +112,20 @@ class ApiTest extends \WP_UnitTestCase
     $this->run_events('en_EN', array('type' => 'all'), '1', 'key1', "$base_uri?type=all&lang=en&organizer=1&key=key1");
     // api-version = 1
     $this->run_events('en_EN', array('api-version' => '1'), '1', 'key1', "https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1");
+
+    // Generate a Mock Result
+    $evt1 = new \YesTicket\Model\Event();
+    $evt1->event_name = "My mocked event #1";
+    $evt2 = new \YesTicket\Model\Event();
+    $evt2->event_name = "My other mocked event (#2)";
+    $mock_result = array($evt1, $evt2);
+
     // grep = 'mocked'
-    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1", $mock_result);
     $result = Api::getInstance()->getEvents(array('grep' => 'mocked'));
     $this->assertCount(2, $result);
     // grep = '#1'
-    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1", $mock_result);
     $result = Api::getInstance()->getEvents(array('grep' => '#1'));
     $this->assertCount(1, $result);
     $this->assertSame('My mocked event #1', $result[0]->event_name);
