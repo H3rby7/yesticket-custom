@@ -14,7 +14,7 @@ class Cache
      *
      * @var Cache
      */
-    static private $instance;
+    static protected $instance;
 
     /**
      * Get the $instance
@@ -38,7 +38,7 @@ class Cache
      * 
      * @param string $get_url the full api call URL
      * 
-     * @return mixed data as JSON.
+     * @return string Response body.
      */
     public function getFromCacheOrFresh($get_url)
     {
@@ -63,19 +63,20 @@ class Cache
      * 
      * @param string $get_url the full api call URL
      * 
-     * @return mixed data as JSON.
+     * @return string Response body
      */
-    private function getData($get_url)
+    protected function getData($get_url)
     {
         $this->logRequestMasked($get_url);
         $http = new \WP_Http;
         $result = $http->get($get_url);
-        $get_content = $result['body'];
-        if (empty($get_content) || $result['response']['code'] != 200) {
+        if (\is_wp_error($result)) {
+            throw new \RuntimeException($result->get_error_message());
+        }
+        if (empty($result['body']) || $result['response']['code'] != 200) {
             throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
         }
-        $result = \json_decode($get_content);
-        return $result;
+        return $result['body'];
     }
 
     /**
@@ -95,7 +96,7 @@ class Cache
      * 
      * @param string $CACHE_KEY Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
      */
-    private function addKeyToActiveCaches($CACHE_KEY)
+    protected function addKeyToActiveCaches($CACHE_KEY)
     {
         $cacheKeys = \get_option('yesticket_transient_keys', array());
         if (!\in_array($CACHE_KEY, $cacheKeys)) {
@@ -124,7 +125,7 @@ class Cache
      * 
      * @param string $url the full api call URL
      */
-    private function logRequestMasked($url)
+    protected function logRequestMasked($url)
     {
         // https://www.php.net/manual/en/function.preg-replace.php
         $masked_url = \preg_replace('/organizer=\w+/', 'organizer=****', $url);
