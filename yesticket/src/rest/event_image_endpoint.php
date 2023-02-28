@@ -63,11 +63,18 @@ class ImageEndpoint
 
   public function handleRequest($data)
   {
-    // https://www.yesticket.org/dev/picture.php?event=4573
-    $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
-    $result = ImageCache::getInstance()->getFromCacheOrFresh($yesTicketImageUrl);
     \header('Content-Type: image/jpeg', true);
-    \imagejpeg($result);
+    try {
+      $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
+      $result = ImageCache::getInstance()->getFromCacheOrFresh($yesTicketImageUrl);
+      if (!$result || !@\imagejpeg($result, null, 100)) {
+        \status_header(404);
+        return new \WP_Error('', "Could not create image for $yesTicketImageUrl");
+      }
+    } catch (\Exception $e) {
+      \status_header(404);
+      return new \WP_Error('', $e->getMessage());
+    }
     return null;
   }
 }

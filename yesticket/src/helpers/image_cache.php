@@ -42,7 +42,7 @@ class ImageCache extends Cache
         $filePath = $this->getCacheFilePath($CACHE_KEY);
         // check if the transient for this $get_url is present AND the image is present at $filepath
         if (false != get_transient($CACHE_KEY) && \file_exists($filePath)) {
-            $image = \imagecreatefromjpeg($filePath);
+            $image = @\imagecreatefromjpeg($filePath);
             if ($image) {
                 return $image;
             } else {
@@ -73,7 +73,7 @@ class ImageCache extends Cache
      */
     protected function getData($get_url)
     {
-        $image = \imagecreatefromjpeg($get_url);
+        $image = @\imagecreatefromjpeg($get_url);
         if (!$image) {
             throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
         }
