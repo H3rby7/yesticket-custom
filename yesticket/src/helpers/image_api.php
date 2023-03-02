@@ -5,8 +5,8 @@ namespace YesTicket;
 use \YesTicket\ImageCache;
 use \InvalidArgumentException;
 
-include_once("cache.php");
 include_once("functions.php");
+include_once("image_cache.php");
 include_once("plugin_options.php");
 include_once(__DIR__ . "/../model/event.php");
 
@@ -50,5 +50,10 @@ class ImageApi
         $this->cache = ImageCache::getInstance();
     }
 
-
+    public function getEventImage($event_id)
+    {
+        $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $event_id;
+        $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl, '\imagecreatefromjpeg', '\imagejpeg');
+        return $result;
+    }
 }

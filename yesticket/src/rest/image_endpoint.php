@@ -2,9 +2,9 @@
 
 namespace YesTicket\Rest;
 
-use \YesTicket\ImageCache;
+use \YesTicket\ImageApi;
 
-include_once(__DIR__ . "/../helpers/image_cache.php");
+include_once(__DIR__ . "/../helpers/image_api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 
 add_action('rest_api_init', function () {
@@ -37,16 +37,16 @@ class ImageEndpoint
   /**
    * The $instance
    *
-   * @var ImageCache
+   * @var ImageApi
    */
-  private $cache;
+  private $api;
 
   /**
    * Constructor.
    */
   public function __construct()
   {
-    $this->cache = ImageCache::getInstance();
+    $this->api = ImageApi::getInstance();
   }
 
   public function registerRoute()
@@ -82,8 +82,7 @@ class ImageEndpoint
   public function handleRequest($data)
   {
     try {
-      $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
-      $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl, '\imagecreatefromjpeg', '\imagejpeg');
+      $result = $this->api->getEventImage($data['event_id']);
       \header('Content-Type: image/jpeg', true, 200);
       echo $result;
     } catch (\Exception $e) {
