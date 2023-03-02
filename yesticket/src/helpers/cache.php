@@ -7,7 +7,7 @@ include_once("plugin_options.php");
 /**
  * Cache for YesTicket API Calls
  */
-class Cache
+abstract class Cache
 {
     /**
      * The $instance
@@ -21,14 +21,7 @@ class Cache
      * 
      * @return Cache $instance
      */
-    static public function getInstance()
-    {
-        if (!isset(Cache::$instance)) {
-            Cache::$instance = new Cache();
-        }
-        Cache::$instance->ensureOptionExists();
-        return Cache::$instance;
-    }
+    abstract static public function getInstance();
 
     /**
      * Make sure the option handling our cache_keys exists and is an array.
@@ -39,53 +32,6 @@ class Cache
         if (!$opt || !\is_array($opt)) {
             \update_option('yesticket_transient_keys', array());
         }
-    }
-
-    /**
-     * Get data from the specified $get_url. 
-     * Use cached response, if present, else we make a new call and sve the data to cache
-     * 
-     * @param string $get_url the full api call URL
-     * 
-     * @return string Response body.
-     */
-    public function getFromCacheOrFresh($get_url)
-    {
-        $CACHE_TIME_IN_MINUTES = PluginOptions::getInstance()->getCacheTimeInMinutes();
-        $CACHE_KEY = $this->cacheKey($get_url);
-
-        // check if we have cached information
-        $data = get_transient($CACHE_KEY);
-        if (false === $data) {
-            // Cache not present, we make the API call
-            $data = $this->getData($get_url);
-            \set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS);
-            // save cache key to options, so we can delete the transient, if necessary
-            $this->addKeyToActiveCaches($CACHE_KEY);
-        }
-        // at this time we have our data, either from cache or after an API call.
-        return $data;
-    }
-
-    /**
-     * Get data from the specified $get_url. 
-     * 
-     * @param string $get_url the full api call URL
-     * 
-     * @return string Response body
-     */
-    protected function getData($get_url)
-    {
-        $this->logRequestMasked($get_url);
-        $http = new \WP_Http;
-        $result = $http->get($get_url);
-        if (\is_wp_error($result)) {
-            throw new \RuntimeException($result->get_error_message());
-        }
-        if (empty($result['body']) || $result['response']['code'] != 200) {
-            throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
-        }
-        return $result['body'];
     }
 
     /**
@@ -113,6 +59,19 @@ class Cache
             $cacheKeys[] = $CACHE_KEY;
             \update_option('yesticket_transient_keys', $cacheKeys);
         }
+    }
+
+    /**
+     * Cache the result
+     * 
+     * @param string $CACHE_KEY Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
+     * @param mixed $data the data
+     */
+    protected function cache($CACHE_KEY, $data)
+    {
+        \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
+        // save cache key to options, so we can delete the transient, if necessary
+        $this->addKeyToActiveCaches($CACHE_KEY);
     }
 
     /**

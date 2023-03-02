@@ -2,6 +2,7 @@
 
 namespace YesTicket;
 
+use \YesTicket\RestCache;
 use \InvalidArgumentException;
 
 include_once("cache.php");
@@ -37,7 +38,7 @@ class Api
     /**
      * The $instance
      *
-     * @var Cache
+     * @var RestCache
      */
     private $cache;
 
@@ -46,7 +47,7 @@ class Api
      */
     public function __construct()
     {
-        $this->cache = Cache::getInstance();
+        $this->cache = RestCache::getInstance();
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace YesTicket;
 
+use YesTicket\Cache;
+
 include_once("cache.php");
 include_once("functions.php");
 include_once("plugin_options.php");
@@ -24,6 +26,29 @@ class ImageCache extends Cache
         return ImageCache::$instance;
     }
 
+    
+    /**
+     * Get data from the specified $get_url. 
+     * Use cached response, if present, else we make a new call and sve the data to cache
+     * 
+     * @param string $get_url the full api call URL
+     * 
+     * @return mixed Response.
+     */
+    public function getFromCacheOrFresh($get_url, $fetchFunction, $renderFunction)
+    {
+        $CACHE_KEY = $this->cacheKey($get_url);
+        // check if we have cached information
+        $data = get_transient($CACHE_KEY);
+        if (false === $data) {
+            // Cache not present, we make the API call
+            $data = $this->getData($get_url, $fetchFunction, $renderFunction);
+            $this->cache($CACHE_KEY, $data);
+        }
+        // at this time we have our data, either from cache or after an API call.
+        return $data;
+    }
+
     /**
      * Get JPEG image from the specified $url. 
      * 
@@ -31,17 +56,17 @@ class ImageCache extends Cache
      * 
      * @return reource|GdImage image.
      */
-    protected function getData($url)
+    protected function getData($url, $fetchFunction, $renderFunction)
     {
         $this->logRequestMasked($url);
         \ob_start();
-        $image = \imagecreatefromjpeg($url);
+        $image = $fetchFunction($url);
         $msg = \ob_get_clean();
         if (!$image) {
             return $this->handleError($url, $msg);
         }
         \ob_start();
-        if (!\imagejpeg($image, null, 100)) {
+        if (!$renderFunction($image, null, 100)) {
             $this->logImageMsg($url, \ob_get_clean());
             throw new \RuntimeException("Could not create JPEG from $url", 500);
         }

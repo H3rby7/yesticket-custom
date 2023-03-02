@@ -83,8 +83,8 @@ class ImageEndpoint
   {
     try {
       $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
-      $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl);
-      \header('Content-Type: image/png', true, 200);
+      $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl, '\imagecreatefromjpeg', '\imagejpeg');
+      \header('Content-Type: image/jpeg', true, 200);
       echo $result;
     } catch (\Exception $e) {
       // \header('Content-Type: image/jpeg', true, 404);
