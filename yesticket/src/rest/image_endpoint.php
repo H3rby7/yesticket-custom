@@ -66,7 +66,8 @@ class ImageEndpoint
     ));
   }
 
-  public function validationCallback($param, $request = null, $key = null) {
+  public function validationCallback($param, $request = null, $key = null)
+  {
     if (!is_numeric($param) || $param < 1) {
       return false;
     }
@@ -84,10 +85,7 @@ class ImageEndpoint
     try {
       $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
       $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl);
-      if (!$result || !@\imagejpeg($result, null, 100)) {
-        \status_header(404);
-        return new \WP_Error(404, "Could not create image for $yesTicketImageUrl");
-      }
+      echo $result;
     } catch (\Exception $e) {
       \status_header(404);
       return new \WP_Error(404, $e->getMessage());

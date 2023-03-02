@@ -174,6 +174,7 @@ class Event
 
   public function getPictureUrl()
   {
+    // TODO: check for 'allow_url_fopen' to be true as our implementation relies on it. If false, we cannot provide a cache.
     if (!empty($this->event_id)) {
       return "/wp-json/yesticket/v1/picture/" . $this->event_id;
     }

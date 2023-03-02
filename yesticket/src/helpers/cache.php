@@ -26,10 +26,19 @@ class Cache
         if (!isset(Cache::$instance)) {
             Cache::$instance = new Cache();
         }
-        if (!\get_option('yesticket_transient_keys', false)) {
-            \add_option('yesticket_transient_keys', array());
-        }
+        Cache::$instance->ensureOptionExists();
         return Cache::$instance;
+    }
+
+    /**
+     * Make sure the option handling our cache_keys exists and is an array.
+     */
+    protected function ensureOptionExists()
+    {
+        $opt = \get_option('yesticket_transient_keys', false);
+        if (!$opt || !\is_array($opt)) {
+            \update_option('yesticket_transient_keys', array());
+        }
     }
 
     /**
