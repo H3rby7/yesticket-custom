@@ -85,11 +85,11 @@ class ImageEndpoint
       $result = $this->api->getEventImage($data['event_id']);
       \header($result->getHeader(), true, 200);
       echo $result->image_data;
+      return new \WP_REST_Response($result->image_data, 200, [$result->getHeader()]);
     } catch (\Exception $e) {
       $msg = $e->getMessage();
       \ytp_log(__FILE__ . "@" . __LINE__ . ": '$msg'");
       return new \WP_Error($e->getCode(), '', array('status' => $e->getCode()));
     }
-    return null;
   }
 }

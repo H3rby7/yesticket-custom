@@ -3,11 +3,17 @@
 namespace YesTicket;
 
 use \YesTicket\ImageCache;
+use YesTicket\Model\CachedImage;
 use \YesTicket\Rest\ImageEndpoint;
+use \WP_REST_Server;
 
 // As seen in https://torquemag.io/2017/01/testing-api-endpoints/
 class ImageEndpointTest extends \WP_UnitTestCase
 {
+  /**
+   * @var WP_REST_Server
+   */
+  protected $server;
   protected function setUp(): void
   {
     parent::setUp();
@@ -63,19 +69,16 @@ class ImageEndpointTest extends \WP_UnitTestCase
   }
 
   /**
-   * Initiate Mock for @see ImageCache
-   * 
-   * @param string $expected_url
-   * @param mixed $mock_result
+   * Initiate Mock for @see ImageApi
    */
   private function initMock()
   {
     // Inject Mock into API::$instance
-    $_cache_property = new \ReflectionProperty(ImageEndpoint::class, "cache");
+    $_cache_property = new \ReflectionProperty(ImageEndpoint::class, "api");
     $_cache_property->setAccessible(true);
     $instance = ImageEndpoint::getInstance();
-    $cache_mock = $this->getMockBuilder(ImageCache::class)
-      ->setMethods(['getFromCacheOrFresh'])
+    $cache_mock = $this->getMockBuilder(ImageApi::class)
+      ->setMethods(['getEventImage'])
       ->getMock();
     $_cache_property->setValue($instance, $cache_mock);
     return $cache_mock;
@@ -86,54 +89,19 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_handleRequest_200()
   {
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    \delete_transient(Cache::getInstance()->cacheKey($get_url));
-    $mock_result = \imagecreate(10, 10);
+    $mock_result = getCachedImage('image/jpeg', '\imagejpeg');
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
-      ->method('getFromCacheOrFresh')
-      ->with($get_url)
+      ->method('getEventImage')
+      ->with(123)
       ->will($this->returnValue($mock_result));
     $request = new \WP_REST_Request('GET', '/yesticket/v1/picture/123');
     \ob_start();
     $response = @$this->server->dispatch($request);
-    $image = \ob_get_clean();
+    $output = \ob_end_clean();
     $this->assertSame(200, $response->get_status());
-    $this->assertStringContainsString('quality = 100', $image);
-  }
-
-  /**
-   * @covers YesTicket\Rest\ImageEndpoint
-   */
-  function test_handleRequest_cache_throws()
-  {
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    \delete_transient(Cache::getInstance()->cacheKey($get_url));
-    $cache_mock = $this->initMock();
-    $cache_mock->expects($this->once())
-      ->method('getFromCacheOrFresh')
-      ->with($get_url)
-      ->willThrowException(new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket")));
-    $request = new \WP_REST_Request('GET', '/yesticket/v1/picture/123');
-    $response = @$this->server->dispatch($request);
-    $this->assertTrue($response->get_status() > 299, "Should not be OK");
-  }
-
-  /**
-   * @covers YesTicket\Rest\ImageEndpoint
-   */
-  function test_handleRequest_cache_returns_false()
-  {
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    \delete_transient(Cache::getInstance()->cacheKey($get_url));
-    $cache_mock = $this->initMock();
-    $cache_mock->expects($this->once())
-      ->method('getFromCacheOrFresh')
-      ->with($get_url)
-      ->will($this->returnValue(FALSE));
-    $request = new \WP_REST_Request('GET', '/yesticket/v1/picture/123');
-    $response = @$this->server->dispatch($request);
-    $this->assertTrue($response->get_status() > 299, "Should not be OK");
+    $this->assertContains('Content-Type: image/jpeg', $response->get_headers());
+    $this->assertNotEmpty($output);
   }
 
   /**

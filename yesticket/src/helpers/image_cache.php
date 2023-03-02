@@ -19,8 +19,6 @@ include_once(__DIR__ . "/../model/cached_image.php");
 class ImageCache extends Cache
 {
     /**
-     * Get the $instance
-     * 
      * @return ImageCache $instance
      */
     static public function getInstance()

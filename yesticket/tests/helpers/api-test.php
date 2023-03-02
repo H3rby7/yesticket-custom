@@ -20,7 +20,7 @@ class ApiTest extends \WP_UnitTestCase
   }
 
   /**
-   * Initiate Mock for @see Cache
+   * Initiate Mock for @see RestCache
    * 
    * @param string $expected_url
    * @param mixed $mock_result
@@ -31,7 +31,7 @@ class ApiTest extends \WP_UnitTestCase
     $_cache_property = new \ReflectionProperty(Api::class, "cache");
     $_cache_property->setAccessible(true);
     $instance = Api::getInstance();
-    $cache_mock = $this->getMockBuilder(Cache::class)
+    $cache_mock = $this->getMockBuilder(RestCache::class)
       ->setMethods(['getFromCacheOrFresh'])
       ->getMock();
     $_cache_property->setValue($instance, $cache_mock);

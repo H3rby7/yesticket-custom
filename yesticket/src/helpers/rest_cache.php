@@ -14,6 +14,9 @@ class RestCache extends Cache
 {
     static protected $instance;
 
+    /**
+     * @return RestCache $instance
+     */
     static public function getInstance()
     {
         if (!isset(RestCache::$instance)) {
