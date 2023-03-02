@@ -2,11 +2,17 @@
 
 namespace YesTicket;
 
-use YesTicket\Cache;
+use \YesTicket\Cache;
+use \YesTicket\ImageException;
+use \YesTicket\ImageNotFoundException;
+use YesTicket\Model\CachedImage;
+use \YesTicket\WrongImageTypeException;
 
 include_once("cache.php");
 include_once("functions.php");
 include_once("plugin_options.php");
+include_once(__DIR__ . "/../exceptions/image_exceptions.php");
+include_once(__DIR__ . "/../model/cached_image.php");
 /**
  * Cache for YesTicket API Calls
  */
@@ -28,100 +34,82 @@ class ImageCache extends Cache
 
     
     /**
-     * Get data from the specified $get_url. 
-     * Use cached response, if present, else we make a new call and sve the data to cache
+     * Get image from the specified $get_url using $fetchFunction and render using $renderFunction 
+     * Use cached response, if present, else we make a new call and sve the image to cache
      * 
      * @param string $get_url the full api call URL
+     * @param string expected $type of the image
+     * @param callable $fetchFunction used to fetch image
+     * @param callable $renderFunction used to render image
      * 
-     * @return mixed Response.
+     * @return CachedImage image
+     * 
+     * @throws ImageNotFoundException if the $get_url returns html and not an image (usually meaning ERROR)
+     * @throws WrongImageTypeException if the image behind $get_url is of a different type 
+     * @throws ImageException if unknown error occurs
      */
-    public function getFromCacheOrFresh($get_url, $fetchFunction, $renderFunction)
+    public function getFromCacheOrFresh($get_url, $type, $fetchFunction, $renderFunction)
     {
         $CACHE_KEY = $this->cacheKey($get_url);
         // check if we have cached information
-        $data = get_transient($CACHE_KEY);
-        if (false === $data) {
+        $image = get_transient($CACHE_KEY);
+        if (false === $image) {
             // Cache not present, we make the API call
             $data = $this->getData($get_url, $fetchFunction, $renderFunction);
-            $this->cache($CACHE_KEY, $data);
+            $image = new CachedImage($type, $data);
+            $this->cache($CACHE_KEY, $image);
         }
-        // at this time we have our data, either from cache or after an API call.
-        return $data;
+        // at this time we have our image, either from cache or after an API call.
+        return $image;
     }
 
     /**
-     * Get JPEG image from the specified $url. 
+     * Get image from the specified $get_url using $fetchFunction and render using $renderFunction 
      * 
-     * @param string $url the full JPEG image URL
+     * @param string $get_url the full image URL
+     * @param callable $fetchFunction used to fetch image using $get_url
+     * @param callable $renderFunction used to render image with the result of $fetchFunction
      * 
-     * @return reource|GdImage image.
+     * @return string echoable image content
+     * 
+     * @throws ImageNotFoundException if the $get_url returns html and not an image (usually meaning ERROR)
+     * @throws WrongImageTypeException if the image behind $get_url is of a different type 
+     * @throws ImageException if unknown error occurs
      */
-    protected function getData($url, $fetchFunction, $renderFunction)
+    protected function getData($get_url, $fetchFunction, $renderFunction)
     {
-        $this->logRequestMasked($url);
+        $this->logRequestMasked($get_url);
         \ob_start();
-        $image = $fetchFunction($url);
+        $image = $fetchFunction($get_url);
         $msg = \ob_get_clean();
         if (!$image) {
-            return $this->handleError($url, $msg);
+            throw $this->generateError($msg);
         }
         \ob_start();
-        if (!$renderFunction($image, null, 100)) {
-            $this->logImageMsg($url, \ob_get_clean());
-            throw new \RuntimeException("Could not create JPEG from $url", 500);
-        }
-        return \ob_get_clean();
-    }
-
-    private function handleError($url, $msg)
-    {
-        if (\stripos($msg, 'Not a JPEG file:') === FALSE) {
-            $this->logImageMsg($url, $msg);
-            throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
-        }
-        return $this->getAsPNG($url);
-    }
-
-    /**
-     * Get PNG image from $url
-     * 
-     * @param string $url of the remote image
-     * @return string output image to be echoed
-     */
-    private function getAsPNG($url)
-    {
-        // START Capture message for the remote fopen operation
-        \ob_start();
-        $image = \imagecreatefrompng($url);
-        $msg = \ob_get_clean();
-        // END Capture message for the remote fopen operation
-        if (!$image) {
-            $image = $this->handleError($url, $msg);
-        }
-        // START Capture message for creating image locally
-        \ob_start();
-        if (!\imagepng($image, null, 100)) {
+        if (!$renderFunction($image)) {
             $msg = \ob_get_clean();
-            // END ERROR Capture message for creating image locally
-            $this->logImageMsg($url, $msg);
-            throw new \RuntimeException("Could not create PNG from $url", 500);
+            throw $this->generateError($msg);
         }
         return \ob_get_clean();
-        // END SUCCESS Capture message for creating image locally
     }
 
     /**
-     * Log $msg, if present, or standard Error Message
+     * Create an exception, depending on $msg
      * 
-     * @param string $url of the remote image
-     * @param string $msg as captured from the \imagexxxx function
+     * @param string $msg output of \image????? function
+     * 
+     * @return ImageException
      */
-    private function logImageMsg($url, $msg)
+    private function generateError($msg)
     {
-        if (!empty($msg) && \strlen($msg) > 0) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": '$msg'");
-        } else {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Unknown Error when retrieving image from $url'");
+        // response starts with '<h' (probably <html)
+        if (\stripos($msg, 'starts with 0x3c 0x68') !== FALSE) {
+            return new ImageNotFoundException($msg, 404);
         }
+        // response starts with meta symbol '<control>' (probably different image type than we expected)
+        if (\stripos($msg, 'starts with 0x89') !== FALSE) {
+            return new WrongImageTypeException($msg);
+        }
+        return new ImageException($msg);
     }
 }

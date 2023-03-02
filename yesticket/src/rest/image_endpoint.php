@@ -83,11 +83,12 @@ class ImageEndpoint
   {
     try {
       $result = $this->api->getEventImage($data['event_id']);
-      \header('Content-Type: image/jpeg', true, 200);
-      echo $result;
+      \header($result->getHeader(), true, 200);
+      echo $result->image_data;
     } catch (\Exception $e) {
-      // \header('Content-Type: image/jpeg', true, 404);
-      return new \WP_Error(404, $e->getMessage(), array( 'status' => 404 ));
+      $msg = $e->getMessage();
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": '$msg'");
+      return new \WP_Error($e->getCode(), '', array('status' => $e->getCode()));
     }
     return null;
   }

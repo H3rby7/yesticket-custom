@@ -69,9 +69,13 @@ abstract class Cache
      */
     protected function cache($CACHE_KEY, $data)
     {
-        \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
-        // save cache key to options, so we can delete the transient, if necessary
-        $this->addKeyToActiveCaches($CACHE_KEY);
+        $saved = \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
+        if ($saved) {
+            // save cache key to options, so we can delete the transient, if necessary
+            $this->addKeyToActiveCaches($CACHE_KEY);
+        } else {
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Could not cache item $CACHE_KEY'");
+        }
     }
 
     /**
