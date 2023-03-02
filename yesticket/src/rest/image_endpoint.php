@@ -81,14 +81,14 @@ class ImageEndpoint
 
   public function handleRequest($data)
   {
-    \header('Content-Type: image/jpeg', true);
     try {
       $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $data['event_id'];
       $result = $this->cache->getFromCacheOrFresh($yesTicketImageUrl);
+      \header('Content-Type: image/png', true, 200);
       echo $result;
     } catch (\Exception $e) {
-      \status_header(404);
-      return new \WP_Error(404, $e->getMessage());
+      // \header('Content-Type: image/jpeg', true, 404);
+      return new \WP_Error(404, $e->getMessage(), array( 'status' => 404 ));
     }
     return null;
   }
