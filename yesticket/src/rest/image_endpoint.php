@@ -3,6 +3,7 @@
 namespace YesTicket\Rest;
 
 use \YesTicket\ImageApi;
+use YesTicket\Model\CachedImage;
 
 include_once(__DIR__ . "/../helpers/image_api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
@@ -11,6 +12,7 @@ add_action('rest_api_init', function () {
   ImageEndpoint::getInstance()->registerRoute();
 });
 
+// https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
 class ImageEndpoint
 {
 
@@ -64,6 +66,7 @@ class ImageEndpoint
         ),
       ),
     ));
+    \add_filter('rest_pre_serve_request', [$this, 'servePicture'], 10, 2);
   }
 
   public function validationCallback($param, $request = null, $key = null)
@@ -83,14 +86,37 @@ class ImageEndpoint
   {
     try {
       $result = $this->api->getEventImage($data['event_id']);
-      \header($result->getHeader(), true, 200);
-      echo $result->image_data;
-      return new \WP_REST_Response($result->image_data, 200, [$result->getHeader()]);
+      return new \WP_REST_Response($result, 200, ['Content-Type: ' . $result->content_type]);
     } catch (\Exception $e) {
       $msg = $e->getMessage();
       $code = $e->getCode();
       \ytp_log(__FILE__ . "@" . __LINE__ . ": ERROR $code > '$msg'");
       return new \WP_Error($code, $msg, array('status' => $code));
     }
+  }
+
+  /**
+   * @param boolean $served
+   * @param \WP_REST_Response $result
+   * @param \WP_REST_Request $request
+   * @param \WP_REST_Server $server
+   */
+  public function servePicture($served, $result)
+  {
+    if ($served || $result->is_error()) {
+      return false;
+    }
+    if (\stripos($result->get_matched_route(), '/yesticket/v1/picture') === false) {
+      return false;
+    }
+    if (!($result->get_data() instanceof CachedImage)) {
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Result data is not of type CachedImage'");
+      return false;
+    }
+    foreach ($result->get_headers() as $header) {
+      \header($header, true);
+    }
+    echo $result->get_data()->image_data;
+    return true;
   }
 }

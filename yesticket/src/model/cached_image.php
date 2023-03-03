@@ -24,11 +24,6 @@ class CachedImage implements \Serializable
     $this->image_data = $image_data;
   }
 
-  public function getHeader()
-  {
-    return "Content-Type: " . $this->content_type;
-  }
-
   public function __serialize()
   {
     return [
@@ -51,11 +46,11 @@ class CachedImage implements \Serializable
     $this->image_data = $data['image_data'];
   }
 
-  public function unserialize($image_data)
+  public function unserialize($data)
   {
     list(
       $this->content_type,
       $this->image_data,
-    ) = \unserialize($image_data);
+    ) = \unserialize($data);
   }
 }

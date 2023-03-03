@@ -134,4 +134,51 @@ class ImageEndpointTest extends \WP_UnitTestCase
     $this->assertFalse(ImageEndpoint::getInstance()->validationCallback("1.5"), "'1.5' should not be valid!");
     $this->assertTrue(ImageEndpoint::getInstance()->validationCallback("1"), "'1' should be valid!");
   }
+
+  /**
+   * @covers YesTicket\Rest\ImageEndpoint
+   */
+  function test_serveImage_already_served_expect_false()
+  {
+    $result = new \WP_REST_Response();
+    $result->set_matched_route('/yesticket/v1/picture');
+    $this->assertFalse(ImageEndpoint::getInstance()->servePicture(true, $result));
+  }
+
+  /**
+   * @covers YesTicket\Rest\ImageEndpoint
+   */
+  function test_serveImage_is_error_expect_false()
+  {
+    $result = new \WP_REST_Response();
+    $result->set_matched_route('/yesticket/v1/picture');
+    $result->set_status(400);
+    $this->assertFalse(ImageEndpoint::getInstance()->servePicture(false, $result));
+  }
+
+  /**
+   * @covers YesTicket\Rest\ImageEndpoint
+   */
+  function test_serveImage_path_not_interesting_expect_false()
+  {
+    $result = new \WP_REST_Response();
+    $result->set_matched_route('/other-namespace/v1/picture');
+    $this->assertFalse(ImageEndpoint::getInstance()->servePicture(false, $result));
+  }
+
+  /**
+   * @covers YesTicket\Rest\ImageEndpoint
+   */
+  function test_serveImage_works()
+  {
+    $result = new \WP_REST_Response();
+    $result->set_matched_route('/yesticket/v1/picture');
+    $result->set_headers(['some-header: withValue']);
+    $result->set_data(getCachedImage('image/jpeg', '\imagejpeg', 100));
+    \ob_start();
+    $this->assertTrue(@ImageEndpoint::getInstance()->servePicture(false, $result));
+    $body = \ob_get_clean();
+    $this->assertNotEmpty($body);
+    $this->assertStringContainsString('quality = 100', $body);
+  }
 }
