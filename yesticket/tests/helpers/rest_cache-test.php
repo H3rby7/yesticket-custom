@@ -172,4 +172,23 @@ class RestCacheTest extends \WP_UnitTestCase
     $this->expectException(\RuntimeException::class);
     RestCache::getInstance()->getFromCacheOrFresh($get_url);
   }
+
+  /**
+   * @covers YesTicket\RestCache
+   */
+  function test_gettingWPError()
+  {
+    $get_url = 'test-url';
+    \delete_transient(RestCache::getInstance()->cacheKey($get_url));
+
+    // Setup MOCK for HTTP call
+    remove_all_filters('pre_http_request');
+    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
+      return new \WP_Error(503, 'something went wrong');
+    }, 10, 3);
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage('something went wrong');
+    $this->expectExceptionCode(503);
+    RestCache::getInstance()->getFromCacheOrFresh($get_url);
+  }
 }
