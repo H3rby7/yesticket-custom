@@ -113,8 +113,12 @@ class ImageEndpoint
       \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Result data is not of type CachedImage'");
       return false;
     }
-    foreach ($result->get_headers() as $header) {
-      \header($header, true);
+    if (!\headers_sent()) {
+      // @codeCoverageIgnoreStart
+      foreach ($result->get_headers() as $header) {
+        \header($header, true);
+      }
+      // @codeCoverageIgnoreEnd
     }
     echo $result->get_data()->image_data;
     return true;

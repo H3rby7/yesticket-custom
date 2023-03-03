@@ -169,6 +169,17 @@ class ImageEndpointTest extends \WP_UnitTestCase
   /**
    * @covers YesTicket\Rest\ImageEndpoint
    */
+  function test_serveImage_result_not_cached_image_expect_false()
+  {
+    $result = new \WP_REST_Response();
+    $result->set_matched_route('/yesticket/v1/picture');
+    $result->set_data(array('a property' => 'a string'));
+    $this->assertFalse(ImageEndpoint::getInstance()->servePicture(false, $result));
+  }
+
+  /**
+   * @covers YesTicket\Rest\ImageEndpoint
+   */
   function test_serveImage_works()
   {
     $result = new \WP_REST_Response();
@@ -176,7 +187,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
     $result->set_headers(['some-header: withValue']);
     $result->set_data(getCachedImage('image/jpeg', '\imagejpeg', 100));
     \ob_start();
-    $this->assertTrue(@ImageEndpoint::getInstance()->servePicture(false, $result));
+    $this->assertTrue(ImageEndpoint::getInstance()->servePicture(false, $result));
     $body = \ob_get_clean();
     $this->assertNotEmpty($body);
     $this->assertStringContainsString('quality = 100', $body);
