@@ -49,4 +49,27 @@ class CachedImageTest extends \WP_UnitTestCase
     $this->assertSame($image->get_image_data(), $fromCache->get_image_data());
   }
 
+  /**
+   * @covers YesTicket\Model\CachedImage
+   */
+  function test_image_data_getter_setter()
+  {
+    \ob_start();
+    \imagejpeg(\imagecreatetruecolor(10, 10), null, 100);
+    $image = \ob_get_clean();
+    $ci = new CachedImage();
+    $ci->set_image_data($image);
+    $this->assertSame($image, $ci->get_image_data());
+  }
+
+  /**
+   * @covers YesTicket\Model\CachedImage
+   */
+  function test_content_type_getter_setter()
+  {
+    $type = 'image/jpeg';
+    $ci = new CachedImage();
+    $ci->set_content_type($type);
+    $this->assertSame($type, $ci->get_content_type());
+  }
 }
