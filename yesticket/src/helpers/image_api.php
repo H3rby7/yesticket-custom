@@ -91,12 +91,10 @@ class ImageApi
     private function _getEventImage($get_url)
     {
         try {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Try getting as JPEG'");
             return $this->cache->getFromCacheOrFresh($get_url, 'image/jpeg', '\imagecreatefromjpeg', function ($image) {
                 return \imagejpeg($image, null, 100);
             });
         } catch (WrongImageTypeException $e) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Try getting as PNG'");
             return $this->cache->getFromCacheOrFresh($get_url, 'image/png', '\imagecreatefrompng', function ($image) {
                 return \imagepng($image, null, 0);
             });

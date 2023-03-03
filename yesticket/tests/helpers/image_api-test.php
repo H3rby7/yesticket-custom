@@ -59,8 +59,8 @@ class ImageApiTest extends \WP_UnitTestCase
       ->will($this->returnValue($mock_result));
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
-    $this->assertSame("image/jpeg", $response->content_type);
-    $this->assertStringContainsString('quality = 100', $response->image_data);
+    $this->assertSame("image/jpeg", $response->get_content_type());
+    $this->assertStringContainsString('quality = 100', $response->get_image_data());
   }
 
   /**
@@ -82,7 +82,7 @@ class ImageApiTest extends \WP_UnitTestCase
       ->will($this->returnValue($mock_result));
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
-    $this->assertSame("image/png", $response->content_type);
+    $this->assertSame("image/png", $response->get_content_type());
   }
 
 

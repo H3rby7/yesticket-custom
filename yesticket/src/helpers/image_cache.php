@@ -49,13 +49,22 @@ class ImageCache extends Cache
     public function getFromCacheOrFresh($get_url, $type, $fetchFunction, $renderFunction)
     {
         $CACHE_KEY = $this->cacheKey($get_url);
+        $image = null;
         // check if we have cached information
-        $image = get_transient($CACHE_KEY);
-        if (false === $image) {
+        $transient = get_transient($CACHE_KEY);
+        if (false === $transient) {
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Try getting as Content-Type $type'");
             // Cache not present, we make the API call
             $data = $this->getData($get_url, $fetchFunction, $renderFunction);
             $image = new CachedImage($type, $data);
-            $this->cache($CACHE_KEY, $image);
+            // Need to manually serialize, as the automatic one fails in the unserialize step
+            $this->cache($CACHE_KEY, $image->serialize());
+        } else {
+            $image = new CachedImage();
+            $image->unserialize($transient);
+            $content_type = $image->get_content_type();
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Taken from Cache ($content_type); original url => $get_url'");
+            // Need to manually unserialize, as the automatic would fail in this step
         }
         // at this time we have our image, either from cache or after an API call.
         return $image;

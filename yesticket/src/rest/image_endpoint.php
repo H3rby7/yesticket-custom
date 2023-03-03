@@ -86,7 +86,7 @@ class ImageEndpoint
   {
     try {
       $result = $this->api->getEventImage($data['event_id']);
-      return new \WP_REST_Response($result, 200, ['Content-Type: ' . $result->content_type]);
+      return new \WP_REST_Response($result, 200, ['Content-Type: ' . $result->get_content_type()]);
     } catch (\Exception $e) {
       $msg = $e->getMessage();
       $code = $e->getCode();
@@ -120,7 +120,7 @@ class ImageEndpoint
       }
       // @codeCoverageIgnoreEnd
     }
-    echo $result->get_data()->image_data;
+    echo $result->get_data()->get_image_data();
     return true;
   }
 }
