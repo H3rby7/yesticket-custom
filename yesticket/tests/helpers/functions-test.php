@@ -67,11 +67,9 @@ class YesTicketHelpersTest extends WP_UnitTestCase
    */
   function test_ytp_log_string_expecting_string()
   {
-    $errorLogTmpfile = tmpfile();
-    $errorLogLocationBackup = ini_set('error_log', stream_get_meta_data($errorLogTmpfile)['uri']);
+    \LogCapture::start();
     \ytp_log("my log content");
-    ini_set('error_log', $errorLogLocationBackup);
-    $result = stream_get_contents($errorLogTmpfile);
+    $result = \LogCapture::end_get();
     $this->assertStringContainsString("YESTICKET: my log content", $result);
   }
 
@@ -80,11 +78,9 @@ class YesTicketHelpersTest extends WP_UnitTestCase
    */
   function test_ytp_log_array_expecting_serialized_string()
   {
-    $errorLogTmpfile = tmpfile();
-    $errorLogLocationBackup = ini_set('error_log', stream_get_meta_data($errorLogTmpfile)['uri']);
+    \LogCapture::start();
     \ytp_log(array("my-key" => "my-value"));
-    ini_set('error_log', $errorLogLocationBackup);
-    $result = stream_get_contents($errorLogTmpfile);
+    $result = \LogCapture::end_get();
     $this->assertStringContainsString('YESTICKET: Array', $result);
     $this->assertStringContainsString('[my-key] => my-value', $result);
   }
