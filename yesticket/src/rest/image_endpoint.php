@@ -88,8 +88,9 @@ class ImageEndpoint
       return new \WP_REST_Response($result->image_data, 200, [$result->getHeader()]);
     } catch (\Exception $e) {
       $msg = $e->getMessage();
-      \ytp_log(__FILE__ . "@" . __LINE__ . ": '$msg'");
-      return new \WP_Error($e->getCode(), '', array('status' => $e->getCode()));
+      $code = $e->getCode();
+      \ytp_log(__FILE__ . "@" . __LINE__ . ": ERROR $code > '$msg'");
+      return new \WP_Error($code, $msg, array('status' => $code));
     }
   }
 }

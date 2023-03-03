@@ -105,6 +105,26 @@ class ImageEndpointTest extends \WP_UnitTestCase
   }
 
   /**
+   * @covers YesTicket\Rest\ImageEndpoint
+   */
+  function test_handleRequest_exception()
+  {
+    $cache_mock = $this->initMock();
+    $cache_mock->expects($this->once())
+      ->method('getEventImage')
+      ->with(123)
+      ->willThrowException(new ImageException('my-message', 503));
+    $request = new \WP_REST_Request('GET', '/yesticket/v1/picture/123');
+    \ob_start();
+    $response = @$this->server->dispatch($request);
+    $output = \ob_end_clean();
+    $this->assertSame(503, $response->get_status());
+    $body = $response->get_data();
+    $this->assertSame(503, $body['code']);
+    $this->assertSame('my-message', $body['message']);
+  }
+
+  /**
    * @covers YesTicket\Rest\ImageEndpoint::validationCallback
    */
   function test_validations()
