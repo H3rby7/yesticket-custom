@@ -74,7 +74,9 @@ abstract class Cache
             // save cache key to options, so we can delete the transient, if necessary
             $this->addKeyToActiveCaches($CACHE_KEY);
         } else {
+            // @codeCoverageIgnoreStart
             \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Could not cache item $CACHE_KEY'");
+            // @codeCoverageIgnoreEnd
         }
     }
 

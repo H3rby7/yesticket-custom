@@ -2,10 +2,14 @@
 
 namespace YesTicket;
 
+use LogCapture;
 use \YesTicket\Cache;
+
+include_once(__DIR__ . "/../utility.php");
 
 class TestCacheImpl extends Cache
 {
+  public $addedKey = false;
   static public function getInstance()
   {
   }
@@ -16,6 +20,18 @@ class TestCacheImpl extends Cache
   public function call_addKeyToActiveCaches($cacheKey)
   {
     parent::addKeyToActiveCaches($cacheKey);
+  }
+  protected function addKeyToActiveCaches($cacheKey)
+  {
+    $this->addedKey = $cacheKey;
+  }
+  public function call_cache($cacheKey, $data)
+  {
+    parent::cache($cacheKey, $data);
+  }
+  public function call_logRequestMasked($url)
+  {
+    parent::logRequestMasked($url);
   }
 }
 
@@ -130,6 +146,21 @@ class CacheTest extends \WP_UnitTestCase
   /**
    * @covers YesTicket\Cache
    */
+  function test_cache_storing_works()
+  {
+    $key = 'test-A';
+    \delete_transient($key);
+    $this->assertEmpty(\get_transient($key), "Test should start with transient being absent.");
+    $this->testClass->call_cache($key, 'value-for-a');
+    $transient = \get_transient($key);
+    $this->assertNotEmpty($transient);
+    $this->assertSame('value-for-a', $transient, "Transient should contain our data.");
+    $this->assertSame($key, $this->testClass->addedKey, "Should call 'addKeyToActiveCaches' with param.");
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
   function test_clear_option_empty()
   {
     // Empty option, expect no error
@@ -152,7 +183,7 @@ class CacheTest extends \WP_UnitTestCase
     // expect option [] and transient gone (FALSE)
     $this->assertIsArray(\get_option($this->opt_key));
     $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(get_transient('test-A'));
+    $this->assertFalse(\get_transient('test-A'));
   }
 
   /**
@@ -171,8 +202,8 @@ class CacheTest extends \WP_UnitTestCase
     // and unrelated transient to live on.
     $this->assertIsArray(\get_option($this->opt_key));
     $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(get_transient('test-A'));
-    $this->assertNotEmpty(get_transient('unrelated-B'));
+    $this->assertFalse(\get_transient('test-A'));
+    $this->assertNotEmpty(\get_transient('unrelated-B'));
     // clean up
     \delete_transient('unrelated-B');
   }
@@ -191,7 +222,35 @@ class CacheTest extends \WP_UnitTestCase
     // expect option [] and transients gone (FALSE)
     $this->assertIsArray(\get_option($this->opt_key));
     $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(get_transient('test-A'));
-    $this->assertFalse(get_transient('test-B'));
+    $this->assertFalse(\get_transient('test-A'));
+    $this->assertFalse(\get_transient('test-B'));
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_logRequestMasked_opaque()
+  {
+    LogCapture::start();
+    $this->testClass->call_logRequestMasked('https://my.awesome.url/aaa');
+    $logged = LogCapture::end_get();
+    $this->assertStringContainsString('No cache present', $logged);
+    $this->assertStringContainsString('https://my.awesome.url/aaa', $logged);
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_logRequestMasked_with_secrets_expect_no_confidentials()
+  {
+    LogCapture::start();
+    $this->testClass->call_logRequestMasked('https://my.awesome.url/aaa?organizer=821&key=myawesomeapikey');
+    $logged = LogCapture::end_get();
+    $this->assertStringContainsString('No cache present', $logged);
+    $this->assertStringContainsString('https://my.awesome.url/aaa', $logged);
+    $this->assertStringContainsString('organizer=', $logged);
+    $this->assertStringContainsString('key=', $logged);
+    $this->assertStringNotContainsString('organizer=821', $logged);
+    $this->assertStringNotContainsString('key=myawesomeapikey', $logged);
   }
 }
