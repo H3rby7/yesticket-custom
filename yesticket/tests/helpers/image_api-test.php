@@ -5,6 +5,8 @@ namespace YesTicket;
 use \YesTicket\ImageApi;
 use \YesTicket\ImageCache;
 use \YesTicket\WrongImageTypeException;
+use \YesTicket\ImageException;
+use \LogCapture;
 
 // As seen in https://torquemag.io/2017/01/testing-api-endpoints/
 class ImageApiTest extends \WP_UnitTestCase
@@ -86,7 +88,6 @@ class ImageApiTest extends \WP_UnitTestCase
   function test_cache_returns_jpeg()
   {
     $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    \delete_transient(ImageCache::getInstance()->cacheKey($get_url));
     $mock_result = getCachedImage('image/jpeg', '\imagejpeg', 100);
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
@@ -114,7 +115,6 @@ class ImageApiTest extends \WP_UnitTestCase
   function test_cache_throws_then_returns_png()
   {
     $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    \delete_transient(ImageCache::getInstance()->cacheKey($get_url));
     $mock_result = getCachedImage('image/png', '\imagepng', 0);
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->at(0))
@@ -137,5 +137,65 @@ class ImageApiTest extends \WP_UnitTestCase
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
     $this->assertSame("image/png", $response->get_content_type());
+  }
+
+  /**
+   * @covers YesTicket\ImageApi
+   */
+  function test_cache_throws_image_exception_with_message()
+  {
+    // Define our http-get endpoint
+    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    // Set up mock to throw an ImageException
+    $cache_mock = $this->initMock();
+    $cache_mock->expects($this->once(0))
+      ->method('getFromCacheOrFresh')
+      ->with($get_url)
+      ->willThrowException(new ImageException('mock does not approve this call'));
+    // Start Captures
+    $didThrow = false;
+    LogCapture::start();
+    try {
+      ImageApi::getInstance()->getEventImage(123);
+    } catch (ImageException $e) {
+      // We expect to get here
+      $didThrow = true;
+      $this->assertStringContainsString('mock does not approve this call', $e->getMessage());
+    } finally {
+      $logged = LogCapture::end_get();
+      $this->assertStringContainsString('mock does not approve this call', $logged);
+      // Safety, if we did not catch an error $didThrow will still be false and the assertion fails.
+      $this->assertTrue($didThrow, 'Expected ImageException');
+    }
+  }
+
+  /**
+   * @covers YesTicket\ImageApi
+   */
+  function test_cache_throws_image_exception_no_message()
+  {
+    // Define our http-get endpoint
+    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    // Set up mock to throw an ImageException
+    $cache_mock = $this->initMock();
+    $cache_mock->expects($this->once(0))
+      ->method('getFromCacheOrFresh')
+      ->with($get_url)
+      ->willThrowException(new ImageException());
+    // Start Captures
+    $didThrow = false;
+    LogCapture::start();
+    try {
+      ImageApi::getInstance()->getEventImage(123);
+    } catch (ImageException $e) {
+      // We expect to get here
+      $didThrow = true;
+    } finally {
+      $logged = LogCapture::end_get();
+      $this->assertStringContainsString('Unknown Error', $logged);
+      $this->assertStringContainsString($get_url, $logged, "Should log the URL");
+      // Safety, if we did not catch an error $didThrow will still be false and the assertion fails.
+      $this->assertTrue($didThrow, 'Expected ImageException');
+    }
   }
 }
