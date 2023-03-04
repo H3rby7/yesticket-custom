@@ -72,6 +72,7 @@ abstract class Cache
         $saved = \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
         if ($saved) {
             // save cache key to options, so we can delete the transient, if necessary
+            // TODO: need locking here
             $this->addKeyToActiveCaches($CACHE_KEY);
         } else {
             // @codeCoverageIgnoreStart
@@ -84,10 +85,11 @@ abstract class Cache
      * Clears the cached API request responses.
      * Resets the 'yesticket_transient_keys' option to an empty array.
      */
-    public function clear()
+    static public function clear()
     {
-        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
-        $cacheKeys = \get_option('yesticket_transient_keys');
+        $cacheKeys = \get_option('yesticket_transient_keys', array());
+        $count = \count($cacheKeys);
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing $count cache items, triggered by user.'");
         \update_option('yesticket_transient_keys', array());
         foreach ($cacheKeys as $k) {
             \delete_transient($k);

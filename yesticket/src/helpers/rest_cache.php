@@ -61,7 +61,11 @@ class RestCache extends Cache
         $http = new \WP_Http;
         $result = $http->get($get_url);
         if (\is_wp_error($result)) {
-            throw new \RuntimeException($result->get_error_message(), $result->get_error_code());
+            $code = $result->get_error_code();
+            if (\is_string($code)) {
+                throw new \RuntimeException($result->get_error_message().' '.$code);
+            }
+            throw new \RuntimeException($result->get_error_message(), $code);
         }
         if (empty($result['body']) || $result['response']['code'] != 200) {
             throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));

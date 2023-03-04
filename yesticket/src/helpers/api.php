@@ -5,7 +5,7 @@ namespace YesTicket;
 use \YesTicket\RestCache;
 use \InvalidArgumentException;
 
-include_once("cache.php");
+include_once("rest_cache.php");
 include_once("functions.php");
 include_once("plugin_options.php");
 include_once(__DIR__ . "/../model/event.php");

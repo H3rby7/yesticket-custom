@@ -165,7 +165,7 @@ class CacheTest extends \WP_UnitTestCase
   {
     // Empty option, expect no error
     \update_option($this->opt_key, []);
-    $this->testClass->clear();
+    Cache::clear();
     $this->assertIsArray(\get_option($this->opt_key));
     $this->assertCount(0, \get_option($this->opt_key));
   }
@@ -179,7 +179,7 @@ class CacheTest extends \WP_UnitTestCase
     \set_transient('test-A', 'value-A', 0);
     \update_option($this->opt_key,  ['test-A']);
     // clear cache
-    $this->testClass->clear();
+    Cache::clear();
     // expect option [] and transient gone (FALSE)
     $this->assertIsArray(\get_option($this->opt_key));
     $this->assertCount(0, \get_option($this->opt_key));
@@ -197,7 +197,7 @@ class CacheTest extends \WP_UnitTestCase
     \set_transient('unrelated-B', 'value-B', 0);
     \update_option($this->opt_key,  ['test-A']);
     // clear cache
-    $this->testClass->clear();
+    Cache::clear();
     // expect option [] and transient 'test-A' gone (FALSE)
     // and unrelated transient to live on.
     $this->assertIsArray(\get_option($this->opt_key));
@@ -218,7 +218,7 @@ class CacheTest extends \WP_UnitTestCase
     \set_transient('test-B', 'value-B', 0);
     \update_option($this->opt_key,  ['test-A', 'test-B']);
     // clear cache
-    $this->testClass->clear();
+    Cache::clear();
     // expect option [] and transients gone (FALSE)
     $this->assertIsArray(\get_option($this->opt_key));
     $this->assertCount(0, \get_option($this->opt_key));

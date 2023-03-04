@@ -53,7 +53,7 @@ class ImageCache extends Cache
         // check if we have cached information
         $transient = get_transient($CACHE_KEY);
         if (false === $transient) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Try getting as Content-Type $type'");
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Try getting as Content-Type $type; url => $get_url'");
             // Cache not present, we make the API call
             $data = $this->getData($get_url, $fetchFunction, $renderFunction);
             $image = new CachedImage($type, $data);
@@ -85,7 +85,6 @@ class ImageCache extends Cache
      */
     protected function getData($get_url, $fetchFunction, $renderFunction)
     {
-        $this->logRequestMasked($get_url);
         \ob_start();
         $image = $fetchFunction($get_url);
         $msg = \ob_get_clean();

@@ -91,7 +91,7 @@ class ImageEndpoint
       $msg = $e->getMessage();
       $code = $e->getCode();
       \ytp_log(__FILE__ . "@" . __LINE__ . ": ERROR $code > '$msg'");
-      return new \WP_Error($code, $msg, array('status' => $code));
+      return new \WP_Error($code, '', array('status' => $code));
     }
   }
 

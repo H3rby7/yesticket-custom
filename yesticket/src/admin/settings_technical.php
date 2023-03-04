@@ -120,8 +120,7 @@ EOD;
    */
   private function clear_cache()
   {
-    ImageCache::getInstance()->clear();
-    Cache::getInstance()->clear();
+    Cache::clear();
     return $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")
