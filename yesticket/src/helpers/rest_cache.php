@@ -22,7 +22,6 @@ class RestCache extends Cache
         if (!isset(RestCache::$instance)) {
             RestCache::$instance = new RestCache();
         }
-        RestCache::$instance->ensureOptionExists();
         return RestCache::$instance;
     }
 

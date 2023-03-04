@@ -26,7 +26,6 @@ class ImageCache extends Cache
         if (!isset(ImageCache::$instance)) {
             ImageCache::$instance = new ImageCache();
         }
-        ImageCache::$instance->ensureOptionExists();
         return ImageCache::$instance;
     }
 
