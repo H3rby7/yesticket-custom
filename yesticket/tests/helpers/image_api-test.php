@@ -46,7 +46,14 @@ class ImageApiTest extends \WP_UnitTestCase
     return $cache_mock;
   }
 
-  private function mockValidateFetchFunction($f, $renderer)
+  /**
+   * Utility function to simplify different fetch function validations
+   * Validate that the passed argument $f is a function and can fetch a 'whatever $renderer' returns.
+   * @param callable $f the function
+   * @param callable $renderer one of \imageXXXX
+   * @return boolean true if valid; false if invalid
+   */
+  private function _validateFetchFunction($f, $renderer)
   {
     if (!\is_callable($f)) {
       \error_log('Must be a callable!');
@@ -61,17 +68,32 @@ class ImageApiTest extends \WP_UnitTestCase
     return $result !== FALSE && (\is_resource($result) || $result instanceof \GdImage);
   }
 
-  private function mockValidateJPEGFetchFunction($f)
+  /**
+   * Validate that the passed argument is a function and can fetch a jpeg
+   * @param callable $f the function
+   * @return boolean true if valid; false if invalid
+   */
+  private function validateJPEGFetchFunction($f)
   {
-    return $this->mockValidateFetchFunction($f, '\imagejpeg');
+    return $this->_validateFetchFunction($f, '\imagejpeg');
   }
 
-  private function mockValidatePNGFetchFunction($f)
+  /**
+   * Validate that the passed argument is a function and can fetch a png
+   * @param callable $f the function
+   * @return boolean true if valid; false if invalid
+   */
+  private function validatePNGFetchFunction($f)
   {
-    return $this->mockValidateFetchFunction($f, '\imagepng');
+    return $this->_validateFetchFunction($f, '\imagepng');
   }
 
-  private function mockValidateRenderFunction($f)
+  /**
+   * Validate that the passed argument is a function and can render an image
+   * @param callable $f the function
+   * @return boolean true if valid; false if invalid
+   */
+  private function validateRenderFunction($f)
   {
     if (!\is_callable($f)) {
       \error_log('Must be a callable!');
@@ -87,7 +109,9 @@ class ImageApiTest extends \WP_UnitTestCase
    */
   function test_cache_returns_jpeg()
   {
+    // Define our http-get endpoint
     $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    // Set up mock to return a png on 'image/png'
     $mock_result = getCachedImage('image/jpeg', '\imagejpeg', 100);
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
@@ -96,13 +120,14 @@ class ImageApiTest extends \WP_UnitTestCase
         $get_url,
         'image/jpeg',
         $this->callback(function ($fetchFunction) {
-          return $this->mockValidateJPEGFetchFunction($fetchFunction);
+          return $this->validateJPEGFetchFunction($fetchFunction);
         }),
         $this->callback(function ($renderFunction) {
-          return $this->mockValidateRenderFunction($renderFunction);
+          return $this->validateRenderFunction($renderFunction);
         })
       )
       ->will($this->returnValue($mock_result));
+    // Call and assert
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
     $this->assertSame("image/jpeg", $response->get_content_type());
@@ -114,26 +139,34 @@ class ImageApiTest extends \WP_UnitTestCase
    */
   function test_cache_throws_then_returns_png()
   {
+    // Define our http-get endpoint
     $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    // Set up mock to ...
     $mock_result = getCachedImage('image/png', '\imagepng', 0);
     $cache_mock = $this->initMock();
+    //                ... throw WrongImageTypeException on first call with 'image/jpeg'
     $cache_mock->expects($this->at(0))
       ->method('getFromCacheOrFresh')
-      ->with($get_url)
+      ->with(
+        $get_url,
+        'image/jpeg'
+      )
       ->willThrowException(new WrongImageTypeException());
+    //                ... return a png on second call with 'image/png'
     $cache_mock->expects($this->at(1))
       ->method('getFromCacheOrFresh')
       ->with(
         $get_url,
         'image/png',
         $this->callback(function ($fetchFunction) {
-          return $this->mockValidatePNGFetchFunction($fetchFunction);
+          return $this->validatePNGFetchFunction($fetchFunction);
         }),
         $this->callback(function ($renderFunction) {
-          return $this->mockValidateRenderFunction($renderFunction);
+          return $this->validateRenderFunction($renderFunction);
         })
       )
       ->will($this->returnValue($mock_result));
+    // Call and assert
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
     $this->assertSame("image/png", $response->get_content_type());
