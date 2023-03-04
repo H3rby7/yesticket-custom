@@ -32,7 +32,7 @@ abstract class Cache
         if (!$opt || !\is_array($opt)) {
             \update_option('yesticket_transient_keys', array(), false);
         }
-        add_action('ytp_add_cache_key', [$this, 'addKeyToActiveCaches'], 10, 2);
+        \add_action('ytp_check_cache_key', '\Yesticket\invalidateIfNotInActiveCaches', 10, 2);
     }
 
     /**
@@ -51,35 +51,17 @@ abstract class Cache
      * Ensure the WP_TRANSIENTS $CACHE_KEY is in our active cache keys
      * 
      * @param string $CACHE_KEY Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
-     * @param int (optional) $attemptCount increased during scheduled events
-     * @return boolean true if cached or caching successfully scheduled.
      */
-    protected function addKeyToActiveCaches($CACHE_KEY, $attemptCount = 0)
+    protected function addKeyToActiveCaches($CACHE_KEY)
     {
-        if ($attemptCount > 5) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Failed adding $CACHE_KEY to yesticket_transient_keys; removing from cache.'");
-            \delete_transient($CACHE_KEY);
-            return;
-        }
-        if (\get_transient('yesticket_transient_keys_lock')) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Lock is in use.'");
-            return \wp_schedule_single_event(\time(), 'ytp_add_cache_key', [$CACHE_KEY, ++$attemptCount]);
-        }
-        \set_transient('yesticket_transient_keys_lock', $CACHE_KEY, 1);
-        if (\get_transient('yesticket_transient_keys_lock') !== $CACHE_KEY) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Lost race condition. Lock is in use.'");
-            return \wp_schedule_single_event(\time(), 'ytp_add_cache_key', [$CACHE_KEY, ++$attemptCount]);
-        }
-        // At this time we are 90% save (due to this make-shift locking)
         $cacheKeys = \get_option('yesticket_transient_keys', array());
-        $success = false;
         if (!\in_array($CACHE_KEY, $cacheKeys)) {
             // unknown cache key, add to known keys
             $cacheKeys[] = $CACHE_KEY;
-            $success = \update_option('yesticket_transient_keys', $cacheKeys, false);
+            \update_option('yesticket_transient_keys', $cacheKeys, false);
+            $success = \wp_schedule_single_event(\time() + 10, 'ytp_check_cache_key', [$CACHE_KEY, \rand(1, \getrandmax())]);
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Schedule successful? -> $success'");
         }
-        \delete_transient('yesticket_transient_keys_lock');
-        return $success;
     }
 
     /**
@@ -93,11 +75,9 @@ abstract class Cache
         $saved = \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
         if ($saved) {
             // save cache key to options, so we can delete the transient, if necessary
-            $saved = $this->addKeyToActiveCaches($CACHE_KEY);
-        }
-        if (!$saved) {
+            $this->addKeyToActiveCaches($CACHE_KEY);
+        } else {
             // @codeCoverageIgnoreStart
-            \delete_transient($CACHE_KEY);
             \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Could not cache item $CACHE_KEY'");
             // @codeCoverageIgnoreEnd
         }
@@ -129,5 +109,22 @@ abstract class Cache
         $masked_url = \preg_replace('/organizer=\w+/', 'organizer=****', $url);
         $masked_url = \preg_replace('/key=\w+/', 'key=****', $masked_url);
         \ytp_log(__FILE__ . "@" . __LINE__ . ": 'No cache present, getting new data from: $masked_url'");
+    }
+}
+
+/**
+ * If WP_TRANSIENTS $CACHE_KEY is not in our active cache keys; we delete the transient
+ * 
+ * @param string $CACHE_KEY Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
+ * @param int $rand to trick wp_scheduler into not ignoring consecutive attempts
+ * 
+ */
+function invalidateIfNotInActiveCaches($CACHE_KEY, $rand)
+{
+    \ytp_log(__FILE__ . "@" . __LINE__ . ": 'invalidateIfNotInActiveCaches called for $CACHE_KEY.'");
+    $cacheKeys = \get_option('yesticket_transient_keys', array());
+    if (!\in_array($CACHE_KEY, $cacheKeys)) {
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": '$CACHE_KEY was not added to activecaches, deleting transient.'");
+        \delete_transient($CACHE_KEY);
     }
 }
