@@ -5,8 +5,6 @@ use WP_Http;
 
 class RestCacheTest extends \WP_UnitTestCase
 {
-  private $opt_key = 'yesticket_transient_keys';
-
   function test_class_exists()
   {
     $this->assertTrue(\class_exists("YesTicket\RestCache"));
@@ -22,9 +20,6 @@ class RestCacheTest extends \WP_UnitTestCase
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);
     $this->assertNotEmpty(RestCache::getInstance());
-    $opt = \get_option($this->opt_key);
-    $this->assertIsArray($opt);
-    $this->assertCount(0, $opt);
     $_instance_prop->setAccessible(false);
   }
 

@@ -9,21 +9,8 @@ include_once(__DIR__ . "/../utility.php");
 
 class TestCacheImpl extends Cache
 {
-  public $addedKey = false;
   static public function getInstance()
   {
-  }
-  public function call_ensureOptionExists()
-  {
-    parent::ensureOptionExists();
-  }
-  public function call_addKeyToActiveCaches($cacheKey)
-  {
-    parent::addKeyToActiveCaches($cacheKey);
-  }
-  protected function addKeyToActiveCaches($cacheKey)
-  {
-    $this->addedKey = $cacheKey;
   }
   public function call_cache($cacheKey, $data)
   {
@@ -37,7 +24,6 @@ class TestCacheImpl extends Cache
 
 class CacheTest extends \WP_UnitTestCase
 {
-  private $opt_key = 'yesticket_transient_keys';
   private $testClass;
 
   function setUp(): void
@@ -48,44 +34,6 @@ class CacheTest extends \WP_UnitTestCase
   function test_class_exists()
   {
     $this->assertTrue(\class_exists("YesTicket\Cache"));
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
-  function test_ensureOptionExists_option_absent()
-  {
-    \delete_option($this->opt_key);
-    $this->assertFalse(\get_option($this->opt_key, false), "Test should start with option being absent.");
-    $this->testClass->call_ensureOptionExists();
-    $option = \get_option($this->opt_key, false);
-    $this->assertIsArray($option);
-    $this->assertCount(0, $option);
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
-  function test_ensureOptionExists_option_not_an_array()
-  {
-    \update_option($this->opt_key, "a-string instead of an array! Scandalous!");
-    $this->testClass->call_ensureOptionExists();
-    $option = \get_option($this->opt_key, false);
-    $this->assertIsArray($option);
-    $this->assertCount(0, $option);
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
-  function test_ensureOptionExists_option_already_present()
-  {
-    \update_option($this->opt_key, ["some-key", "another-key"]);
-    $this->testClass->call_ensureOptionExists();
-    $option = \get_option($this->opt_key, false);
-    $this->assertNotEmpty($option);
-    $this->assertIsArray($option);
-    $this->assertSameSets(["some-key", "another-key"], $option, "Should contain the previously set values.");
   }
 
   /**
@@ -107,45 +55,6 @@ class CacheTest extends \WP_UnitTestCase
   /**
    * @covers YesTicket\Cache
    */
-  function test_addKeyToActiveCaches_empty_arr()
-  {
-    \update_option($this->opt_key, []);
-    $this->testClass->call_addKeyToActiveCaches('my-test-key');
-    $option = \get_option($this->opt_key, false);
-    $this->assertNotEmpty($option);
-    $this->assertIsArray($option);
-    $this->assertSameSets(['my-test-key'], $option, "Should contain the new value.");
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
-  function test_addKeyToActiveCaches_arr_already_has_it()
-  {
-    \update_option($this->opt_key, ['my-test-key']);
-    $this->testClass->call_addKeyToActiveCaches('my-test-key');
-    $option = \get_option($this->opt_key, false);
-    $this->assertNotEmpty($option);
-    $this->assertIsArray($option);
-    $this->assertSameSets(['my-test-key'], $option, "Should contain the new value (and only once)");
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
-  function test_addKeyToActiveCaches_arr_has_another_item()
-  {
-    \update_option($this->opt_key, ['my-test-key']);
-    $this->testClass->call_addKeyToActiveCaches('my-other-key');
-    $option = \get_option($this->opt_key, false);
-    $this->assertNotEmpty($option);
-    $this->assertIsArray($option);
-    $this->assertSameSets(['my-test-key', 'my-other-key'], $option, "Should contain both values");
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
   function test_cache_storing_works()
   {
     $key = 'test-A';
@@ -155,19 +64,6 @@ class CacheTest extends \WP_UnitTestCase
     $transient = \get_transient($key);
     $this->assertNotEmpty($transient);
     $this->assertSame('value-for-a', $transient, "Transient should contain our data.");
-    $this->assertSame($key, $this->testClass->addedKey, "Should call 'addKeyToActiveCaches' with param.");
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
-  function test_clear_option_empty()
-  {
-    // Empty option, expect no error
-    \update_option($this->opt_key, []);
-    Cache::clear();
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
   }
 
   /**
@@ -175,15 +71,13 @@ class CacheTest extends \WP_UnitTestCase
    */
   function test_clear_one_transient_given()
   {
-    // given transient 'test-A', enlisted in the option
-    \set_transient('test-A', 'value-A', 0);
-    \update_option($this->opt_key,  ['test-A']);
+    $cacheKey = $this->testClass->cacheKey('test-A');
+    \set_transient($cacheKey, 'value-A', 0);
+    // Check we could set transient
+    $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
     // clear cache
     Cache::clear();
-    // expect option [] and transient gone (FALSE)
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(\get_transient('test-A'));
+    $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
   }
 
   /**
@@ -191,20 +85,16 @@ class CacheTest extends \WP_UnitTestCase
    */
   function test_clear_two_transients_given_only_one_to_be_cleared()
   {
-    // given transient 'test-A', enlisted in the option
-    // and an unrelated transient
-    \set_transient('test-A', 'value-A', 0);
+    $cacheKey = $this->testClass->cacheKey('test-A');
+    \set_transient($cacheKey, 'value-A', 0);
     \set_transient('unrelated-B', 'value-B', 0);
-    \update_option($this->opt_key,  ['test-A']);
+    // Check we could set transients
+    $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
+    $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should have been available.");
     // clear cache
     Cache::clear();
-    // expect option [] and transient 'test-A' gone (FALSE)
-    // and unrelated transient to live on.
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(\get_transient('test-A'));
-    $this->assertNotEmpty(\get_transient('unrelated-B'));
-    // clean up
+    $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
+    $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should still be available after ::clear.");
     \delete_transient('unrelated-B');
   }
 
@@ -213,17 +103,16 @@ class CacheTest extends \WP_UnitTestCase
    */
   function test_clear_two_transients_given_noth_to_be_cleared()
   {
-    // given two transients, both enlisted in the option
-    \set_transient('test-A', 'value-A', 0);
-    \set_transient('test-B', 'value-B', 0);
-    \update_option($this->opt_key,  ['test-A', 'test-B']);
-    // clear cache
+    $cacheKeyA = $this->testClass->cacheKey('test-A');
+    $cacheKeyB = $this->testClass->cacheKey('b-key');
+    \set_transient($cacheKeyA, 'value-A', 0);
+    \set_transient($cacheKeyB, 'Bs value is this', 0);
+    // Check we could set transients
+    $this->assertNotEmpty(\get_transient($cacheKeyA), "Transient A should have been available.");
+    $this->assertNotEmpty(\get_transient($cacheKeyB), "Transient B should have been available.");
     Cache::clear();
-    // expect option [] and transients gone (FALSE)
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(\get_transient('test-A'));
-    $this->assertFalse(\get_transient('test-B'));
+    $this->assertFalse(\get_transient($cacheKeyA), "Transient A should have been cleared.");
+    $this->assertFalse(\get_transient($cacheKeyB), "Transient B should have been cleared.");
   }
 
   /**

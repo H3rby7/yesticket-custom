@@ -121,7 +121,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
     $this->assertSame(503, $response->get_status());
     $body = $response->get_data();
     $this->assertSame(503, $body['code']);
-    $this->assertSame('my-message', $body['message']);
+    $this->assertSame('', $body['message']);
   }
 
   /**
