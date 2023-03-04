@@ -44,6 +44,42 @@ class ImageApiTest extends \WP_UnitTestCase
     return $cache_mock;
   }
 
+  private function mockValidateFetchFunction($f, $renderer)
+  {
+    if (!\is_callable($f)) {
+      \error_log('Must be a callable!');
+      return false;
+    }
+    // Create fake resource to be fetched
+    $fakeResourceFile = \wp_tempnam();
+    $renderer(\imagecreatetruecolor(10, 10), $fakeResourceFile);
+    // Fetch fake resource
+    $result = $f($fakeResourceFile);
+    // Assertions
+    return $result !== FALSE && (\is_resource($result) || $result instanceof \GdImage);
+  }
+
+  private function mockValidateJPEGFetchFunction($f)
+  {
+    return $this->mockValidateFetchFunction($f, '\imagejpeg');
+  }
+
+  private function mockValidatePNGFetchFunction($f)
+  {
+    return $this->mockValidateFetchFunction($f, '\imagepng');
+  }
+
+  private function mockValidateRenderFunction($f)
+  {
+    if (!\is_callable($f)) {
+      \error_log('Must be a callable!');
+      return false;
+    }
+    \ob_start();
+    $this->assertTrue($f(\imagecreatetruecolor(10, 10)));
+    return !empty(\ob_get_clean());
+  }
+
   /**
    * @covers YesTicket\ImageApi
    */
@@ -55,7 +91,16 @@ class ImageApiTest extends \WP_UnitTestCase
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
-      ->with($get_url)
+      ->with(
+        $get_url,
+        'image/jpeg',
+        $this->callback(function ($fetchFunction) {
+          return $this->mockValidateJPEGFetchFunction($fetchFunction);
+        }),
+        $this->callback(function ($renderFunction) {
+          return $this->mockValidateRenderFunction($renderFunction);
+        })
+      )
       ->will($this->returnValue($mock_result));
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
@@ -78,12 +123,19 @@ class ImageApiTest extends \WP_UnitTestCase
       ->willThrowException(new WrongImageTypeException());
     $cache_mock->expects($this->at(1))
       ->method('getFromCacheOrFresh')
-      ->with($get_url)
+      ->with(
+        $get_url,
+        'image/png',
+        $this->callback(function ($fetchFunction) {
+          return $this->mockValidatePNGFetchFunction($fetchFunction);
+        }),
+        $this->callback(function ($renderFunction) {
+          return $this->mockValidateRenderFunction($renderFunction);
+        })
+      )
       ->will($this->returnValue($mock_result));
     $response = ImageApi::getInstance()->getEventImage(123);
     $this->assertNotEmpty($response);
     $this->assertSame("image/png", $response->get_content_type());
   }
-
-
 }
