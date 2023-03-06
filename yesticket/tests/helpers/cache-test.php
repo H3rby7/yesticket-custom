@@ -1,11 +1,35 @@
 <?php
 
 namespace YesTicket;
-use WP_Http;
+
+use LogCapture;
+use \YesTicket\Cache;
+
+include_once(__DIR__ . "/../utility.php");
+
+class TestCacheImpl extends Cache
+{
+  static public function getInstance()
+  {
+  }
+  public function call_cache($cacheKey, $data)
+  {
+    parent::cache($cacheKey, $data);
+  }
+  public function call_logRequestMasked($url)
+  {
+    parent::logRequestMasked($url);
+  }
+}
 
 class CacheTest extends \WP_UnitTestCase
 {
-  private $opt_key = 'yesticket_transient_keys';
+  private $testClass;
+
+  function setUp(): void
+  {
+    $this->testClass = new TestCacheImpl();
+  }
 
   function test_class_exists()
   {
@@ -15,31 +39,15 @@ class CacheTest extends \WP_UnitTestCase
   /**
    * @covers YesTicket\Cache
    */
-  function test_get_instance()
-  {
-    $_class = new \ReflectionClass(Cache::class);
-    $_instance_prop = $_class->getProperty("instance");
-    $_instance_prop->setAccessible(true);
-    $_instance_prop->setValue(NULL);
-    $this->assertNotEmpty(Cache::getInstance());
-    $opt = \get_option($this->opt_key);
-    $this->assertIsArray($opt);
-    $this->assertCount(0, $opt);
-    $_instance_prop->setAccessible(false);
-  }
-
-  /**
-   * @covers YesTicket\Cache
-   */
   function test_cacheKey()
   {
     $very_long_url = 'https://yesticket.org/some/very/long/url/with/more/than/172/characters/to/verify/the/method/keeps/its/limit/omg/that/requires/a/lot/of/text/I/did/not/think/that/far/but/now/I/got/it';
-    $cacheKey = Cache::getInstance()->cacheKey($very_long_url);
+    $cacheKey = $this->testClass->cacheKey($very_long_url);
     $this->assertNotEmpty($cacheKey);
     $this->assertTrue(strlen($cacheKey) < 172, "Transient key must be <172 characters!");
-    $this->assertSame($cacheKey, Cache::getInstance()->cacheKey($very_long_url), "Should be deterministic.");
+    $this->assertSame($cacheKey, $this->testClass->cacheKey($very_long_url), "Should be deterministic.");
     $this->assertFalse(
-      Cache::getInstance()->cacheKey('a') == Cache::getInstance()->cacheKey('b'),
+      $this->testClass->cacheKey('a') == $this->testClass->cacheKey('b'),
       "Should return different results for different inputs"
     );
   }
@@ -47,132 +55,134 @@ class CacheTest extends \WP_UnitTestCase
   /**
    * @covers YesTicket\Cache
    */
-  function test_clear()
+  function test_cache_storing_works()
   {
-    // Empty option, expect no error
-    Cache::getInstance()->clear();
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
+    $key = 'test-A';
+    \delete_transient($key);
+    $this->assertEmpty(\get_transient($key), "Test should start with transient being absent.");
+    $this->testClass->call_cache($key, 'value-for-a');
+    $transient = \get_transient($key);
+    $this->assertNotEmpty($transient);
+    $this->assertSame('value-for-a', $transient, "Transient should contain our data.");
+  }
 
-    // given transient 'test-A', enlisted in the option
-    \set_transient('test-A', 'value-A', 0);
-    \update_option($this->opt_key,  ['test-A']);
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_clear_one_transient_given()
+  {
+    $cacheKey = $this->testClass->cacheKey('test-A');
+    \set_transient($cacheKey, 'value-A', 0);
+    // Check we could set transient
+    $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
     // clear cache
-    Cache::getInstance()->clear();
-    // expect option [] and transient gone (FALSE)
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(get_transient('test-A'));
+    global $wpdb;
+    $this->assertTrue(Cache::clear($wpdb));
+    $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
+  }
 
-    // given transient 'test-A', enlisted in the option
-    // and an unrelated transient
-    \set_transient('test-A', 'value-A', 0);
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_clear_two_transients_given_only_one_to_be_cleared()
+  {
+    $cacheKey = $this->testClass->cacheKey('test-A');
+    \set_transient($cacheKey, 'value-A', 0);
     \set_transient('unrelated-B', 'value-B', 0);
-    \update_option($this->opt_key,  ['test-A']);
+    // Check we could set transients
+    $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
+    $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should have been available.");
     // clear cache
-    Cache::getInstance()->clear();
-    // expect option [] and transient 'test-A' gone (FALSE)
-    // and unrelated transient to live on.
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(get_transient('test-A'));
-    $this->assertNotEmpty(get_transient('unrelated-B'));
-    // clean up
+    global $wpdb;
+    $this->assertTrue(Cache::clear($wpdb));
+    $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
+    $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should still be available after ::clear.");
     \delete_transient('unrelated-B');
-
-    // given two transients, both enlisted in the option
-    \set_transient('test-A', 'value-A', 0);
-    \set_transient('test-B', 'value-B', 0);
-    \update_option($this->opt_key,  ['test-A', 'test-B']);
-    // clear cache
-    Cache::getInstance()->clear();
-    // expect option [] and transients gone (FALSE)
-    $this->assertIsArray(\get_option($this->opt_key));
-    $this->assertCount(0, \get_option($this->opt_key));
-    $this->assertFalse(get_transient('test-A'));
-    $this->assertFalse(get_transient('test-B'));
   }
 
   /**
    * @covers YesTicket\Cache
    */
-  function test_getFromCacheOrFresh()
+  function test_clear_two_transients_given_noth_to_be_cleared()
   {
-    // constants
-    $get_url = 'test-url';
-    $cacheKey = Cache::getInstance()->cacheKey($get_url);
-
-    // General Setup
-    $pre_http_request_filter_has_run = false;
-    $external_call_url = '';
-    // Setup MOCK for HTTP call
-    remove_all_filters('pre_http_request');
-    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use (&$pre_http_request_filter_has_run, &$external_call_url) {
-      $pre_http_request_filter_has_run = true;
-      $external_call_url = $url;
-      return array(
-        'headers'     => array(),
-        'cookies'     => array(),
-        'filename'    => null,
-        'response'    => array('code' => WP_Http::OK, 'message' => 'OK'),
-        'status_code' => WP_Http::OK,
-        'success'     => 1,
-        'body'        => '{"a-key": "a-value"}',
-      );
-    }, 10, 3);
-
-    // Given no cached item
-    $pre_http_request_filter_has_run = false;
-    $external_call_url = '';
-    \delete_transient($cacheKey);
-    // Call
-    $result = Cache::getInstance()->getFromCacheOrFresh($get_url);
-    // Check Mock was invoked
-    $this->assertTrue($pre_http_request_filter_has_run, "Should make HTTP call.");
-    $this->assertSame($external_call_url, $get_url, "Called wrong url");
-    // Check response from Mock was used
-    $this->assertNotEmpty($result);
-    $this->assertNotEmpty($result->{'a-key'}, "Expect result to match mocked response");
-    $this->assertSame('a-value', $result->{'a-key'}, "Expect result to match mocked response");
-    // Check new cache item equals Mock response
-    $cache = get_transient($cacheKey);
-    $this->assertNotEmpty($cache);
-    $this->assertNotEmpty($cache->{'a-key'}, "Expect new cache to match mocked response");
-    $this->assertSame('a-value', $cache->{'a-key'}, "Expect new cache to match mocked response");
-
-    // Given cached item is present (from previous test)
-    $pre_http_request_filter_has_run = false;
-    $external_call_url = '';
-    // Call
-    $result = Cache::getInstance()->getFromCacheOrFresh($get_url);
-    $this->assertFalse($pre_http_request_filter_has_run, "Should have used the cache.");
-    $this->assertNotEmpty($result);
-    $this->assertNotEmpty($result->{'a-key'}, "Expect result to match cached response");
-    $this->assertSame('a-value', $result->{'a-key'}, "Expect result to match cached response");
+    $cacheKeyA = $this->testClass->cacheKey('test-A');
+    $cacheKeyB = $this->testClass->cacheKey('b-key');
+    \set_transient($cacheKeyA, 'value-A', 0);
+    \set_transient($cacheKeyB, 'Bs value is this', 0);
+    // Check we could set transients
+    $this->assertNotEmpty(\get_transient($cacheKeyA), "Transient A should have been available.");
+    $this->assertNotEmpty(\get_transient($cacheKeyB), "Transient B should have been available.");
+    global $wpdb;
+    $this->assertTrue(Cache::clear($wpdb));
+    $this->assertFalse(\get_transient($cacheKeyA), "Transient A should have been cleared.");
+    $this->assertFalse(\get_transient($cacheKeyB), "Transient B should have been cleared.");
   }
 
   /**
    * @covers YesTicket\Cache
    */
-  function test_gettingErrorFromApi()
+  function test_clear_db_error()
   {
-    $get_url = 'test-url';
-    \delete_transient(Cache::getInstance()->cacheKey($get_url));
+    // Set-Up DB mock
+    $wpdb_mock = $this->getMockBuilder(wpdb::class)
+      ->setMethods(['get_results'])
+      ->getMock();
+    $wpdb_mock->expects($this->once())
+      ->method('get_results')
+      ->with()
+      ->will($this->returnValue(null));
+    $wpdb_mock->last_error = 'test last error of wpdb';
+    $wpdb_mock->prefix = 'wp_';
+    LogCapture::start();
+    $this->assertFalse(Cache::clear($wpdb_mock));
+    $logged = LogCapture::end_get();
+    $this->assertStringContainsString('test last error of wpdb', $logged);
+  }
 
-    // Setup MOCK for HTTP call
-    remove_all_filters('pre_http_request');
-    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
-      return array(
-        'headers'     => array(),
-        'cookies'     => array(),
-        'filename'    => null,
-        'response'    => array('code' => WP_Http::SERVICE_UNAVAILABLE, 'message' => 'API down for maintainance'),
-        'status_code' => WP_Http::SERVICE_UNAVAILABLE,
-        'success'     => 0,
-        'body'        => '',
-      );
-    }, 10, 3);
-    $this->expectException(\RuntimeException::class);
-    Cache::getInstance()->getFromCacheOrFresh($get_url);
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_clear_db_transient_not_present_anymore()
+  {
+    \delete_transient('test-A');
+    // Set-Up DB mock
+    $wpdb_mock = $this->getMockBuilder(wpdb::class)
+      ->setMethods(['get_results'])
+      ->getMock();
+    $wpdb_mock->expects($this->once())
+      ->method('get_results')
+      ->with()
+      ->will($this->returnValue(array(array('test-A'))));
+    $wpdb_mock->last_error = null;
+    $wpdb_mock->prefix = 'wp_';
+    $this->assertFalse(Cache::clear($wpdb_mock));
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_logRequestMasked_opaque()
+  {
+    LogCapture::start();
+    $this->testClass->call_logRequestMasked('https://my.awesome.url/aaa');
+    $logged = LogCapture::end_get();
+    $this->assertStringContainsString('No cache present', $logged);
+    $this->assertStringContainsString('https://my.awesome.url/aaa', $logged);
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_logRequestMasked_with_secrets_expect_no_confidentials()
+  {
+    LogCapture::start();
+    $this->testClass->call_logRequestMasked('https://my.awesome.url/aaa?organizer=821&key=myawesomeapikey');
+    $logged = LogCapture::end_get();
+    $this->assertStringContainsString('No cache present', $logged);
+    $this->assertStringContainsString('https://my.awesome.url/aaa', $logged);
+    $this->assertStringContainsString('organizer=', $logged);
+    $this->assertStringContainsString('key=', $logged);
+    $this->assertStringNotContainsString('organizer=821', $logged);
+    $this->assertStringNotContainsString('key=myawesomeapikey', $logged);
   }
 }

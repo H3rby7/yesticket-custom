@@ -2,11 +2,13 @@
 
 namespace YesTicket;
 
+use \YesTicket\RestCache;
 use \InvalidArgumentException;
 
-include_once("cache.php");
+include_once("rest_cache.php");
 include_once("functions.php");
 include_once("plugin_options.php");
+include_once(__DIR__ . "/../model/event.php");
 
 /**
  * Grants simplified access to the YesTicket API
@@ -36,7 +38,7 @@ class Api
     /**
      * The $instance
      *
-     * @var Cache
+     * @var RestCache
      */
     private $cache;
 
@@ -45,7 +47,7 @@ class Api
      */
     public function __construct()
     {
-        $this->cache = Cache::getInstance();
+        $this->cache = RestCache::getInstance();
     }
 
     /**
@@ -184,16 +186,14 @@ class Api
         if (empty($att["grep"])) {
             \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events'");
             // We don't  filter on our side. Easy API call.
-            $apiCall = $this->buildUrl($att, "events");
-            $result = $this->cache->getFromCacheOrFresh($apiCall);
+            $result = $this->_getEvents($att);
         } else {
             // if we 'grep' (filter events manually on our side)
             $_count = empty($att["count"]) ? null : $att["count"];
             // we unset 'count' to call the api for more elements than needed.
             \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Getting events without \"count\", because \"grep\" is in use.'");
             $att["count"] = null;
-            $apiCall = $this->buildUrl($att, "events");
-            $unfiltered = $this->cache->getFromCacheOrFresh($apiCall);
+            $unfiltered = $this->_getEvents($att);
             $att["count"] = $_count;
             // we filter the items
             $result = $this->applyGrep($unfiltered, $att["grep"]);
@@ -209,6 +209,18 @@ class Api
     }
 
     /**
+     * Build URL, get and transform into an array of @see \YesTicket\Model\Event
+     * @param mixed $att of shortcode
+     * @return array of @see \YesTicket\Model\Event
+     */
+    private function _getEvents($att)
+    {
+        $apiCall = $this->buildUrl($att, "events");
+        $json = $this->cache->getFromCacheOrFresh($apiCall);
+        return \array_map('\Yesticket\Model\Event::fromJson', \json_decode($json, false));
+    }
+
+    /**
      * Validate API call and get testimonials from API
      * 
      * @param mixed $att of shortcode
@@ -220,6 +232,7 @@ class Api
         $this->validateArguments($att);
         $apiCall = $this->buildUrl($att, "testimonials");
         $result = $this->cache->getFromCacheOrFresh($apiCall);
+        $result = \json_decode($result);
         if (empty($att["count"]) || !\is_numeric($att["count"]) || !\is_countable($result)) {
             // no count set or $result uncountable, just return list
             \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Returning all testimonials'");

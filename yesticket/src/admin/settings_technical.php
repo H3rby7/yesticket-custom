@@ -2,6 +2,7 @@
 
 namespace YesTicket\Admin;
 use YesTicket\Cache;
+use YesTicket\ImageCache;
 use YesTicket\PluginOptions;
 
 include_once("settings_section.php");
@@ -13,17 +14,23 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
  */
 class SettingsTechnical extends SettingsSection
 {
+  /**
+   * DB connection used to clear cache
+   * @var wpdb
+   * @see https://developer.wordpress.org/reference/classes/wpdb/
+   */
+  private $wpdb = null;
 
-  private $cache;
   /**
    * Constructor.
    *
    * @param string $parent_slug for the menu hirarchy
+   * @param string $wpdb DB connection
    */
-  public function __construct($parent_slug)
+  public function __construct($parent_slug, $wpdb)
   {
     parent::__construct($parent_slug);
-    $this->cache = Cache::getInstance();
+    $this->wpdb = $wpdb;
     $this->configure();
   }
 
@@ -121,7 +128,7 @@ EOD;
    */
   private function clear_cache()
   {
-    $this->cache->clear();
+    Cache::clear($this->wpdb);
     return $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")

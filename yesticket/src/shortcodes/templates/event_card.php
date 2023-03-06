@@ -4,7 +4,7 @@ $ts = $time->getTimestamp();
 ?>
 <a href="<?php echo $item->yesticket_booking_url; ?>" target="_blank">
   <div class="ytp-event-card">
-    <div class="ytp-event-card-image" style="background-image: url('<?php echo $item->event_picture_url; ?>')"></div>
+    <div class="ytp-event-card-image" style="background-image: url('<?php echo $item->getPictureUrl(); ?>')"></div>
     <div class="ytp-event-card-text-wrapper">
       <div class="ytp-event-card-date">
         <span class="ytp-event-card-month"><?php echo \wp_date('M', $ts); ?></span><br>

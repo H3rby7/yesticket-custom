@@ -1,6 +1,7 @@
 <?php
 
 include_once("admin/plugin_menu.php");
+include_once("rest/image_endpoint.php");
 include_once("shortcodes/yesticket_events.php");
 include_once("shortcodes/yesticket_events_list.php");
 include_once("shortcodes/yesticket_events_cards.php");

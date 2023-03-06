@@ -7,76 +7,21 @@ include_once("plugin_options.php");
 /**
  * Cache for YesTicket API Calls
  */
-class Cache
+abstract class Cache
 {
     /**
      * The $instance
      *
      * @var Cache
      */
-    static private $instance;
+    static protected $instance;
 
     /**
      * Get the $instance
      * 
      * @return Cache $instance
      */
-    static public function getInstance()
-    {
-        if (!isset(Cache::$instance)) {
-            Cache::$instance = new Cache();
-        }
-        if (!\get_option('yesticket_transient_keys', false)) {
-            \add_option('yesticket_transient_keys', array());
-        }
-        return Cache::$instance;
-    }
-
-    /**
-     * Get data from the specified $get_url. 
-     * Use cached response, if present, else we make a new call and sve the data to cache
-     * 
-     * @param string $get_url the full api call URL
-     * 
-     * @return mixed data as JSON.
-     */
-    public function getFromCacheOrFresh($get_url)
-    {
-        $CACHE_TIME_IN_MINUTES = PluginOptions::getInstance()->getCacheTimeInMinutes();
-        $CACHE_KEY = $this->cacheKey($get_url);
-
-        // check if we have cached information
-        $data = get_transient($CACHE_KEY);
-        if (false === $data) {
-            // Cache not present, we make the API call
-            $data = $this->getData($get_url);
-            \set_transient($CACHE_KEY, $data, $CACHE_TIME_IN_MINUTES * MINUTE_IN_SECONDS);
-            // save cache key to options, so we can delete the transient, if necessary
-            $this->addKeyToActiveCaches($CACHE_KEY);
-        }
-        // at this time we have our data, either from cache or after an API call.
-        return $data;
-    }
-
-    /**
-     * Get data from the specified $get_url. 
-     * 
-     * @param string $get_url the full api call URL
-     * 
-     * @return mixed data as JSON.
-     */
-    private function getData($get_url)
-    {
-        $this->logRequestMasked($get_url);
-        $http = new \WP_Http;
-        $result = $http->get($get_url);
-        $get_content = $result['body'];
-        if (empty($get_content) || $result['response']['code'] != 200) {
-            throw new \RuntimeException(__("The YesTicket service is currently unavailable. Please try again later.", "yesticket"));
-        }
-        $result = \json_decode($get_content);
-        return $result;
-    }
+    abstract static public function getInstance();
 
     /**
      * Transform the $get_url into a key used for WP_TRANSIENTS
@@ -91,32 +36,46 @@ class Cache
     }
 
     /**
-     * Ensure the WP_TRANSIENTS $CACHE_KEY is in our active cache keys
+     * Cache the result
      * 
      * @param string $CACHE_KEY Transient name. Expected to not be SQL-escaped. Must be 172 characters or fewer in length.
+     * @param mixed $data the data
      */
-    private function addKeyToActiveCaches($CACHE_KEY)
+    protected function cache($CACHE_KEY, $data)
     {
-        $cacheKeys = \get_option('yesticket_transient_keys', array());
-        if (!\in_array($CACHE_KEY, $cacheKeys)) {
-            // unknown cache key, add to known keys
-            $cacheKeys[] = $CACHE_KEY;
-            \update_option('yesticket_transient_keys', $cacheKeys);
+        $saved = \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
+        if (!$saved) {
+            // @codeCoverageIgnoreStart
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Could not cache item $CACHE_KEY'");
+            // @codeCoverageIgnoreEnd
         }
     }
 
     /**
-     * Clears the cached API request responses.
-     * Resets the 'yesticket_transient_keys' option to an empty array.
+     * Clears all transient/cache items
+     * @param wpdb $wpdb DB connection
+     * @return boolean TRUE if all cached items could be deleted. FALSE if any errors occured.
      */
-    public function clear()
+    static public function clear($wpdb)
     {
-        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing Cache, triggered by user.'");
-        $cacheKeys = \get_option('yesticket_transient_keys');
-        \update_option('yesticket_transient_keys', array());
-        foreach ($cacheKeys as $k) {
-            \delete_transient($k);
+        // https://developer.wordpress.org/reference/classes/wpdb/get_results/
+        $queryResult = $wpdb->get_results("SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE '_transient_yesticket%'", ARRAY_N);
+        if ($wpdb->last_error || empty($queryResult) || !\is_array($queryResult)) {
+            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'DB Query failed, cannot clear cache.' " . $wpdb->last_error);
+            return FALSE;
         }
+        $cacheKeys = \array_map(function ($row) {
+            return \str_replace('_transient_', '', $row[0]);
+        }, $queryResult);
+        $count = \count($cacheKeys);
+        $success = TRUE;
+        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing $count cache items, triggered by user.'");
+        foreach ($cacheKeys as $k) {
+            if (!\delete_transient($k)) {
+                $success = FALSE;
+            }
+        }
+        return $success;
     }
 
     /**
@@ -124,7 +83,7 @@ class Cache
      * 
      * @param string $url the full api call URL
      */
-    private function logRequestMasked($url)
+    protected function logRequestMasked($url)
     {
         // https://www.php.net/manual/en/function.preg-replace.php
         $masked_url = \preg_replace('/organizer=\w+/', 'organizer=****', $url);
