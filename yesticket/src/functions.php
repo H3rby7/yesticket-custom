@@ -12,7 +12,7 @@ function ytp_init_callback()
 {
   $pathToSiteCss = \plugins_url('ytp-site.css', __FILE__);
   $pathToAdminCss = \plugins_url('admin/styles.css', __FILE__);
-  $pathToLanguages = \basename(\dirname(__FILE__)) . '/languages/';
+  $pathToLanguages = 'yesticket/src/languages/';
   if (true === WP_DEBUG) {
     \error_log("Loading YesTicket plugin ...");
   }
