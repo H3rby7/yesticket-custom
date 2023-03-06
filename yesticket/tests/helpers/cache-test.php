@@ -76,7 +76,8 @@ class CacheTest extends \WP_UnitTestCase
     // Check we could set transient
     $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
     // clear cache
-    Cache::clear();
+    global $wpdb;
+    $this->assertTrue(Cache::clear($wpdb));
     $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
   }
 
@@ -92,7 +93,8 @@ class CacheTest extends \WP_UnitTestCase
     $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
     $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should have been available.");
     // clear cache
-    Cache::clear();
+    global $wpdb;
+    $this->assertTrue(Cache::clear($wpdb));
     $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
     $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should still be available after ::clear.");
     \delete_transient('unrelated-B');
@@ -110,9 +112,50 @@ class CacheTest extends \WP_UnitTestCase
     // Check we could set transients
     $this->assertNotEmpty(\get_transient($cacheKeyA), "Transient A should have been available.");
     $this->assertNotEmpty(\get_transient($cacheKeyB), "Transient B should have been available.");
-    Cache::clear();
+    global $wpdb;
+    $this->assertTrue(Cache::clear($wpdb));
     $this->assertFalse(\get_transient($cacheKeyA), "Transient A should have been cleared.");
     $this->assertFalse(\get_transient($cacheKeyB), "Transient B should have been cleared.");
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_clear_db_error()
+  {
+    // Set-Up DB mock
+    $wpdb_mock = $this->getMockBuilder(wpdb::class)
+      ->setMethods(['get_results'])
+      ->getMock();
+    $wpdb_mock->expects($this->once())
+      ->method('get_results')
+      ->with()
+      ->will($this->returnValue(null));
+    $wpdb_mock->last_error = 'test last error of wpdb';
+    $wpdb_mock->prefix = 'wp_';
+    LogCapture::start();
+    $this->assertFalse(Cache::clear($wpdb_mock));
+    $logged = LogCapture::end_get();
+    $this->assertStringContainsString('test last error of wpdb', $logged);
+  }
+
+  /**
+   * @covers YesTicket\Cache
+   */
+  function test_clear_db_transient_not_present_anymore()
+  {
+    \delete_transient('test-A');
+    // Set-Up DB mock
+    $wpdb_mock = $this->getMockBuilder(wpdb::class)
+      ->setMethods(['get_results'])
+      ->getMock();
+    $wpdb_mock->expects($this->once())
+      ->method('get_results')
+      ->with()
+      ->will($this->returnValue(array(array('test-A'))));
+    $wpdb_mock->last_error = null;
+    $wpdb_mock->prefix = 'wp_';
+    $this->assertFalse(Cache::clear($wpdb_mock));
   }
 
   /**
