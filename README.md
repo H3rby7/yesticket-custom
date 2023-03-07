@@ -28,6 +28,10 @@ Setup will run on [http://127.0.0.1](http://127.0.0.1).
 *Note that wp-cli will crash until you finish the WP installation*
 *Might need to add '--force-recreate'*
 
+### Check php --ini settings
+
+    docker-compose exec -ti wp php -r "var_dump(\filter_var(\ini_get('allow_url_fopen'), \FILTER_VALIDATE_BOOLEAN));"
+
 ## Stop DEV ENV
 
     docker-compose stop
