@@ -25,12 +25,16 @@ if (!function_exists('\locale_get_primary_language')) {
    */
   function locale_get_primary_language($locale)
   {
-    $localeUnderscorePos = strpos($locale, "_");
+    return ytp_locale_get_primary_language($locale);
+  }
+}
+
+function ytp_locale_get_primary_language($locale) {
+  $localeUnderscorePos = strpos($locale, "_");
     if ($localeUnderscorePos != false and $localeUnderscorePos > -1) {
       $locale = substr($locale, 0, $localeUnderscorePos);
     }
     return $locale;
-  }
 }
 
 /**
