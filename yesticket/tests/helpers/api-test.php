@@ -63,9 +63,10 @@ class ApiTest extends \WP_UnitTestCase
   private function run_events($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
   {
     // Generate a Mock Result
-    $evt1 = new \YesTicket\Model\Event();
+    $event_uses_cache = \filter_var(\ini_get('allow_url_fopen'), \FILTER_VALIDATE_BOOLEAN);
+    $evt1 = new \YesTicket\Model\Event($event_uses_cache);
     $evt1->event_name = "My mocked event #1";
-    $evt2 = new \YesTicket\Model\Event();
+    $evt2 = new \YesTicket\Model\Event($event_uses_cache);
     $evt2->event_name = "My other mocked event (#2)";
     $mock_result = array($evt1, $evt2);
 
@@ -114,9 +115,9 @@ class ApiTest extends \WP_UnitTestCase
     $this->run_events('en_EN', array('api-version' => '1'), '1', 'key1', "https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1");
 
     // Generate a Mock Result
-    $evt1 = new \YesTicket\Model\Event();
+    $evt1 = new \YesTicket\Model\Event(false);
     $evt1->event_name = "My mocked event #1";
-    $evt2 = new \YesTicket\Model\Event();
+    $evt2 = new \YesTicket\Model\Event(false);
     $evt2->event_name = "My other mocked event (#2)";
     $mock_result = array($evt1, $evt2);
 
