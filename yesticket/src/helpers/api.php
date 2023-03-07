@@ -348,17 +348,7 @@ class Api
      */
     private function getLocale()
     {
-        $lang = get_locale();
-        if (function_exists('\locale_get_primary_language')) {
-            return \locale_get_primary_language($lang);
-        } else {
-            $lang = get_locale();
-            $langUnderscorePos = strpos($lang, "_");
-            if ($langUnderscorePos != false and $langUnderscorePos > -1) {
-                $lang = substr($lang, 0, $langUnderscorePos);
-            }
-            return $lang;
-        }
+        return \locale_get_primary_language(get_locale());
     }
 
     /**
