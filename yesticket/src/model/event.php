@@ -5,9 +5,18 @@ namespace YesTicket\Model;
 class Event
 {
 
-  static public function fromJson($item)
+  /**
+   * 'Convert' PHP StdClass into Event obj.
+   * E.G. to use after \json_decode()
+   * 
+   * @param object $item encoded appropriate PHP type
+   * @return Event
+   */
+  static public function fromStdClass($item)
   {
-    $Obj = new Event();
+    // Cach implementation relies on the php.ini param below
+    $can_cache = \filter_var(\ini_get('allow_url_fopen'), \FILTER_VALIDATE_BOOLEAN);
+    $Obj = new Event($can_cache);
     $prop = \get_object_vars($item);
     foreach ($prop as $key => $lock) {
       if (\property_exists($Obj,  $key)) {
@@ -16,6 +25,16 @@ class Event
     }
     return $Obj;
   }
+
+  public function __construct($use_cache)
+  {
+    $this->use_cache = $use_cache;
+  }
+
+  /**
+   * @var boolean
+   */
+  private $use_cache;
 
   /**
    * @var string
@@ -172,15 +191,24 @@ class Event
    */
   public $tickets;
 
+  /**
+   * Get URL of event picture redirected to our ImageAPI, so we can cache it.
+   * @return string the URL
+   */
   public function getPictureUrl()
   {
-    // TODO: check for 'allow_url_fopen' to be true as our implementation relies on it. If false, we cannot provide a cache.
+    if (!$this->use_cache) {
+      return $this->event_picture_url;
+    }
     if (!empty($this->event_id)) {
       return "/wp-json/yesticket/v1/picture/" . $this->event_id;
     }
     // Fallback
     $query = \parse_url($this->event_picture_url, \PHP_URL_QUERY);
-    preg_match('/event=(<id>\d+)/', $query, $matches);
-    return "/wp-json/yesticket/v1/picture/" . $matches['id'];
+    \preg_match('/event=(?<id>\d+)/', $query, $matches);
+    if (\array_key_exists('id', $matches)) {
+      return "/wp-json/yesticket/v1/picture/" . $matches['id'];
+    }
+    return $this->event_picture_url;
   }
 }

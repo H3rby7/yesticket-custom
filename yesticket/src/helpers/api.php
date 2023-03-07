@@ -217,7 +217,7 @@ class Api
     {
         $apiCall = $this->buildUrl($att, "events");
         $json = $this->cache->getFromCacheOrFresh($apiCall);
-        return \array_map('\Yesticket\Model\Event::fromJson', \json_decode($json, false));
+        return \array_map('\Yesticket\Model\Event::fromStdClass', \json_decode($json, false));
     }
 
     /**
