@@ -1,5 +1,5 @@
 <section class="yesticket-slide">
-  <span class="background fadeIn" style="background-image:url('<?php echo $event->event_picture_url; ?>')"></span>
+  <span class="background fadeIn" style="background-image:url('<?php echo $event->getPictureUrl(); ?>')"></span>
   <div class="wrap">
     <div class="yesticket-event-meta slide-top slideInLeft delay">
       <h2 class="yesticket-event-name"><?php echo $event->event_name; ?></h2>
