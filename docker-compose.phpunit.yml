@@ -6,7 +6,7 @@ services:
       context: tools
       dockerfile: phpunit.dockerfile
       args:
-        VERSION_PHP: 7.3
+        VERSION_PHP: 7.2
         VERSION_PHP_UNIT: 8
     working_dir: /app/yesticket
     environment:
