@@ -4,21 +4,21 @@ on: [push]
 jobs:
   Zip:
     runs-on: ubuntu-latest
-    services:
-      # Label used to access the service container
-      # mariadb:
-      #   # Docker Hub image
-      #   image: mariadb
-      #   env:
-      #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      #     MYSQL_DATABASE: "wordpress_test"
-      #     MYSQL_ROOT_PASSWORD: "test"
-      #   # Set health checks to wait until mariadb has started
-      #   options: >-
-      #     --health-cmd healthcheck.sh --no-defaults || exit 1
-      #     --health-interval 10s
-      #     --health-timeout 5s
-      #     --health-retries 5
+    # services:
+    #   Label used to access the service container
+    #   mariadb:
+    #     # Docker Hub image
+    #     image: mariadb
+    #     env:
+    #       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    #       MYSQL_DATABASE: "wordpress_test"
+    #       MYSQL_ROOT_PASSWORD: "test"
+    #     # Set health checks to wait until mariadb has started
+    #     options: >-
+    #       --health-cmd healthcheck.sh --no-defaults || exit 1
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
