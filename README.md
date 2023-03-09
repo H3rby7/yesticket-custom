@@ -133,23 +133,23 @@ TODO:
 
 For a list of common assertions [see this](https://make.wordpress.org/core/handbook/testing/automated-testing/writing-phpunit-tests/#using-assertions).
 
-### Setup automated Tests
-
-Make sure the scripts in `bin` have `LF` line-endings!
-
-    docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d --build
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /app/bin/install-wp-tests.sh wordpress_test root test mysql_phpunit latest true
-
 ### Running automated Tests
 
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug [args...]
-    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug
+Simple All-In-One:
+
+    docker-compose -f docker-compose.phpunit.yml up --build wordpress_phpunit
+
+If encountering any errors, try:
+
+    docker-compose -f docker-compose.phpunit.yml up -d
+    docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit --debug [...args]
 
 ### Stop automated Test Container
 
-    docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml stop
+This clears the whole testing setup.
 
-Then [install as instructed above](#installing-in-wordpress).
+    docker-compose -f docker-compose.phpunit.yml down --volumes
+
 # Translations
 
 Followed the [Official Wordpress Guide](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/).
