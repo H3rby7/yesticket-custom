@@ -11,6 +11,8 @@ jobs:
       mariadb:
         # Docker Hub image
         image: mariadb
+        ports:
+          - 3306
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: "wordpress_test"
