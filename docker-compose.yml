@@ -22,6 +22,8 @@ services:
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD: "${DB_ROOT_PASSWORD}"
       WORDPRESS_DEBUG: true
+    networks:
+      - development
     depends_on:
       - db
     links:
@@ -37,6 +39,8 @@ services:
   #     WORDPRESS_DB_NAME: "${DB_NAME}"
   #     WORDPRESS_DB_USER: root
   #     WORDPRESS_DB_PASSWORD: "${DB_ROOT_PASSWORD}"
+  #   networks:
+  #     - development
   #   depends_on:
   #     - db
   #     - wp
@@ -49,6 +53,8 @@ services:
   #     PMA_PORT: 3306
   #     MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}" #user will be 'root'
   #     UPLOAD_LIMIT: 50M
+  #   networks:
+  #     - development
   #   ports:
   #     - ${IP}:8080:80
   #   links:
@@ -69,7 +75,13 @@ services:
     environment:
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+    networks:
+      - development
 
 volumes:
   wp_app:
   db_data:
+
+networks:
+  development:
+    name: yesticket_development
