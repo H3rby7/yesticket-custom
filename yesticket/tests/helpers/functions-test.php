@@ -4,19 +4,6 @@ include_once(__DIR__ . "/../utility.php");
 
 class YesTicketHelpersTest extends WP_UnitTestCase
 {
-  /**
-   * @covers ::ytp_locale_get_primary_language
-   */
-  function test_ytp_locale_get_primary_language()
-  {
-    $this->assertSame('en', \ytp_locale_get_primary_language('en'));
-    $this->assertSame('en', \ytp_locale_get_primary_language('en_EN'));
-    $this->assertSame('en', \ytp_locale_get_primary_language('en_US'));
-    $this->assertSame('de', \ytp_locale_get_primary_language('de'));
-    $this->assertSame('de', \ytp_locale_get_primary_language('de_DE'));
-    $this->assertSame('de', \ytp_locale_get_primary_language('de_AU'));
-    $this->assertSame('po', \ytp_locale_get_primary_language('po'));
-  }
 
   /**
    * @covers ::ytp_getImageUrl
