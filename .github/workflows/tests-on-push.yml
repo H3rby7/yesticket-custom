@@ -34,5 +34,5 @@ jobs:
           mkdir -p $WP_TESTS_DIR
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/includes/ $WP_TESTS_DIR/includes
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/data/ $WP_TESTS_DIR/data
-      - run: phpunit
+      - run: phpunit ${{ github.workspace }}/yesticket
       - run: echo "🍏 This job's status is ${{ job.status }}."
