@@ -14,13 +14,11 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: "wordpress_test"
-          MYSQL_ROOT_PASSWORD: "test"
+          MYSQL_ROOT_PASSWORD: test
+          MYSQL_PASSWORD: test
+          MYSQL_USER: root
         # Set health checks to wait until mariadb has started
-        options: >-
-          --health-cmd 'healthcheck.sh --no-defaults || exit 1'
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
