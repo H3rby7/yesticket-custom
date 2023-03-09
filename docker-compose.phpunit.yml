@@ -22,6 +22,7 @@ services:
         condition: service_healthy
     volumes:
       - "./:/app"
+      - "./config/wp-tests-config.php:/tmp/wordpress-tests-lib/wp-tests-config.php"
       - "testsuite:/tmp"
 # Changing the DB-Container name or env requires adaption in the phpunit.dockerfile!
   mysql_phpunit:
