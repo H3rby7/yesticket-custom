@@ -24,10 +24,8 @@ jobs:
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - name: Composer update
-        env:
-          WORKING-DIR: ${{ github.repository }}/yesticket
         run: |
-          composer update -n
+          composer update -d ${{ github.repository }}/yesticket -n
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
