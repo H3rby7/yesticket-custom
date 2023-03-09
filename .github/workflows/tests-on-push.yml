@@ -1,4 +1,6 @@
 name: Test on Push
+env:
+  WP_TESTS_DIR: ${{ github.workspace }}/tmp/wordpress-tests-lib
 run-name: testing '${{ github.ref }}'
 on: [push]
 jobs:
@@ -29,12 +31,12 @@ jobs:
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
-          WP_TESTS_DIR: ${{ github.workspace }}/tmp/wordpress-tests-lib
         run: |
           mkdir -p $WP_TESTS_DIR
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/includes/ $WP_TESTS_DIR/includes
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/data/ $WP_TESTS_DIR/data
-      - run: |
+      - name: Run Tests
+        run: |
           cd ${{ github.workspace }}/yesticket
           phpunit
       - run: echo "🍏 This job's status is ${{ job.status }}."
