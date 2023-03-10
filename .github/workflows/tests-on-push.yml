@@ -31,7 +31,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.2
-          extensions: intl
+          extensions: intl, xdebug
           coverage: pcov
       # - name: Composer Info
       #   run: |
