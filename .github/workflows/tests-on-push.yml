@@ -1,6 +1,7 @@
 name: Test on Push
 env:
   WP_TESTS_DIR: ${{ github.workspace }}/tmp/wordpress-tests-lib
+  COMPOSER_HOME: ${{ github.workspace }}/tmp/composer
 run-name: testing '${{ github.ref }}'
 on: [push]
 jobs:
