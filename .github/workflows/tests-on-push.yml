@@ -27,10 +27,16 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Composer Info
+        run: |
+          echo "Composer GLOBAL config"
+          composer config --global -l
+          echo "Composer Local config"
+          composer config -l
       - name: Composer update
         run: |
-          export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
-          VENDOR_DIR=`composer config --global vendor-dir`
+          COMPOSER_HOME=`composer config home`
+          VENDOR_DIR=`composer config vendor-dir`
           composer update -d ${{ github.workspace }}/yesticket -n
           composer dump-autoload -d ${{ github.workspace }}/yesticket
           ls -al $COMPOSER_HOME/$VENDOR_DIR
@@ -45,9 +51,9 @@ jobs:
           sed -i "s/mysql_phpunit/localhost:${{ job.services.mariadb.ports[3306] }}/" $WP_TESTS_DIR/wp-tests-config.php
       - name: Run Tests
         run: |
-          export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
           cd ${{ github.workspace }}/yesticket
-          VENDOR_DIR=`composer config --global vendor-dir`
+          COMPOSER_HOME=`composer config home`
+          VENDOR_DIR=`composer config vendor-dir`
           export COMPOSER_VENDOR_DIR="$COMPOSER_HOME/$VENDOR_DIR"
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
           phpunit
