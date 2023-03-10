@@ -4,6 +4,10 @@ namespace YesTicket\Model;
 
 class Event
 {
+  /**
+   * @var string
+   */
+  private const YESTICKET_FALLBACK_IMAGE_URL = "https://www.yesticket.org/dev/picture.php?event=0";
 
   /**
    * 'Convert' PHP StdClass into Event obj.
@@ -203,8 +207,15 @@ class Event
     if (!empty($this->event_id)) {
       return "/wp-json/yesticket/v1/picture/" . $this->event_id;
     }
-    // Fallback
+    if (empty($this->event_picture_url)) {
+      // Does not have an own image?!
+      return Event::YESTICKET_FALLBACK_IMAGE_URL;
+    }
+    // Fallback, extract ID from 'event_picture_url' if possible
     $query = \parse_url($this->event_picture_url, \PHP_URL_QUERY);
+    if (!$query) {
+      return Event::YESTICKET_FALLBACK_IMAGE_URL;
+    }
     \preg_match('/event=(?<id>\d+)/', $query, $matches);
     if (\array_key_exists('id', $matches)) {
       return "/wp-json/yesticket/v1/picture/" . $matches['id'];
