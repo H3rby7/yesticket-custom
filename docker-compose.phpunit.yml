@@ -31,6 +31,8 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "wordpress_test"
       MYSQL_ROOT_PASSWORD: "test"
+      MYSQL_USER: "yesticket"
+      MYSQL_PASSWORD: "test"
     networks:
       - testing
     healthcheck:

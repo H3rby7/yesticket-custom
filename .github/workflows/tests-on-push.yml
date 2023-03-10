@@ -17,6 +17,8 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_DATABASE: "wordpress_test"
           MYSQL_ROOT_PASSWORD: "test"
+          MYSQL_USER: "yesticket"
+          MYSQL_PASSWORD: "test"
         # Set health checks to wait until mariadb has started
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     steps:

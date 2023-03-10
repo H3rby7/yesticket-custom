@@ -38,7 +38,7 @@ define( 'WP_DEBUG', true );
  */
 
 define( 'DB_NAME', 'wordpress_test' );
-define( 'DB_USER', 'root' );
+define( 'DB_USER', 'yesticket' );
 define( 'DB_PASSWORD', 'test' );
 define( 'DB_HOST', 'mysql_phpunit' );
 define( 'DB_CHARSET', 'utf8' );
