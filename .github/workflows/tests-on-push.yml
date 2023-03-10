@@ -32,6 +32,7 @@ jobs:
         with:
           php-version: 7.2
           extensions: intl
+          tools: phpunit, composer
           coverage: xdebug
       # - name: Composer Info
       #   run: |
