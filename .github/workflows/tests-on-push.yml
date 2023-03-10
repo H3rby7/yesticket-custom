@@ -21,7 +21,7 @@ jobs:
           MYSQL_USER: "yesticket"
           MYSQL_PASSWORD: "test"
         # Set health checks to wait until mariadb has started
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+        # options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
