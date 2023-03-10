@@ -52,6 +52,7 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $opt_key = 'yesticket_settings_technical';
 
     // Make sure we start clear
+    \register_initial_settings();
     \unregister_setting($opt_group, $opt_key);
 
     // Register Settings
@@ -82,6 +83,7 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $opt_key = 'yesticket_settings_required';
 
     // Make sure we start clear
+    \register_initial_settings();
     \unregister_setting($opt_group, $opt_key);
 
     // Register Settings
