@@ -36,7 +36,7 @@ jobs:
           cd ${{ github.workspace }}/yesticket
           composer update -n
           composer dump-autoload
-          ls -al `composer config vendor-dir`
+          ls -al `composer config vendor-dir --absolute`
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
@@ -49,7 +49,7 @@ jobs:
       - name: Run Tests
         run: |
           cd ${{ github.workspace }}/yesticket
-          export COMPOSER_VENDOR_DIR=`composer config vendor-dir`
+          export COMPOSER_VENDOR_DIR=`composer config --absolute vendor-dir`
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
           phpunit
       - run: echo "🍏 This job's status is ${{ job.status }}."
