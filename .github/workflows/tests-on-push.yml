@@ -29,6 +29,7 @@ jobs:
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - name: Composer update
         run: |
+          export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
           composer update -d ${{ github.workspace }}/yesticket -n
           composer dump-autoload -d ${{ github.workspace }}/yesticket
       - name: Prepare WP Test-lib files
@@ -42,8 +43,8 @@ jobs:
           sed -i "s/mysql_phpunit/localhost:${{ job.services.mariadb.ports[3306] }}/" $WP_TESTS_DIR/wp-tests-config.php
       - name: Run Tests
         run: |
+          export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
           cd ${{ github.workspace }}/yesticket
-          COMPOSER_HOME=`composer config --global home`
           VENDOR_DIR=`composer config --global vendor-dir`
           export COMPOSER_VENDOR_DIR="$COMPOSER_HOME/$VENDOR_DIR"
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
