@@ -1,6 +1,7 @@
 name: Test on Push
 env:
   WP_TESTS_DIR: ${{ github.workspace }}/tmp/wordpress-tests-lib
+  XDEBUG_MODE: coverage
 run-name: testing '${{ github.ref }}'
 on: [push]
 jobs:
@@ -58,8 +59,6 @@ jobs:
           sed -i "s|/app/coverage-reports|${{ github.workspace }}/coverage-reports|g" ${{ github.workspace }}/yesticket/phpunit.xml
           cat ${{ github.workspace }}/yesticket/phpunit.xml
       - name: Run Tests
-        env:
-          XDEBUG_MODE: "coverage"
         run: |
           cd ${{ github.workspace }}/yesticket
           export COMPOSER_VENDOR_DIR=`composer config --absolute vendor-dir`
