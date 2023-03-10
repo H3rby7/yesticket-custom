@@ -32,6 +32,7 @@ jobs:
           composer dump-autoload -d ${{ github.workspace }}/yesticket
           composer config --global home
           ls -al /home/runner/.composer
+          cat -al /home/runner/.composer/config.json
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
