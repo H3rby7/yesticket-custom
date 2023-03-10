@@ -1,6 +1,8 @@
-name: Zip on Push
+name: Create ZIP
 run-name: Zip, zip, zipping on repo's '${{ github.ref }}'
-on: [push]
+on:
+  release:
+    types: [published]
 jobs:
   Zip:
     runs-on: ubuntu-latest
