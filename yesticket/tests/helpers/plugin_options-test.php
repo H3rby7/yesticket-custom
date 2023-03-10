@@ -62,7 +62,7 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertNotEmpty($option);
     $this->assertCount(1, $option);
 
-    $this->assertNotEmpty($option['cache_time_in_minutes']);
+    $this->assertArrayHasKey('cache_time_in_minutes', $option);
     $this->assertSame(60, $option['cache_time_in_minutes']);
 
     // Clean up
@@ -92,6 +92,8 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertNotEmpty($option);
     $this->assertCount(2, $option);
 
+    $this->assertArrayHasKey('organizer_id', $option);
+    $this->assertArrayHasKey('api_key', $option);
     $this->assertNull($option['organizer_id']);
     $this->assertNull($option['api_key']);
 
