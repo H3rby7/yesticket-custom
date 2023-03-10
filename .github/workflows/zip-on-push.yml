@@ -14,12 +14,10 @@ jobs:
         run: |
           . ${{ github.workspace }}/bin/prepare-zip.sh ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Archive finished ZIP
-        uses: actions/upload-artifact@v3
-        with:
-          name: yesticket
-          path: ${{ github.workspace }}/dist
+      - name: ZIP files
+        run: |
+          zip -r ${{ github.workspace }}/yesticket.zip ${{ github.workspace }}/dist/*
       - uses: AButler/upload-release-assets@v2.0
         with:
-          files: ${{ github.workspace }}/dist/**
+          files: ${{ github.workspace }}/yesticket.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
