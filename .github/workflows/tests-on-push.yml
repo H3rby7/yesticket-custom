@@ -26,11 +26,11 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: ls -l
       - name: Composer update
         run: |
           composer update -d ${{ github.workspace }}/yesticket -n
           composer dump-autoload -d ${{ github.workspace }}/yesticket
+      - run: ls -l /home/runner/.composer/vendor
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
