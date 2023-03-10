@@ -28,10 +28,8 @@ jobs:
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - name: Composer Info
         run: |
-          echo "Composer GLOBAL config"
-          composer config --global -l
           cd ${{ github.workspace }}/yesticket
-          echo "Composer LOCAL config"
+          echo "Composer config"
           composer config -l
       - name: Composer update
         run: |
