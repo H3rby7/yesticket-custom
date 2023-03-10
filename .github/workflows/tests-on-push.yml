@@ -30,6 +30,9 @@ jobs:
         run: |
           echo "Composer GLOBAL config"
           composer config --global -l
+          cd ${{ github.workspace }}/yesticket
+          echo "Composer LOCAL config"
+          composer config -l
       - name: Composer update
         run: |
           cd ${{ github.workspace }}/yesticket
