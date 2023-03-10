@@ -15,6 +15,7 @@ services:
     command: phpunit
     environment:
       XDEBUG_MODE: "coverage"
+      COMPOSER_VENDOR_DIR: /tmp/vendor
     networks:
       - testing
     depends_on:

@@ -21,7 +21,8 @@ RUN wget https://xdebug.org/files/xdebug-$VERSION_XDEBUG.tgz && \
 # END PHPUNIT Setup
 # START Test-Lib Setup
 COPY yesticket/composer.* .
-RUN composer update -n
+RUN composer config --global vendor-dir /tmp/vendor && \
+    composer update -n
 RUN mkdir -p /tmp/wordpress-tests-lib
 RUN svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/includes/ /tmp/wordpress-tests-lib/includes && \
     svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/data/ /tmp/wordpress-tests-lib/data
