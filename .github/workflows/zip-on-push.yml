@@ -17,4 +17,3 @@ jobs:
         with:
           name: yesticket
           path: ${{ github.workspace }}/dist
-

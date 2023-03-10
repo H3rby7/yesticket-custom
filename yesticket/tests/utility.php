@@ -21,7 +21,7 @@ function assertTranslate(&$wasCalled, $expectedInput)
  * @param int $qualityArg 3rd param (quality) used in \imagexxxx call
  * @return CachedImage image
  */
-function getCachedImage($type, $renderer, $qualityArg = null)
+function getCachedImage($type, $renderer, $qualityArg = 0)
 {
   $image = \imagecreatetruecolor(10, 10);
   \ob_start();

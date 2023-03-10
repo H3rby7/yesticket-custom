@@ -23,7 +23,7 @@ if (!function_exists('is_countable')) {
  */
 function ytp_getImageUrl($fileName)
 {
-  return \plugin_dir_url(__DIR__) . 'img/' . $fileName;
+  return \plugins_url('yesticket/src/img/' . $fileName);
 }
 
 /**

@@ -7,7 +7,6 @@
         "phpunit/php-code-coverage": "^7.0"
     },
     "config": {
-        "discard-changes": true,
-        "vendor-dir": "/tmp/vendor"
+        "discard-changes": true
     }
 }

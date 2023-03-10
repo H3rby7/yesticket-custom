@@ -1,0 +1,75 @@
+name: Test on Push
+env:
+  WP_TESTS_DIR: ${{ github.workspace }}/tmp/wordpress-tests-lib
+  XDEBUG_MODE: coverage
+run-name: testing '${{ github.ref }}'
+on: [push]
+jobs:
+  PhpUnit:
+    runs-on: ubuntu-latest
+    services:
+      # Label used to access the service container
+      mariadb:
+        # Docker Hub image
+        image: mariadb
+        ports:
+          # Will publish port 3306 of container at random hostPort, accessible via {{ job.services.mariadb.ports[3306] }}
+          - 3306
+        env:
+          MARIADB_MYSQL_LOCALHOST_USER: "yes"
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_DATABASE: "wordpress_test"
+          MYSQL_ROOT_PASSWORD: "test"
+          MYSQL_USER: "yesticket"
+          MYSQL_PASSWORD: "test"
+        # Set health checks to wait until mariadb has started
+        # options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.2
+          extensions: intl
+          tools: phpunit:8, composer
+          coverage: xdebug
+      # - name: Composer Info
+      #   run: |
+      #     cd ${{ github.workspace }}/yesticket
+      #     echo "Composer config"
+      #     composer config -l
+      - name: PHP Info
+        run: |
+          php -m
+          php --ini
+          php --ri xdebug
+      - name: Composer update
+        run: |
+          cd ${{ github.workspace }}/yesticket
+          composer update -n
+          composer dump-autoload
+          ls -al `composer config vendor-dir --absolute`
+      - name: Prepare WP Test-lib files
+        env:
+          VERSION_WP: 6.1.1
+        run: |
+          DB_HOST=127.0.0.1:${{ job.services.mariadb.ports[3306] }}
+          echo -n Will connect to DB at $DB_HOST
+          mkdir -p $WP_TESTS_DIR
+          svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/includes/ $WP_TESTS_DIR/includes
+          svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/data/ $WP_TESTS_DIR/data
+          cp ${{ github.workspace }}/config/wp-tests-config.php $WP_TESTS_DIR/wp-tests-config.php
+          sed -i "s/mysql_phpunit/$DB_HOST/" $WP_TESTS_DIR/wp-tests-config.php
+      - name: Prepare phpunit.xml
+        run: |
+          sed -i "s|/app/coverage-reports|${{ github.workspace }}/coverage-reports|g" ${{ github.workspace }}/yesticket/phpunit.xml
+          cat ${{ github.workspace }}/yesticket/phpunit.xml
+      - name: Run Tests
+        run: |
+          cd ${{ github.workspace }}/yesticket
+          export COMPOSER_VENDOR_DIR=`composer config --absolute vendor-dir`
+          echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
+          phpunit
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3

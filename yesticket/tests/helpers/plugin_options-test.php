@@ -52,7 +52,9 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $opt_key = 'yesticket_settings_technical';
 
     // Make sure we start clear
-    \unregister_setting($opt_group, $opt_key);
+    global $new_allowed_options, $wp_registered_settings;
+    unset( $new_allowed_options[ $opt_group ] );
+    unset( $wp_registered_settings[ $opt_key ] );
 
     // Register Settings
     $this->register_settings_technical($opt_group);
@@ -62,7 +64,7 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertNotEmpty($option);
     $this->assertCount(1, $option);
 
-    $this->assertNotEmpty($option['cache_time_in_minutes']);
+    $this->assertArrayHasKey('cache_time_in_minutes', $option);
     $this->assertSame(60, $option['cache_time_in_minutes']);
 
     // Clean up
@@ -82,7 +84,9 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $opt_key = 'yesticket_settings_required';
 
     // Make sure we start clear
-    \unregister_setting($opt_group, $opt_key);
+    global $new_allowed_options, $wp_registered_settings;
+    unset( $new_allowed_options[ $opt_group ] );
+    unset( $wp_registered_settings[ $opt_key ] );
 
     // Register Settings
     $this->register_settings_required($opt_group);
@@ -92,6 +96,8 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertNotEmpty($option);
     $this->assertCount(2, $option);
 
+    $this->assertArrayHasKey('organizer_id', $option);
+    $this->assertArrayHasKey('api_key', $option);
     $this->assertNull($option['organizer_id']);
     $this->assertNull($option['api_key']);
 

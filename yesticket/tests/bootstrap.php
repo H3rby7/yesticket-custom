@@ -9,16 +9,19 @@ $_tests_dir = \getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
 	$_tests_dir = '/tmp/wordpress-tests-lib';
 }
-$_composer_home = \getenv( 'COMPOSER_HOME' );
-if ( ! $_composer_home ) {
-	$_composer_home = '/tmp';
+$_composer_vendor = \getenv( 'COMPOSER_VENDOR_DIR' );
+if ( ! $_composer_vendor ) {
+	$_composer_vendor = '/tmp/vendor';
 }
+
+\error_log(__FILE__ . ": Tests Lib dir is '$_tests_dir'");
+\error_log(__FILE__ . ": Composer vendor is '$_composer_vendor'");
 
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
 // Autoload
-require_once $_composer_home . '/vendor/autoload.php';
+require_once $_composer_vendor . '/autoload.php';
 
 /**
  * Manually load the plugin being tested.

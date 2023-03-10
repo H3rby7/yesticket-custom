@@ -46,7 +46,7 @@ class ApiTest extends \WP_UnitTestCase
   /**
    * Prepare Mocks, filters and options for call
    */
-  private function prepare($locale = 'en_EN', $opt_organizer = NULL, $opt_key = NULL, $expected, $mock_result)
+  private function prepare($expected, $mock_result, $opt_organizer = NULL, $opt_key = NULL, $locale = 'en_EN')
   {
     // Mock locale
     \add_filter('locale', function () use (&$locale) {
@@ -60,7 +60,7 @@ class ApiTest extends \WP_UnitTestCase
     $this->initMock($expected, $mock_result);
   }
 
-  private function run_events($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
+  private function run_events($expected, $att = array(), $opt_organizer = NULL, $opt_key = NULL, $locale = 'en_EN')
   {
     // Generate a Mock Result
     $event_uses_cache = \filter_var(\ini_get('allow_url_fopen'), \FILTER_VALIDATE_BOOLEAN);
@@ -70,15 +70,15 @@ class ApiTest extends \WP_UnitTestCase
     $evt2->event_name = "My other mocked event (#2)";
     $mock_result = array($evt1, $evt2);
 
-    $this->prepare($locale, $opt_organizer, $opt_key, $expected, $mock_result);
+    $this->prepare($expected, $mock_result, $opt_organizer, $opt_key, $locale);
     $result = Api::getInstance()->getEvents($att);
     $this->assertEqualSets($mock_result, $result, "Should be equal.");
   }
 
-  private function run_testimonials($locale = 'en_EN', $att = array(), $opt_organizer = NULL, $opt_key = NULL, $expected)
+  private function run_testimonials($expected, $att = array(), $opt_organizer = NULL, $opt_key = NULL, $locale = 'en_EN')
   {
     $mock_result = array(\json_decode("{'event_name': 'something'}"));
-    $this->prepare($locale, $opt_organizer, $opt_key, $expected, $mock_result);
+    $this->prepare($expected, $mock_result, $opt_organizer, $opt_key, $locale);
     $result = Api::getInstance()->getTestimonials($att);
     $this->assertEqualSets($mock_result, $result);
   }
@@ -90,9 +90,9 @@ class ApiTest extends \WP_UnitTestCase
   {
     $base_uri = 'https://www.yesticket.org/api/v2/events.php';
     // Basic
-    $this->run_events('en_EN', array(), '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    $this->run_events("$base_uri?lang=en&organizer=1&key=key1", array(), '1', 'key1', 'en_EN');
     // Defaults of shortcode
-    $this->run_events('en_EN', array(
+    $this->run_events("$base_uri?count=9&type=all&lang=en&organizer=1&key=key1", array(
       'env' => NULL,
       'api-version' => NULL,
       'organizer' => NULL,
@@ -100,19 +100,19 @@ class ApiTest extends \WP_UnitTestCase
       'type' => 'all',
       'count' => 9,
       'grep' => NULL,
-    ), '1', 'key1', "$base_uri?count=9&type=all&lang=en&organizer=1&key=key1");
+    ), '1', 'key1', 'en_EN');
     // locale de_DE
-    $this->run_events('de_DE', array(), '1', 'key1', "$base_uri?lang=de&organizer=1&key=key1");
+    $this->run_events("$base_uri?lang=de&organizer=1&key=key1", array(), '1', 'key1', 'de_DE');
     // Different organizer & key
-    $this->run_events('en_EN', array('organizer' => '2', 'key' => 'keyof2'), '1', 'key1', "$base_uri?lang=en&organizer=2&key=keyof2");
+    $this->run_events("$base_uri?lang=en&organizer=2&key=keyof2", array('organizer' => '2', 'key' => 'keyof2'), '1', 'key1', 'en_EN');
     // env = dev
-    $this->run_events('en_EN', array('env' => 'dev'), '1', 'key1', "https://www.yesticket.org/dev/api/v2/events.php?lang=en&organizer=1&key=key1");
+    $this->run_events("https://www.yesticket.org/dev/api/v2/events.php?lang=en&organizer=1&key=key1", array('env' => 'dev'), '1', 'key1', 'en_EN');
     // count = 50
-    $this->run_events('en_EN', array('count' => '50'), '1', 'key1', "$base_uri?count=50&lang=en&organizer=1&key=key1");
+    $this->run_events("$base_uri?count=50&lang=en&organizer=1&key=key1", array('count' => '50'), '1', 'key1', 'en_EN');
     // type = all
-    $this->run_events('en_EN', array('type' => 'all'), '1', 'key1', "$base_uri?type=all&lang=en&organizer=1&key=key1");
+    $this->run_events("$base_uri?type=all&lang=en&organizer=1&key=key1", array('type' => 'all'), '1', 'key1', 'en_EN');
     // api-version = 1
-    $this->run_events('en_EN', array('api-version' => '1'), '1', 'key1', "https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1");
+    $this->run_events("https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1", array('api-version' => '1'), '1', 'key1', 'en_EN');
 
     // Generate a Mock Result
     $evt1 = new \YesTicket\Model\Event(false);
@@ -122,11 +122,11 @@ class ApiTest extends \WP_UnitTestCase
     $mock_result = array($evt1, $evt2);
 
     // grep = 'mocked'
-    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1", $mock_result);
+    $this->prepare("$base_uri?lang=en&organizer=1&key=key1", $mock_result, '1', 'key1', 'en_EN');
     $result = Api::getInstance()->getEvents(array('grep' => 'mocked'));
     $this->assertCount(2, $result);
     // grep = '#1'
-    $this->prepare('en_EN', '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1", $mock_result);
+    $this->prepare("$base_uri?lang=en&organizer=1&key=key1", $mock_result, '1', 'key1', 'en_EN');
     $result = Api::getInstance()->getEvents(array('grep' => '#1'));
     $this->assertCount(1, $result);
     $this->assertSame('My mocked event #1', $result[0]->event_name);
@@ -139,31 +139,31 @@ class ApiTest extends \WP_UnitTestCase
   {
     $base_uri = 'https://www.yesticket.org/api/v2/testimonials.php';
     // Basic
-    $this->run_testimonials('en_EN', array(), '1', 'key1', "$base_uri?lang=en&organizer=1&key=key1");
+    $this->run_testimonials("$base_uri?lang=en&organizer=1&key=key1", array(), '1', 'key1', 'en_EN');
     // Defaults of shortcode
-    $this->run_testimonials('en_EN', array(
+    $this->run_testimonials("$base_uri?count=9&type=all&lang=en&organizer=1&key=key1", array(
       'env' => NULL,
       'api-version' => NULL,
       'organizer' => NULL,
       'key' => NULL,
       'type' => 'all',
       'count' => '9',
-    ), '1', 'key1', "$base_uri?count=9&type=all&lang=en&organizer=1&key=key1");
+    ), '1', 'key1', 'en_EN');
     // locale de_DE
-    $this->run_testimonials('de_DE', array(), '1', 'key1', "$base_uri?lang=de&organizer=1&key=key1");
+    $this->run_testimonials("$base_uri?lang=de&organizer=1&key=key1", array(), '1', 'key1', 'de_DE');
     // Different organizer & key
-    $this->run_testimonials('en_EN', array('organizer' => '2', 'key' => 'keyof2'), '1', 'key1', "$base_uri?lang=en&organizer=2&key=keyof2");
+    $this->run_testimonials("$base_uri?lang=en&organizer=2&key=keyof2", array('organizer' => '2', 'key' => 'keyof2'), '1', 'key1', 'en_EN');
     // env = dev
-    $this->run_testimonials('en_EN', array('env' => 'dev'), '1', 'key1', "https://www.yesticket.org/dev/api/v2/testimonials.php?lang=en&organizer=1&key=key1");
+    $this->run_testimonials("https://www.yesticket.org/dev/api/v2/testimonials.php?lang=en&organizer=1&key=key1", array('env' => 'dev'), '1', 'key1', 'en_EN');
     // count = 50
-    $this->run_testimonials('en_EN', array('count' => '50'), '1', 'key1', "$base_uri?count=50&lang=en&organizer=1&key=key1");
+    $this->run_testimonials("$base_uri?count=50&lang=en&organizer=1&key=key1", array('count' => '50'), '1', 'key1', 'en_EN');
     // types
-    $this->run_testimonials('en_EN', array('type' => 'all'), '1', 'key1', "$base_uri?type=all&lang=en&organizer=1&key=key1");
-    $this->run_testimonials('en_EN', array('type' => 'performance'), '1', 'key1', "$base_uri?type=performance&lang=en&organizer=1&key=key1");
-    $this->run_testimonials('en_EN', array('type' => 'workshop'), '1', 'key1', "$base_uri?type=workshop&lang=en&organizer=1&key=key1");
-    $this->run_testimonials('en_EN', array('type' => 'festival'), '1', 'key1', "$base_uri?type=festival&lang=en&organizer=1&key=key1");
+    $this->run_testimonials("$base_uri?type=all&lang=en&organizer=1&key=key1", array('type' => 'all'), '1', 'key1', 'en_EN');
+    $this->run_testimonials("$base_uri?type=performance&lang=en&organizer=1&key=key1", array('type' => 'performance'), '1', 'key1', 'en_EN');
+    $this->run_testimonials("$base_uri?type=workshop&lang=en&organizer=1&key=key1", array('type' => 'workshop'), '1', 'key1', 'en_EN');
+    $this->run_testimonials("$base_uri?type=festival&lang=en&organizer=1&key=key1", array('type' => 'festival'), '1', 'key1', 'en_EN');
     // api-version = 1
-    $this->run_testimonials('en_EN', array('api-version' => '1'), '1', 'key1', "https://www.yesticket.org/api/testimonials-endpoint.php?lang=en&organizer=1&key=key1");
+    $this->run_testimonials("https://www.yesticket.org/api/testimonials-endpoint.php?lang=en&organizer=1&key=key1", array('api-version' => '1'), '1', 'key1', 'en_EN');
   }
 
   private function run_events_forThrows($req_settings, $att, $exception, $exception_msg)
