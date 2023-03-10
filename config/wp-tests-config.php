@@ -1,7 +1,13 @@
 <?php
 
+$_composer_home = \getenv( 'COMPOSER_HOME' );
+$_abs_path = '/tmp/vendor/johnpbloch/wordpress-core/';
+if ( $_composer_home ) {
+	$_abs_path = "$_composer_home/vendor/johnpbloch/wordpress-core/";
+}
+
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
-define( 'ABSPATH', '/tmp/vendor/johnpbloch/wordpress-core/' );
+define( 'ABSPATH', $_abs_path );
 
 /*
  * Path to the theme to test with.
