@@ -63,7 +63,7 @@ jobs:
           cd ${{ github.workspace }}/yesticket
           export COMPOSER_VENDOR_DIR=`composer config --absolute vendor-dir`
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
-          phpunit
+          phpunit --coverage-clover coverage-clover.xml
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Archive coverage
         uses: actions/upload-artifact@v3
