@@ -6,6 +6,7 @@ include_once("shortcodes/yesticket_events.php");
 include_once("shortcodes/yesticket_events_list.php");
 include_once("shortcodes/yesticket_events_cards.php");
 include_once("shortcodes/yesticket_testimonials.php");
+include_once("shortcodes/yesticket_slides.php");
 
 \add_action('init', 'ytp_init_callback');
 
@@ -23,10 +24,15 @@ function ytp_init_callback()
   if (!\wp_register_style('yesticket-admin', $pathToAdminCss, false, 'all')) {
     \error_log("Could not register_style: 'yesticket-admin' from '$pathToAdminCss'.");
   }
+  \YesTicket\Slides::registerFiles();
   if (!\load_plugin_textdomain('yesticket', false, $pathToLanguages)) {
     \error_log("Could not load_plugin_textdomain: 'yesticket' from '$pathToLanguages'.");
   }
   if (true === WP_DEBUG) {
     \error_log("YesTicket plugin loaded ...");
   }
+}
+
+if (true === WP_DEBUG) {
+    \error_log("YesTicket plugin loaded ...\n");
 }
