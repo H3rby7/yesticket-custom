@@ -6,6 +6,9 @@ if ( $_composer_home ) {
 	$_abs_path = "$_composer_home/vendor/johnpbloch/wordpress-core/";
 }
 
+\error_log("Composer home is '$_composer_home'");
+\error_log("ABSPATH is '$_abs_path'");
+
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', $_abs_path );
 

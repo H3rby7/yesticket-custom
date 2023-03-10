@@ -14,6 +14,9 @@ if ( ! $_composer_home ) {
 	$_composer_home = '/tmp';
 }
 
+\error_log("Tests Lib dir is '$_tests_dir'");
+\error_log("Composer home is '$_composer_home'");
+
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
