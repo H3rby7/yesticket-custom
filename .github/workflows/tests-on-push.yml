@@ -31,8 +31,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.2
-          extensions: intl, xdebug
-          coverage: pcov
+          extensions: intl
+          coverage: xdebug
       # - name: Composer Info
       #   run: |
       #     cd ${{ github.workspace }}/yesticket
