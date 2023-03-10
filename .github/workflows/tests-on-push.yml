@@ -37,7 +37,7 @@ jobs:
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/includes/ $WP_TESTS_DIR/includes
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/data/ $WP_TESTS_DIR/data
           cp ${{ github.workspace }}/config/wp-tests-config.php $WP_TESTS_DIR/wp-tests-config.php
-          sed -i "s/mysql_phpunit/127.0.0.1:${{ job.services.mariadb.ports[3306] }}/" $WP_TESTS_DIR/wp-tests-config.php
+          sed -i "s/mysql_phpunit/mariadb/" $WP_TESTS_DIR/wp-tests-config.php
       - name: Run Tests
         run: |
           cd ${{ github.workspace }}/yesticket
