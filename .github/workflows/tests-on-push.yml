@@ -31,6 +31,8 @@ jobs:
         run: |
           export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
           echo "COMPOSER_HOME is '${COMPOSER_HOME}'"
+          export COMPOSER_VENDOR_DIR="$COMPOSER_HOME/vendor"
+          echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
           composer update -d ${{ github.workspace }}/yesticket -n -v
           composer dump-autoload -d ${{ github.workspace }}/yesticket -v
           composer config --global home
@@ -48,5 +50,7 @@ jobs:
           cd ${{ github.workspace }}/yesticket
           export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
           echo "COMPOSER_HOME is '${COMPOSER_HOME}'"
+          export COMPOSER_VENDOR_DIR="$COMPOSER_HOME/vendor"
+          echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
           phpunit
       - run: echo "🍏 This job's status is ${{ job.status }}."

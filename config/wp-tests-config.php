@@ -1,12 +1,12 @@
 <?php
 
-$_composer_home = \getenv( 'COMPOSER_HOME' );
+$_composer_vendor = \getenv( 'COMPOSER_VENDOR_DIR' );
 $_abs_path = '/tmp/vendor/johnpbloch/wordpress-core/';
-if ( $_composer_home ) {
-	$_abs_path = "$_composer_home/vendor/johnpbloch/wordpress-core/";
+if ( $_composer_vendor ) {
+	$_abs_path = "$_composer_vendor/johnpbloch/wordpress-core/";
 }
 
-\error_log(__FILE__ . ": Composer home is '$_composer_home'");
+\error_log(__FILE__ . ": Composer vendor is '$_composer_vendor'");
 \error_log(__FILE__ . ": ABSPATH is '$_abs_path'");
 
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
