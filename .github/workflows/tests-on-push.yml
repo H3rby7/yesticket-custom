@@ -11,8 +11,6 @@ jobs:
       mariadb:
         # Docker Hub image
         image: mariadb
-        ports:
-          - 3306
         env:
           MARIADB_MYSQL_LOCALHOST_USER: "yes"
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
