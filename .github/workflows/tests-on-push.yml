@@ -27,6 +27,12 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.2
+          extensions: intl
+          coverage: pcov
       # - name: Composer Info
       #   run: |
       #     cd ${{ github.workspace }}/yesticket
@@ -63,7 +69,7 @@ jobs:
           cd ${{ github.workspace }}/yesticket
           export COMPOSER_VENDOR_DIR=`composer config --absolute vendor-dir`
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
-          phpunit --coverage-clover coverage-clover.xml
+          phpunit
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Archive coverage
         uses: actions/upload-artifact@v3
