@@ -41,7 +41,7 @@ jobs:
       - name: Run Tests
         run: |
           cd ${{ github.workspace }}/yesticket
-          COMPOSER_HOME=`composer config --global home`
+          export COMPOSER_HOME=`composer config --global home`
           echo "COMPOSER_HOME is '${COMPOSER_HOME}'"
           phpunit
       - run: echo "🍏 This job's status is ${{ job.status }}."
