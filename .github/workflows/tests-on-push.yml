@@ -30,6 +30,9 @@ jobs:
         run: |
           composer update -d ${{ github.workspace }}/yesticket -n
           composer dump-autoload -d ${{ github.workspace }}/yesticket
+          composer config --global home
+          ls -l /home/runner/.composer/vendor
+          composer config home -d ${{ github.workspace }}/yesticket
       - run: ls -l /home/runner/.composer/vendor
       - name: Prepare WP Test-lib files
         env:
