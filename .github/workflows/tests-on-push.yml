@@ -26,12 +26,14 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - name: Composer Info
         run: |
           cd ${{ github.workspace }}/yesticket
           echo "Composer config"
           composer config -l
+      - name: PHP Info
+        run: |
+          php -m
       - name: Composer update
         run: |
           cd ${{ github.workspace }}/yesticket
