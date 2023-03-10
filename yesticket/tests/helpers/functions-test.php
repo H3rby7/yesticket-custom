@@ -10,8 +10,8 @@ class YesTicketHelpersTest extends WP_UnitTestCase
    */
   function test_ytp_getImageUrl()
   {
-    $this->assertSame('http://example.org/wp-content/plugins/app/yesticket/src/img/', \ytp_getImageUrl(''));
-    $this->assertSame('http://example.org/wp-content/plugins/app/yesticket/src/img/my-image.png', \ytp_getImageUrl('my-image.png'));
+    $this->assertSame('http://example.org/wp-content/plugins/yesticket/src/img/', \ytp_getImageUrl(''));
+    $this->assertSame('http://example.org/wp-content/plugins/yesticket/src/img/my-image.png', \ytp_getImageUrl('my-image.png'));
   }
 
   /**
