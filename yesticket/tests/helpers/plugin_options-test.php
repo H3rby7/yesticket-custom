@@ -52,8 +52,9 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $opt_key = 'yesticket_settings_technical';
 
     // Make sure we start clear
-    \register_initial_settings();
-    \unregister_setting($opt_group, $opt_key);
+    global $new_allowed_options, $wp_registered_settings;
+    unset( $new_allowed_options[ $opt_group ] );
+    unset( $wp_registered_settings[ $opt_key ] );
 
     // Register Settings
     $this->register_settings_technical($opt_group);
@@ -83,8 +84,9 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $opt_key = 'yesticket_settings_required';
 
     // Make sure we start clear
-    \register_initial_settings();
-    \unregister_setting($opt_group, $opt_key);
+    global $new_allowed_options, $wp_registered_settings;
+    unset( $new_allowed_options[ $opt_group ] );
+    unset( $wp_registered_settings[ $opt_key ] );
 
     // Register Settings
     $this->register_settings_required($opt_group);
