@@ -31,9 +31,11 @@ jobs:
       #     cd ${{ github.workspace }}/yesticket
       #     echo "Composer config"
       #     composer config -l
-      # - name: PHP Info
-      #   run: |
-      #     php -m
+      - name: PHP Info
+        run: |
+          php -m
+          php --ini
+          php --ri xdebug
       - name: Composer update
         run: |
           cd ${{ github.workspace }}/yesticket
