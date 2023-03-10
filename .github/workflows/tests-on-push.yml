@@ -71,9 +71,5 @@ jobs:
           export COMPOSER_VENDOR_DIR=`composer config --absolute vendor-dir`
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
           phpunit
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - name: Archive coverage
-        uses: actions/upload-artifact@v3
-        with:
-          name: yesticket
-          path: ${{ github.workspace }}/coverage-reports
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
