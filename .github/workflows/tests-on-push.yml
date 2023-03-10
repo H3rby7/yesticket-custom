@@ -30,6 +30,7 @@ jobs:
       - name: Composer update
         run: |
           composer update -d ${{ github.workspace }}/yesticket -n
+          ls -l $COMPOSER_HOME/vendor
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
