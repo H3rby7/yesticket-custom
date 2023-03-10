@@ -2,6 +2,8 @@
 
 Wordpress Plugin to display Events, Shows, Performances, Workshops, Festivals and Audience Feedback (Testimonials) from the ["YesTicket" Online Ticketing Service](https://www.yesticket.org/).
 
+[![codecov](https://codecov.io/gh/H3rby7/yesticket-custom/branch/main/graph/badge.svg?token=HJCBUM2CST)](https://codecov.io/gh/H3rby7/yesticket-custom)
+
 # Installing in Wordpress
 
 1. In your Wordpress go to `Plugins > Install`.
