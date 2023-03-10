@@ -30,8 +30,10 @@ jobs:
       - name: Composer update
         run: |
           export COMPOSER_HOME="$CUSTOM_COMPOSER_HOME"
+          VENDOR_DIR=`composer config --global vendor-dir`
           composer update -d ${{ github.workspace }}/yesticket -n
           composer dump-autoload -d ${{ github.workspace }}/yesticket
+          ls -al $COMPOSER_HOME/$VENDOR_DIR
       - name: Prepare WP Test-lib files
         env:
           VERSION_WP: 6.1.1
