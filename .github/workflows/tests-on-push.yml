@@ -11,6 +11,9 @@ jobs:
       mariadb:
         # Docker Hub image
         image: mariadb
+        ports:
+          # Will publish port 3306 of container at random hostPort, accessible via {{ job.services.mariadb.ports[3306] }}
+          - 3306
         env:
           MARIADB_MYSQL_LOCALHOST_USER: "yes"
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
@@ -39,7 +42,7 @@ jobs:
         env:
           VERSION_WP: 6.1.1
         run: |
-          DB_HOST=localhost:${{ job.services.mariadb.ports[3306] }}
+          DB_HOST=127.0.0.1:${{ job.services.mariadb.ports[3306] }}
           echo -n Will connect to DB at $DB_HOST
           mkdir -p $WP_TESTS_DIR
           svn co --quiet https://develop.svn.wordpress.org/tags/$VERSION_WP/tests/phpunit/includes/ $WP_TESTS_DIR/includes
