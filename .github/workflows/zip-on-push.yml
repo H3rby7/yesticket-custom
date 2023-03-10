@@ -16,7 +16,8 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: ZIP files
         run: |
-          zip -r ${{ github.workspace }}/yesticket.zip ${{ github.workspace }}/dist/*
+          cd ${{ github.workspace }}/dist
+          zip -r ${{ github.workspace }}/yesticket.zip ./*
       - uses: AButler/upload-release-assets@v2.0
         with:
           files: ${{ github.workspace }}/yesticket.zip
