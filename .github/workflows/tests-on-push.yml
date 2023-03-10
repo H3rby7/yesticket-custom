@@ -53,7 +53,7 @@ jobs:
           sed -i "s/mysql_phpunit/$DB_HOST/" $WP_TESTS_DIR/wp-tests-config.php
       - name: Prepare phpunit.xml
         run: |
-          sed -i "s|/app/coverage-reports|${{ github.workspace }}|g" ${{ github.workspace }}/yesticket/phpunit.xml
+          sed -i "s|/app/coverage-reports|${{ github.workspace }}/coverage-reports|g" ${{ github.workspace }}/yesticket/phpunit.xml
           cat ${{ github.workspace }}/yesticket/phpunit.xml
       - name: Run Tests
         env:
@@ -64,3 +64,8 @@ jobs:
           echo "COMPOSER_VENDOR_DIR is '${COMPOSER_VENDOR_DIR}'"
           phpunit
       - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Archive coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: yesticket
+          path: ${{ github.workspace }}/coverage-reports
