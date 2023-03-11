@@ -4,47 +4,55 @@ services:
   wp:
     # https://hub.docker.com/_/wordpress/
     # image: wordpress:6.1.1:latest
-    # image: wordpress:5.6.0-php7.2
+    image: wordpress:5.6.0-php7.2
     # image: wordpress:5.9.2-php7.3
     # image: wordpress:6.1.1-php7.4
     # image: wordpress:6.1.1-php8.0
     # image: wordpress:6.1.1-php8.1
-    image: wordpress:6.1.1-php8.2
+    # image: wordpress:6.1.1-php8.2
     ports:
       - ${IP}:80:80 # change ip if required
     volumes:
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
       - wp_app:/var/www/html # Full wordpress project
       - ./yesticket/:/var/www/html/wp-content/plugins/yesticket # Plugin development
-      #- ./theme-name/trunk/:/var/www/html/wp-content/themes/theme-name # Theme development
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: "${DB_NAME}"
-      WORDPRESS_DB_USER: root
-      WORDPRESS_DB_PASSWORD: "${DB_ROOT_PASSWORD}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
       WORDPRESS_DEBUG: true
     networks:
       - development
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     links:
       - db
 
-  # wpcli:
-  #   image: wordpress:cli
-  #   volumes:
-  #     - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
-  #     - wp_app:/var/www/html
-  #   environment:
-  #     WORDPRESS_DB_HOST: db
-  #     WORDPRESS_DB_NAME: "${DB_NAME}"
-  #     WORDPRESS_DB_USER: root
-  #     WORDPRESS_DB_PASSWORD: "${DB_ROOT_PASSWORD}"
-  #   networks:
-  #     - development
-  #   depends_on:
-  #     - db
-  #     - wp
+  wpcli:
+    image: wordpress:cli
+    volumes:
+      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+      - ./bin/install-wp.sh:/usr/local/bin/install-wp.sh
+      - wp_app:/var/www/html
+      - ./yesticket/:/var/www/html/wp-content/plugins/yesticket # Plugin development
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: "${DB_NAME}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
+      WP_USER: "${WP_USER}"
+      WP_USER_PW: "${WP_USER_PW}"
+      YESTICKET_ORGANIZER_ID: "${YESTICKET_ORGANIZER_ID}"
+      YESTICKET_KEY: "${YESTICKET_KEY}"
+    networks:
+      - development
+    depends_on:
+      db:
+        condition: service_healthy
+      wp: 
+        condition: service_started
 
   # pma:
   #   image: phpmyadmin/phpmyadmin
@@ -62,22 +70,24 @@ services:
   #     - db:db
 
   db:
-    image: mysql:latest # https://hub.docker.com/_/mysql/ - or mariadb https://hub.docker.com/_/mariadb
-    ports:
-      - ${IP}:3306:3306 # change ip if required
-    command: [
-        '--default_authentication_plugin=mysql_native_password',
-        '--character-set-server=utf8mb4',
-        '--collation-server=utf8mb4_unicode_ci'
-    ]
+    image: "mariadb:10.2"
     volumes:
       - ./wp-data:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
     networks:
       - development
+    healthcheck:
+      test: "healthcheck.sh --no-defaults || exit 1"
+      interval: 5s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
 
 volumes:
   wp_app:
