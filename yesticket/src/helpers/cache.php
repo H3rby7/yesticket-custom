@@ -46,7 +46,7 @@ abstract class Cache
         $saved = \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
         if (!$saved) {
             // @codeCoverageIgnoreStart
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Could not cache item $CACHE_KEY'");
+            \ytp_log(__FILE__, __LINE__, "Could not cache item '$CACHE_KEY'");
             // @codeCoverageIgnoreEnd
         }
     }
@@ -61,7 +61,7 @@ abstract class Cache
         // https://developer.wordpress.org/reference/classes/wpdb/get_results/
         $queryResult = $wpdb->get_results("SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE '_transient_yesticket%'", ARRAY_N);
         if ($wpdb->last_error || empty($queryResult) || !\is_array($queryResult)) {
-            \ytp_log(__FILE__ . "@" . __LINE__ . ": 'DB Query failed, cannot clear cache.' " . $wpdb->last_error);
+            \ytp_log(__FILE__, __LINE__, "DB Query failed, cannot clear cache. " . $wpdb->last_error);
             return FALSE;
         }
         $cacheKeys = \array_map(function ($row) {
@@ -69,7 +69,7 @@ abstract class Cache
         }, $queryResult);
         $count = \count($cacheKeys);
         $success = TRUE;
-        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Clearing $count cache items, triggered by user.'");
+        \ytp_log(__FILE__, __LINE__, "Clearing $count cache items, triggered by user.");
         foreach ($cacheKeys as $k) {
             if (!\delete_transient($k)) {
                 $success = FALSE;
@@ -88,6 +88,6 @@ abstract class Cache
         // https://www.php.net/manual/en/function.preg-replace.php
         $masked_url = \preg_replace('/organizer=\w+/', 'organizer=****', $url);
         $masked_url = \preg_replace('/key=\w+/', 'key=****', $masked_url);
-        \ytp_log(__FILE__ . "@" . __LINE__ . ": 'No cache present, getting new data from: $masked_url'");
+        \ytp_log(__FILE__, __LINE__, "No cache present, getting new data from: '$masked_url'");
     }
 }
