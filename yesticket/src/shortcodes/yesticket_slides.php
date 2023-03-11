@@ -34,10 +34,10 @@ class Slides extends EventUsingShortcode
     $pathToSlidesCss = \plugins_url('webslides/webslides.css', __FILE__);
     $pathToSlidesJs = \plugins_url('webslides/webslides.min.js', __FILE__);
     if (!\wp_register_style('yesticket_slides', $pathToSlidesCss, false, 'all')) {
-      \error_log("Could not register_style: 'yesticket_slides' from '$pathToSlidesCss'.");
+      \ytp_info(__FILE__, __LINE__, "Could not register_style: 'yesticket_slides' from '$pathToSlidesCss'.");
     }
     if (!\wp_register_script('yesticket_slides', $pathToSlidesJs, false, 'all')) {
-      \error_log("Could not register_script: 'yesticket_slides' from '$pathToSlidesJs'.");
+      \ytp_info(__FILE__, __LINE__, "Could not register_script: 'yesticket_slides' from '$pathToSlidesJs'.");
     }
   }
 
