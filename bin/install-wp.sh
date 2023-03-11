@@ -2,9 +2,9 @@
 
 # Install WordPress.
 wp core install \
-  --title="Project" \
-  --admin_user="wordpress" \
-  --admin_password="wordpress" \
+  --title="YesTicket Development" \
+  --admin_user="yesticket" \
+  --admin_password="yesticket" \
   --admin_email="admin@example.com" \
   --url="http://project.test" \
   --skip-email
@@ -13,4 +13,4 @@ wp core install \
 wp option update permalink_structure "/%year%/%monthnum%/%postname%/" --skip-themes --skip-plugins
 
 # Activate plugin.
-wp plugin activate my-plugin
+wp plugin activate yesticket

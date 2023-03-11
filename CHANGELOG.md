@@ -6,6 +6,7 @@
 * 'Key' and 'Organizer-ID' are now configured globally on the Settings Page
 * Added translation support
 * Added the displaying of events as cards (as known from the `iframe` embedding of YesTicket)
+* Added the displaying of events as slideshow to use for marketing on events
 * Updated Plugin Settings Page
     * Guides through the configuration
     * Shortcodes have previews
