@@ -107,7 +107,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
   /**
    * @covers YesTicket\Rest\ImageEndpoint
    */
-  function test_handleRequest_exception()
+  function test_handleRequest_given_exception_expect_redirect()
   {
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
@@ -118,10 +118,10 @@ class ImageEndpointTest extends \WP_UnitTestCase
     \ob_start();
     $response = @$this->server->dispatch($request);
     $output = \ob_end_clean();
-    $this->assertSame(503, $response->get_status());
-    $body = $response->get_data();
-    $this->assertSame(503, $body['code']);
-    $this->assertSame('', $body['message']);
+    $this->assertSame(307, $response->get_status(), "Fallback should be redirect!");
+    $headers = $response->get_headers();
+    \error_log(\print_r($headers, true));
+    $this->assertContains('Location: https://www.yesticket.org/dev/picture.php?event=123', $headers, 'Should send a Location Header!');
   }
 
   /**

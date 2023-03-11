@@ -104,12 +104,12 @@ class ImageEndpoint
   {
     try {
       $result = $this->api->getEventImage($data['event_id']);
-      return new \WP_REST_Response($result, 200, ['Content-Type: ' . $result->get_content_type()]);
+      return new \WP_REST_Response($result, \WP_Http::OK, ['Content-Type: ' . $result->get_content_type()]);
     } catch (\Exception $e) {
       $msg = $e->getMessage();
       $code = $e->getCode();
       \ytp_info(__FILE__, __LINE__, "ERROR code => '$code'; msg => '$msg'");
-      return new \WP_Error($code, '', array('status' => $code));
+      return new \WP_REST_Response(null, \WP_Http::TEMPORARY_REDIRECT, ['Location: ' . $this->api->getYesTicketUrlOfImage($data['event_id'])]);
     }
   }
 
@@ -124,22 +124,26 @@ class ImageEndpoint
   public function servePicture($served, $result)
   {
     if ($served || $result->is_error()) {
+      // Request was already sent out
       return false;
     }
     if (\stripos($result->get_matched_route(), '/yesticket/v1/picture') === false) {
+      // Request is not one of ours
       return false;
     }
+    if ($result->get_status() == \WP_Http::TEMPORARY_REDIRECT) {
+      // We make a temporary redirect as error fallback
+      \ytp_info(__FILE__, __LINE__, "Send out temporary redirect");
+      ytp_sendHeaders($result);
+      return true;
+    }
     if (!($result->get_data() instanceof CachedImage)) {
+      // Not a redirect and data is not what we expect.
       \ytp_info(__FILE__, __LINE__, "Result data is not of type CachedImage");
       return false;
     }
-    if (!\headers_sent()) {
-      // @codeCoverageIgnoreStart
-      foreach ($result->get_headers() as $header) {
-        \header($header, true);
-      }
-      // @codeCoverageIgnoreEnd
-    }
+    // Data is a CachedImage, continue as planned.
+    ytp_sendHeaders($result);
     echo $result->get_data()->get_image_data();
     return true;
   }

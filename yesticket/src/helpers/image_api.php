@@ -61,7 +61,7 @@ class ImageApi
      */
     public function getEventImage($event_id)
     {
-        $yesTicketImageUrl = "https://www.yesticket.org/dev/picture.php?event=" . $event_id;
+        $yesTicketImageUrl = $this->getYesTicketUrlOfImage($event_id);
         try {
             return $this->_getEventImage($yesTicketImageUrl);
         } catch (ImageException $e) {
@@ -73,6 +73,10 @@ class ImageApi
             }
             throw $e;
         }
+    }
+
+    public function getYesTicketUrlOfImage($event_id) {
+        return "https://www.yesticket.org/dev/picture.php?event=" . $event_id;
     }
 
     /**

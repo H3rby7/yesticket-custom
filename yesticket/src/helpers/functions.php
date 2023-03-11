@@ -196,3 +196,16 @@ function strpos_findLast_viaRegex($haystack, $needlePattern)
   }
   return $highestIndex > -1 ? $highestIndex : false;
 }
+
+  /**
+   * Send out the headers defined in $response, if headers have not been sent.
+   * 
+   * @param \WP_REST_Response $response
+   */
+function ytp_sendHeaders($response) {
+  if (!\headers_sent()) {
+    foreach ($response->get_headers() as $header) {
+      \header($header, true);
+    }
+  }
+}
