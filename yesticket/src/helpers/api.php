@@ -184,14 +184,14 @@ class Api
         $this->validateArguments($att);
         $result = null;
         if (empty($att["grep"])) {
-            \ytp_log(__FILE__, __LINE__, "Getting events");
+            \ytp_debug(__FILE__, __LINE__, "Getting events");
             // We don't  filter on our side. Easy API call.
             $result = $this->_getEvents($att);
         } else {
             // if we 'grep' (filter events manually on our side)
             $_count = empty($att["count"]) ? null : $att["count"];
             // we unset 'count' to call the api for more elements than needed.
-            \ytp_log(__FILE__, __LINE__, "Getting events without 'count', because 'grep' is in use.");
+            \ytp_debug(__FILE__, __LINE__, "Getting events without 'count', because 'grep' is in use.");
             $att["count"] = null;
             $unfiltered = $this->_getEvents($att);
             $att["count"] = $_count;
@@ -200,10 +200,10 @@ class Api
         }
         if (empty($att["count"]) || !\is_numeric($att["count"]) || !\is_countable($result)) {
             // no count set or $result uncountable, just return list
-            \ytp_log(__FILE__, __LINE__, "'Returning all events'");
+            \ytp_debug(__FILE__, __LINE__, "'Returning all events'");
             return $result;
         }
-        \ytp_log(__FILE__, __LINE__, "Returning only " . $att["count"] . " events");
+        \ytp_debug(__FILE__, __LINE__, "Returning only " . $att["count"] . " events");
         // apply count to the list (because of 'grep' and to support counted events in case of v1 api call)
         return \array_slice($result, 0, $att["count"]);
     }
@@ -235,10 +235,10 @@ class Api
         $result = \json_decode($result);
         if (empty($att["count"]) || !\is_numeric($att["count"]) || !\is_countable($result)) {
             // no count set or $result uncountable, just return list
-            \ytp_log(__FILE__, __LINE__, "Returning all testimonials");
+            \ytp_debug(__FILE__, __LINE__, "Returning all testimonials");
             return $result;
         }
-        \ytp_log(__FILE__, __LINE__, "Returning only " . $att["count"] . " testimonials");
+        \ytp_debug(__FILE__, __LINE__, "Returning only " . $att["count"] . " testimonials");
         // apply count to the list (to support counted events in case of v1 api call)
         return \array_slice($result, 0, $att["count"]);
     }

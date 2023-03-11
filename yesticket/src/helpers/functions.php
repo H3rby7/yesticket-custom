@@ -34,7 +34,7 @@ function ytp_getImageUrl($fileName)
  * @param string $log content to be logged
  * 
  */
-function ytp_log($file, $line, $log)
+function ytp_info($file, $line, $log)
 {
   $file = \preg_replace('/.*yesticket\/src/', '[YESTICKET]', $file);
   $prefix = "$file@$line: ";
@@ -56,7 +56,7 @@ function ytp_log($file, $line, $log)
 function ytp_debug($file, $line, $log)
 {
   if (true === WP_DEBUG) {
-    ytp_log($file, $line, $log);
+    \ytp_info($file, $line, $log);
   }
 }
 

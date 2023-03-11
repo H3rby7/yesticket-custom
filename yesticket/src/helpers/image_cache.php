@@ -52,7 +52,7 @@ class ImageCache extends Cache
         // check if we have cached information
         $transient = get_transient($CACHE_KEY);
         if (false === $transient) {
-            \ytp_log(__FILE__, __LINE__, "Try getting as Content-Type '$type'; url => '$get_url'");
+            \ytp_debug(__FILE__, __LINE__, "Try getting as Content-Type '$type'; url => '$get_url'");
             // Cache not present, we make the API call
             $data = $this->getData($get_url, $fetchFunction, $renderFunction);
             $image = new CachedImage($type, $data);
@@ -62,7 +62,7 @@ class ImageCache extends Cache
             $image = new CachedImage();
             $image->unserialize($transient);
             $content_type = $image->get_content_type();
-            \ytp_log(__FILE__, __LINE__, "Taken from Cache content_type => '$content_type'; original url => '$get_url'");
+            \ytp_debug(__FILE__, __LINE__, "Taken from Cache content_type => '$content_type'; original url => '$get_url'");
             // Need to manually unserialize, as the automatic would fail in this step
         }
         // at this time we have our image, either from cache or after an API call.

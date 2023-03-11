@@ -76,11 +76,11 @@ class PluginOptions
   {
     $options = \get_option($option_name);
     if (!$options) {
-      \ytp_log(__FILE__, __LINE__, "'$option_name' was not found, returning default: '$default'");
+      \ytp_debug(__FILE__, __LINE__, "'$option_name' was not found, returning default: '$default'");
       return $default;
     }
     if (!isset($options[$option_key]) || empty($options[$option_key])) {
-      \ytp_log(__FILE__, __LINE__, "'$option_name' does not contain key '$option_key', returning default: '$default'");
+      \ytp_debug(__FILE__, __LINE__, "'$option_name' does not contain key '$option_key', returning default: '$default'");
       return $default;
     }
     return $options[$option_key];
@@ -99,11 +99,11 @@ class PluginOptions
   {
     $options = \get_option($option_name);
     if (!$options) {
-      \ytp_log(__FILE__, __LINE__, "'$option_name' was not found, returning default: '$default'");
+      \ytp_debug(__FILE__, __LINE__, "'$option_name' was not found, returning default: '$default'");
       return $default;
     }
     if (!isset($options[$option_key]) || !\is_numeric($options[$option_key])) {
-      \ytp_log(__FILE__, __LINE__, "'$option_name' does not contain key '$option_key', returning default: '$default'");
+      \ytp_debug(__FILE__, __LINE__, "'$option_name' does not contain key '$option_key', returning default: '$default'");
       return $default;
     }
     return $options[$option_key];
