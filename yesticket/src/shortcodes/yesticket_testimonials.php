@@ -21,7 +21,6 @@ function shortcode_testimonials($atts)
         'key' => NULL,
         'type' => 'all',
         'count' => '9',
-        'theme' => 'light',
         'design' => 'basic',
         'details' => 'no',
     ), $atts);

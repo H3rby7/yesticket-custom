@@ -22,4 +22,3 @@
 <?php
 $this->render_template('shortcode_options_type', array("type" => "testimonials"));
 $this->render_template('shortcode_options_count');
-$this->render_template('shortcode_options_theme');
