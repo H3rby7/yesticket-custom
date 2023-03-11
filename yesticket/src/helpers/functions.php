@@ -27,19 +27,36 @@ function ytp_getImageUrl($fileName)
 }
 
 /**
- * Log output from YesTicket plugin if WP_DEBUG is true.
+ * Log output from YesTicket plugin
  * 
+ * @param string calling $file 
+ * @param string calling $line 
  * @param string $log content to be logged
  * 
  */
-function ytp_log($log)
+function ytp_info($file, $line, $log)
+{
+  $file = \preg_replace('/.*yesticket\/src/', '[YESTICKET]', $file);
+  $prefix = "$file@$line: ";
+  if (is_array($log) || is_object($log)) {
+    \error_log($prefix . \print_r($log, true));
+  } else {
+    \error_log($prefix . $log);
+  }
+}
+
+/**
+ * Log output from YesTicket plugin if WP_DEBUG is true.
+ * 
+ * @param string calling $file 
+ * @param string calling $line 
+ * @param string $log content to be logged
+ * 
+ */
+function ytp_debug($file, $line, $log)
 {
   if (true === WP_DEBUG) {
-    if (is_array($log) || is_object($log)) {
-      \error_log("YESTICKET: " . \print_r($log, true));
-    } else {
-      \error_log("YESTICKET: " . $log);
-    }
+    \ytp_info($file, $line, $log);
   }
 }
 

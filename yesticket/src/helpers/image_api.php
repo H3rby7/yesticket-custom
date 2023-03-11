@@ -67,9 +67,9 @@ class ImageApi
         } catch (ImageException $e) {
             $msg = $e->getMessage();
             if (!empty($msg) && \strlen($msg) > 0) {
-                \ytp_log(__FILE__ . "@" . __LINE__ . ": '$msg'");
+                \ytp_info(__FILE__, __LINE__, "Unknown Error: $msg");
             } else {
-                \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Unknown Error when retrieving image from $yesTicketImageUrl'");
+                \ytp_info(__FILE__, __LINE__, "Unknown Error when retrieving image from '$yesTicketImageUrl'");
             }
             throw $e;
         }

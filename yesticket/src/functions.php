@@ -1,6 +1,7 @@
 <?php
 
 include_once("admin/plugin_menu.php");
+include_once("helpers/functions.php");
 include_once("rest/image_endpoint.php");
 include_once("shortcodes/yesticket_events.php");
 include_once("shortcodes/yesticket_events_list.php");
@@ -15,24 +16,17 @@ function ytp_init_callback()
   $pathToSiteCss = \plugins_url('ytp-site.css', __FILE__);
   $pathToAdminCss = \plugins_url('admin/styles.css', __FILE__);
   $pathToLanguages = 'yesticket/src/languages/';
-  if (true === WP_DEBUG) {
-    \error_log("Loading YesTicket plugin ...");
-  }
+  \ytp_debug(__FILE__, __LINE__, "Loading YesTicket plugin ...");
   if (!\wp_register_style('yesticket', $pathToSiteCss, false, 'all')) {
-    \error_log("Could not register_style: 'yesticket' from '$pathToSiteCss'.");
+    \ytp_info(__FILE__, __LINE__, "Could not register_style: 'yesticket' from '$pathToSiteCss'.");
   }
   if (!\wp_register_style('yesticket-admin', $pathToAdminCss, false, 'all')) {
-    \error_log("Could not register_style: 'yesticket-admin' from '$pathToAdminCss'.");
+    \ytp_info(__FILE__, __LINE__, "Could not register_style: 'yesticket-admin' from '$pathToAdminCss'.");
   }
   \YesTicket\Slides::registerFiles();
-  if (!\load_plugin_textdomain('yesticket', false, $pathToLanguages)) {
-    \error_log("Could not load_plugin_textdomain: 'yesticket' from '$pathToLanguages'.");
+  if (!\load_plugin_textdomain('yesticket', false, $pathToLanguages) && true === WP_DEBUG) {
+    $locale = get_locale();
+    \ytp_debug(__FILE__, __LINE__, "Could not load 'yesticket' translations for $locale from '$pathToLanguages'. Falling back to 'en'.");
   }
-  if (true === WP_DEBUG) {
-    \error_log("YesTicket plugin loaded ...");
-  }
-}
-
-if (true === WP_DEBUG) {
-    \error_log("YesTicket plugin loaded ...\n");
+  \ytp_debug(__FILE__, __LINE__, "YesTicket plugin loaded ...");
 }

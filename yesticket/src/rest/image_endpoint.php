@@ -90,7 +90,7 @@ class ImageEndpoint
     } catch (\Exception $e) {
       $msg = $e->getMessage();
       $code = $e->getCode();
-      \ytp_log(__FILE__ . "@" . __LINE__ . ": ERROR $code > '$msg'");
+      \ytp_info(__FILE__, __LINE__, "ERROR code => '$code'; msg => '$msg'");
       return new \WP_Error($code, '', array('status' => $code));
     }
   }
@@ -110,7 +110,7 @@ class ImageEndpoint
       return false;
     }
     if (!($result->get_data() instanceof CachedImage)) {
-      \ytp_log(__FILE__ . "@" . __LINE__ . ": 'Result data is not of type CachedImage'");
+      \ytp_info(__FILE__, __LINE__, "Result data is not of type CachedImage");
       return false;
     }
     if (!\headers_sent()) {

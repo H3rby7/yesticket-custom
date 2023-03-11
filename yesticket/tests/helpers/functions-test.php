@@ -73,25 +73,25 @@ class YesTicketHelpersTest extends WP_UnitTestCase
   }
 
   /**
-   * @covers ::ytp_log
+   * @covers ::ytp_info
    */
-  function test_ytp_log_string_expecting_string()
+  function test_ytp_info_string_expecting_string()
   {
     \LogCapture::start();
-    \ytp_log("my log content");
+    \ytp_info("/path/to/plugins/yesticket/src/file.php", 14, "my log content");
     $result = \LogCapture::end_get();
-    $this->assertStringContainsString("YESTICKET: my log content", $result);
+    $this->assertStringContainsString("[YESTICKET]/file.php@14: my log content", $result);
   }
 
   /**
-   * @covers ::ytp_log
+   * @covers ::ytp_info
    */
-  function test_ytp_log_array_expecting_serialized_string()
+  function test_ytp_info_array_expecting_serialized_string()
   {
     \LogCapture::start();
-    \ytp_log(array("my-key" => "my-value"));
+    \ytp_info("/path/to/plugins/yesticket/src/other/file.php", 69, array("my-key" => "my-value"));
     $result = \LogCapture::end_get();
-    $this->assertStringContainsString('YESTICKET: Array', $result);
+    $this->assertStringContainsString('[YESTICKET]/other/file.php@69: Array', $result);
     $this->assertStringContainsString('[my-key] => my-value', $result);
   }
 
