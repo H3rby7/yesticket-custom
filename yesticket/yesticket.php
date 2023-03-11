@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: YesTicket
- * Plugin URI: ?page=yesticket-plugin
+ * Plugin URI: ?page=yesticket-settings
  * Version: 2.0.0
  * Author: YesTicket
  * Author URI: https://www.yesticket.org/
@@ -10,8 +10,8 @@
  * License: GPL2
  * Text Domain: yesticket
  * Domain Path: /src/languages
- * Requires at least: 5.6.0
- * Requires PHP: 7.3
+ * Requires at least: 5.6
+ * Requires PHP: 7.2
  */
 
 include_once("src/functions.php");
