@@ -36,6 +36,7 @@ function ytp_getImageUrl($fileName)
  */
 function ytp_log($file, $line, $log)
 {
+  $file = \preg_replace('/.*yesticket\/src/', '[YESTICKET]', $file);
   $prefix = "$file@$line: ";
   if (is_array($log) || is_object($log)) {
     \error_log($prefix . \print_r($log, true));
