@@ -51,6 +51,9 @@ class ImageEndpoint
     $this->api = ImageApi::getInstance();
   }
 
+  /**
+   * Call register_rest_route for the image endpoint
+   */
   public function registerRoute()
   {
     // 127.0.0.1/wp-json/yesticket/v1/picture/123
@@ -69,6 +72,13 @@ class ImageEndpoint
     \add_filter('rest_pre_serve_request', [$this, 'servePicture'], 10, 2);
   }
 
+  /**
+   * Callback to validate event_id is of supported value.
+   * 
+   * @param string $param
+   * 
+   * @return boolean TRUE if OK; FALSE if not.
+   */
   public function validationCallback($param, $request = null, $key = null)
   {
     if (!is_numeric($param) || $param < 1) {
@@ -82,6 +92,14 @@ class ImageEndpoint
     return true;
   }
 
+  /**
+   * Callback for our registered REST route
+   * 
+   * @param \WP_REST_Request $data
+   * 
+   * @return \WP_REST_Response
+   * @return \WP_Error
+   */
   public function handleRequest($data)
   {
     try {
@@ -96,6 +114,8 @@ class ImageEndpoint
   }
 
   /**
+   * Hooked in 'rest_pre_serve_request'
+   * 
    * @param boolean $served
    * @param \WP_REST_Response $result
    * @param \WP_REST_Request $request
