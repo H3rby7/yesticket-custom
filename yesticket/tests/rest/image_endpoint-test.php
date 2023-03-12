@@ -120,7 +120,6 @@ class ImageEndpointTest extends \WP_UnitTestCase
     $output = \ob_end_clean();
     $this->assertSame(307, $response->get_status(), "Fallback should be redirect!");
     $headers = $response->get_headers();
-    \error_log(\print_r($headers, true));
     $this->assertContains('Location: https://www.yesticket.org/dev/picture.php?event=123', $headers, 'Should send a Location Header!');
   }
 

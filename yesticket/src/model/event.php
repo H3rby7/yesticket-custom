@@ -205,7 +205,7 @@ class Event
       return $this->event_picture_url;
     }
     if (!empty($this->event_id)) {
-      return "/wp-json/yesticket/v1/picture/" . $this->event_id;
+      return $this->pictureUrlFromId($this->event_id);
     }
     if (empty($this->event_picture_url)) {
       // Does not have an own image?!
@@ -218,8 +218,12 @@ class Event
     }
     \preg_match('/event=(?<id>\d+)/', $query, $matches);
     if (\array_key_exists('id', $matches)) {
-      return "/wp-json/yesticket/v1/picture/" . $matches['id'];
+      return $this->pictureUrlFromId($matches['id']);
     }
     return $this->event_picture_url;
+  }
+
+  private function pictureUrlFromId($id) {
+    return \get_site_url(null, "wp-json/yesticket/v1/picture/$id");
   }
 }

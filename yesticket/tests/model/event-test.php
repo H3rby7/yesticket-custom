@@ -98,7 +98,7 @@ class EventTest extends \WP_UnitTestCase
   {
     $input = new Event(true);
     $input->event_id = 1;
-    $this->assertSame('/wp-json/yesticket/v1/picture/1', $input->getPictureUrl());
+    $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/1', $input->getPictureUrl());
   }
   /**
    * @covers YesTicket\Model\Event
@@ -107,7 +107,7 @@ class EventTest extends \WP_UnitTestCase
   {
     $input = new Event(true);
     $input->event_picture_url = 'https://www.yesticket.org/picture.php?event=69';
-    $this->assertSame('/wp-json/yesticket/v1/picture/69', $input->getPictureUrl());
+    $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/69', $input->getPictureUrl());
   }
 
   /**
@@ -149,6 +149,19 @@ class EventTest extends \WP_UnitTestCase
     $input->event_picture_url = 'https://www.yesticket.org/picture.php?event=69';
     $result =  $input->getPictureUrl();
     $this->assertSame('https://www.yesticket.org/picture.php?event=69', $result);
+  }
+
+  /**
+   * @covers YesTicket\Model\Event
+   */
+  function test_getPictureUrl_respects_site_url()
+  {
+    $oldSite = \get_option('siteurl');
+    \update_option('siteurl', 'http://another-example.org/subpath');
+    $input = new Event(true);
+    $input->event_id = 1;
+    $this->assertSame('http://another-example.org/subpath/wp-json/yesticket/v1/picture/1', $input->getPictureUrl());
+    \update_option('siteurl', $oldSite);
   }
 
   private function getInputEventJson() {
