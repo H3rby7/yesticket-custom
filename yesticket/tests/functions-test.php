@@ -1,7 +1,7 @@
 <?php
 
 
-class PluginOptionsTest extends \WP_UnitTestCase
+class FunctionsTest extends \WP_UnitTestCase
 {
 
   /**

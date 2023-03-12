@@ -2,7 +2,7 @@
 
 include_once(__DIR__ . "/../utility.php");
 
-class YesTicketHelpersTest extends WP_UnitTestCase
+class HelperFunctionsTest extends \WP_UnitTestCase
 {
 
   /**
@@ -93,6 +93,37 @@ class YesTicketHelpersTest extends WP_UnitTestCase
     $result = \LogCapture::end_get();
     $this->assertStringContainsString('[YESTICKET]/other/file.php@69: Array', $result);
     $this->assertStringContainsString('[my-key] => my-value', $result);
+  }
+
+  /**
+   * @covers ::ytp_debug
+   */
+  function test_ytp_debug_string_expecting_string()
+  {
+    \LogCapture::start();
+    \ytp_debug(".../yesticket/src/file.php", 161, "less important message");
+    $result = \LogCapture::end_get();
+    if (true === WP_DEBUG) {
+      $this->assertStringContainsString("[YESTICKET]/file.php@161: less important message", $result);
+    } else {
+      $this->assertEmpty($result, "debugging was not enabled, should not log.");
+    }
+  }
+
+  /**
+   * @covers ::ytp_debug
+   */
+  function test_ytp_debug_array_expecting_serialized_string()
+  {
+    \LogCapture::start();
+    \ytp_debug(".../yesticket/src/file.php", 161, array("is-this-important?" => "less so."));
+    $result = \LogCapture::end_get();
+    if (true === WP_DEBUG) {
+      $this->assertStringContainsString('[YESTICKET]/file.php@161: Array', $result);
+      $this->assertStringContainsString('[is-this-important?] => less so.', $result);
+    } else {
+      $this->assertEmpty($result, "debugging was not enabled, should not log.");
+    }
   }
 
   function run_ytp_render_eventType($expected, $input)
