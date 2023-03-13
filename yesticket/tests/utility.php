@@ -136,16 +136,19 @@ abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
    * This only works if directory structure and the test's filename follow the correct pattern.
    * 
    * @param string __FILE__
+   * @param array $variables passed via 'compact', to be used via 'extract'
    * @return SimpleXMLElement
    * 
    * @see https://www.w3schools.com/xml/xpath_syntax.asp to select XML node to run assertions.
    */
-  public function includeTemplate($file)
+  public function includeTemplate($file, $variables = array())
   {
     $template_path = $this->getTemplatePath($file);
     if (!is_readable($template_path)) {
       throw new \Error("Cannot read template file '$template_path'");
     }
+    // Extract the variables to a local namespace
+    \extract($variables);
     \ob_start();
     include $this->getTemplatePath($template_path);
     $result = \ob_get_clean();
