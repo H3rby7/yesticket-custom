@@ -142,13 +142,17 @@ abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
    */
   public function includeTemplate($file)
   {
+    $template_path = $this->getTemplatePath($file);
+    if (!is_readable($template_path)) {
+      throw new \Error("Cannot read template file '$template_path'");
+    }
     \ob_start();
-    include $this->getTemplatePath($file);
+    include $this->getTemplatePath($template_path);
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
     \libxml_clear_errors();
     $asXML = \simplexml_load_string($result);
-    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML");
+    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
     return $asXML;
   }
 }
