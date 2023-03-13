@@ -77,3 +77,78 @@ class LogCapture
     }
   }
 }
+
+/**
+ * Utility class to test with transltions
+ */
+abstract class YTP_TranslateTestCase extends \WP_UnitTestCase
+{
+  protected $assertedTranslations = [];
+  protected $actualTranslations = [];
+
+  public function set_up(): void
+  {
+    parent::set_up();
+    $this->assertedTranslations = [];
+    $this->actualTranslations = [];
+    \remove_all_filters('gettext', 69);
+    \add_filter('gettext', function ($translated_text, $untranslated_text, $domain) {
+      $this->actualTranslations[] = array('text' => $untranslated_text, 'domain' => $domain);
+      return $translated_text;
+    }, 69, 3);
+  }
+
+  /**
+   * Set up expected translations
+   */
+  public function expectTranslate($expectedInput, $domain = 'yesticket')
+  {
+    $this->assertedTranslations[] = array('text' => $expectedInput, 'domain' => $domain);
+  }
+
+  public function assert_post_conditions(): void
+  {
+    parent::assert_post_conditions();
+    \remove_all_filters('gettext', 69);
+    $this->assertSameSets($this->assertedTranslations, $this->actualTranslations, "Expected different translations.");
+  }
+}
+
+/**
+ * Utility class to test our templates.
+ */
+abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
+{
+  /**
+   * Return the template for a template test.
+   * This only works if directory structure and the test's filename follow the correct pattern.
+   * 
+   * @param string __FILE__
+   * @return string templatePath
+   */
+  public function getTemplatePath($file)
+  {
+    return str_replace('-test.php', '.php', str_replace('tests', 'src', $file));
+  }
+
+  /**
+   * Get templated XML for a template test
+   * This only works if directory structure and the test's filename follow the correct pattern.
+   * 
+   * @param string __FILE__
+   * @return SimpleXMLElement
+   * 
+   * @see https://www.w3schools.com/xml/xpath_syntax.asp to select XML node to run assertions.
+   */
+  public function includeTemplate($file)
+  {
+    \ob_start();
+    include $this->getTemplatePath($file);
+    $result = \ob_get_clean();
+    $this->assertNotEmpty($result);
+    \libxml_clear_errors();
+    $asXML = \simplexml_load_string($result);
+    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML");
+    return $asXML;
+  }
+}
