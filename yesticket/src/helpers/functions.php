@@ -199,6 +199,7 @@ function strpos_findLast_viaRegex($haystack, $needlePattern)
 
   /**
    * Send out the headers defined in $response, if headers have not been sent.
+   * TODO: maybe '@runInSeparateProcess' helps to test headers?
    * 
    * @param \WP_REST_Response $response
    */

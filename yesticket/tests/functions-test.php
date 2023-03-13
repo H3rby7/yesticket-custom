@@ -1,6 +1,5 @@
 <?php
 
-
 class FunctionsTest extends \WP_UnitTestCase
 {
 

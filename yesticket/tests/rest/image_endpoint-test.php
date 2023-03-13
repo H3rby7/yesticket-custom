@@ -2,8 +2,6 @@
 
 namespace YesTicket;
 
-use \YesTicket\ImageCache;
-use YesTicket\Model\CachedImage;
 use \YesTicket\Rest\ImageEndpoint;
 use \WP_REST_Server;
 

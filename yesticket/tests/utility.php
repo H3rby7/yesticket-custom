@@ -35,10 +35,10 @@ class LogCapture
 
   static private function getInstance()
   {
-      if (!isset(LogCapture::$instance)) {
-        LogCapture::$instance = new LogCapture();
-      }
-      return LogCapture::$instance;
+    if (!isset(LogCapture::$instance)) {
+      LogCapture::$instance = new LogCapture();
+    }
+    return LogCapture::$instance;
   }
 
   private $tmpFile;
@@ -48,7 +48,8 @@ class LogCapture
   /**
    * Redirect error_log to our capturing
    */
-  static public function start() {
+  static public function start()
+  {
     $lc = LogCapture::getInstance();
     Assert::assertFalse($lc->open, ">>> LogCapture -> Capturing already ongoing!");
     $lc->open = true;
@@ -59,7 +60,8 @@ class LogCapture
    * Restore error_log to normal state and return captured content
    * @return string content
    */
-  static public function end_get() {
+  static public function end_get()
+  {
     $lc = LogCapture::getInstance();
     Assert::assertTrue($lc->open, ">>> LogCapture -> Capturing was not running!");
     $result = stream_get_contents($lc->tmpFile);
