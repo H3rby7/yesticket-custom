@@ -94,26 +94,6 @@ EOD;
   }
 
   /**
-   * Prints the Clear Cache Button
-   */
-  public function render_clear_cache_button()
-  {
-    /* translators: The sentence ends with a button 'Clear Cache' (can be translated at that msgId) */
-    $hint_text = __("If your changes in YesTicket are not reflected fast enough, try to: ", "yesticket");
-    /* translators: Text on a button, use imperativ if possible. */
-    $button_text = __("Clear Cache", "yesticket");
-    $pageQuery = $this->get_parent_slug();
-    print <<<EOD
-      <form action="admin.php?page=$pageQuery" method="POST">
-        <input type="hidden" name="clear-cache" value="1">
-        <label for="clear-cache_submit">$hint_text</label>
-        <input type="submit" name="clear-cache_submit" value="$button_text">
-      </form>
-EOD;
-    // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented and followed by newline !!!!
-  }
-
-  /**
    * Prints the technical settings section header.
    */
   public function render_technical_section()

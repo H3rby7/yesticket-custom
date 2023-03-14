@@ -4,7 +4,7 @@ namespace YesTicket;
 
 include_once(__DIR__ . "/../../utility.php");
 
-class TemplateSettingsRequiredTest extends \YTP_TemplateTestCase
+class TemplateSettingsRequiredHeadingTest extends \YTP_TemplateTestCase
 {
 
   function test_html()

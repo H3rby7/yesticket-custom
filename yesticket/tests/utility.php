@@ -29,6 +29,23 @@ function getCachedImage($type, $renderer, $qualityArg = 0)
   return new CachedImage($type, \ob_get_clean());
 }
 
+/**
+ * Close HTML <tag> that are valid without their counterpart </tag>
+ * 
+ * @param string $input
+ * 
+ * Closes:
+ *  * <input />
+ *  * <img />
+ * 
+ * Useful to test HTML output via @see \simplexml_load_string
+ * 
+ */
+function closeStandaloneHtmlTags($input)
+{
+  return \preg_replace('/(<(input|img)[\s\w"\'=\/\[\]]+[\s\w"\'=\[\]])>/', '${1}/>', $input);
+}
+
 class LogCapture
 {
   static private $instance;
@@ -154,7 +171,7 @@ abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
     \libxml_clear_errors();
-    $asXML = \simplexml_load_string($result);
+    $asXML = \simplexml_load_string(\closeStandaloneHtmlTags($result));
     $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
     return $asXML;
   }
