@@ -17,6 +17,15 @@ class SettingsTechnicalTest extends \YTP_TranslateTestCase
   {
     // Init Object
     $settingsTechnical = new SettingsTechnical('yesticket-settings', null);
+    $_SERVER['REQUEST_URI'] = "http://example.org/wp-admin/admin.php?page=yesticket-settings";
+    $_GET['tab'] = "technical";
+    // Expect Translations
+    $this->expectTranslate("Technical Settings");
+    $this->expectTranslate("Change these settings at your own risk.");
+    $this->expectTranslate("Cache time in minutes");
+    $this->expectTranslate("Save Changes", "default");
+    $this->expectTranslate("If your changes in YesTicket are not reflected fast enough, try to: ");
+    $this->expectTranslate("Clear Cache");
     // Render
     \ob_start();
     $settingsTechnical->render();
@@ -24,7 +33,6 @@ class SettingsTechnicalTest extends \YTP_TranslateTestCase
     $this->assertNotEmpty($result);
     $asXML = $this->validateAndGetAsXml($result);
     // Run assertions on XML
-    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
     $this->assertSettings($asXML->xpath("//form[@method='post']")[0]);
     $this->assertClearCache($asXML->xpath("//form[@method='post']")[1]);
   }
@@ -69,7 +77,7 @@ class SettingsTechnicalTest extends \YTP_TranslateTestCase
   {
     // Form element itself
     $this->assertNotEmpty($formXML, "Clear cache should have a form with method='post'.");
-    $this->assertStringContainsString("admin.php?page=aa", $formXML->xpath("@action")[0]);
+    $this->assertStringContainsString("admin.php?page=yesticket-settings&tab=technical", $formXML->xpath("@action")[0]);
 
     // Submit BTN
     $this->assertNotEmpty($formXML->xpath("//input[@type='submit']"), "Form must have a submit input.");

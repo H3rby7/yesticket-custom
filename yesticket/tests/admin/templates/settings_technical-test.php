@@ -24,11 +24,12 @@ class TemplateSettingsTechnicalTest extends \YTP_TemplateTestCase
   function test_renders_valid_localized_html()
   {
     $slug = $this->get_slug();
-    $action = "http://127.0.0.1/wp-admin/options.php?test='$slug'";
+    $action = "http://127.0.0.1/wp-admin/options.php?page=$slug";
+    $tab = "&tab=technical";
     $this->expectTranslate("Save Changes", "default");
     $this->expectTranslate("If your changes in YesTicket are not reflected fast enough, try to: ");
     $this->expectTranslate("Clear Cache");
-    $this->includeTemplate(__FILE__, \compact("action"));
+    $this->includeTemplate(__FILE__, \compact("action", "tab"));
   }
 
 }

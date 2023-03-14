@@ -63,6 +63,7 @@ class SettingsRequired extends SettingsSection
 
   /**
    * Prints the required settings.
+   * If necessary settings are not yet set, changes slug to the examples page, to redirect there right after these settings being set.
    */
   public function render()
   {

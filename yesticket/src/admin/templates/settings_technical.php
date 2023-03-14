@@ -6,7 +6,7 @@
     \submit_button();
     ?>
   </form>
-  <form action="admin.php?page=<?php echo $this->get_parent_slug(); ?>" method="post">
+  <form action="admin.php?page=<?php echo $this->get_parent_slug() . $tab; ?>" method="post">
     <input type="hidden" name="clear-cache" value="1" />
     <label for="clear-cache_submit"><?php
                                     /* translators: The sentence ends with a button 'Clear Cache' (can be translated at that msgId) */

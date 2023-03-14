@@ -84,26 +84,47 @@ class LogCapture
 abstract class YTP_HtmlTestCase extends \WP_UnitTestCase
 {
   /**
-   * Close HTML <tag> that are valid without their counterpart </tag>
+   * Apply small transformations on perfectly fine HTML5 code so we can validate it with SimpleXML class.
    * 
    * @param string $input
+   * @return string ready to be used with '\simplexml_load_string'
    * 
-   * Closes:
+   * Closes tags:
    *  * <input />
    *  * <img />
    * 
-   * Useful to test HTML output via @see \simplexml_load_string
+   * Escapes:
+   *  * '&' cahracter
+   * 
+   * @see \simplexml_load_string
    * 
    */
-  function closeStandaloneHtmlTags($input)
+  function prepHtmlForLibXML($input)
   {
-    return \preg_replace('/(<(input|img)[\s\w"\'=\/\[\]]+[\s\w"\'=\[\]])>/', '${1}/>', $input);
+    $input = \preg_replace('/(<(input|img)[\s\w"\'=\/\[\]]+[\s\w"\'=\[\]])>/', '${1}/>', $input);
+    // '&' character is used in XML to insert a character reference with syntax &name, so we must escape it.
+    $input = \preg_replace('/&/', '&amp;', $input);
+    return $input;
   }
 
-  function validateAndGetAsXml($input) {
+  function validateAndGetAsXml($input)
+  {
     \libxml_clear_errors();
-    $asXML = \simplexml_load_string($this->closeStandaloneHtmlTags($input));
-    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
+    $oldSetting = \libxml_use_internal_errors(true);
+    $sanitizedInput = $this->prepHtmlForLibXML($input);
+    $asXML = \simplexml_load_string($sanitizedInput);
+    if ($asXML === false) {
+      $errors = libxml_get_errors();
+      \libxml_use_internal_errors($oldSetting);
+      $arr = \explode("\n", $sanitizedInput);
+      $withLines = \implode("\n", \array_map(function ($index, $line) {
+        $lineNr = $index + 1;
+        return "<$lineNr> $line";
+      }, array_keys($arr), array_values($arr)));
+
+      $this->assertSameSets($errors, [], "Should produce valid HTML, but is: >>> \n" . $withLines);
+      $this->assertNotEmpty($asXML, "Should produce valid HTML, but is: >>> \n" . $withLines);
+    }
     return $asXML;
   }
 }

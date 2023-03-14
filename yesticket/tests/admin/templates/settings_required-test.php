@@ -21,7 +21,7 @@ class TemplateSettingsRequiredTest extends \YTP_TemplateTestCase
   function test_html()
   {
     $slug = $this->get_slug();
-    $action = "http://127.0.0.1/wp-admin/options.php?test='$slug'";
+    $action = "http://127.0.0.1/wp-admin/options.php?test=$slug";
     $request_url = "/wp-admin/admin.php?page=yesticket-settings";
     $this->expectTranslate("Save Changes", "default");
     $this->includeTemplate(__FILE__, \compact("action", "request_url"));

@@ -12,10 +12,18 @@ class SettingsRequiredTest extends \YTP_TranslateTestCase
   /**
    * @covers YesTicket\Admin\SettingsRequired
    */
-  function test_render()
+  function test_render_necessarySettingsNotSet()
   {
     // Init Object
     $settingsTechnical = new SettingsRequired('yesticket-settings');
+    $_SERVER['REQUEST_URI'] = "http://example.org/wp-admin/admin.php?page=yesticket-settings";
+    // Expect Translations
+    $this->expectTranslate("Required Settings");
+    $this->expectTranslate("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:");
+    $this->expectTranslate("https://www.yesticket.org/login/en/integration.php#wp-plugin");
+    $this->expectTranslate("Your 'key'");
+    $this->expectTranslate("Your 'organizer-ID'");
+    $this->expectTranslate("Save Changes", "default");
     // Render
     \ob_start();
     $settingsTechnical->render();
@@ -37,7 +45,7 @@ class SettingsRequiredTest extends \YTP_TranslateTestCase
     // _wp_http_referer
     $hiddenInput = $formXML->xpath("input[@name='_wp_http_referer']")[0];
     $this->assertStringContainsString("hidden", $hiddenInput->xpath("@type")[0]);
-    $this->assertStringContainsString("wp-admin/admin.php?page=yesticket-settings", $hiddenInput->xpath("@value")[0]);
+    $this->assertStringContainsString("wp-admin/admin.php?page=yesticket", $hiddenInput->xpath("@value")[0]);
     // _wpnonce
     $hiddenInput = $formXML->xpath("input[@name='_wpnonce']")[0];
     $this->assertStringContainsString("hidden", $hiddenInput->xpath("@type")[0]);

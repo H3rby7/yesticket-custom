@@ -74,7 +74,8 @@ class SettingsTechnical extends SettingsSection
   public function render()
   {
     $action = \esc_url(\admin_url('options.php'));
-    $this->render_template('settings_technical', \compact("action"));
+    $tab = isset($_GET['tab']) ? ('&tab=' . $_GET['tab']) : '';
+    $this->render_template('settings_technical', \compact("action", "tab"));
   }
 
   /**
