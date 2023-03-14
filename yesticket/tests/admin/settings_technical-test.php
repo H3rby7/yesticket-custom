@@ -7,7 +7,7 @@ use YesTicket\Admin\SettingsTechnical;
 
 include_once(__DIR__ . "/../utility.php");
 
-class SettingsTechnicalTest extends \WP_UnitTestCase
+class SettingsTechnicalTest extends \YTP_TranslateTestCase
 {
   
   /**
@@ -22,8 +22,7 @@ class SettingsTechnicalTest extends \WP_UnitTestCase
     $settingsTechnical->render();
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
-    \libxml_clear_errors();
-    $asXML = \simplexml_load_string(\closeStandaloneHtmlTags($result));
+    $asXML = $this->validateAndGetAsXml($result);
     // Run assertions on XML
     $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
     $this->assertSettings($asXML->xpath("//form[@method='post']")[0]);

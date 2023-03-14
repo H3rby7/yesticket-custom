@@ -29,23 +29,6 @@ function getCachedImage($type, $renderer, $qualityArg = 0)
   return new CachedImage($type, \ob_get_clean());
 }
 
-/**
- * Close HTML <tag> that are valid without their counterpart </tag>
- * 
- * @param string $input
- * 
- * Closes:
- *  * <input />
- *  * <img />
- * 
- * Useful to test HTML output via @see \simplexml_load_string
- * 
- */
-function closeStandaloneHtmlTags($input)
-{
-  return \preg_replace('/(<(input|img)[\s\w"\'=\/\[\]]+[\s\w"\'=\[\]])>/', '${1}/>', $input);
-}
-
 class LogCapture
 {
   static private $instance;
@@ -96,9 +79,39 @@ class LogCapture
 }
 
 /**
- * Utility class to test with transltions
+ * Utility class providing some html testing capabilities
  */
-abstract class YTP_TranslateTestCase extends \WP_UnitTestCase
+abstract class YTP_HtmlTestCase extends \WP_UnitTestCase
+{
+  /**
+   * Close HTML <tag> that are valid without their counterpart </tag>
+   * 
+   * @param string $input
+   * 
+   * Closes:
+   *  * <input />
+   *  * <img />
+   * 
+   * Useful to test HTML output via @see \simplexml_load_string
+   * 
+   */
+  function closeStandaloneHtmlTags($input)
+  {
+    return \preg_replace('/(<(input|img)[\s\w"\'=\/\[\]]+[\s\w"\'=\[\]])>/', '${1}/>', $input);
+  }
+
+  function validateAndGetAsXml($input) {
+    \libxml_clear_errors();
+    $asXML = \simplexml_load_string($this->closeStandaloneHtmlTags($input));
+    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
+    return $asXML;
+  }
+}
+
+/**
+ * Utility class to test with translations
+ */
+abstract class YTP_TranslateTestCase extends \YTP_HtmlTestCase
 {
   protected $assertedTranslations = [];
   protected $actualTranslations = [];
@@ -167,12 +180,9 @@ abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
     // Extract the variables to a local namespace
     \extract($variables);
     \ob_start();
-    include $this->getTemplatePath($template_path);
+    include $template_path;
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
-    \libxml_clear_errors();
-    $asXML = \simplexml_load_string(\closeStandaloneHtmlTags($result));
-    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
-    return $asXML;
+    return $this->validateAndGetAsXml($result);
   }
 }

@@ -6,7 +6,7 @@ use YesTicket\Admin\SettingsRequired;
 
 include_once(__DIR__ . "/../utility.php");
 
-class SettingsRequiredTest extends \WP_UnitTestCase
+class SettingsRequiredTest extends \YTP_TranslateTestCase
 {
 
   /**
@@ -21,12 +21,9 @@ class SettingsRequiredTest extends \WP_UnitTestCase
     $settingsTechnical->render();
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
-    \libxml_clear_errors();
-    $asXML = \simplexml_load_string(\closeStandaloneHtmlTags($result));
-    $formXML = $asXML->xpath("//form[@method='post']")[0];
-    // Run assertions on XML
-    $this->assertEmpty(libxml_get_errors(), "Should produce valid HTML, but is: >>> \n" . $asXML->asXML());
+    $asXML = $this->validateAndGetAsXml($result);
     // Settings Form Assertions
+    $formXML = $asXML->xpath("//form[@method='post']")[0];
     // Form element itself
     $this->assertNotEmpty($formXML, "Should have a form with method='post'.");
     $this->assertStringContainsString("wp-admin/options.php", $formXML->xpath("@action")[0]);
