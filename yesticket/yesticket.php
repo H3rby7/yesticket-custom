@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: YesTicket
- * Plugin URI: ?page=yesticket-settings
+ * Plugin URI: https://www.yesticket.org/
  * Version: 2.0.0
  * Author: YesTicket
  * Author URI: https://www.yesticket.org/
