@@ -15,12 +15,8 @@
 		</testsuite>
 	</testsuites>
 	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
+		<whitelist>
 			<directory suffix=".php">./src/</directory>
-			<exclude>
-				<directory suffix=".php">*/shortcodes/templates/</directory>
-				<directory suffix=".php">*/admin/templates/</directory>
-			</exclude>
 		</whitelist>
 	</filter>
 	<logging>

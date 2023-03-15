@@ -20,14 +20,14 @@ class PluginOptions
    *
    * @var SETTINGS_TECHNICAL_KEY
    */
-  private const SETTINGS_TECHNICAL_KEY = 'yesticket_settings_technical';
+  public const SETTINGS_TECHNICAL_KEY = 'yesticket_settings_technical';
 
   /**
    * Option_Name of the required settings
    *
    * @var SETTINGS_REQUIRED_KEY
    */
-  private const SETTINGS_REQUIRED_KEY = 'yesticket_settings_required';
+  public const SETTINGS_REQUIRED_KEY = 'yesticket_settings_required';
 
   /**
    * Get the $instance

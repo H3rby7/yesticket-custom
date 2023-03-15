@@ -63,6 +63,7 @@ class SettingsRequired extends SettingsSection
 
   /**
    * Prints the required settings.
+   * If necessary settings are not yet set, changes slug to the examples page, to redirect there right after these settings being set.
    */
   public function render()
   {
@@ -82,10 +83,11 @@ class SettingsRequired extends SettingsSection
   public function render_api_key()
   {
     $api_key = PluginOptions::getInstance()->getApiKey();
+    $opt_name = PluginOptions::SETTINGS_REQUIRED_KEY;
     print <<<EOD
         <input type='text'
                placeholder='61dc12e43225e22add15ff1b'
-               name='yesticket_settings_required[api_key]'
+               name='${opt_name}[api_key]'
                value='$api_key'>
 EOD;
     // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!
@@ -97,11 +99,12 @@ EOD;
   public function render_organizer_id()
   {
     $organizer_id = PluginOptions::getInstance()->getOrganizerID();
+    $opt_name = PluginOptions::SETTINGS_REQUIRED_KEY;
     print <<<EOD
       <input type='number'
              min='1'
              step='1'
-             name='yesticket_settings_required[organizer_id]'
+             name='${opt_name}[organizer_id]'
              value='$organizer_id'>
 EOD;
     // !!!! Prior to PHP 7.3, the end identifier EOD must not be indented !!!!

@@ -77,3 +77,133 @@ class LogCapture
     }
   }
 }
+
+/**
+ * Utility class providing some html testing capabilities
+ */
+abstract class YTP_HtmlTestCase extends \WP_UnitTestCase
+{
+  /**
+   * Apply small transformations on perfectly fine HTML5 code so we can validate it with SimpleXML class.
+   * 
+   * @param string $input
+   * @return string ready to be used with '\simplexml_load_string'
+   * 
+   * Closes tags:
+   *  * <input />
+   *  * <img />
+   * 
+   * Escapes:
+   *  * '&' cahracter
+   * 
+   * @see \simplexml_load_string
+   * 
+   */
+  function prepHtmlForLibXML($input)
+  {
+    $input = \preg_replace('/(<(input|img)[\s\w\"\'\-\=\/\[\]]+[\s\w\"\'\-\=\[\]])>/', '${1}/>', $input);
+    // '&' character is used in XML to insert a character reference with syntax &name, so we must escape it.
+    $input = \preg_replace('/&/', '&amp;', $input);
+    return $input;
+  }
+
+  function validateAndGetAsXml($input)
+  {
+    \libxml_clear_errors();
+    $oldSetting = \libxml_use_internal_errors(true);
+    $sanitizedInput = $this->prepHtmlForLibXML($input);
+    $asXML = \simplexml_load_string($sanitizedInput);
+    if ($asXML === false) {
+      $errors = libxml_get_errors();
+      \libxml_use_internal_errors($oldSetting);
+      $arr = \explode("\n", $sanitizedInput);
+      $withLines = \implode("\n", \array_map(function ($index, $line) {
+        $lineNr = $index + 1;
+        return "<$lineNr> $line";
+      }, array_keys($arr), array_values($arr)));
+
+      $this->assertSameSets($errors, [], "Should produce valid HTML, but is: >>> \n" . $withLines);
+      $this->assertNotEmpty($asXML, "Should produce valid HTML, but is: >>> \n" . $withLines);
+    }
+    return $asXML;
+  }
+}
+
+/**
+ * Utility class to test with translations
+ */
+abstract class YTP_TranslateTestCase extends \YTP_HtmlTestCase
+{
+  protected $assertedTranslations = [];
+  protected $actualTranslations = [];
+
+  public function set_up(): void
+  {
+    parent::set_up();
+    $this->assertedTranslations = [];
+    $this->actualTranslations = [];
+    \remove_all_filters('gettext', 69);
+    \add_filter('gettext', function ($translated_text, $untranslated_text, $domain) {
+      $this->actualTranslations[] = array('text' => $untranslated_text, 'domain' => $domain);
+      return $translated_text;
+    }, 69, 3);
+  }
+
+  /**
+   * Set up expected translations
+   */
+  public function expectTranslate($expectedInput, $domain = 'yesticket')
+  {
+    $this->assertedTranslations[] = array('text' => $expectedInput, 'domain' => $domain);
+  }
+
+  public function assert_post_conditions(): void
+  {
+    parent::assert_post_conditions();
+    \remove_all_filters('gettext', 69);
+    $this->assertSameSets($this->assertedTranslations, $this->actualTranslations, "Expected different translations.");
+  }
+}
+
+/**
+ * Utility class to test our templates.
+ */
+abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
+{
+  /**
+   * Return the template for a template test.
+   * This only works if directory structure and the test's filename follow the correct pattern.
+   * 
+   * @param string __FILE__
+   * @return string templatePath
+   */
+  public function getTemplatePath($file)
+  {
+    return str_replace('-test.php', '.php', str_replace('tests', 'src', $file));
+  }
+
+  /**
+   * Get templated XML for a template test
+   * This only works if directory structure and the test's filename follow the correct pattern.
+   * 
+   * @param string __FILE__
+   * @param array $variables passed via 'compact', to be used via 'extract'
+   * @return SimpleXMLElement
+   * 
+   * @see https://www.w3schools.com/xml/xpath_syntax.asp to select XML node to run assertions.
+   */
+  public function includeTemplate($file, $variables = array())
+  {
+    $template_path = $this->getTemplatePath($file);
+    if (!is_readable($template_path)) {
+      throw new \Error("Cannot read template file '$template_path'");
+    }
+    // Extract the variables to a local namespace
+    \extract($variables);
+    \ob_start();
+    include $template_path;
+    $result = \ob_get_clean();
+    $this->assertNotEmpty($result);
+    return $this->validateAndGetAsXml($result);
+  }
+}

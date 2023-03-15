@@ -3,6 +3,7 @@
 namespace YesTicket;
 
 use \InvalidArgumentException;
+use \YesTicket\PluginOptions;
 
 class ApiTest extends \WP_UnitTestCase
 {
@@ -52,7 +53,7 @@ class ApiTest extends \WP_UnitTestCase
     \add_filter('locale', function () use (&$locale) {
       return $locale;
     });
-    \update_option('yesticket_settings_required', array(
+    \update_option(PluginOptions::SETTINGS_REQUIRED_KEY, array(
       'organizer_id' => $opt_organizer,
       'api_key' => $opt_key,
     ));
@@ -171,7 +172,7 @@ class ApiTest extends \WP_UnitTestCase
     \add_filter('locale', function () {
       return 'en_EN';
     });
-    \update_option('yesticket_settings_required', $req_settings);
+    \update_option(PluginOptions::SETTINGS_REQUIRED_KEY, $req_settings);
     $this->expectException($exception);
     $this->expectExceptionMessage($exception_msg);
     Api::getInstance()->getEvents($att);
@@ -182,7 +183,7 @@ class ApiTest extends \WP_UnitTestCase
     \add_filter('locale', function () {
       return 'en_EN';
     });
-    \update_option('yesticket_settings_required', $req_settings);
+    \update_option(PluginOptions::SETTINGS_REQUIRED_KEY, $req_settings);
     $this->expectException($exception);
     $this->expectExceptionMessage($exception_msg);
     Api::getInstance()->getTestimonials($att);

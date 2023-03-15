@@ -1,6 +1,6 @@
 <div class="ytp-admin">
   <h1>
-    <img src="<?php echo \ytp_getImageUrl('YesTicket_logo.png'); ?>" height="60" alt="YesTicket Logo">
+    <img src="<?php echo \ytp_getImageUrl('YesTicket_logo.png'); ?>" height="60" alt="YesTicket Logo" />
   </h1>
   <p><?php
       /* translators: YesTicket Plugin Page Introduction Text*/

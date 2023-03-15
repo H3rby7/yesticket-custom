@@ -4,6 +4,9 @@ namespace YesTicket;
 
 class PluginOptionsTest extends \WP_UnitTestCase
 {
+  private const SETTINGS_REQUIRED_KEY = 'yesticket_settings_required';
+  private const SETTINGS_TECHNICAL_KEY = 'yesticket_settings_technical';
+
   function test_class_exists()
   {
     $this->assertTrue(\class_exists("YesTicket\PluginOptions"));
@@ -49,16 +52,15 @@ class PluginOptionsTest extends \WP_UnitTestCase
   {
     // Given
     $opt_group = 'test-slug';
-    $opt_key = 'yesticket_settings_technical';
 
     // Make sure we start clear
     global $new_allowed_options, $wp_registered_settings;
     unset( $new_allowed_options[ $opt_group ] );
-    unset( $wp_registered_settings[ $opt_key ] );
+    unset( $wp_registered_settings[ $this::SETTINGS_TECHNICAL_KEY ] );
 
     // Register Settings
     $this->register_settings_technical($opt_group);
-    $option = \get_option($opt_key);
+    $option = \get_option($this::SETTINGS_TECHNICAL_KEY);
 
     // Assertions
     $this->assertNotEmpty($option);
@@ -68,10 +70,10 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertSame(60, $option['cache_time_in_minutes']);
 
     // Clean up
-    \unregister_setting($opt_group, $opt_key);
+    \unregister_setting($opt_group, $this::SETTINGS_TECHNICAL_KEY);
 
     // Ensure cleaned
-    $this->assertEmpty(\get_option($opt_key));
+    $this->assertEmpty(\get_option($this::SETTINGS_TECHNICAL_KEY));
   }
 
   /**
@@ -81,16 +83,15 @@ class PluginOptionsTest extends \WP_UnitTestCase
   {
     // Given
     $opt_group = 'test-slug';
-    $opt_key = 'yesticket_settings_required';
 
     // Make sure we start clear
     global $new_allowed_options, $wp_registered_settings;
     unset( $new_allowed_options[ $opt_group ] );
-    unset( $wp_registered_settings[ $opt_key ] );
+    unset( $wp_registered_settings[ $this::SETTINGS_REQUIRED_KEY ] );
 
     // Register Settings
     $this->register_settings_required($opt_group);
-    $option = \get_option($opt_key);
+    $option = \get_option($this::SETTINGS_REQUIRED_KEY);
 
     // Assertions
     $this->assertNotEmpty($option);
@@ -102,10 +103,10 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertNull($option['api_key']);
 
     // Clean up
-    \unregister_setting($opt_group, $opt_key);
+    \unregister_setting($opt_group, $this::SETTINGS_REQUIRED_KEY);
 
     // Ensure cleaned
-    $this->assertEmpty(\get_option($opt_key));
+    $this->assertEmpty(\get_option($this::SETTINGS_REQUIRED_KEY));
   }
 
   /**
@@ -120,7 +121,7 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertSame(60, PluginOptions::getInstance()->getCacheTimeInMinutes(), "Expected option's default value");
 
     // Test update propagates
-    $this->assertTrue(\update_option('yesticket_settings_technical', array(
+    $this->assertTrue(\update_option($this::SETTINGS_TECHNICAL_KEY, array(
       'cache_time_in_minutes' => 69
     )));
     $this->assertSame(69, PluginOptions::getInstance()->getCacheTimeInMinutes(), "Value should have changed");
@@ -132,14 +133,13 @@ class PluginOptionsTest extends \WP_UnitTestCase
   function test_getApiKey()
   {
     // Setup
-    $opt_key = 'yesticket_settings_required';
     $this->register_settings_required();
 
     // Basic Call
     $this->assertNull(PluginOptions::getInstance()->getApiKey(), "Expected option's default value");
 
     // Test update propagates
-    $this->assertTrue(\update_option($opt_key, array(
+    $this->assertTrue(\update_option($this::SETTINGS_REQUIRED_KEY, array(
       'api_key' => 'testkey'
     )));
     $this->assertSame('testkey', PluginOptions::getInstance()->getApiKey(), "Value should have changed");
@@ -151,14 +151,13 @@ class PluginOptionsTest extends \WP_UnitTestCase
   function test_getOrganizerID()
   {
     // Setup
-    $opt_key = 'yesticket_settings_required';
     $this->register_settings_required();
 
     // Basic Call
     $this->assertNull(PluginOptions::getInstance()->getOrganizerID(), "Expected option's default value");
 
     // Test update propagates
-    $this->assertTrue(\update_option($opt_key, array(
+    $this->assertTrue(\update_option($this::SETTINGS_REQUIRED_KEY, array(
       'organizer_id' => '161'
     )));
     $this->assertSame('161', PluginOptions::getInstance()->getOrganizerID(), "Value should have changed");
@@ -171,10 +170,9 @@ class PluginOptionsTest extends \WP_UnitTestCase
   {
     // Given
     $opt_group = 'test-slug';
-    $opt_key = 'yesticket_settings_required';
 
     // Make sure we start clear
-    \unregister_setting($opt_group, $opt_key);
+    \unregister_setting($opt_group, $this::SETTINGS_REQUIRED_KEY);
 
     // Settings not registered, expect false
     $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because settings were not registered.");
@@ -184,19 +182,19 @@ class PluginOptionsTest extends \WP_UnitTestCase
     $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because organizer_id and api_key are NULL.");
 
     // only organizer_id is set, expect false
-    $this->assertTrue(\update_option($opt_key, array(
+    $this->assertTrue(\update_option($this::SETTINGS_REQUIRED_KEY, array(
       'organizer_id' => '161'
     )));
     $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because api_key is NULL.");
 
     // only api_key is set, expect false
-    $this->assertTrue(\update_option($opt_key, array(
+    $this->assertTrue(\update_option($this::SETTINGS_REQUIRED_KEY, array(
       'api_key' => 'testkey'
     )));
     $this->assertFalse(PluginOptions::getInstance()->areNecessarySettingsSet(), "Expect FALSE, because organizer_id is NULL.");
 
     // All set, expect true
-    $this->assertTrue(\update_option($opt_key, array(
+    $this->assertTrue(\update_option($this::SETTINGS_REQUIRED_KEY, array(
       'organizer_id' => '161',
       'api_key' => 'testkey'
     )));
