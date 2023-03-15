@@ -2,8 +2,8 @@
 
 namespace YesTicket;
 
-use \YesTicket\Cache;
 use WP_Error;
+use \YesTicket\Cache;
 use YesTicket\Model\CachedImage;
 
 include_once("cache.php");
@@ -28,11 +28,10 @@ class ImageCache extends Cache
 
     
     /**
-     * Get image from the specified $get_url using $fetchFunction and render using $renderFunction 
-     * Use cached response, if present, else we make a new call and sve the image to cache
+     * Take cached response for $get_url, or get new using the $getFunction.
      * 
      * @param string $get_url the full api call URL
-     * @param callable $getFunction used to fetch image
+     * @param callable $getFunction used to fetch image, if not already in cache
      * 
      * @return CachedImage|WP_Error image
      * 
