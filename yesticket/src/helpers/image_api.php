@@ -2,7 +2,8 @@
 
 namespace YesTicket;
 
-use WP_Error;
+use \WP_Error;
+use \GdImage;
 use \YesTicket\ImageCache;
 use \YesTicket\Model\CachedImage;
 
@@ -68,7 +69,8 @@ class ImageApi
     }
 
     /**
-     * Get image from $get_url given that we know it's $content_type
+     * Render image from $get_url given that we know it's $content_type
+     * 
      * @param string $get_url of the image
      * @param string $content-type of the resource ('image/xyz')
      * 
@@ -76,29 +78,11 @@ class ImageApi
      */
     private function _getEventImage($get_url, $content_type)
     {
-        $image = false;
-        if ($content_type === "image/jpeg" || $content_type === "image/jpg") {
-            $image = \imagecreatefromjpeg($get_url);
-        } else if ($content_type === "image/png") {
-            $image = \imagecreatefrompng($get_url);
+        $image = $this->imageCreateFrom($content_type, $get_url);
+        if (\is_wp_error($image)) {
+            return $image;
         }
-        if (!$image) {
-            \ytp_info(__FILE__, __LINE__, "Could not get '$get_url' [$content_type] from YesTicket.");
-            return new WP_Error(503);
-        }
-        $rendering_worked = false;
-        \ob_start();
-        if ($content_type === "image/jpeg" || $content_type === "image/jpg") {
-            $rendering_worked = \imagejpeg($image, null, 100);
-        } else if ($content_type === "image/png") {
-            $rendering_worked = \imagepng($image, null, 0);
-        }
-        if (!$rendering_worked) {
-            $msg = \ob_get_clean();
-            \ytp_info(__FILE__, __LINE__, "Could not render image data as [$content_type] from '$get_url'. >> $msg");
-            return new WP_Error(503, $msg);
-        }
-        return new CachedImage($content_type, \ob_get_clean());
+        return $this->imageRender($content_type, $image);
     }
 
     /**
@@ -141,6 +125,53 @@ class ImageApi
             return new WP_Error(503);
         }
         return $content_type;
+    }
+
+    /**
+     * Get image data from $url using $content_type
+     * 
+     * @param string $content-type of the resource ('image/xyz')
+     * @param string $url of the resource
+     * 
+     * @return resource|GdImage|WP_Error the image data or ERROR.
+     */
+    private function imageCreateFrom($content_type, $url)
+    {
+        $image = false;
+        if ($content_type === "image/jpeg" || $content_type === "image/jpg") {
+            $image = \imagecreatefromjpeg($url);
+        } else if ($content_type === "image/png") {
+            $image = \imagecreatefrompng($url);
+        }
+        if (!$image) {
+            \ytp_info(__FILE__, __LINE__, "Could not get '$url' [$content_type] from YesTicket.");
+            return new WP_Error(503);
+        }
+        return $image;
+    }
+
+    /**
+     * Render $image as given $content_type
+     * @param string $content-type of the resource ('image/xyz')
+     * @param resource|GdImage $image data
+     * 
+     * @return CachedImage|WP_Error the image wrapped in the cacheable object or ERROR.
+     */
+    private function imageRender($content_type, $image)
+    {
+        $rendering_worked = false;
+        \ob_start();
+        if ($content_type === "image/jpeg" || $content_type === "image/jpg") {
+            $rendering_worked = \imagejpeg($image, null, 100);
+        } else if ($content_type === "image/png") {
+            $rendering_worked = \imagepng($image, null, 0);
+        }
+        if (!$rendering_worked) {
+            $msg = \ob_get_clean();
+            \ytp_info(__FILE__, __LINE__, "Could not render image data as [$content_type]. >> $msg");
+            return new WP_Error(503, $msg);
+        }
+        return new CachedImage($content_type, \ob_get_clean());
     }
 
     /**
