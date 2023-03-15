@@ -63,11 +63,7 @@ class ImageApi
     {
         $yesTicketImageUrl = $this->getYesTicketUrlOfImage($event_id);
         $image = $this->cache->getFromCacheOrFresh($yesTicketImageUrl, function ($get_url) {
-            $content_type = $this->determineContentTypeOfImage($get_url);
-            if (\is_wp_error($content_type)) {
-                return $content_type;
-            }
-            return $this->_getEventImage($get_url, $content_type);
+            return $this->_getEventImage($get_url);
         });
         if (\is_wp_error($image)) {
             $image->add_data($yesTicketImageUrl);
@@ -76,15 +72,18 @@ class ImageApi
     }
 
     /**
-     * Render image from $get_url given that we know it's $content_type
+     * Render image from $get_url
      * 
      * @param string $get_url of the image
-     * @param string $content-type of the resource ('image/xyz')
      * 
      * @return CachedImage|WP_Error the image wrapped in the cacheable object or ERROR.
      */
-    private function _getEventImage($get_url, $content_type)
+    private function _getEventImage($get_url)
     {
+        $content_type = $this->determineContentTypeOfImage($get_url);
+        if (\is_wp_error($content_type)) {
+            return $content_type;
+        }
         $image = $this->imageCreateFrom($content_type, $get_url);
         if (\is_wp_error($image)) {
             return $image;

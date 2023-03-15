@@ -59,7 +59,7 @@ class RestCacheTest extends \WP_UnitTestCase
     $result = RestCache::getInstance()->getFromCacheOrFresh($get_url);
     // Check Mock was invoked
     $this->assertTrue($pre_http_request_filter_has_run, "Should make HTTP call.");
-    $this->assertSame($external_call_url, $get_url, "Called wrong url");
+    $this->assertSame($get_url, $external_call_url, "Called wrong url");
     // Check response from Mock was used
     $this->assertNotEmpty($result);
     $this->assertSame('{"a-key": "a-value"}', $result, "Expect result to match mocked response");

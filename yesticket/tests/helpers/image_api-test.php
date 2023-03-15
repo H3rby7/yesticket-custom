@@ -1,12 +1,9 @@
 <?php
 
-namespace YesTicket;
 
 use \YesTicket\ImageApi;
 use \YesTicket\ImageCache;
-use \YesTicket\WrongImageTypeException;
-use \YesTicket\ImageException;
-use \LogCapture;
+use YesTicket\Model\CachedImage;
 
 // As seen in https://torquemag.io/2017/01/testing-api-endpoints/
 class ImageApiTest extends \WP_UnitTestCase
@@ -22,7 +19,7 @@ class ImageApiTest extends \WP_UnitTestCase
    */
   function test_get_instance()
   {
-    $_class = new \ReflectionClass(ImageApi::class);
+    $_class = new ReflectionClass(ImageApi::class);
     $_instance_prop = $_class->getProperty("instance");
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);
@@ -36,7 +33,7 @@ class ImageApiTest extends \WP_UnitTestCase
   private function initMock()
   {
     // Inject Mock into ImageApi::$instance
-    $_cache_property = new \ReflectionProperty(ImageApi::class, "cache");
+    $_cache_property = new ReflectionProperty(ImageApi::class, "cache");
     $_cache_property->setAccessible(true);
     $instance = ImageApi::getInstance();
     $cache_mock = $this->getMockBuilder(ImageCache::class)
@@ -47,135 +44,32 @@ class ImageApiTest extends \WP_UnitTestCase
   }
 
   /**
-   * Utility function to simplify different fetch function validations
-   * Validate that the passed argument $f is a function and can fetch a 'whatever $renderer' returns.
-   * @param callable $f the function
-   * @param callable $renderer one of \imageXXXX
-   * @return boolean true if valid; false if invalid
-   */
-  private function _validateFetchFunction($f, $renderer)
-  {
-    if (!\is_callable($f)) {
-      \error_log('Must be a callable!');
-      return false;
-    }
-    // Create fake resource to be fetched
-    $fakeResourceFile = \wp_tempnam();
-    $renderer(\imagecreatetruecolor(10, 10), $fakeResourceFile);
-    // Fetch fake resource
-    $result = $f($fakeResourceFile);
-    // Assertions
-    return $result !== FALSE && (\is_resource($result) || $result instanceof \GdImage);
-  }
-
-  /**
-   * Validate that the passed argument is a function and can fetch a jpeg
-   * @param callable $f the function
-   * @return boolean true if valid; false if invalid
-   */
-  private function validateJPEGFetchFunction($f)
-  {
-    return $this->_validateFetchFunction($f, '\imagejpeg');
-  }
-
-  /**
-   * Validate that the passed argument is a function and can fetch a png
-   * @param callable $f the function
-   * @return boolean true if valid; false if invalid
-   */
-  private function validatePNGFetchFunction($f)
-  {
-    return $this->_validateFetchFunction($f, '\imagepng');
-  }
-
-  /**
-   * Validate that the passed argument is a function and can render an image
-   * @param callable $f the function
-   * @return boolean true if valid; false if invalid
-   */
-  private function validateRenderFunction($f)
-  {
-    if (!\is_callable($f)) {
-      \error_log('Must be a callable!');
-      return false;
-    }
-    \ob_start();
-    $this->assertTrue($f(\imagecreatetruecolor(10, 10)));
-    return !empty(\ob_get_clean());
-  }
-
-  /**
    * @covers YesTicket\ImageApi
    */
-  function test_cache_returns_jpeg()
+  function test_cache_returns_cachedImage()
   {
     // Define our http-get endpoint
     $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
     // Set up mock to return a png on 'image/png'
-    $mock_result = getCachedImage('image/jpeg', '\imagejpeg', 100);
+    $mock_result = new CachedImage();
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
       ->with(
         $get_url,
-        'image/jpeg',
-        $this->callback(function ($fetchFunction) {
-          return $this->validateJPEGFetchFunction($fetchFunction);
-        }),
-        $this->callback(function ($renderFunction) {
-          return $this->validateRenderFunction($renderFunction);
+        $this->callback(function ($getFunction) {
+          return \is_callable($getFunction);
         })
       )
       ->will($this->returnValue($mock_result));
     // Call and assert
-    $response = ImageApi::getInstance()->getEventImage(123);
-    $this->assertNotEmpty($response);
-    $this->assertSame("image/jpeg", $response->get_content_type());
-    $this->assertStringContainsString('quality = 100', $response->get_image_data());
+    $this->assertSame($mock_result, ImageApi::getInstance()->getEventImage(123));
   }
 
   /**
    * @covers YesTicket\ImageApi
    */
-  function test_cache_throws_then_returns_png()
-  {
-    // Define our http-get endpoint
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    // Set up mock to ...
-    $mock_result = getCachedImage('image/png', '\imagepng', 0);
-    $cache_mock = $this->initMock();
-    //                ... throw WrongImageTypeException on first call with 'image/jpeg'
-    $cache_mock->expects($this->at(0))
-      ->method('getFromCacheOrFresh')
-      ->with(
-        $get_url,
-        'image/jpeg'
-      )
-      ->willThrowException(new WrongImageTypeException());
-    //                ... return a png on second call with 'image/png'
-    $cache_mock->expects($this->at(1))
-      ->method('getFromCacheOrFresh')
-      ->with(
-        $get_url,
-        'image/png',
-        $this->callback(function ($fetchFunction) {
-          return $this->validatePNGFetchFunction($fetchFunction);
-        }),
-        $this->callback(function ($renderFunction) {
-          return $this->validateRenderFunction($renderFunction);
-        })
-      )
-      ->will($this->returnValue($mock_result));
-    // Call and assert
-    $response = ImageApi::getInstance()->getEventImage(123);
-    $this->assertNotEmpty($response);
-    $this->assertSame("image/png", $response->get_content_type());
-  }
-
-  /**
-   * @covers YesTicket\ImageApi
-   */
-  function test_cache_throws_image_exception_with_message()
+  function test_cache_returns_wp_error()
   {
     // Define our http-get endpoint
     $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
@@ -184,51 +78,70 @@ class ImageApiTest extends \WP_UnitTestCase
     $cache_mock->expects($this->once(0))
       ->method('getFromCacheOrFresh')
       ->with($get_url)
-      ->willThrowException(new ImageException('mock does not approve this call'));
-    // Start Captures
-    $didThrow = false;
-    LogCapture::start();
-    try {
-      ImageApi::getInstance()->getEventImage(123);
-    } catch (ImageException $e) {
-      // We expect to get here
-      $didThrow = true;
-      $this->assertStringContainsString('mock does not approve this call', $e->getMessage());
-    } finally {
-      $logged = LogCapture::end_get();
-      $this->assertStringContainsString('mock does not approve this call', $logged);
-      // Safety, if we did not catch an error $didThrow will still be false and the assertion fails.
-      $this->assertTrue($didThrow, 'Expected ImageException');
-    }
+      ->will($this->returnValue(new WP_Error(503)));
+    $result = ImageApi::getInstance()->getEventImage(123);
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertSame($get_url, $result->get_error_data(), "Error data should be the URL to the actual yesticket resource.");
   }
+
+  
 
   /**
    * @covers YesTicket\ImageApi
    */
-  function test_cache_throws_image_exception_no_message()
+  function test_get_function()
   {
     // Define our http-get endpoint
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
-    // Set up mock to throw an ImageException
+    $event_id = 1;
+    $expected_url = "https://www.yesticket.org/dev/picture.php?event=$event_id";
+    // Set up mock to return a png on 'image/png'
     $cache_mock = $this->initMock();
-    $cache_mock->expects($this->once(0))
+    $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
-      ->with($get_url)
-      ->willThrowException(new ImageException());
-    // Start Captures
-    $didThrow = false;
-    LogCapture::start();
-    try {
-      ImageApi::getInstance()->getEventImage(123);
-    } catch (ImageException $e) {
-      // We expect to get here
-      $didThrow = true;
-    } finally {
-      $logged = LogCapture::end_get();
-      $this->assertStringContainsString('Unknown Error', $logged);
-      $this->assertStringContainsString($get_url, $logged, "Should log the URL");
-      // Safety, if we did not catch an error $didThrow will still be false and the assertion fails.
-      $this->assertTrue($didThrow, 'Expected ImageException');
-    }
+      ->with(
+        $expected_url,
+        $this->callback(function ($getFunction) use ($expected_url) {
+          $this->assertLogsAndReturnsWpError($getFunction, $expected_url);
+          return true;
+        })
+      )
+      ->will($this->returnValue(new CachedImage()));
+    ImageApi::getInstance()->getEventImage($event_id);
   }
+
+  
+  /**
+   * Given 'HEAD' Request returns WP_Error
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertLogsAndReturnsWpError($f, $expected_url)
+  {
+    // General Setup
+    $pre_http_request_filter_has_run = false;
+    $external_call_url = '';
+    // Setup MOCK for HTTP call
+    remove_all_filters('pre_http_request');
+    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use (&$pre_http_request_filter_has_run, &$external_call_url) {
+      $pre_http_request_filter_has_run = true;
+      $external_call_url = $url;
+      return array(
+        'headers'     => array(),
+        'cookies'     => array(),
+        'filename'    => null,
+        'response'    => array('code' => WP_Http::OK, 'message' => 'OK'),
+        'status_code' => WP_Http::OK,
+        'success'     => 1,
+        'body'        => '{"a-key": "a-value"}',
+      );
+    }, 10, 3);
+    // Call
+    $result = $f($expected_url);
+    // Check Mock was invoked
+    $this->assertTrue($pre_http_request_filter_has_run, "Should make HTTP call.");
+    $this->assertSame($expected_url, $external_call_url, "Called wrong url");
+  }
+
 }
