@@ -57,15 +57,22 @@ class ImageApi
      * 
      * @param int $event_id
      * 
-     * @return CachedImage|WP_Error image (using cache) or ERROR.
+     * @return CachedImage|WP_Error image (using cache) or ERROR. Error's data will be the resource URL.
      */
     public function getEventImage($event_id)
     {
         $yesTicketImageUrl = $this->getYesTicketUrlOfImage($event_id);
-        return $this->cache->getFromCacheOrFresh($yesTicketImageUrl, function ($get_url) {
+        $image = $this->cache->getFromCacheOrFresh($yesTicketImageUrl, function ($get_url) {
             $content_type = $this->determineContentTypeOfImage($get_url);
+            if (\is_wp_error($content_type)) {
+                return $content_type;
+            }
             return $this->_getEventImage($get_url, $content_type);
         });
+        if (\is_wp_error($image)) {
+            $image->add_data($yesTicketImageUrl);
+        }
+        return $image;
     }
 
     /**

@@ -1,9 +1,10 @@
 <?php
 
-namespace YesTicket;
-
-use \YesTicket\Rest\ImageEndpoint;
+use \ReflectionClass;
+use \ReflectionProperty;
+use \WP_Error;
 use \WP_REST_Server;
+use \YesTicket\Rest\ImageEndpoint;
 
 // As seen in https://torquemag.io/2017/01/testing-api-endpoints/
 class ImageEndpointTest extends \WP_UnitTestCase
@@ -17,7 +18,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
     parent::setUp();
     /** @var WP_REST_Server $wp_rest_server */
     global $wp_rest_server;
-    $this->server = $wp_rest_server = new \WP_REST_Server;
+    $this->server = $wp_rest_server = new WP_REST_Server;
     do_action('rest_api_init');
   }
 
@@ -58,7 +59,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_get_instance()
   {
-    $_class = new \ReflectionClass(ImageEndpoint::class);
+    $_class = new ReflectionClass(ImageEndpoint::class);
     $_instance_prop = $_class->getProperty("instance");
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);
@@ -72,7 +73,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
   private function initMock()
   {
     // Inject Mock into API::$instance
-    $_cache_property = new \ReflectionProperty(ImageEndpoint::class, "api");
+    $_cache_property = new ReflectionProperty(ImageEndpoint::class, "api");
     $_cache_property->setAccessible(true);
     $instance = ImageEndpoint::getInstance();
     $cache_mock = $this->getMockBuilder(ImageApi::class)
@@ -93,7 +94,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
       ->method('getEventImage')
       ->with(123)
       ->will($this->returnValue($mock_result));
-    $request = new \WP_REST_Request('GET', '/yesticket/v1/picture/123');
+    $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     \ob_start();
     $response = @$this->server->dispatch($request);
     $output = \ob_end_clean();
@@ -111,14 +112,14 @@ class ImageEndpointTest extends \WP_UnitTestCase
     $cache_mock->expects($this->once())
       ->method('getEventImage')
       ->with(123)
-      ->willThrowException(new ImageException('my-message', 503));
-    $request = new \WP_REST_Request('GET', '/yesticket/v1/picture/123');
+      ->will($this->returnValue(new WP_Error(503, null, 'https://mock.response')));
+    $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     \ob_start();
     $response = @$this->server->dispatch($request);
     $output = \ob_end_clean();
     $this->assertSame(307, $response->get_status(), "Fallback should be redirect!");
     $headers = $response->get_headers();
-    $this->assertContains('Location: https://www.yesticket.org/dev/picture.php?event=123', $headers, 'Should send a Location Header!');
+    $this->assertContains('Location: https://mock.response', $headers, 'Should send a Location Header!');
   }
 
   /**
@@ -137,7 +138,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_serveImage_already_served_expect_false()
   {
-    $result = new \WP_REST_Response();
+    $result = new WP_REST_Response();
     $result->set_matched_route('/yesticket/v1/picture');
     $this->assertFalse(ImageEndpoint::getInstance()->servePicture(true, $result));
   }
@@ -147,7 +148,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_serveImage_is_error_expect_false()
   {
-    $result = new \WP_REST_Response();
+    $result = new WP_REST_Response();
     $result->set_matched_route('/yesticket/v1/picture');
     $result->set_status(400);
     $this->assertFalse(ImageEndpoint::getInstance()->servePicture(false, $result));
@@ -158,7 +159,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_serveImage_path_not_interesting_expect_false()
   {
-    $result = new \WP_REST_Response();
+    $result = new WP_REST_Response();
     $result->set_matched_route('/other-namespace/v1/picture');
     $this->assertFalse(ImageEndpoint::getInstance()->servePicture(false, $result));
   }
@@ -168,7 +169,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_serveImage_result_not_cached_image_expect_false()
   {
-    $result = new \WP_REST_Response();
+    $result = new WP_REST_Response();
     $result->set_matched_route('/yesticket/v1/picture');
     $result->set_data(array('a property' => 'a string'));
     $this->assertFalse(ImageEndpoint::getInstance()->servePicture(false, $result));
@@ -179,7 +180,7 @@ class ImageEndpointTest extends \WP_UnitTestCase
    */
   function test_serveImage_works()
   {
-    $result = new \WP_REST_Response();
+    $result = new WP_REST_Response();
     $result->set_matched_route('/yesticket/v1/picture');
     $result->set_headers(['some-header: withValue']);
     $result->set_data(getCachedImage('image/jpeg', '\imagejpeg', 100));
