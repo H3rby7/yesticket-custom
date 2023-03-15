@@ -10,9 +10,6 @@ include_once(__DIR__ . "/../utility.php");
 class SettingsTechnicalTest extends \YTP_TranslateTestCase
 {
   
-  /**
-   * @covers YesTicket\Admin\SettingsTechnical
-   */
   function test_render()
   {
     // Init Object

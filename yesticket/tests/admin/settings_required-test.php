@@ -9,9 +9,6 @@ include_once(__DIR__ . "/../utility.php");
 class SettingsRequiredTest extends \YTP_TranslateTestCase
 {
 
-  /**
-   * @covers YesTicket\Admin\SettingsRequired
-   */
   function test_render_necessarySettingsNotSet()
   {
     // Init Object
