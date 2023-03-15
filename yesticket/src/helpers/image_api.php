@@ -2,6 +2,7 @@
 
 namespace YesTicket;
 
+use WP_Error;
 use \YesTicket\ImageCache;
 use \YesTicket\Model\CachedImage;
 
@@ -55,53 +56,79 @@ class ImageApi
      * 
      * @param int $event_id
      * 
-     * @return CachedImage image
-     * 
-     * @throws ImageException if image cannot be loaded.
+     * @return CachedImage|WP_Error image
      */
     public function getEventImage($event_id)
     {
         $yesTicketImageUrl = $this->getYesTicketUrlOfImage($event_id);
-        try {
-            return $this->_getEventImage($yesTicketImageUrl);
-        } catch (ImageException $e) {
-            $msg = $e->getMessage();
-            if (!empty($msg) && \strlen($msg) > 0) {
-                \ytp_info(__FILE__, __LINE__, "Unknown Error: $msg");
-            } else {
-                \ytp_info(__FILE__, __LINE__, "Unknown Error when retrieving image from '$yesTicketImageUrl'");
+
+        return $this->cache->getFromCacheOrFresh($yesTicketImageUrl, function ($yesTicketImageUrl) {
+            $http = new \WP_Http();
+            $result = $http->request($yesTicketImageUrl, array("method" => "HEAD"));
+            if (\is_wp_error($result)) {
+                \ytp_info(__FILE__, __LINE__, $result);
+                return $result;
             }
-            throw $e;
-        }
+            if (!\array_key_exists("response", $result) || !\array_key_exists("headers", $result)) {
+                \ytp_info(__FILE__, __LINE__, "Malformed response for '$yesTicketImageUrl' >> \n" . \print_r($result, true));
+                return new WP_Error(503);
+            }
+            $response = $result["response"];
+            if (!\array_key_exists("code", $response)) {
+                \ytp_info(__FILE__, __LINE__, "Result of call '$yesTicketImageUrl' has no response code. Response is: >> \n" . \print_r($response, true));
+                return new WP_Error(503);
+            }
+            $status_code = $response["code"];
+            if ($status_code != 200) {
+                \ytp_info(__FILE__, __LINE__, "Response code of call '$yesTicketImageUrl' is not 200 [actual: $status_code]");
+                return new WP_Error(503);
+            }
+            $headers = $result["headers"]->getAll();
+            if (!\array_key_exists("content-type", $headers)) {
+                \ytp_info(__FILE__, __LINE__, "Result of call '$yesTicketImageUrl' has no content-type header. Available headers are: >> \n" . \print_r($headers, true));
+                return new WP_Error(503);
+            }
+            $content_type = $headers["content-type"];
+            if (\stripos($content_type, "image") === false) {
+                \ytp_info(__FILE__, __LINE__, "Content-type of resource '$yesTicketImageUrl' is not an image [actual: $content_type]");
+                return new WP_Error(503);
+            }
+            if ($content_type === "image/jpeg" || $content_type === "image/jpg") {
+                $image = \imagecreatefromjpeg($yesTicketImageUrl);
+                if (!$image) {
+                    \ytp_info(__FILE__, __LINE__, "Could not get '$yesTicketImageUrl' [$content_type] from YesTicket.");
+                    return new WP_Error(503);
+                }
+                \ob_start();
+                if (!\imagejpeg($image, null, 100)) {
+                    $msg = \ob_get_clean();
+                    \ytp_info(__FILE__, __LINE__, "Could not render image data as [$content_type] from '$yesTicketImageUrl'. >> $msg");
+                    return new WP_Error(503, $msg);
+                }
+                return new CachedImage($content_type, \ob_get_clean());
+            }
+            if ($content_type === "image/png") {
+                $image = \imagecreatefrompng($yesTicketImageUrl);
+                if (!$image) {
+                    \ytp_info(__FILE__, __LINE__, "Could not get '$yesTicketImageUrl' [$content_type] from YesTicket.");
+                    return new WP_Error(503);
+                }
+                \ob_start();
+                if (!\imagepng($image, null, 0)) {
+                    $msg = \ob_get_clean();
+                    \ytp_info(__FILE__, __LINE__, "Could not render image data as [$content_type] from '$yesTicketImageUrl'. >> $msg");
+                    return new WP_Error(503, $msg);
+                }
+                return new CachedImage($content_type, \ob_get_clean());
+            }
+            \ytp_info(__FILE__, __LINE__, "Unknown content-type [$content_type] found for resource '$yesTicketImageUrl'.");
+            return new WP_Error(503);
+        });
     }
 
-    public function getYesTicketUrlOfImage($event_id) {
+    public function getYesTicketUrlOfImage($event_id)
+    {
         return "https://www.yesticket.org/dev/picture.php?event=" . $event_id;
     }
 
-    /**
-     * Get image from $get_url
-     * Attempt to load as:
-     * 1. JPEG
-     * 2. PNG
-     * then gives up
-     * 
-     * @param string $get_url of the image
-     * 
-     * @return CachedImage image
-     * 
-     * @throws ImageException if image cannot be loaded.
-     */
-    private function _getEventImage($get_url)
-    {
-        try {
-            return $this->cache->getFromCacheOrFresh($get_url, 'image/jpeg', '\imagecreatefromjpeg', function ($image) {
-                return \imagejpeg($image, null, 100);
-            });
-        } catch (WrongImageTypeException $e) {
-            return $this->cache->getFromCacheOrFresh($get_url, 'image/png', '\imagecreatefrompng', function ($image) {
-                return \imagepng($image, null, 0);
-            });
-        }
-    }
 }

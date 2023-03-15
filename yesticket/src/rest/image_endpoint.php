@@ -2,6 +2,11 @@
 
 namespace YesTicket\Rest;
 
+use \WP_Http;
+use \WP_Error;
+use \WP_REST_Server;
+use \WP_REST_Request;
+use \WP_REST_Response;
 use \YesTicket\ImageApi;
 use YesTicket\Model\CachedImage;
 
@@ -95,31 +100,27 @@ class ImageEndpoint
   /**
    * Callback for our registered REST route
    * 
-   * @param \WP_REST_Request $data
+   * @param WP_REST_Request $data
    * 
-   * @return \WP_REST_Response
-   * @return \WP_Error
+   * @return WP_REST_Response
+   * @return WP_Error
    */
   public function handleRequest($data)
   {
-    try {
-      $result = $this->api->getEventImage($data['event_id']);
-      return new \WP_REST_Response($result, \WP_Http::OK, ['Content-Type: ' . $result->get_content_type()]);
-    } catch (\Exception $e) {
-      $msg = $e->getMessage();
-      $code = $e->getCode();
-      \ytp_info(__FILE__, __LINE__, "ERROR code => '$code'; msg => '$msg'");
-      return new \WP_REST_Response(null, \WP_Http::TEMPORARY_REDIRECT, ['Location: ' . $this->api->getYesTicketUrlOfImage($data['event_id'])]);
+    $result = $this->api->getEventImage($data['event_id']);
+    if (empty($result) || \is_wp_error($result)) {
+      return new WP_REST_Response(null, WP_Http::TEMPORARY_REDIRECT, ['Location: ' . $this->api->getYesTicketUrlOfImage($data['event_id'])]);
     }
+    return new WP_REST_Response($result, WP_Http::OK, ['Content-Type: ' . $result->get_content_type()]);
   }
 
   /**
    * Hooked in 'rest_pre_serve_request'
    * 
    * @param boolean $served
-   * @param \WP_REST_Response $result
-   * @param \WP_REST_Request $request
-   * @param \WP_REST_Server $server
+   * @param WP_REST_Response $result
+   * @param WP_REST_Request $request
+   * @param WP_REST_Server $server
    */
   public function servePicture($served, $result)
   {
@@ -131,7 +132,7 @@ class ImageEndpoint
       // Request is not one of ours
       return false;
     }
-    if ($result->get_status() == \WP_Http::TEMPORARY_REDIRECT) {
+    if ($result->get_status() == WP_Http::TEMPORARY_REDIRECT) {
       // We make a temporary redirect as error fallback
       \ytp_info(__FILE__, __LINE__, "Send out temporary redirect");
       ytp_sendHeaders($result);
