@@ -101,7 +101,7 @@ class ImageApiTest extends \WP_UnitTestCase
   private function mockHttpResponse($headers = [], $status_code = 200, $msg = 'OK', $body = '', $success = 1)
   {
     return array(
-      'headers'     => $headers,
+      'headers'     => new Requests_Utility_CaseInsensitiveDictionary($headers),
       'cookies'     => array(),
       'filename'    => null,
       'response'    => array('code' => $status_code, 'message' => $msg),
@@ -133,24 +133,42 @@ class ImageApiTest extends \WP_UnitTestCase
 
   /**
    * @covers YesTicket\ImageApi
+   * 
+   * Uses the Mock's validation possibility to call the function used to get the data.
    */
   function test_get_function()
   {
     // Define our http-get endpoint
     $event_id = 1;
     $expected_url = "https://www.yesticket.org/dev/picture.php?event=$event_id";
-    // Set up mock to return a png on 'image/png'
+    // Make our Mock validation run the passed function.
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
       ->with(
         $expected_url,
         $this->callback(function ($getFunction) use ($expected_url) {
-          $this->assertLogsAndReturnsWpError($getFunction, $expected_url);
+
+
+          // >>>>>>>>>>>>>>>>>>> START actual test calls. <<<<<<<<<<<<<<<<<<<<<<
+          // Error Cases
+          $this->assertionsGivenWpError($getFunction, $expected_url);
+          $this->assertionsGivenNoResponse($getFunction, $expected_url);
+          $this->assertionsGivenNoHeaders($getFunction, $expected_url);
+          $this->assertionsGivenNoResponseCode($getFunction, $expected_url);
+          $this->assertionsGivenBadResponseCode($getFunction, $expected_url);
+          $this->assertionsGivenNoContentTypeHeader($getFunction, $expected_url);
+          $this->assertionsGivenBadContentTypeHeader($getFunction, $expected_url);
+          // Success case
+          $this->assertionsGivenContentTypeGiven($getFunction, $expected_url);
+          // >>>>>>>>>>>>>>>>>>> END actual test calls. <<<<<<<<<<<<<<<<<<<<<<
+
+
           return true;
         })
       )
       ->will($this->returnValue(new CachedImage()));
+    // Start test.
     ImageApi::getInstance()->getEventImage($event_id);
   }
   
@@ -161,7 +179,7 @@ class ImageApiTest extends \WP_UnitTestCase
    * @param callable $f the function
    * @param string $expected_url of the resource
    */
-  private function assertLogsAndReturnsWpError($f, $expected_url)
+  private function assertionsGivenWpError($f, $expected_url)
   {
     $this->_preHttpRequestFilter(new WP_Error());
     // Call
@@ -173,6 +191,146 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertSame($expected_url, ImageApiTest::$external_call_url, "Called wrong url");
     $this->assertTrue(\is_wp_error($result));
     $this->assertStringContainsString("WP_Error", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request returns no 'response'
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenNoResponse($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse();
+    unset($mockResponse['response']);
+    $this->_preHttpRequestFilter($mockResponse);
+    // Call
+    LogCapture::start();
+    $result = $f($expected_url);
+    $logged = LogCapture::end_get();
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
+    $this->assertStringContainsString("Malformed response", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request returns no 'headers'
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenNoHeaders($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse();
+    unset($mockResponse['headers']);
+    $this->_preHttpRequestFilter($mockResponse);
+    // Call
+    LogCapture::start();
+    $result = $f($expected_url);
+    $logged = LogCapture::end_get();
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
+    $this->assertStringContainsString("Malformed response", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request returns no 'response[code]'
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenNoResponseCode($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse();
+    unset($mockResponse['response']['code']);
+    $this->_preHttpRequestFilter($mockResponse);
+    // Call
+    LogCapture::start();
+    $result = $f($expected_url);
+    $logged = LogCapture::end_get();
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
+    $this->assertStringContainsString("has no response code", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request response[code] is not 200
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenBadResponseCode($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse([], 500);
+    $this->_preHttpRequestFilter($mockResponse);
+    // Call
+    LogCapture::start();
+    $result = $f($expected_url);
+    $logged = LogCapture::end_get();
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
+    $this->assertStringContainsString("Response code", $logged, "Should log the error.");
+    $this->assertStringContainsString("not 200", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request returns no 'content-type' header
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenNoContentTypeHeader($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse(array("another" => "header"));
+    $this->_preHttpRequestFilter($mockResponse);
+    // Call
+    LogCapture::start();
+    $result = $f($expected_url);
+    $logged = LogCapture::end_get();
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
+    $this->assertStringContainsString("no content-type header", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request returns bad 'content-type' header
+   * Expect: WP_Error
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenBadContentTypeHeader($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse(array("content-type" => "not-an-imag3"));
+    $this->_preHttpRequestFilter($mockResponse);
+    // Call
+    LogCapture::start();
+    $result = $f($expected_url);
+    $logged = LogCapture::end_get();
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
+    $this->assertStringContainsString("Content-type", $logged, "Should log the error.");
+    $this->assertStringContainsString("not an image", $logged, "Should log the error.");
+  }
+  
+  /**
+   * Given 'HEAD' Request returns successful and with a 'content-type' header
+   * Expect: the content-type
+   * 
+   * @param callable $f the function
+   * @param string $expected_url of the resource
+   */
+  private function assertionsGivenContentTypeGiven($f, $expected_url)
+  {
+    $mockResponse = $this->mockHttpResponse(array("content-type" => "image/jpeg"));
+    $this->_preHttpRequestFilter($mockResponse);
+    $result = $f($expected_url);
+    $this->assertSame('image/jpeg', $result);
   }
 
 }
