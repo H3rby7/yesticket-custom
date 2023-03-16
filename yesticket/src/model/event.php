@@ -7,7 +7,7 @@ class Event
   /**
    * @var string
    */
-  private const YESTICKET_FALLBACK_IMAGE_URL = "https://www.yesticket.org/dev/picture.php?event=0";
+  private const YESTICKET_FALLBACK_IMAGE_URL = "https://www.yesticket.org/picture.php?event=0";
 
   /**
    * 'Convert' PHP StdClass into Event obj.

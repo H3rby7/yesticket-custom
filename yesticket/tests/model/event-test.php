@@ -116,7 +116,7 @@ class EventTest extends \WP_UnitTestCase
   function test_getPictureUrl_null()
   {
     $input = new Event(true);
-    $this->assertSame("https://www.yesticket.org/dev/picture.php?event=0", $input->getPictureUrl());
+    $this->assertSame("https://www.yesticket.org/picture.php?event=0", $input->getPictureUrl());
   }
 
   /**
@@ -126,7 +126,7 @@ class EventTest extends \WP_UnitTestCase
   {
     $input = new Event(true);
     $input->event_picture_url = "not an url";
-    $this->assertSame("https://www.yesticket.org/dev/picture.php?event=0", $input->getPictureUrl());
+    $this->assertSame("https://www.yesticket.org/picture.php?event=0", $input->getPictureUrl());
   }
 
   /**
@@ -135,8 +135,8 @@ class EventTest extends \WP_UnitTestCase
   function test_getPictureUrl_no_event_id_given()
   {
     $input = new Event(true);
-    $input->event_picture_url = "https://www.yesticket.org/dev/picture.php?not=given";
-    $this->assertSame("https://www.yesticket.org/dev/picture.php?not=given", $input->getPictureUrl());
+    $input->event_picture_url = "https://www.yesticket.org/picture.php?not=given";
+    $this->assertSame("https://www.yesticket.org/picture.php?not=given", $input->getPictureUrl());
   }
 
   /**

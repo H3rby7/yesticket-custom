@@ -52,7 +52,7 @@ class ImageApiTest extends \WP_UnitTestCase
   function test_cache_returns_cachedImage()
   {
     // Define our http-get endpoint
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    $get_url = "https://www.yesticket.org/picture.php?event=123";
     // Set up mock to return a png on 'image/png'
     $mock_result = new CachedImage();
     $cache_mock = $this->initMock();
@@ -75,7 +75,7 @@ class ImageApiTest extends \WP_UnitTestCase
   function test_cache_returns_wp_error()
   {
     // Define our http-get endpoint
-    $get_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    $get_url = "https://www.yesticket.org/picture.php?event=123";
     // Set up mock to throw an ImageException
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once(0))
@@ -140,7 +140,7 @@ class ImageApiTest extends \WP_UnitTestCase
   {
     // Define our http-get endpoint
     $event_id = 1;
-    $expected_url = "https://www.yesticket.org/dev/picture.php?event=$event_id";
+    $expected_url = "https://www.yesticket.org/picture.php?event=$event_id";
     // Make our Mock validation run the passed function.
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())

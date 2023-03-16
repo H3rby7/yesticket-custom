@@ -188,6 +188,6 @@ class ImageApi
      */
     public function getYesTicketUrlOfImage($event_id)
     {
-        return "https://www.yesticket.org/dev/picture.php?event=" . $event_id;
+        return "https://www.yesticket.org/picture.php?event=" . $event_id;
     }
 }
