@@ -9,6 +9,9 @@ use YesTicket\Model\CachedImage;
 class ImageApiTest extends \WP_UnitTestCase
 {
 
+  static $pre_http_request_filter_has_run = false;
+  static $external_call_url = '';
+
   function test_class_exists()
   {
     $this->assertTrue(\class_exists("YesTicket\ImageApi"));
@@ -84,7 +87,49 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertSame($get_url, $result->get_error_data(), "Error data should be the URL to the actual yesticket resource.");
   }
 
-  
+  /**
+   * Construct a response to be used with filter
+   * @see https://developer.wordpress.org/reference/hooks/pre_http_request/
+   * 
+   * @param array $headers of MockResponse
+   * @param int $status_code of MockResponse
+   * @param string $msg of MockResponse
+   * @param string $body of MockResponse
+   * @param int $success of MockResponse
+   * @return array the MockResponse
+   */
+  private function mockHttpResponse($headers = [], $status_code = 200, $msg = 'OK', $body = '', $success = 1)
+  {
+    return array(
+      'headers'     => $headers,
+      'cookies'     => array(),
+      'filename'    => null,
+      'response'    => array('code' => $status_code, 'message' => $msg),
+      'status_code' => $status_code,
+      'success'     => $success,
+      'body'        => $body,
+    );
+  }
+
+  /**
+   * Add Http Filter to mock WP_Http requests using short-circuit
+   * 
+   * @param array|WP_Error $mockResponse the MockResponse
+   * 
+   * @see https://developer.wordpress.org/reference/hooks/pre_http_request/
+   */
+  private function _preHttpRequestFilter($mockResponse)
+  {
+    ImageApiTest::$pre_http_request_filter_has_run = false;
+    ImageApiTest::$external_call_url = '';
+    // Setup MOCK for HTTP call
+    remove_all_filters('pre_http_request', 69);
+    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use ($mockResponse) {
+      ImageApiTest::$pre_http_request_filter_has_run = true;
+      ImageApiTest::$external_call_url = $url;
+      return $mockResponse;
+    }, 69, 3);
+  }
 
   /**
    * @covers YesTicket\ImageApi
@@ -108,7 +153,6 @@ class ImageApiTest extends \WP_UnitTestCase
       ->will($this->returnValue(new CachedImage()));
     ImageApi::getInstance()->getEventImage($event_id);
   }
-
   
   /**
    * Given 'HEAD' Request returns WP_Error
@@ -119,29 +163,16 @@ class ImageApiTest extends \WP_UnitTestCase
    */
   private function assertLogsAndReturnsWpError($f, $expected_url)
   {
-    // General Setup
-    $pre_http_request_filter_has_run = false;
-    $external_call_url = '';
-    // Setup MOCK for HTTP call
-    remove_all_filters('pre_http_request');
-    \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) use (&$pre_http_request_filter_has_run, &$external_call_url) {
-      $pre_http_request_filter_has_run = true;
-      $external_call_url = $url;
-      return array(
-        'headers'     => array(),
-        'cookies'     => array(),
-        'filename'    => null,
-        'response'    => array('code' => WP_Http::OK, 'message' => 'OK'),
-        'status_code' => WP_Http::OK,
-        'success'     => 1,
-        'body'        => '{"a-key": "a-value"}',
-      );
-    }, 10, 3);
+    $this->_preHttpRequestFilter(new WP_Error());
     // Call
+    LogCapture::start();
     $result = $f($expected_url);
+    $logged = LogCapture::end_get();
     // Check Mock was invoked
-    $this->assertTrue($pre_http_request_filter_has_run, "Should make HTTP call.");
-    $this->assertSame($expected_url, $external_call_url, "Called wrong url");
+    $this->assertTrue(ImageApiTest::$pre_http_request_filter_has_run, "Should make HTTP call.");
+    $this->assertSame($expected_url, ImageApiTest::$external_call_url, "Called wrong url");
+    $this->assertTrue(\is_wp_error($result));
+    $this->assertStringContainsString("WP_Error", $logged, "Should log the error.");
   }
 
 }
