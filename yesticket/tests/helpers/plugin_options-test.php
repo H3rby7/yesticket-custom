@@ -1,8 +1,8 @@
 <?php
 
-namespace YesTicket;
+use \YesTicket\PluginOptions;
 
-class PluginOptionsTest extends \WP_UnitTestCase
+class PluginOptionsTest extends WP_UnitTestCase
 {
   private const SETTINGS_REQUIRED_KEY = 'yesticket_settings_required';
   private const SETTINGS_TECHNICAL_KEY = 'yesticket_settings_technical';
@@ -17,7 +17,7 @@ class PluginOptionsTest extends \WP_UnitTestCase
    */
   function test_get_instance()
   {
-    $_class = new \ReflectionClass(PluginOptions::class);
+    $_class = new ReflectionClass(PluginOptions::class);
     $_instance_prop = $_class->getProperty("instance");
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);

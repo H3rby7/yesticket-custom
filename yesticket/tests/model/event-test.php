@@ -1,10 +1,8 @@
 <?php
 
-namespace YesTicket\Model;
+use \YesTicket\Model\Event;
 
-use YesTicket\Model\Event;
-
-class EventTest extends \WP_UnitTestCase
+class EventTest extends WP_UnitTestCase
 {
   function test_class_exists()
   {

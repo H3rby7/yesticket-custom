@@ -1,10 +1,8 @@
 <?php
 
-namespace YesTicket\Model;
+use \YesTicket\Model\CachedImage;
 
-use YesTicket\Model\CachedImage;
-
-class CachedImageTest extends \WP_UnitTestCase
+class CachedImageTest extends WP_UnitTestCase
 {
   function test_class_exists()
   {

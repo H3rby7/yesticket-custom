@@ -2,7 +2,7 @@
 
 namespace YesTicket\Admin;
 
-use YesTicket\PluginOptions;
+use \YesTicket\PluginOptions;
 
 include_once("examples_page.php");
 include_once("settings_page.php");

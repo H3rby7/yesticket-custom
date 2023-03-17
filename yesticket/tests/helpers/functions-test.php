@@ -2,7 +2,7 @@
 
 include_once(__DIR__ . "/../utility.php");
 
-class HelperFunctionsTest extends \WP_UnitTestCase
+class HelperFunctionsTest extends WP_UnitTestCase
 {
 
   /**
@@ -77,9 +77,9 @@ class HelperFunctionsTest extends \WP_UnitTestCase
    */
   function test_ytp_info_string_expecting_string()
   {
-    \LogCapture::start();
+    LogCapture::start();
     \ytp_info("/path/to/plugins/yesticket/src/file.php", 14, "my log content");
-    $result = \LogCapture::end_get();
+    $result = LogCapture::end_get();
     $this->assertStringContainsString("[YESTICKET]/file.php@14: my log content", $result);
   }
 
@@ -88,9 +88,9 @@ class HelperFunctionsTest extends \WP_UnitTestCase
    */
   function test_ytp_info_array_expecting_serialized_string()
   {
-    \LogCapture::start();
+    LogCapture::start();
     \ytp_info("/path/to/plugins/yesticket/src/other/file.php", 69, array("my-key" => "my-value"));
-    $result = \LogCapture::end_get();
+    $result = LogCapture::end_get();
     $this->assertStringContainsString('[YESTICKET]/other/file.php@69: Array', $result);
     $this->assertStringContainsString('[my-key] => my-value', $result);
   }
@@ -100,9 +100,9 @@ class HelperFunctionsTest extends \WP_UnitTestCase
    */
   function test_ytp_debug_string_expecting_string()
   {
-    \LogCapture::start();
+    LogCapture::start();
     \ytp_debug(".../yesticket/src/file.php", 161, "less important message");
-    $result = \LogCapture::end_get();
+    $result = LogCapture::end_get();
     if (true === WP_DEBUG) {
       $this->assertStringContainsString("[YESTICKET]/file.php@161: less important message", $result);
     } else {
@@ -115,9 +115,9 @@ class HelperFunctionsTest extends \WP_UnitTestCase
    */
   function test_ytp_debug_array_expecting_serialized_string()
   {
-    \LogCapture::start();
+    LogCapture::start();
     \ytp_debug(".../yesticket/src/file.php", 161, array("is-this-important?" => "less so."));
-    $result = \LogCapture::end_get();
+    $result = LogCapture::end_get();
     if (true === WP_DEBUG) {
       $this->assertStringContainsString('[YESTICKET]/file.php@161: Array', $result);
       $this->assertStringContainsString('[is-this-important?] => less so.', $result);

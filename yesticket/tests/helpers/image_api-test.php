@@ -3,10 +3,10 @@
 
 use \YesTicket\ImageApi;
 use \YesTicket\ImageCache;
-use YesTicket\Model\CachedImage;
+use \YesTicket\Model\CachedImage;
 
 // As seen in https://torquemag.io/2017/01/testing-api-endpoints/
-class ImageApiTest extends \WP_UnitTestCase
+class ImageApiTest extends WP_UnitTestCase
 {
 
   static $pre_http_request_filter_has_run = false;

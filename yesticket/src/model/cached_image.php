@@ -2,7 +2,9 @@
 
 namespace YesTicket\Model;
 
-class CachedImage implements \Serializable
+use \Serializable;
+
+class CachedImage implements Serializable
 {
   /**
    * @var string

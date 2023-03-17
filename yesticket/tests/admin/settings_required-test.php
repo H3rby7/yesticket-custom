@@ -2,12 +2,14 @@
 
 namespace YesTicket;
 
-use YesTicket\Admin\SettingsRequired;
-use YesTicket\PluginOptions;
+use \SimpleXMLElement;
+use \YTP_TranslateTestCase;
+use \YesTicket\Admin\SettingsRequired;
+use \YesTicket\PluginOptions;
 
 include_once(__DIR__ . "/../utility.php");
 
-class SettingsRequiredTest extends \YTP_TranslateTestCase
+class SettingsRequiredTest extends YTP_TranslateTestCase
 {
 
   function test_render_necessarySettingsNotSet()
@@ -67,7 +69,7 @@ class SettingsRequiredTest extends \YTP_TranslateTestCase
   }
 
   /**
-   * @param \SimpleXMLElement $formXML the form
+   * @param SimpleXMLElement $formXML the form
    * @param string $referer to expect for _wp_http_referer input field.
    */
   function makeFormAssertions($formXML, $referer)

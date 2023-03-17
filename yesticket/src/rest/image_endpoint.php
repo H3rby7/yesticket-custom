@@ -8,7 +8,7 @@ use \WP_REST_Server;
 use \WP_REST_Request;
 use \WP_REST_Response;
 use \YesTicket\ImageApi;
-use YesTicket\Model\CachedImage;
+use \YesTicket\Model\CachedImage;
 
 include_once(__DIR__ . "/../helpers/image_api.php");
 include_once(__DIR__ . "/../helpers/functions.php");

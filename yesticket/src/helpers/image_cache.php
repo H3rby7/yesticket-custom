@@ -2,9 +2,9 @@
 
 namespace YesTicket;
 
-use WP_Error;
+use \WP_Error;
 use \YesTicket\Cache;
-use YesTicket\Model\CachedImage;
+use \YesTicket\Model\CachedImage;
 
 include_once("cache.php");
 include_once("functions.php");

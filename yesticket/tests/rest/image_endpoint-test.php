@@ -1,13 +1,10 @@
 <?php
 
-use \ReflectionClass;
-use \ReflectionProperty;
-use \WP_Error;
-use \WP_REST_Server;
+use \YesTicket\ImageApi;
 use \YesTicket\Rest\ImageEndpoint;
 
 // As seen in https://torquemag.io/2017/01/testing-api-endpoints/
-class ImageEndpointTest extends \WP_UnitTestCase
+class ImageEndpointTest extends WP_UnitTestCase
 {
   /**
    * @var WP_REST_Server

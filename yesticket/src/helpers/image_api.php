@@ -3,6 +3,7 @@
 namespace YesTicket;
 
 use \WP_Error;
+use \WP_Http;
 use \GdImage;
 use \YesTicket\ImageCache;
 use \YesTicket\Model\CachedImage;
@@ -100,7 +101,7 @@ class ImageApi
    */
   public function determineContentTypeOfImage($yesTicketImageUrl)
   {
-    $http = new \WP_Http();
+    $http = new WP_Http();
     $result = $http->request($yesTicketImageUrl, array("method" => "HEAD"));
     if (\is_wp_error($result)) {
       \ytp_info(__FILE__, __LINE__, $result);

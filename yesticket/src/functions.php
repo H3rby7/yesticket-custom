@@ -1,5 +1,7 @@
 <?php
 
+use \YesTicket\Slides;
+
 include_once("admin/plugin_menu.php");
 include_once("helpers/functions.php");
 include_once("rest/image_endpoint.php");
@@ -23,7 +25,7 @@ function ytp_init_callback()
   if (!\wp_register_style('yesticket-admin', $pathToAdminCss, false, 'all')) {
     \ytp_info(__FILE__, __LINE__, "Could not register_style: 'yesticket-admin' from '$pathToAdminCss'.");
   }
-  \YesTicket\Slides::registerFiles();
+  Slides::registerFiles();
   if (!\load_plugin_textdomain('yesticket', false, $pathToLanguages) && true === WP_DEBUG) {
     $locale = get_locale();
     \ytp_debug(__FILE__, __LINE__, "Could not load 'yesticket' translations for $locale from '$pathToLanguages'. Falling back to 'en'.");

@@ -2,9 +2,11 @@
 
 namespace YesTicket;
 
+use \YTP_TemplateTestCase;
+
 include_once(__DIR__ . "/../../utility.php");
 
-class TemplateAdminHeaderTest extends \YTP_TemplateTestCase
+class TemplateAdminHeaderTest extends YTP_TemplateTestCase
 {
 
   function test_html()

@@ -2,9 +2,8 @@
 
 namespace YesTicket\Admin;
 
-use YesTicket\Cache;
-use YesTicket\ImageCache;
-use YesTicket\PluginOptions;
+use \YesTicket\Cache;
+use \YesTicket\PluginOptions;
 
 include_once("settings_section.php");
 include_once(__DIR__ . "/../helpers/cache.php");

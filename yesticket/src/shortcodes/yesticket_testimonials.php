@@ -2,6 +2,8 @@
 
 namespace YesTicket;
 
+use \Exception;
+
 include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
@@ -90,7 +92,7 @@ class Testimonials extends Templater
       } else {
         $content .= $this->render_testimonials($result, $att);
       }
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       $content .= __($e->getMessage(), 'yesticket');
     }
     $content .= "</div>\n";

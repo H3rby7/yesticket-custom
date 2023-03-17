@@ -1,10 +1,8 @@
 <?php
 
-namespace YesTicket;
+use \YesTicket\RestCache;
 
-use WP_Http;
-
-class RestCacheTest extends \WP_UnitTestCase
+class RestCacheTest extends WP_UnitTestCase
 {
   function test_class_exists()
   {
@@ -16,7 +14,7 @@ class RestCacheTest extends \WP_UnitTestCase
    */
   function test_get_instance()
   {
-    $_class = new \ReflectionClass(RestCache::class);
+    $_class = new ReflectionClass(RestCache::class);
     $_instance_prop = $_class->getProperty("instance");
     $_instance_prop->setAccessible(true);
     $_instance_prop->setValue(NULL);
@@ -100,7 +98,7 @@ class RestCacheTest extends \WP_UnitTestCase
         'body'        => '',
       );
     }, 10, 3);
-    $this->expectException(\RuntimeException::class);
+    $this->expectException(RuntimeException::class);
     RestCache::getInstance()->getFromCacheOrFresh($get_url);
   }
 
@@ -115,9 +113,9 @@ class RestCacheTest extends \WP_UnitTestCase
     // Setup MOCK for HTTP call
     remove_all_filters('pre_http_request');
     \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
-      return new \WP_Error(503, 'something went wrong');
+      return new WP_Error(503, 'something went wrong');
     }, 10, 3);
-    $this->expectException(\RuntimeException::class);
+    $this->expectException(RuntimeException::class);
     $this->expectExceptionMessage('something went wrong');
     $this->expectExceptionCode(503);
     RestCache::getInstance()->getFromCacheOrFresh($get_url);
@@ -134,9 +132,9 @@ class RestCacheTest extends \WP_UnitTestCase
     // Setup MOCK for HTTP call
     remove_all_filters('pre_http_request');
     \add_filter('pre_http_request', function ($preempt, $parsed_args, $url) {
-      return new \WP_Error('http_request_failed', 'something went wrong');
+      return new WP_Error('http_request_failed', 'something went wrong');
     }, 10, 3);
-    $this->expectException(\RuntimeException::class);
+    $this->expectException(RuntimeException::class);
     $this->expectExceptionMessage('something went wrong');
     $this->expectExceptionMessage('http_request_failed');
     $this->expectExceptionCode(0);

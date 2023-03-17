@@ -1,8 +1,5 @@
 <?php
 
-namespace YesTicket;
-
-use LogCapture;
 use \YesTicket\Cache;
 
 include_once(__DIR__ . "/../utility.php");
@@ -22,7 +19,7 @@ class TestCacheImpl extends Cache
   }
 }
 
-class CacheTest extends \WP_UnitTestCase
+class CacheTest extends WP_UnitTestCase
 {
   private $testClass;
 

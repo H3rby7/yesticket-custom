@@ -1,11 +1,11 @@
 <?php
 
-namespace YesTicket;
-
-use \InvalidArgumentException;
+use \YesTicket\Api;
 use \YesTicket\PluginOptions;
+use \YesTicket\RestCache;
+use \YesTicket\Model\Event;
 
-class ApiTest extends \WP_UnitTestCase
+class ApiTest extends WP_UnitTestCase
 {
   function test_class_exists()
   {
@@ -29,7 +29,7 @@ class ApiTest extends \WP_UnitTestCase
   private function initMock($expected_url, $mock_result)
   {
     // Inject Mock into API::$instance
-    $_cache_property = new \ReflectionProperty(Api::class, "cache");
+    $_cache_property = new ReflectionProperty(Api::class, "cache");
     $_cache_property->setAccessible(true);
     $instance = Api::getInstance();
     $cache_mock = $this->getMockBuilder(RestCache::class)
@@ -65,9 +65,9 @@ class ApiTest extends \WP_UnitTestCase
   {
     // Generate a Mock Result
     $event_uses_cache = \filter_var(\ini_get('allow_url_fopen'), \FILTER_VALIDATE_BOOLEAN);
-    $evt1 = new \YesTicket\Model\Event($event_uses_cache);
+    $evt1 = new Event($event_uses_cache);
     $evt1->event_name = "My mocked event #1";
-    $evt2 = new \YesTicket\Model\Event($event_uses_cache);
+    $evt2 = new Event($event_uses_cache);
     $evt2->event_name = "My other mocked event (#2)";
     $mock_result = array($evt1, $evt2);
 
@@ -116,9 +116,9 @@ class ApiTest extends \WP_UnitTestCase
     $this->run_events("https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1", array('api-version' => '1'), '1', 'key1', 'en_EN');
 
     // Generate a Mock Result
-    $evt1 = new \YesTicket\Model\Event(false);
+    $evt1 = new Event(false);
     $evt1->event_name = "My mocked event #1";
-    $evt2 = new \YesTicket\Model\Event(false);
+    $evt2 = new Event(false);
     $evt2->event_name = "My other mocked event (#2)";
     $mock_result = array($evt1, $evt2);
 

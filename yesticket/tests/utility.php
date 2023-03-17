@@ -81,7 +81,7 @@ class LogCapture
 /**
  * Utility class providing some html testing capabilities
  */
-abstract class YTP_HtmlTestCase extends \WP_UnitTestCase
+abstract class YTP_HtmlTestCase extends WP_UnitTestCase
 {
   /**
    * Apply small transformations on perfectly fine HTML5 code so we can validate it with SimpleXML class.
@@ -132,7 +132,7 @@ abstract class YTP_HtmlTestCase extends \WP_UnitTestCase
 /**
  * Utility class to test with translations
  */
-abstract class YTP_TranslateTestCase extends \YTP_HtmlTestCase
+abstract class YTP_TranslateTestCase extends YTP_HtmlTestCase
 {
   protected $assertedTranslations = [];
   protected $actualTranslations = [];
@@ -168,7 +168,7 @@ abstract class YTP_TranslateTestCase extends \YTP_HtmlTestCase
 /**
  * Utility class to test our templates.
  */
-abstract class YTP_TemplateTestCase extends \YTP_TranslateTestCase
+abstract class YTP_TemplateTestCase extends YTP_TranslateTestCase
 {
   /**
    * Return the template for a template test.

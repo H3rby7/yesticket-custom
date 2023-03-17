@@ -1,4 +1,7 @@
 <?php
+
+use \WP_REST_Response;
+
 if (!function_exists('is_countable')) {
   // For PHP < 7.3.0
   /**
@@ -209,7 +212,7 @@ function strpos_findLast_viaRegex($haystack, $needlePattern)
  * Send out the headers defined in $response, if headers have not been sent.
  * TODO: maybe '@runInSeparateProcess' helps to test headers?
  * 
- * @param \WP_REST_Response $response
+ * @param WP_REST_Response $response
  */
 function ytp_sendHeaders($response)
 {

@@ -2,12 +2,13 @@
 
 namespace YesTicket;
 
-use SimpleXMLElement;
-use YesTicket\Admin\SettingsTechnical;
+use \SimpleXMLElement;
+use \YTP_TranslateTestCase;
+use \YesTicket\Admin\SettingsTechnical;
 
 include_once(__DIR__ . "/../utility.php");
 
-class SettingsTechnicalTest extends \YTP_TranslateTestCase
+class SettingsTechnicalTest extends YTP_TranslateTestCase
 {
 
   function test_render()
