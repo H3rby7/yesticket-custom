@@ -122,6 +122,7 @@ class CacheTest extends WP_UnitTestCase
   {
     // Set-Up DB mock
     $wpdb_mock = $this->getMockBuilder(wpdb::class)
+      ->disableOriginalConstructor()
       ->setMethods(['get_results'])
       ->getMock();
     $wpdb_mock->expects($this->once())
@@ -144,6 +145,7 @@ class CacheTest extends WP_UnitTestCase
     \delete_transient('test-A');
     // Set-Up DB mock
     $wpdb_mock = $this->getMockBuilder(wpdb::class)
+      ->disableOriginalConstructor()
       ->setMethods(['get_results'])
       ->getMock();
     $wpdb_mock->expects($this->once())
