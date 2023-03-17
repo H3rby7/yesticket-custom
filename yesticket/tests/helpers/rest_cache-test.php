@@ -1,6 +1,7 @@
 <?php
 
 namespace YesTicket;
+
 use WP_Http;
 
 class RestCacheTest extends \WP_UnitTestCase

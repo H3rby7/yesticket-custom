@@ -1,6 +1,7 @@
 <?php
 
 namespace YesTicket\Admin;
+
 use YesTicket\PluginOptions;
 
 include_once("settings_section.php");

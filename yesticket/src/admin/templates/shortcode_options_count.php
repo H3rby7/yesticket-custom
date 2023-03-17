@@ -1,4 +1,4 @@
-<h4><?php _e("Count", "yesticket");?></h4>
+<h4><?php _e("Count", "yesticket"); ?></h4>
 <p><?php _e("Using <b>count</b> you can define the maximum amount of elements.", "yesticket"); ?></p>
 <p class="ml-3"><span class="ytp-code">count="6"</span>
   <?php

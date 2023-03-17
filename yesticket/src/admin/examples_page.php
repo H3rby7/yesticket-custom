@@ -1,6 +1,7 @@
 <?php
 
 namespace YesTicket\Admin;
+
 use YesTicket\Templater;
 
 include_once(__DIR__ . "/../helpers/functions.php");

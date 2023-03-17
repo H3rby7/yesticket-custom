@@ -1,4 +1,4 @@
-<h4><?php _e("Type", "yesticket");?></h4>
+<h4><?php _e("Type", "yesticket"); ?></h4>
 <?php
 if ($type === 'events') {
 ?>

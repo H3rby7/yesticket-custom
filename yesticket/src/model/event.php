@@ -223,7 +223,8 @@ class Event
     return $this->event_picture_url;
   }
 
-  private function pictureUrlFromId($id) {
+  private function pictureUrlFromId($id)
+  {
     return \get_site_url(null, "wp-json/yesticket/v1/picture/$id");
   }
 }

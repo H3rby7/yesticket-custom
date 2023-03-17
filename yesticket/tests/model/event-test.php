@@ -164,7 +164,8 @@ class EventTest extends \WP_UnitTestCase
     \update_option('siteurl', $oldSite);
   }
 
-  private function getInputEventJson() {
+  private function getInputEventJson()
+  {
     return <<<EOD
     {
       "event_name":"Event #42, Best Show Everrr",
@@ -201,5 +202,4 @@ class EventTest extends \WP_UnitTestCase
     }
 EOD;
   }
-
 }

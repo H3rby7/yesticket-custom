@@ -1,16 +1,17 @@
 <?php
+
 /**
  * PHPUnit bootstrap file
  *
  * @package YesTicket
  */
 
-$_tests_dir = \getenv( 'WP_TESTS_DIR' );
-if ( ! $_tests_dir ) {
+$_tests_dir = \getenv('WP_TESTS_DIR');
+if (!$_tests_dir) {
 	$_tests_dir = '/tmp/wordpress-tests-lib';
 }
-$_composer_vendor = \getenv( 'COMPOSER_VENDOR_DIR' );
-if ( ! $_composer_vendor ) {
+$_composer_vendor = \getenv('COMPOSER_VENDOR_DIR');
+if (!$_composer_vendor) {
 	$_composer_vendor = '/tmp/vendor';
 }
 
@@ -26,10 +27,11 @@ require_once $_composer_vendor . '/autoload.php';
 /**
  * Manually load the plugin being tested.
  */
-function _manually_load_plugin() {
-	require \dirname( \dirname( __FILE__ ) ) . '/yesticket.php';
+function _manually_load_plugin()
+{
+	require \dirname(\dirname(__FILE__)) . '/yesticket.php';
 }
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+tests_add_filter('muplugins_loaded', '_manually_load_plugin');
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';

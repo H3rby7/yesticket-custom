@@ -55,8 +55,8 @@ class PluginOptionsTest extends \WP_UnitTestCase
 
     // Make sure we start clear
     global $new_allowed_options, $wp_registered_settings;
-    unset( $new_allowed_options[ $opt_group ] );
-    unset( $wp_registered_settings[ $this::SETTINGS_TECHNICAL_KEY ] );
+    unset($new_allowed_options[$opt_group]);
+    unset($wp_registered_settings[$this::SETTINGS_TECHNICAL_KEY]);
 
     // Register Settings
     $this->register_settings_technical($opt_group);
@@ -86,8 +86,8 @@ class PluginOptionsTest extends \WP_UnitTestCase
 
     // Make sure we start clear
     global $new_allowed_options, $wp_registered_settings;
-    unset( $new_allowed_options[ $opt_group ] );
-    unset( $wp_registered_settings[ $this::SETTINGS_REQUIRED_KEY ] );
+    unset($new_allowed_options[$opt_group]);
+    unset($wp_registered_settings[$this::SETTINGS_REQUIRED_KEY]);
 
     // Register Settings
     $this->register_settings_required($opt_group);

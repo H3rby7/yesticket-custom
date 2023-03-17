@@ -1,6 +1,7 @@
 <?php
 
 namespace YesTicket\Admin;
+
 use YesTicket\PluginOptions;
 
 include_once("examples_page.php");
@@ -52,7 +53,6 @@ class PluginMenu
   {
     return 'yesticket';
   }
-
 }
 
 /**

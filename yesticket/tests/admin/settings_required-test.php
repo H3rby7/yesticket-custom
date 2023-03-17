@@ -31,7 +31,7 @@ class SettingsRequiredTest extends \YTP_TranslateTestCase
     $this->makeFormAssertions($formXML, "wp-admin/admin.php?page=yesticket");
   }
 
-  
+
   function test_render_necessarySettingsPresent()
   {
     // Init Object

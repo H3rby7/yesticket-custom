@@ -1,6 +1,7 @@
 <?php
 
 namespace YesTicket\Admin;
+
 use YesTicket\Cache;
 use YesTicket\ImageCache;
 use YesTicket\PluginOptions;

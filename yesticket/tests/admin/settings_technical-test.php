@@ -9,7 +9,7 @@ include_once(__DIR__ . "/../utility.php");
 
 class SettingsTechnicalTest extends \YTP_TranslateTestCase
 {
-  
+
   function test_render()
   {
     // Init Object

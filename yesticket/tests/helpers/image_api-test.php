@@ -183,7 +183,7 @@ class ImageApiTest extends \WP_UnitTestCase
     // Start test.
     ImageApi::getInstance()->getEventImage($event_id);
   }
-  
+
   /**
    * Given 'HEAD' Request returns WP_Error
    * Expect: WP_Error
@@ -205,7 +205,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertTrue(\is_wp_error($result));
     $this->assertStringContainsString("WP_Error", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' Request returns no 'response'
    * Expect: WP_Error
@@ -227,7 +227,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("Malformed response", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' Request returns no 'headers'
    * Expect: WP_Error
@@ -249,7 +249,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("Malformed response", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' Request returns no 'response[code]'
    * Expect: WP_Error
@@ -271,7 +271,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("has no response code", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' Request response[code] is not 200
    * Expect: WP_Error
@@ -293,7 +293,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString("Response code", $logged, "Should log the error.");
     $this->assertStringContainsString("not 200", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' Request returns no 'content-type' header
    * Expect: WP_Error
@@ -314,7 +314,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("no content-type header", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' Request returns bad 'content-type' header
    * Expect: WP_Error
@@ -336,7 +336,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString("Content-type", $logged, "Should log the error.");
     $this->assertStringContainsString("not an image", $logged, "Should log the error.");
   }
-  
+
   /**
    * Given 'HEAD' says it's a JPEG; Image file is bad
    * Expect: WP_Error
@@ -356,7 +356,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("image/jpeg", $logged, "Log should contain the content-type.");
   }
-  
+
   /**
    * Given 'HEAD' says it's a PNG; Image file is bad
    * Expect: WP_Error
@@ -376,7 +376,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("image/png", $logged, "Log should contain the content-type.");
   }
-  
+
   /**
    * Given 'HEAD' says it's a JPEG; is actually PNG Image
    * Expect: WP_Error
@@ -396,7 +396,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString($expected_url, $logged, "Log should contain the URL.");
     $this->assertStringContainsString("image/jpeg", $logged, "Log should contain the content-type.");
   }
-  
+
   /**
    * Given 'HEAD' says it's a JPEG; is actually PNG Image
    * Expect: WP_Error
@@ -417,7 +417,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertStringContainsString("Could not render image", $logged);
     $this->assertStringContainsString("image/jpeg", $logged, "Log should contain the content-type.");
   }
-  
+
   /**
    * Given 'HEAD' says it's a JPEG; is actually PNG Image
    * Expect: CachedImage
@@ -435,7 +435,7 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertSame("image/jpeg", $result->get_content_type());
     $this->assertNotEmpty($result->get_image_data());
   }
-  
+
   /**
    * Given 'HEAD' says it's a JPEG; is actually PNG Image
    * Expect: CachedImage
@@ -453,5 +453,4 @@ class ImageApiTest extends \WP_UnitTestCase
     $this->assertSame("image/png", $result->get_content_type());
     $this->assertNotEmpty($result->get_image_data());
   }
-
 }

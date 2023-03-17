@@ -16,5 +16,4 @@ class TemplateAdminHeaderTest extends \YTP_TemplateTestCase
     $this->assertNotEmpty($asXML->xpath("//h1"), "Should have <h1> element.");
     $this->assertNotEmpty($asXML->xpath("//p"), "Should have <p> element");
   }
-
 }

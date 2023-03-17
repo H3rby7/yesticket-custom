@@ -1,4 +1,5 @@
 <?php
+
 namespace YesTicket;
 
 include_once("functions.php");

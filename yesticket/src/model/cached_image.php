@@ -26,19 +26,23 @@ class CachedImage implements \Serializable
     }
   }
 
-  public function set_image_data($image_data) {
+  public function set_image_data($image_data)
+  {
     $this->image_data = \base64_encode($image_data);
   }
 
-  public function get_image_data() {
+  public function get_image_data()
+  {
     return \base64_decode($this->image_data);
   }
 
-  public function set_content_type($content_type) {
+  public function set_content_type($content_type)
+  {
     $this->content_type = $content_type;
   }
 
-  public function get_content_type() {
+  public function get_content_type()
+  {
     return $this->content_type;
   }
 

@@ -67,6 +67,6 @@
 </p>
 <?php
 
-$this->render_template('shortcode_options_type', array("type"=>"events"));
+$this->render_template('shortcode_options_type', array("type" => "events"));
 $this->render_template('shortcode_options_count');
 $this->render_template('shortcode_options_grep');
