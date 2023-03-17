@@ -96,7 +96,9 @@ class ImageEndpointTest extends WP_UnitTestCase
     $response = @$this->server->dispatch($request);
     $output = \ob_end_clean();
     $this->assertSame(200, $response->get_status());
-    $this->assertContains('Content-Type: image/jpeg', $response->get_headers());
+    $headers = $response->get_headers();
+    $this->assertArrayHasKey('Content-Type', $headers, 'Should send a Content-Type Header!');
+    $this->assertSame('image/jpeg', $headers['Content-Type']);
     $this->assertNotEmpty($output);
   }
 
@@ -113,10 +115,11 @@ class ImageEndpointTest extends WP_UnitTestCase
     $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     \ob_start();
     $response = @$this->server->dispatch($request);
-    $output = \ob_end_clean();
+    \ob_end_clean();
     $this->assertSame(307, $response->get_status(), "Fallback should be redirect!");
     $headers = $response->get_headers();
-    $this->assertContains('Location: https://mock.response', $headers, 'Should send a Location Header!');
+    $this->assertArrayHasKey('Location', $headers, 'Should send a Location Header!');
+    $this->assertSame('https://mock.response', $headers['Location']);
   }
 
   /**
@@ -179,7 +182,7 @@ class ImageEndpointTest extends WP_UnitTestCase
   {
     $result = new WP_REST_Response();
     $result->set_matched_route('/yesticket/v1/picture');
-    $result->set_headers(['some-header: withValue']);
+    $result->set_headers(array ('some-header' => 'withValue'));
     $result->set_data(getCachedImage('image/jpeg', '\imagejpeg', 100));
     \ob_start();
     $this->assertTrue(ImageEndpoint::getInstance()->servePicture(false, $result));
