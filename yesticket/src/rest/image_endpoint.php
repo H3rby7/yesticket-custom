@@ -111,7 +111,7 @@ class ImageEndpoint
     if (\is_wp_error($result)) {
       return new WP_REST_Response(null, WP_Http::TEMPORARY_REDIRECT, ['Location: ' . $result->get_error_data()]);
     }
-    return new WP_REST_Response($result, WP_Http::OK, ['Content-Type: ' . $result->get_content_type()]);
+    return new WP_REST_Response($result, WP_Http::OK, array('Content-Type' => $result->get_content_type()));
   }
 
   /**
