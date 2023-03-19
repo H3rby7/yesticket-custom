@@ -51,22 +51,50 @@ class ImageApiTest extends WP_UnitTestCase
    */
   function test_cache_returns_cachedImage()
   {
-    // Define our http-get endpoint
-    $get_url = "https://www.yesticket.org/picture.php?event=123";
+    // Define expected yesticket URL for image
+    $expected_url = "https://www.yesticket.org/picture.php?event=123";
     // Set up mock to return a png on 'image/png'
     $mock_result = new CachedImage();
     $cache_mock = $this->initMock();
     $cache_mock->expects($this->once())
       ->method('getFromCacheOrFresh')
       ->with(
-        $get_url,
+        $expected_url,
         $this->callback(function ($getFunction) {
           return \is_callable($getFunction);
         })
       )
       ->will($this->returnValue($mock_result));
     // Call and assert
-    $this->assertSame($mock_result, ImageApi::getInstance()->getEventImage(123));
+    $request = new WP_REST_Request();
+    $request['event_id'] = 123;
+    $this->assertSame($mock_result, ImageApi::getInstance()->getEventImage($request));
+  }
+
+  /**
+   * @covers YesTicket\ImageApi
+   */
+  function test_cache_returns_cachedImage_dev()
+  {
+    // Define expected yesticket URL for image
+    $expected_url = "https://www.yesticket.org/dev/picture.php?event=123";
+    // Set up mock to return a png on 'image/png'
+    $mock_result = new CachedImage();
+    $cache_mock = $this->initMock();
+    $cache_mock->expects($this->once())
+      ->method('getFromCacheOrFresh')
+      ->with(
+        $expected_url,
+        $this->callback(function ($getFunction) {
+          return \is_callable($getFunction);
+        })
+      )
+      ->will($this->returnValue($mock_result));
+    // Call and assert
+    $request = new WP_REST_Request();
+    $request['event_id'] = 123;
+    $request['env'] = 'dev';
+    $this->assertSame($mock_result, ImageApi::getInstance()->getEventImage($request));
   }
 
   /**
@@ -82,7 +110,9 @@ class ImageApiTest extends WP_UnitTestCase
       ->method('getFromCacheOrFresh')
       ->with($get_url)
       ->will($this->returnValue(new WP_Error(503)));
-    $result = ImageApi::getInstance()->getEventImage(123);
+    $request = new WP_REST_Request();
+    $request['event_id'] = 123;
+    $result = ImageApi::getInstance()->getEventImage($request);
     $this->assertTrue(\is_wp_error($result));
     $this->assertSame($get_url, $result->get_error_data(), "Error data should be the URL to the actual yesticket resource.");
   }
@@ -181,7 +211,9 @@ class ImageApiTest extends WP_UnitTestCase
       )
       ->will($this->returnValue(new CachedImage()));
     // Start test.
-    ImageApi::getInstance()->getEventImage($event_id);
+    $request = new WP_REST_Request();
+    $request['event_id'] = $event_id;
+    ImageApi::getInstance()->getEventImage($request);
   }
 
   /**

@@ -56,13 +56,13 @@ class ImageApi
   /**
    * Get Event image from yesticket for given $event_id
    * 
-   * @param int $event_id
+   * @param WP_REST_Request $wp_request
    * 
    * @return CachedImage|WP_Error image (using cache) or ERROR. Error's data will be the resource URL.
    */
-  public function getEventImage($event_id)
+  public function getEventImage($wp_request)
   {
-    $yesTicketImageUrl = $this->getYesTicketUrlOfImage($event_id);
+    $yesTicketImageUrl = $this->getYesTicketUrlOfImage($wp_request);
     $image = $this->cache->getFromCacheOrFresh($yesTicketImageUrl, function ($get_url) {
       return $this->_getEventImage($get_url);
     });
@@ -182,13 +182,19 @@ class ImageApi
   }
 
   /**
-   * Takes an event_id and returns the corresponding event image's URL on the yesticket.org platform
+   * Returns the corresponding event image's URL on the yesticket.org platform
    * 
-   * @param number $event_id ID of event
+   * @param WP_REST_Request $wp_request
+   * 
    * @return string image url
    */
-  public function getYesTicketUrlOfImage($event_id)
+  public function getYesTicketUrlOfImage($wp_request)
   {
-    return "https://www.yesticket.org/picture.php?event=" . $event_id;
+    $event_id = $wp_request['event_id'];
+    $env_add = '';
+    if (!empty($wp_request['env']) && $wp_request['env'] == 'dev') {
+      $env_add = '/dev';
+    }
+    return "https://www.yesticket.org$env_add/picture.php?event=" . $event_id;
   }
 }

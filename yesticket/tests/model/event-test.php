@@ -96,57 +96,85 @@ class EventTest extends WP_UnitTestCase
   {
     $input = new Event(true);
     $input->event_id = 1;
+    // ENV = '' [meaning PROD]
     $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/1', $input->getPictureUrl());
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/1?env=dev', $input->getPictureUrl());
   }
   /**
    * @covers YesTicket\Model\Event
    */
-  function test_getPictureUrl_take_from_event_picture_url()
+  function test_getPictureUrl_no_eventId_but_pictureUrl_contains_id()
   {
     $input = new Event(true);
+    // ENV = '' [meaning PROD]
     $input->event_picture_url = 'https://www.yesticket.org/picture.php?event=69';
     $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/69', $input->getPictureUrl());
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $input->event_picture_url = 'https://www.yesticket.org/dev/picture.php?event=69';
+    $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/69?env=dev', $input->getPictureUrl());
   }
 
   /**
    * @covers YesTicket\Model\Event
    */
-  function test_getPictureUrl_null()
+  function test_getPictureUrl_no_eventId_and_pictureUrl_is_null()
   {
     $input = new Event(true);
-    $this->assertSame("https://www.yesticket.org/picture.php?event=0", $input->getPictureUrl());
+    // ENV = '' [meaning PROD]
+    $this->assertSame("http://example.org/wp-json/yesticket/v1/picture/0", $input->getPictureUrl());
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/0?env=dev', $input->getPictureUrl());
   }
 
   /**
    * @covers YesTicket\Model\Event
    */
-  function test_getPictureUrl_malformed()
+  function test_getPictureUrl_no_eventId_and_pictureUrl_malformed()
   {
     $input = new Event(true);
     $input->event_picture_url = "not an url";
-    $this->assertSame("https://www.yesticket.org/picture.php?event=0", $input->getPictureUrl());
+    // ENV = '' [meaning PROD]
+    $this->assertSame("http://example.org/wp-json/yesticket/v1/picture/0", $input->getPictureUrl());
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $this->assertSame('http://example.org/wp-json/yesticket/v1/picture/0?env=dev', $input->getPictureUrl());
   }
 
   /**
    * @covers YesTicket\Model\Event
    */
-  function test_getPictureUrl_no_event_id_given()
+  function test_getPictureUrl_no_eventId_and_pictureUrl_contains_no_id()
   {
     $input = new Event(true);
+    // ENV = '' [meaning PROD]
     $input->event_picture_url = "https://www.yesticket.org/picture.php?not=given";
     $this->assertSame("https://www.yesticket.org/picture.php?not=given", $input->getPictureUrl());
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $input->event_picture_url = "https://www.yesticket.org/dev/picture.php?not=given";
+    $this->assertSame('https://www.yesticket.org/dev/picture.php?not=given', $input->getPictureUrl());
   }
 
   /**
    * @covers YesTicket\Model\Event
    */
-  function test_getPictureUrl_no_fopen_allowed()
+  function test_getPictureUrl_eventId_given_but_no_fopen_allowed()
   {
     $input = new Event(false);
     $input->event_id = 1;
+    // ENV = '' [meaning PROD]
     $input->event_picture_url = 'https://www.yesticket.org/picture.php?event=69';
-    $result =  $input->getPictureUrl();
+    $result = $input->getPictureUrl();
     $this->assertSame('https://www.yesticket.org/picture.php?event=69', $result);
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $input->event_picture_url = 'https://www.yesticket.org/dev/picture.php?event=69';
+    $result = $input->getPictureUrl();
+    $this->assertSame('https://www.yesticket.org/dev/picture.php?event=69', $result);
   }
 
   /**
@@ -158,7 +186,11 @@ class EventTest extends WP_UnitTestCase
     \update_option('siteurl', 'http://another-example.org/subpath');
     $input = new Event(true);
     $input->event_id = 1;
+    // ENV = '' [meaning PROD]
     $this->assertSame('http://another-example.org/subpath/wp-json/yesticket/v1/picture/1', $input->getPictureUrl());
+    // ENV = 'dev'
+    $input->setYesticketEnvironment('dev');
+    $this->assertSame('http://another-example.org/subpath/wp-json/yesticket/v1/picture/1?env=dev', $input->getPictureUrl());
     \update_option('siteurl', $oldSite);
   }
 

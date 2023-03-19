@@ -100,14 +100,14 @@ class ImageEndpoint
   /**
    * Callback for our registered REST route
    * 
-   * @param WP_REST_Request $data
+   * @param WP_REST_Request $wp_request
    * 
    * @return WP_REST_Response
    * @return WP_Error
    */
-  public function handleRequest($data)
+  public function handleRequest($wp_request)
   {
-    $result = $this->api->getEventImage($data['event_id']);
+    $result = $this->api->getEventImage($wp_request);
     if (\is_wp_error($result)) {
       return new WP_REST_Response(null, WP_Http::TEMPORARY_REDIRECT, array('Location' => $result->get_error_data()));
     }
