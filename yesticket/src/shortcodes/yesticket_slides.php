@@ -46,7 +46,7 @@ class Slides extends EventUsingShortcode
     return \shortcode_atts(array(
       'type' => 'all',
       'env' => 'prod',
-      'count' => '10',
+      'count' => 100,
       'grep' => NULL,
       'teaser-length' => '250',
       'ms-per-slide' => '10000',

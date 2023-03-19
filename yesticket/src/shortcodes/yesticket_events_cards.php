@@ -35,6 +35,13 @@ class EventsCards extends EventUsingShortcode
     parent::__construct();
   }
 
+  protected function shortCodeArgs($atts)
+  {
+    $att = parent::shortCodeArgs($atts);
+    $att['details'] = 'no';
+    return $att;
+  }
+
   function render_contents($result, $att)
   {
     $content = "";

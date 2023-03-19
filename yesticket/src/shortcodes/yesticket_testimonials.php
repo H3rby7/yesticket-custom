@@ -22,7 +22,7 @@ function shortcode_testimonials($atts)
     'organizer' => NULL,
     'key' => NULL,
     'type' => 'all',
-    'count' => '9',
+    'count' => 100,
     'design' => 'basic',
     'details' => 'no',
   ), $atts);

@@ -36,6 +36,13 @@ class Events extends EventUsingShortcode
     parent::__construct();
   }
 
+  protected function shortCodeArgs($atts)
+  {
+    $att = parent::shortCodeArgs($atts);
+    $att['count'] = 9;
+    return $att;
+  }
+
   function render_contents($result, $att)
   {
     $content = "";

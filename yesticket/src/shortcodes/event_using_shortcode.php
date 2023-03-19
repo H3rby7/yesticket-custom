@@ -50,17 +50,14 @@ abstract class EventUsingShortcode extends Templater
    */
   protected function shortCodeArgs($atts)
   {
-    // List all 'att' here, eventhough some 'att' are only used by some shortcodes
     return \shortcode_atts(array(
       'env' => NULL,
       'api-version' => NULL,
       'organizer' => NULL,
       'key' => NULL,
       'type' => 'all',
-      'count' => 9,
+      'count' => 100,
       'theme' => 'light',
-      'details' => 'no',
-      'ticketlink' => 'no',
       'grep' => NULL,
     ), $atts);
   }

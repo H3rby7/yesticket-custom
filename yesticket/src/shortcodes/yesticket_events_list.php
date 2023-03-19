@@ -35,6 +35,13 @@ class EventsList extends EventUsingShortcode
     parent::__construct();
   }
 
+  protected function shortCodeArgs($atts)
+  {
+    $att = parent::shortCodeArgs($atts);
+    $att['ticketlink'] = 'no';
+    return $att;
+  }
+
   function render_contents($result, $att)
   {
     $content = "<ol>\n";
