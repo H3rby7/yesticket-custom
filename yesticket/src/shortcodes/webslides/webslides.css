@@ -264,8 +264,7 @@ Vertically and horizontally centered
   z-index: 130000;}
 
 #ytp-slides {
-  --ytp--color--primary: white;
-  --ytp--color--contrast: black;
+  /* DEFAULTS for '--ytp--color--primary' and '--ytp--color--contrast' are set via inline Styles during PHP rendering */
   background-color: var(--ytp--color--primary);
   color: var(--ytp--color--contrast);
   position: fixed;
