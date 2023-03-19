@@ -93,7 +93,6 @@ class ImageEndpoint
       // is not a whole number (e.G. 32.5 = true; 32 = false)
       return false;
     }
-    // \header('Content-Type: image/jpeg', true);
     return true;
   }
 
@@ -135,7 +134,7 @@ class ImageEndpoint
     if ($result->get_status() == WP_Http::TEMPORARY_REDIRECT) {
       // We make a temporary redirect as error fallback
       \ytp_info(__FILE__, __LINE__, "Send out temporary redirect");
-      ytp_sendHeaders($result);
+      \ytp_sendHeaders($result);
       return true;
     }
     if (!($result->get_data() instanceof CachedImage)) {
@@ -144,7 +143,7 @@ class ImageEndpoint
       return false;
     }
     // Data is a CachedImage, continue as planned.
-    ytp_sendHeaders($result);
+    \ytp_sendHeaders($result);
     echo $result->get_data()->get_image_data();
     return true;
   }
