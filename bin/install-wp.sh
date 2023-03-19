@@ -97,7 +97,7 @@ function createExampleShortCodePageEventsList() {
   echo "Creating example page for [yesticket_events_list]" >&2
   read -r -d '' CONTENT << EOM
     <!-- wp:shortcode -->
-    [yesticket_events_list env="dev" type="all"]
+    [yesticket_events_list env="dev" type="all" ticketlink="yes"]
     <!-- /wp:shortcode -->
 EOM
   examplePage 'ytp_events_list' 'Events List' "$CONTENT"
