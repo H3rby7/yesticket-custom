@@ -2,12 +2,10 @@
 
 namespace YesTicket\Model;
 
-class Event
+include_once("environment_aware_class.php");
+
+class Event extends EnvironmentAware
 {
-  /**
-   * @var string
-   */
-  private const YESTICKET_FALLBACK_IMAGE_URL = "https://www.yesticket.org/picture.php?event=0";
 
   /**
    * 'Convert' PHP StdClass into Event obj.
@@ -30,7 +28,7 @@ class Event
     return $Obj;
   }
 
-  public function __construct($use_cache)
+  public function __construct($use_cache = true, $yesticket_env = '')
   {
     $this->use_cache = $use_cache;
   }
@@ -202,29 +200,38 @@ class Event
   public function getPictureUrl()
   {
     if (!$this->use_cache) {
+      // Not using cache
       return $this->event_picture_url;
     }
     if (!empty($this->event_id)) {
+      // Using cache, returning a link using our cache
       return $this->pictureUrlFromId($this->event_id);
     }
     if (empty($this->event_picture_url)) {
-      // Does not have an own image?!
-      return Event::YESTICKET_FALLBACK_IMAGE_URL;
+      // No event_id and no event_picture_url; using fallback (iamge 0)!
+      return $this->pictureUrlFromId(0);
     }
-    // Fallback, extract ID from 'event_picture_url' if possible
+    // Fallback if we have an 'event_picture_url', we extract the ID (if possible)
     $query = \parse_url($this->event_picture_url, \PHP_URL_QUERY);
     if (!$query) {
-      return Event::YESTICKET_FALLBACK_IMAGE_URL;
+      // Could not parse the URL, better use fallback (image 0)!
+      return $this->pictureUrlFromId(0);
     }
     \preg_match('/event=(?<id>\d+)/', $query, $matches);
     if (\array_key_exists('id', $matches)) {
+      // Could find an ID in the event_picture_url, returning a link using our cache
       return $this->pictureUrlFromId($matches['id']);
     }
+    // Could not find an ID in the URL, just returning the original event_picture_url
     return $this->event_picture_url;
   }
 
   private function pictureUrlFromId($id)
   {
-    return \get_site_url(null, "wp-json/yesticket/v1/picture/$id");
+    $env_add = '';
+    if ($this->isDevEnvironment()) {
+      $env_add = '?env=dev';
+    }
+    return \get_site_url(null, "wp-json/yesticket/v1/picture/${id}${env_add}");
   }
 }

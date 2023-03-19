@@ -87,11 +87,11 @@ class ImageEndpointTest extends WP_UnitTestCase
   {
     $mock_result = getCachedImage('image/jpeg', '\imagejpeg');
     $cache_mock = $this->initMock();
+    $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     $cache_mock->expects($this->once())
       ->method('getEventImage')
-      ->with(123)
+      ->with($request)
       ->will($this->returnValue($mock_result));
-    $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     \ob_start();
     $response = @$this->server->dispatch($request);
     $output = \ob_end_clean();
@@ -108,11 +108,11 @@ class ImageEndpointTest extends WP_UnitTestCase
   function test_handleRequest_given_exception_expect_redirect()
   {
     $cache_mock = $this->initMock();
+    $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     $cache_mock->expects($this->once())
       ->method('getEventImage')
-      ->with(123)
+      ->with($request)
       ->will($this->returnValue(new WP_Error(503, null, 'https://mock.response')));
-    $request = new WP_REST_Request('GET', '/yesticket/v1/picture/123');
     \ob_start();
     $response = @$this->server->dispatch($request);
     \ob_end_clean();

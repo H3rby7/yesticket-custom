@@ -217,7 +217,13 @@ class Api
   {
     $apiCall = $this->buildUrl($att, "events");
     $json = $this->cache->getFromCacheOrFresh($apiCall);
-    return \array_map('\Yesticket\Model\Event::fromStdClass', \json_decode($json, false));
+    $event_list = \array_map('\Yesticket\Model\Event::fromStdClass', \json_decode($json, false));
+    if ($this->isDevEnv($att)) {
+      $event_list = \array_map(function($event) {
+        return $event->setYesticketEnvironment('dev');
+      }, $event_list);
+    }
+    return $event_list;
   }
 
   /**
@@ -268,10 +274,7 @@ class Api
   private function buildUrl($att, $type)
   {
     // Check to add 'env' path to API call
-    $env_add = "";
-    if (!empty($att["env"]) && $att["env"] == 'dev') {
-      $env_add = "/dev";
-    }
+    $env_add = $this->isDevEnv($att) ? "/dev" : "";
 
     $api_endpoint = $this->getApiEndpoint($att, $type);
 
@@ -281,6 +284,10 @@ class Api
     // Add query parameters
     $get_url .= $this->buildQueryParams($att);
     return $get_url;
+  }
+
+  private function isDevEnv($att) {
+    return !empty($att["env"]) && $att["env"] == 'dev';
   }
 
   /**

@@ -106,15 +106,36 @@ class ApiTest extends WP_UnitTestCase
     $this->run_events("$base_uri?lang=de&organizer=1&key=key1", array(), '1', 'key1', 'de_DE');
     // Different organizer & key
     $this->run_events("$base_uri?lang=en&organizer=2&key=keyof2", array('organizer' => '2', 'key' => 'keyof2'), '1', 'key1', 'en_EN');
-    // env = dev
-    $this->run_events("https://www.yesticket.org/dev/api/v2/events.php?lang=en&organizer=1&key=key1", array('env' => 'dev'), '1', 'key1', 'en_EN');
     // count = 50
     $this->run_events("$base_uri?count=50&lang=en&organizer=1&key=key1", array('count' => '50'), '1', 'key1', 'en_EN');
     // type = all
     $this->run_events("$base_uri?type=all&lang=en&organizer=1&key=key1", array('type' => 'all'), '1', 'key1', 'en_EN');
     // api-version = 1
     $this->run_events("https://www.yesticket.org/api/events-endpoint.php?lang=en&organizer=1&key=key1", array('api-version' => '1'), '1', 'key1', 'en_EN');
+  }
 
+  /**
+   * @covers YesTicket\Api
+   */
+  function test_getEvents_dev()
+  {
+    $base_uri = 'https://www.yesticket.org/dev/api/v2/events.php';
+    // Generate a Mock Result
+    $evt1 = new Event(false);
+    $evt1->event_name = "My mocked event #1";
+
+    $this->prepare("$base_uri?lang=en&organizer=1&key=key1", [$evt1], '1', 'key1', 'en_EN');
+    $result = Api::getInstance()->getEvents(array('env' => 'dev'));
+    $this->assertCount(1, $result);
+    $this->assertTrue($result[0]->isDevEnvironment());
+  }
+
+  /**
+   * @covers YesTicket\Api
+   */
+  function test_getEvents_grep()
+  {
+    $base_uri = 'https://www.yesticket.org/api/v2/events.php';
     // Generate a Mock Result
     $evt1 = new Event(false);
     $evt1->event_name = "My mocked event #1";
