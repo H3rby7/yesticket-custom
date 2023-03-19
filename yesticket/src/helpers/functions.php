@@ -1,7 +1,5 @@
 <?php
 
-use \WP_REST_Response;
-
 if (!function_exists('is_countable')) {
   // For PHP < 7.3.0
   /**
