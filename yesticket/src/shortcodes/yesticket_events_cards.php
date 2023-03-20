@@ -20,7 +20,7 @@ class EventsCards extends EventUsingShortcode
   static public function getInstance()
   {
     if (!isset(EventsCards::$instance)) {
-      EventsCards::$instance = new EventsCards();
+      EventsCards::$instance = new EventsCards(Api::getInstance());
     }
     return EventsCards::$instance;
   }
@@ -30,9 +30,9 @@ class EventsCards extends EventUsingShortcode
   }
 
   protected $cssClass = 'ytp-event-cards';
-  public function __construct()
+  public function __construct($api)
   {
-    parent::__construct();
+    parent::__construct($api);
   }
 
   protected function shortCodeArgs($atts)
