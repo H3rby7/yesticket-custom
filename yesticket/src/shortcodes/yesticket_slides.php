@@ -56,7 +56,7 @@ class Slides extends EventUsingShortcode
       'welcome-1' => __('welcome to our', "yesticket"),
       'welcome-2' => __('improv theatre show', "yesticket"),
       'welcome-3' => __('where everything is made up', "yesticket"),
-    ), $atts);
+    ), $atts, 'yesticket_slides');
   }
 
   public function __construct()

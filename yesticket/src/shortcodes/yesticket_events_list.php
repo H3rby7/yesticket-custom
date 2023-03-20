@@ -37,9 +37,9 @@ class EventsList extends EventUsingShortcode
 
   protected function shortCodeArgs($atts)
   {
-    $att = parent::shortCodeArgs($atts);
-    $att['ticketlink'] = 'no';
-    return $att;
+    $pairs = parent::shortCodeArgs($atts);
+    $pairs['ticketlink'] = 'no';
+    return \shortcode_atts($pairs, $atts, 'yesticket_events_list');
   }
 
   function render_contents($result, $att)

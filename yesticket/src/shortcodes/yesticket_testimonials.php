@@ -25,7 +25,7 @@ function shortcode_testimonials($atts)
     'count' => 100,
     'design' => 'basic',
     'details' => 'no',
-  ), $atts);
+  ), $atts, 'yesticket_testimonials');
   return Testimonials::getInstance()->get($att);
 }
 

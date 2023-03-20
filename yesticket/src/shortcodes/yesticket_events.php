@@ -38,9 +38,9 @@ class Events extends EventUsingShortcode
 
   protected function shortCodeArgs($atts)
   {
-    $att = parent::shortCodeArgs($atts);
-    $att['count'] = 9;
-    return $att;
+    $pairs = parent::shortCodeArgs($atts);
+    $pairs['details'] = 'no';
+    return \shortcode_atts($pairs, $atts, 'yesticket_events');
   }
 
   function render_contents($result, $att)
