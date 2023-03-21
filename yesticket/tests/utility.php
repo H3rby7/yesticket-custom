@@ -127,6 +127,36 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
     }
     return $asXML;
   }
+
+  /**
+   * Assert that the $xml element has the given $expected_class
+   * 
+   * @param string $expected_class
+   * @param SimpleXMLElement $xml
+   */
+  function assertHtmlHasClass($expected_class, $xml) {
+    $this->assertStringContainsString($expected_class, $xml->attributes()['class'], "Expected element to have class '${expected_class}'.");
+  }
+
+  /**
+   * Assert that the $xml element contains the given $expected_text
+   * 
+   * @param string $expected_text
+   * @param SimpleXMLElement $xml
+   */
+  function assertHtmlContainsText($expected_text, $xml) {
+    $this->assertStringContainsString($expected_text, $xml->asXML(), "Expected element to have contain text '${expected_text}'.");
+  }
+
+  /**
+   * Assert that the $xml element contains the given $expected_text
+   * 
+   * @param string $undesired
+   * @param SimpleXMLElement $xml
+   */
+  function assertHtmlDoesNotContainText($undesired, $xml) {
+    $this->assertStringNotContainsString($undesired, $xml->asXML(), "Expected element to NOT contain text '${undesired}'.");
+  }
 }
 
 /**
@@ -150,11 +180,17 @@ abstract class YTP_TranslateTestCase extends YTP_HtmlTestCase
   }
 
   /**
-   * Set up expected translations
+   * Set up expected translations. Call before translations are run.
+   * 
+   * @param string $expectedInput ['msgid' as used for .po files]
+   * @param string $domain to get the translations from
+   * 
+   * @return string $expectedInput for convenience.
    */
   public function expectTranslate($expectedInput, $domain = 'yesticket')
   {
     $this->assertedTranslations[] = array('text' => $expectedInput, 'domain' => $domain);
+    return $expectedInput;
   }
 
   public function assert_post_conditions(): void

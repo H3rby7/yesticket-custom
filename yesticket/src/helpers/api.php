@@ -177,7 +177,7 @@ class Api
    * 
    * @param mixed $att of shortcode
    * 
-   * @return mixed the events
+   * @return array of @see \YesTicket\Model\Event
    */
   public function getEvents($att)
   {
