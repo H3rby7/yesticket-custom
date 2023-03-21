@@ -139,6 +139,16 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
   }
 
   /**
+   * Assert that the $xml element does NOT have the given $undesired_class
+   * 
+   * @param string $undesired_class
+   * @param SimpleXMLElement $xml
+   */
+  function assertHtmlDoesNotHaveClass($undesired_class, $xml) {
+    $this->assertStringNotContainsString($undesired_class, $xml->attributes()['class'], "Expected element to NOT have class '${undesired_class}'.");
+  }
+
+  /**
    * Assert that the $xml element contains the given $expected_text
    * 
    * @param string $expected_text

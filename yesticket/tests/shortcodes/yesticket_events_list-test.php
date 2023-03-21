@@ -76,6 +76,7 @@ class EventsListTest extends YTP_TranslateTestCase
     $asXML = $this->validateAndGetAsXml($result);
     $this->assertHtmlHasClass('ytp-event-list', $asXML);
     $this->assertHtmlHasClass('ytp-light', $asXML);
+    $this->assertHtmlDoesNotHaveClass('ytp-dark', $asXML);
     // Is an 'OL'
     $this->assertNotEmpty($asXML->xpath('ol'), "Should contain an ordered list.");
     // Check on our item.
@@ -89,6 +90,34 @@ class EventsListTest extends YTP_TranslateTestCase
     $this->assertHtmlContainsText("My amazing stage 2161", $item, "Item should show the location_name.");
     $this->assertHtmlContainsText("Paradise City 2161", $item, "Item should show the location_city.");
     $this->assertHtmlDoesNotContainText("https://link-to-my-tickets", $item, "Item should not have ticketlink, as \$att ticketlink is 'no'.");
+  }
+
+  function test_shortcode_with_type_ticketlink_and_theme()
+  {
+    // Mock API
+    $api_mock = $this->initMock();
+    $mock_result = [$this->createMockEvent()];
+    $api_mock->expects($this->once())
+      ->method('getEvents')
+      // Expect call using the defaults
+      ->with($this->identicalTo(array('env' => NULL, 'api-version' => NULL, 'organizer' => NULL, 'key' => NULL, 'type' => 'performance', 'count' => 100, 'theme' => 'dark', 'grep' => NULL, 'ticketlink' => 'yes',)))
+      ->will($this->returnValue($mock_result));
+    // Translations
+    $this->expectTranslate("Tickets");
+    $this->expectTranslate("F j, Y");
+    $this->expectTranslate("g:i A");
+    // Call shortcode
+    $result = EventsList::shortCode(array('type' => 'performance','theme' => 'dark','ticketlink' => 'yes',));
+    $this->assertNotEmpty($result);
+    // produces valid HTML
+    $asXML = $this->validateAndGetAsXml($result);
+    $this->assertHtmlHasClass('ytp-event-list', $asXML);
+    $this->assertHtmlHasClass('ytp-dark', $asXML);
+    $this->assertHtmlDoesNotHaveClass('ytp-light', $asXML);
+    // Check on our item.
+    $item = $asXML->xpath('ol/li')[0];
+    $this->assertHtmlDoesNotContainText("Performance", $item, "Item should NOT display its type, because \$att type is 'performance'.");
+    $this->assertHtmlContainsText("https://link-to-my-tickets", $item, "Item should display the ticketlink, because \$att ticketlink is 'yes'.");
   }
 
   /**
