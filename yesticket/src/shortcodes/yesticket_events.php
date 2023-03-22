@@ -21,7 +21,7 @@ class Events extends EventUsingShortcode
   static public function getInstance()
   {
     if (!isset(Events::$instance)) {
-      Events::$instance = new Events();
+      Events::$instance = new Events(Api::getInstance());
     }
     return Events::$instance;
   }
@@ -31,9 +31,9 @@ class Events extends EventUsingShortcode
   }
 
   protected $cssClass = 'ytp-events';
-  public function __construct()
+  public function __construct($api)
   {
-    parent::__construct();
+    parent::__construct($api);
   }
 
   protected function shortCodeArgs($atts)

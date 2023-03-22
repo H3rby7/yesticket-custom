@@ -8,26 +8,7 @@ include_once(__DIR__ . "/../helpers/api.php");
 include_once(__DIR__ . "/../helpers/functions.php");
 include_once(__DIR__ . "/../helpers/templater.php");
 
-\add_shortcode('yesticket_testimonials', 'YesTicket\shortcode_testimonials');
-
-/**
- * Callback to add_shortcode [yesticket_testimonials]
- */
-function shortcode_testimonials($atts)
-{
-  \wp_enqueue_style('yesticket');
-  $att = \shortcode_atts(array(
-    'env' => NULL,
-    'api-version' => NULL,
-    'organizer' => NULL,
-    'key' => NULL,
-    'type' => 'all',
-    'count' => 100,
-    'design' => 'basic',
-    'details' => 'no',
-  ), $atts, 'yesticket_testimonials');
-  return Testimonials::getInstance()->get($att);
-}
+\add_shortcode('yesticket_testimonials', array('YesTicket\Testimonials', 'shortCode'));
 
 /**
  * Shortcode [yesticket_testimonials]
@@ -49,14 +30,46 @@ class Testimonials extends Templater
   static public function getInstance()
   {
     if (!isset(Testimonials::$instance)) {
-      Testimonials::$instance = new Testimonials();
+      Testimonials::$instance = new Testimonials(Api::getInstance());
     }
     return Testimonials::$instance;
   }
 
-  protected function __construct()
+  /**
+   * Static callback to add via add_shortcode
+   * Use like array('ClassName', 'shortCode')
+   * 
+   * @param array $atts — User defined attributes in shortcode tag.
+   * @return callback - To add with add_shortcode
+   */
+  static public function shortCode($atts)
+  {
+    \wp_enqueue_style('yesticket');
+    $att = \shortcode_atts(array(
+      'env' => NULL,
+      'api-version' => NULL,
+      'organizer' => NULL,
+      'key' => NULL,
+      'type' => 'all',
+      'count' => 100,
+      'design' => 'basic',
+      'details' => 'no',
+    ), $atts, 'yesticket_testimonials');
+    return Testimonials::getInstance()->get($att);
+  }
+
+  /**
+   * @var Api
+   */
+  protected $api;
+
+  /**
+   * @param Api $api
+   */
+  protected function __construct($api)
   {
     parent::__construct(__DIR__ . '/templates');
+    $this->api = $api;
   }
 
   /**
@@ -84,7 +97,7 @@ class Testimonials extends Templater
     $classes = $this->getDesignClasses($att);
     $content = \ytp_render_shortcode_container_div($classes, $att);
     try {
-      $result = Api::getInstance()->getTestimonials($att);
+      $result = $this->api->getTestimonials($att);
       if (!\is_countable($result) or \count($result) < 1) {
         $content .= \ytp_render_no_events();
       } else if (\array_key_exists('message', $result) && $result->message == "no items found") {
@@ -93,7 +106,7 @@ class Testimonials extends Templater
         $content .= $this->render_testimonials($result, $att);
       }
     } catch (Exception $e) {
-      $content .= __($e->getMessage(), 'yesticket');
+      $content .= $e->getMessage();
     }
     $content .= "</div>\n";
     return $content;

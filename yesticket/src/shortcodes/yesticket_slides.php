@@ -14,7 +14,7 @@ class Slides extends EventUsingShortcode
   static public function getInstance()
   {
     if (!isset(Slides::$instance)) {
-      Slides::$instance = new Slides();
+      Slides::$instance = new Slides(Api::getInstance());
     }
     return Slides::$instance;
   }
@@ -59,9 +59,9 @@ class Slides extends EventUsingShortcode
     ), $atts, 'yesticket_slides');
   }
 
-  public function __construct()
+  public function __construct($api)
   {
-    parent::__construct();
+    parent::__construct($api);
   }
 
   function render_contents($result, $att)
