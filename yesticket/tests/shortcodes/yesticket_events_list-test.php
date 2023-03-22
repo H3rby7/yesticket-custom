@@ -6,7 +6,7 @@ use YesTicket\Model\Event;
 
 include_once(__DIR__ . "/../utility.php");
 
-class EventsListTest extends YTP_TranslateTestCase
+class EventsListShortcodeTest extends YTP_TranslateTestCase
 {
 
   function test_class_exists()
@@ -187,7 +187,7 @@ class EventsListTest extends YTP_TranslateTestCase
   }
 
   /**
-   * @param int $event_id (between 100 and 999!)
+   * @param int $event_id (between 1000 and 9999!)
    * @param string $event_type a valid event type
    * 
    * @see \ytp_render_eventType
