@@ -104,6 +104,7 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
     $input = \preg_replace('/(<(input|img)[\s\w\"\'\-\=\/\[\]]+[\s\w\"\'\-\=\[\]])>/', '${1}/>', $input);
     // '&' character is used in XML to insert a character reference with syntax &name, so we must escape it.
     $input = \preg_replace('/&/', '&amp;', $input);
+    $input = \preg_replace('/<br>/', '<br/>', $input);
     return $input;
   }
 
