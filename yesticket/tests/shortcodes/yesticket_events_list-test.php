@@ -39,10 +39,50 @@ class EventsListTest extends YTP_TranslateTestCase
     $this->assertNotEmpty(EventsList::getInstance());
   }
 
-  function test_shortcode_defaults_only_no_events()
+  function test_shortcode_no_events()
   {
     // Mock API
     $this->initMock();
+    // Translations
+    $expectedContent = $this->expectTranslate("At this time no upcoming events are available.");
+    // Call shortcode
+    $result = EventsList::shortCode([]);
+    $this->assertNotEmpty($result);
+    $this->assertStringContainsString($expectedContent, $result, "Should contain the 'error' message.");
+    // produces valid HTML
+    $asXML = $this->validateAndGetAsXml($result);
+    $this->assertHtmlHasClass('ytp-event-list', $asXML);
+    $this->assertHtmlHasClass('ytp-light', $asXML);
+  }
+
+  function test_shortcode_exception()
+  {
+    // Mock API
+    $api_mock = $this->initMock();
+    $api_mock->expects($this->once())
+      ->method('getEvents')
+      // Expect call using the defaults
+      ->with($this->anything())
+      ->will($this->throwException(new InvalidArgumentException("api-key not set!")));
+    // Call shortcode
+    $result = EventsList::shortCode([]);
+    $this->assertNotEmpty($result);
+    $this->assertStringContainsString("api-key not set!", $result, "Should contain the 'error' message.");
+    // produces valid HTML
+    $asXML = $this->validateAndGetAsXml($result);
+    $this->assertHtmlHasClass('ytp-event-list', $asXML);
+    $this->assertHtmlHasClass('ytp-light', $asXML);
+  }
+
+  function test_shortcode_message_no_items_found()
+  {
+    // Mock API
+    $api_mock = $this->initMock();
+    $api_mock->expects($this->once())
+      ->method('getEvents')
+      // Expect call using the defaults
+      ->with($this->anything())
+      ->will($this->returnValue(json_decode('{"message":"no items found"}')));
     // Translations
     $expectedContent = $this->expectTranslate("At this time no upcoming events are available.");
     // Call shortcode
@@ -107,7 +147,7 @@ class EventsListTest extends YTP_TranslateTestCase
     $this->expectTranslate("F j, Y");
     $this->expectTranslate("g:i A");
     // Call shortcode
-    $result = EventsList::shortCode(array('type' => 'performance','theme' => 'dark','ticketlink' => 'yes',));
+    $result = EventsList::shortCode(array('type' => 'performance', 'theme' => 'dark', 'ticketlink' => 'yes',));
     $this->assertNotEmpty($result);
     // produces valid HTML
     $asXML = $this->validateAndGetAsXml($result);
@@ -118,6 +158,32 @@ class EventsListTest extends YTP_TranslateTestCase
     $item = $asXML->xpath('ol/li')[0];
     $this->assertHtmlDoesNotContainText("Performance", $item, "Item should NOT display its type, because \$att type is 'performance'.");
     $this->assertHtmlContainsText("https://link-to-my-tickets", $item, "Item should display the ticketlink, because \$att ticketlink is 'yes'.");
+  }
+
+  function test_shortcode_set_all_att()
+  {
+    $input_att = array(
+      'env' => 'dev',
+      'api-version' => 2,
+      'organizer' => 16,
+      'key' => 'an-api-key-for-16',
+      'type' => 'performance',
+      'count' => 69,
+      'theme' => 'dark',
+      'grep' => 'f',
+      'ticketlink' => 'yes',
+    );
+    // Mock API
+    $api_mock = $this->initMock();
+    $api_mock->expects($this->once())
+      ->method('getEvents')
+      // Expect call using the defaults
+      ->with($this->identicalTo($input_att))
+      ->will($this->returnValue([]));
+    $this->expectTranslate("At this time no upcoming events are available.");
+    // Call shortcode
+    $result = EventsList::shortCode($input_att);
+    $this->assertNotEmpty($result);
   }
 
   /**

@@ -51,7 +51,9 @@ abstract class EventUsingShortcode extends Templater
   {
     // THIS IS A STUB to share the function documentation!
     // Overwrite in implementing class
+    // @codeCoverageIgnoreStart
     return "<!-- STUB -->";
+    // @codeCoverageIgnoreEnd
   }
 
   /**
@@ -88,14 +90,12 @@ abstract class EventUsingShortcode extends Templater
       $result = $this->api->getEvents($att);
       if (!\is_countable($result) or \count($result) < 1) {
         $content .= \ytp_render_no_events();
-      } else if (\array_key_exists('message', $result) && $result->message == "no items found") {
-        $content .= \ytp_render_no_events();
       } else {
         $content .= $this->render_contents($result, $att);
       }
       //$content .= "<p>Wir nutzen das Ticketsystem von <a href='https://www.yesticket.org' target='_blank'>YesTicket.org</a></p>";
     } catch (Exception $e) {
-      $content .= __($e->getMessage(), 'yesticket');
+      $content .= $e->getMessage();
     }
     $content .= "</div>\n";
     return $content;

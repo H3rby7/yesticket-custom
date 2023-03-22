@@ -106,7 +106,7 @@ class Testimonials extends Templater
         $content .= $this->render_testimonials($result, $att);
       }
     } catch (Exception $e) {
-      $content .= __($e->getMessage(), 'yesticket');
+      $content .= $e->getMessage();
     }
     $content .= "</div>\n";
     return $content;
