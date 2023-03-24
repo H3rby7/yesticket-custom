@@ -12,19 +12,29 @@ include_once(__DIR__ . "/../utility.php");
 class SettingsRequiredTest extends YTP_TranslateTestCase
 {
 
+  public function set_up(): void
+  {
+    parent::set_up();
+    $this->expectTranslate("Required Settings");
+    $this->expectTranslate("Your 'key'");
+    $this->expectTranslate("Your 'organizer-ID'");
+  }
+
   function test_render_necessarySettingsNotSet()
   {
     // Init Object
-    $settingsTechnical = new SettingsRequired('yesticket-settings');
+    $settingsRequired = new SettingsRequired('yesticket-settings');
     // Init Options
     \delete_option(PluginOptions::SETTINGS_REQUIRED_KEY);
     // Change server Context
     $_SERVER['REQUEST_URI'] = "http://example.org/wp-admin/admin.php?page=yesticket-settings";
     // Expect Translations
-    $this->makeTranslateExpections();
+    $this->expectTranslate("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:");
+    $this->expectTranslate("https://www.yesticket.org/login/en/integration.php#wp-plugin");
+    $this->expectTranslate("Save Changes", "default");
     // Render
     \ob_start();
-    $settingsTechnical->render();
+    $settingsRequired->render();
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
     $asXML = $this->validateAndGetAsXml($result);
@@ -33,11 +43,10 @@ class SettingsRequiredTest extends YTP_TranslateTestCase
     $this->makeFormAssertions($formXML, "wp-admin/admin.php?page=yesticket");
   }
 
-
   function test_render_necessarySettingsPresent()
   {
     // Init Object
-    $settingsTechnical = new SettingsRequired('yesticket-settings');
+    $settingsRequired = new SettingsRequired('yesticket-settings');
     // Init Options
     \update_option(PluginOptions::SETTINGS_REQUIRED_KEY, array(
       'organizer_id' => "1",
@@ -46,10 +55,12 @@ class SettingsRequiredTest extends YTP_TranslateTestCase
     // Change server Context
     $_SERVER['REQUEST_URI'] = "http://example.org/wp-admin/admin.php?page=yesticket-settings";
     // Expect Translations
-    $this->makeTranslateExpections();
+    $this->expectTranslate("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:");
+    $this->expectTranslate("https://www.yesticket.org/login/en/integration.php#wp-plugin");
+    $this->expectTranslate("Save Changes", "default");
     // Render
     \ob_start();
-    $settingsTechnical->render();
+    $settingsRequired->render();
     $result = \ob_get_clean();
     $this->assertNotEmpty($result);
     $asXML = $this->validateAndGetAsXml($result);
@@ -58,14 +69,25 @@ class SettingsRequiredTest extends YTP_TranslateTestCase
     $this->makeFormAssertions($formXML, "wp-admin/admin.php?page=yesticket-settings");
   }
 
-  function makeTranslateExpections()
+  function test_render_feedback_update_no()
   {
-    $this->expectTranslate("Required Settings");
-    $this->expectTranslate("You need two things: your personal <b>organizer-ID</b> and the corresponding <b>Key</b>. Both can be found in your admin area on YesTicket > Marketing > Integrations:");
-    $this->expectTranslate("https://www.yesticket.org/login/en/integration.php#wp-plugin");
-    $this->expectTranslate("Your 'key'");
-    $this->expectTranslate("Your 'organizer-ID'");
-    $this->expectTranslate("Save Changes", "default");
+    $settingsRequired = new SettingsRequired('yesticket-settings');
+    unset($_GET['settings-updated']);
+    $result = $settingsRequired->feedback();
+    $this->assertEmpty($result);
+  }
+
+  function test_render_feedback_update_yes()
+  {
+    $settingsRequired = new SettingsRequired('yesticket-settings');
+    $_GET['settings-updated'] = "yes";
+    // Expect Translations
+    $expected_text = $this->expectTranslate("Settings saved.");
+    $result = $settingsRequired->feedback();
+    $this->assertNotEmpty($result);
+    $asXML = $this->validateAndGetAsXml($result);
+    // Settings Form Assertions
+    $this->assertHtmlContainsText($expected_text, $asXML);
   }
 
   /**
