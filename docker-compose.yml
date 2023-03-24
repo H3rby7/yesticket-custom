@@ -22,6 +22,14 @@ services:
       WORDPRESS_DB_USER: "${DB_USER}"
       WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
       WORDPRESS_DEBUG: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 200M
+        reservations:
+          cpus: '0.01'
+          memory: 300M
     networks:
       - development
     depends_on:
@@ -70,7 +78,7 @@ services:
   #     - db:db
 
   db:
-    image: "mariadb:10.2"
+    image: "mariadb:10.9"
     volumes:
       - ./wp-data:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql

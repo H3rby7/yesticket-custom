@@ -16,6 +16,14 @@ services:
     environment:
       XDEBUG_MODE: "coverage"
       COMPOSER_VENDOR_DIR: /tmp/vendor
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 500M
+        reservations:
+          cpus: '0.2'
+          memory: 200M
     networks:
       - testing
     depends_on:
@@ -27,13 +35,21 @@ services:
       - "testsuite:/tmp"
 # Changing the DB-Container name or env requires adaption in the phpunit.dockerfile!
   mysql_phpunit:
-    image: "mariadb:10.2"
+    image: "mariadb:10.9"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "wordpress_test"
       MYSQL_ROOT_PASSWORD: "test"
       MYSQL_USER: "yesticket"
       MYSQL_PASSWORD: "test"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 300M
+        reservations:
+          cpus: '0.01'
+          memory: 100M
     networks:
       - testing
     healthcheck:
