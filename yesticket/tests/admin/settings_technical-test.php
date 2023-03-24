@@ -11,16 +11,29 @@ include_once(__DIR__ . "/../utility.php");
 class SettingsTechnicalTest extends YTP_TranslateTestCase
 {
 
+  public function set_up(): void
+  {
+    parent::set_up();
+    $this->expectTranslate("Technical Settings");
+    $this->expectTranslate("Cache time in minutes");
+  }
+
+  /**
+   * @covers \YesTicket\Admin\SettingsTechnical
+   */
+  function test_get_instance()
+  {
+    $this->assertNotEmpty(SettingsTechnical::getInstance('yesticket-settings'));
+  }
+
   function test_render()
   {
     // Init Object
-    $settingsTechnical = new SettingsTechnical('yesticket-settings', null);
+    $settingsTechnical = new SettingsTechnical('yesticket-settings', null, null);
     $_SERVER['REQUEST_URI'] = "http://example.org/wp-admin/admin.php?page=yesticket-settings";
     $_GET['tab'] = "technical";
     // Expect Translations
-    $this->expectTranslate("Technical Settings");
     $this->expectTranslate("Change these settings at your own risk.");
-    $this->expectTranslate("Cache time in minutes");
     $this->expectTranslate("Save Changes", "default");
     $this->expectTranslate("If your changes in YesTicket are not reflected fast enough, try to: ");
     $this->expectTranslate("Clear Cache");
@@ -64,6 +77,38 @@ class SettingsTechnicalTest extends YTP_TranslateTestCase
     $this->assertNotEmpty($hiddenInput->xpath("@value")[0]);
     // Submit BTN
     $this->assertNotEmpty($formXML->xpath("//input[@type='submit']"), "Form must have a submit input.");
+  }
+
+  function test_feedback_clear_cache_no()
+  {
+    $cache_mock = $this->getMockBuilder(Cache::class)
+      ->setMethods(['clear', 'getInstance'])
+      ->getMock();
+    $cache_mock->expects($this->never())->method('clear');
+
+    $settingsTechnical = new SettingsTechnical('yesticket-settings', $cache_mock, null);
+
+    unset($_POST['clear-cache']);
+    $result = $settingsTechnical->feedback();
+    $this->assertEmpty($result);
+  }
+
+  function test_feedback_clear_cache_yes()
+  {
+    $cache_mock = $this->getMockBuilder(Cache::class)
+      ->setMethods(['clear', 'getInstance'])
+      ->getMock();
+    $cache_mock->expects($this->once())->method('clear');
+
+    $expected_text = $this->expectTranslate("Deleted the cache.");
+
+    $settingsTechnical = new SettingsTechnical('yesticket-settings', $cache_mock, null);
+
+    $_POST['clear-cache'] = 'yes';
+    $result = $settingsTechnical->feedback();
+    $this->assertNotEmpty($result);
+    $asXML = $this->validateAndGetAsXml($result);
+    $this->assertHtmlContainsText($expected_text, $asXML);
   }
 
   /**

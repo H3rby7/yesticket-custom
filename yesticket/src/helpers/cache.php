@@ -56,12 +56,12 @@ abstract class Cache
    * @param wpdb $wpdb DB connection
    * @return boolean TRUE if all cached items could be deleted. FALSE if any errors occured.
    */
-  static public function clear($wpdb)
+  public function clear($wpdb)
   {
     // https://developer.wordpress.org/reference/classes/wpdb/get_results/
     $queryResult = $wpdb->get_results("SELECT option_name FROM {$wpdb->prefix}options WHERE option_name LIKE '_transient_yesticket%'", ARRAY_N);
     if ($wpdb->last_error || empty($queryResult) || !\is_array($queryResult)) {
-      \ytp_info(__FILE__, __LINE__, "DB Query failed, cannot clear cache. " . $wpdb->last_error);
+      \ytp_info(__FILE__, __LINE__, "DB Query empty or failed, not clearing cache. ERROR: '" . $wpdb->last_error . "'");
       return FALSE;
     }
     $cacheKeys = \array_map(function ($row) {

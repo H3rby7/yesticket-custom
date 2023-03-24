@@ -24,9 +24,13 @@ class SettingsPage extends SettingsSection
    */
   public function configure()
   {
-    global $wpdb;
     $this->required = new SettingsRequired($this->get_slug());
-    $this->technical = new SettingsTechnical($this->get_slug(), $wpdb);
+    $this->technical = SettingsTechnical::getInstance($this->get_slug());
+  }
+
+  public function get_slug()
+  {
+    return $this->parent_slug . '-settings';
   }
 
   /**

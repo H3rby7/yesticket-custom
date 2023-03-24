@@ -86,7 +86,6 @@ class SettingsRequiredTest extends YTP_TranslateTestCase
     $result = $settingsRequired->feedback();
     $this->assertNotEmpty($result);
     $asXML = $this->validateAndGetAsXml($result);
-    // Settings Form Assertions
     $this->assertHtmlContainsText($expected_text, $asXML);
   }
 

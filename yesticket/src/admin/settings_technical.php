@@ -4,6 +4,7 @@ namespace YesTicket\Admin;
 
 use \YesTicket\Cache;
 use \YesTicket\PluginOptions;
+use \YesTicket\RestCache;
 
 include_once("settings_section.php");
 include_once(__DIR__ . "/../helpers/cache.php");
@@ -14,6 +15,29 @@ include_once(__DIR__ . "/../helpers/plugin_options.php");
  */
 class SettingsTechnical extends SettingsSection
 {
+
+  /**
+   * The $instance
+   *
+   * @var SettingsTechnical
+   */
+  static private $instance;
+
+  /**
+   * Get the $instance
+   * @param string $parent_slug for the menu hirarchy
+   * 
+   * @return SettingsTechnical $instance
+   */
+  static public function getInstance($parent_slug)
+  {
+    if (!isset(SettingsTechnical::$instance)) {
+      global $wpdb;
+      SettingsTechnical::$instance = new SettingsTechnical($parent_slug, RestCache::getInstance(), $wpdb);
+    }
+    return SettingsTechnical::$instance;
+  }
+
   /**
    * DB connection used to clear cache
    * @var wpdb
@@ -22,14 +46,21 @@ class SettingsTechnical extends SettingsSection
   private $wpdb = null;
 
   /**
+   * @var Cache
+   */
+  private $cache;
+
+  /**
    * Constructor.
    *
    * @param string $parent_slug for the menu hirarchy
+   * @param Cache $cache
    * @param string $wpdb DB connection
    */
-  public function __construct($parent_slug, $wpdb)
+  public function __construct($parent_slug, $cache, $wpdb)
   {
     parent::__construct($parent_slug);
+    $this->cache = $cache;
     $this->wpdb = $wpdb;
     $this->configure();
   }
@@ -109,7 +140,7 @@ EOD;
    */
   private function clear_cache()
   {
-    Cache::clear($this->wpdb);
+    $this->cache->clear($this->wpdb);
     return $this->success_message(
       /* translators: Success Message after clearing cache */
       __("Deleted the cache.", "yesticket")

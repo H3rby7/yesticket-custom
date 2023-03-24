@@ -36,8 +36,6 @@ class Api
   }
 
   /**
-   * The $instance
-   *
    * @var RestCache
    */
   private $cache;

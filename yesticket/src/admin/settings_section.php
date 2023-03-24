@@ -18,7 +18,7 @@ abstract class SettingsSection extends Templater
    *
    * @var string
    */
-  private $parent_slug;
+  protected $parent_slug;
 
   /**
    * Constructor.
@@ -46,10 +46,7 @@ abstract class SettingsSection extends Templater
    *
    * @return string
    */
-  public function get_slug()
-  {
-    return $this->parent_slug . '-settings';
-  }
+  abstract public function get_slug();
 
   /**
    * Return html for success message

@@ -74,7 +74,7 @@ class CacheTest extends WP_UnitTestCase
     $this->assertNotEmpty(\get_transient($cacheKey), "Transient should have been available.");
     // clear cache
     global $wpdb;
-    $this->assertTrue(Cache::clear($wpdb));
+    $this->assertTrue($this->testClass->clear($wpdb));
     $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
   }
 
@@ -91,7 +91,7 @@ class CacheTest extends WP_UnitTestCase
     $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should have been available.");
     // clear cache
     global $wpdb;
-    $this->assertTrue(Cache::clear($wpdb));
+    $this->assertTrue($this->testClass->clear($wpdb));
     $this->assertFalse(\get_transient($cacheKey), "Transient should have been cleared.");
     $this->assertNotEmpty(\get_transient('unrelated-B'), "Transient should still be available after ::clear.");
     \delete_transient('unrelated-B');
@@ -110,7 +110,7 @@ class CacheTest extends WP_UnitTestCase
     $this->assertNotEmpty(\get_transient($cacheKeyA), "Transient A should have been available.");
     $this->assertNotEmpty(\get_transient($cacheKeyB), "Transient B should have been available.");
     global $wpdb;
-    $this->assertTrue(Cache::clear($wpdb));
+    $this->assertTrue($this->testClass->clear($wpdb));
     $this->assertFalse(\get_transient($cacheKeyA), "Transient A should have been cleared.");
     $this->assertFalse(\get_transient($cacheKeyB), "Transient B should have been cleared.");
   }
@@ -132,7 +132,7 @@ class CacheTest extends WP_UnitTestCase
     $wpdb_mock->last_error = 'test last error of wpdb';
     $wpdb_mock->prefix = 'wp_';
     LogCapture::start();
-    $this->assertFalse(Cache::clear($wpdb_mock));
+    $this->assertFalse($this->testClass->clear($wpdb_mock));
     $logged = LogCapture::end_get();
     $this->assertStringContainsString('test last error of wpdb', $logged);
   }
@@ -154,7 +154,7 @@ class CacheTest extends WP_UnitTestCase
       ->will($this->returnValue(array(array('test-A'))));
     $wpdb_mock->last_error = null;
     $wpdb_mock->prefix = 'wp_';
-    $this->assertFalse(Cache::clear($wpdb_mock));
+    $this->assertFalse($this->testClass->clear($wpdb_mock));
   }
 
   /**
