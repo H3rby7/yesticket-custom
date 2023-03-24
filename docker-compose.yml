@@ -25,11 +25,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: 200M
+          cpus: '0.5'
+          memory: 1G
         reservations:
-          cpus: '0.01'
-          memory: 300M
+          cpus: '0.1'
+          memory: 500M
     networks:
       - development
     depends_on:
@@ -54,6 +54,14 @@ services:
       WP_USER_PW: "${WP_USER_PW}"
       YESTICKET_ORGANIZER_ID: "${YESTICKET_ORGANIZER_ID}"
       YESTICKET_KEY: "${YESTICKET_KEY}"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+        reservations:
+          cpus: '0.01'
+          memory: 50M
     networks:
       - development
     depends_on:
@@ -88,6 +96,14 @@ services:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_USER: "${DB_USER}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 300M
+        reservations:
+          cpus: '0.01'
+          memory: 100M
     networks:
       - development
     healthcheck:
