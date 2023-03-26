@@ -100,8 +100,6 @@ class Testimonials extends Templater
       $result = $this->api->getTestimonials($att);
       if (!\is_countable($result) or \count($result) < 1) {
         $content .= \ytp_render_no_testimonials();
-      } else if (\array_key_exists('message', $result) && $result->message == "no items found") {
-        $content .= \ytp_render_no_testimonials();
       } else {
         $content .= $this->render_testimonials($result, $att);
       }
@@ -120,9 +118,6 @@ class Testimonials extends Templater
   private function getDesignClasses($att)
   {
     $shortcode_class = "ytp-testimonials";
-    if (!isset($att["design"])) {
-      return $shortcode_class;
-    }
     $design = $att["design"];
     if (\strcasecmp($design, "basic") == 0 || \strcasecmp($design, "jump") == 0) {
       return "$shortcode_class ytp-$design";

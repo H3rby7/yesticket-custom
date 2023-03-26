@@ -61,7 +61,6 @@ function ytp_debug($file, $line, $log)
   }
 }
 
-
 /**
  * Return html for "no events available"
  */
