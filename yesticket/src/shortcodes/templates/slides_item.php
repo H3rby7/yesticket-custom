@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="yesticket-event-teaser slideInRight delay delay2">
-      <p><?php $this->eventDescription($event, $att); ?></p>
+      <p><?php $this->print_eventDescription($event, $att); ?></p>
       <div class="backdrop-dark">
         <div></div>
       </div>

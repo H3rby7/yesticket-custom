@@ -11,6 +11,9 @@ include_once(__DIR__ . "/../helpers/templater.php");
 class Slides extends EventUsingShortcode
 {
   static private $instance;
+  /**
+   * @return Slides
+   */
   static public function getInstance()
   {
     if (!isset(Slides::$instance)) {
@@ -59,6 +62,7 @@ class Slides extends EventUsingShortcode
     ), $atts, 'yesticket_slides');
   }
 
+  protected $cssClass = 'ytp-slides';
   public function __construct($api)
   {
     parent::__construct($api);
@@ -74,7 +78,7 @@ class Slides extends EventUsingShortcode
    * @param mixed $item the event
    * @param array $att shortcode attributes
    */
-  function eventDescription($item, $att)
+  public function print_eventDescription($item, $att)
   {
     $descr = $item->event_description;
     if (\strlen($descr) < $att["teaser-length"]) {
