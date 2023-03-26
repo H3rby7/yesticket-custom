@@ -99,9 +99,9 @@ class Testimonials extends Templater
     try {
       $result = $this->api->getTestimonials($att);
       if (!\is_countable($result) or \count($result) < 1) {
-        $content .= \ytp_render_no_events();
+        $content .= \ytp_render_no_testimonials();
       } else if (\array_key_exists('message', $result) && $result->message == "no items found") {
-        $content .= \ytp_render_no_events();
+        $content .= \ytp_render_no_testimonials();
       } else {
         $content .= $this->render_testimonials($result, $att);
       }
