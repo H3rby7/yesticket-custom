@@ -134,9 +134,10 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
    * 
    * @param string $expected_class
    * @param SimpleXMLElement $xml
+   * @param string $msg in case of failure
    */
-  function assertHtmlHasClass($expected_class, $xml) {
-    $this->assertStringContainsString($expected_class, $xml->attributes()['class'], "Expected element to have class '${expected_class}'.");
+  function assertHtmlHasClass($expected_class, $xml, $msg = null) {
+    $this->assertStringContainsString($expected_class, $xml->attributes()['class'], isset($msg) ? $msg : "Expected element to have class '${expected_class}'.");
   }
 
   /**
@@ -144,9 +145,10 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
    * 
    * @param string $undesired_class
    * @param SimpleXMLElement $xml
+   * @param string $msg in case of failure
    */
-  function assertHtmlDoesNotHaveClass($undesired_class, $xml) {
-    $this->assertStringNotContainsString($undesired_class, $xml->attributes()['class'], "Expected element to NOT have class '${undesired_class}'.");
+  function assertHtmlDoesNotHaveClass($undesired_class, $xml, $msg = null) {
+    $this->assertStringNotContainsString($undesired_class, $xml->attributes()['class'], isset($msg) ? $msg : "Expected element to NOT have class '${undesired_class}'.");
   }
 
   /**
@@ -154,9 +156,10 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
    * 
    * @param string $expected_text
    * @param SimpleXMLElement $xml
+   * @param string $msg in case of failure
    */
-  function assertHtmlContainsText($expected_text, $xml) {
-    $this->assertStringContainsString($expected_text, $xml->asXML(), "Expected element to have contain text '${expected_text}'.");
+  function assertHtmlContainsText($expected_text, $xml, $msg = null) {
+    $this->assertStringContainsString($expected_text, $xml->asXML(), isset($msg) ? $msg : "Expected element to contain text '${expected_text}'.");
   }
 
   /**
@@ -164,9 +167,10 @@ abstract class YTP_HtmlTestCase extends WP_UnitTestCase
    * 
    * @param string $undesired
    * @param SimpleXMLElement $xml
+   * @param string $msg in case of failure
    */
-  function assertHtmlDoesNotContainText($undesired, $xml) {
-    $this->assertStringNotContainsString($undesired, $xml->asXML(), "Expected element to NOT contain text '${undesired}'.");
+  function assertHtmlDoesNotContainText($undesired, $xml, $msg = null) {
+    $this->assertStringNotContainsString($undesired, $xml->asXML(), isset($msg) ? $msg : "Expected element to NOT contain text '${undesired}'.");
   }
 }
 
