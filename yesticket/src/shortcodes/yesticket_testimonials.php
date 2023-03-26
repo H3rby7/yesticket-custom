@@ -160,7 +160,7 @@ class Testimonials extends Templater
     $date = $item->date;
     $event = $item->event_name;
     if (!$includeEventName || $event === null || \trim($event) === '') {
-      \printf(
+      return \printf(
         /* translators: Used when producing the testimonial source - %1$s is replaced with the author; %2$s is replaced with the date; %3$s is replaced with the event_name */
         __('%1$s on %2$s.', "yesticket"),
         $source,
