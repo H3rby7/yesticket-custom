@@ -14,27 +14,6 @@ class HelperFunctionsTest extends WP_UnitTestCase
     $this->assertSame('http://example.org/wp-content/plugins/yesticket/src/img/my-image.png', \ytp_getImageUrl('my-image.png'));
   }
 
-  /**
-   * @covers ::ytp_render_no_events
-   */
-  function test_ytp_render_no_events()
-  {
-    $text = \ytp_render_no_events();
-    libxml_clear_errors();
-    simplexml_load_string($text);
-    $this->assertCount(0, libxml_get_errors(), 'Should produce valid HTML');
-  }
-
-  /**
-   * @covers ::ytp_render_no_testimonials
-   */
-  function test_ytp_render_no_testimonials()
-  {
-    $text = ytp_render_no_testimonials();
-    libxml_clear_errors();
-    simplexml_load_string($text);
-    $this->assertCount(0, libxml_get_errors(), 'Should produce valid HTML');
-  }
 
   /**
    * @covers ::ytp_render_shortcode_container_div
@@ -124,30 +103,6 @@ class HelperFunctionsTest extends WP_UnitTestCase
     } else {
       $this->assertEmpty($result, "debugging was not enabled, should not log.");
     }
-  }
-
-  function run_ytp_render_eventType($expected, $input)
-  {
-    ob_start();
-    ytp_render_eventType($input);
-    $this->assertSame($expected, ob_get_clean(), "should be translated to 'EN'");
-  }
-
-  /**
-   * @covers ::ytp_render_eventType
-   */
-  function test_ytp_render_eventType()
-  {
-    \add_filter('locale', function () {
-      return 'en_EN';
-    });
-    $this->run_ytp_render_eventType("Performance", "auftritt");
-    $this->run_ytp_render_eventType("Performance", "Auftritt");
-    $this->run_ytp_render_eventType("Workshop", "workshop");
-    $this->run_ytp_render_eventType("Workshop", "Workshop");
-    $this->run_ytp_render_eventType("Festival", "festival");
-    $this->run_ytp_render_eventType("Festival", "Festival");
-    $this->run_ytp_render_eventType("unknownEventType", "unknownEventType");
   }
 
   /**

@@ -99,7 +99,7 @@ class Testimonials extends Templater
     try {
       $result = $this->api->getTestimonials($att);
       if (!\is_countable($result) or \count($result) < 1) {
-        $content .= \ytp_render_no_testimonials();
+        $content .= $this->render_no_testimonials();
       } else {
         $content .= $this->render_testimonials($result, $att);
       }
@@ -123,6 +123,15 @@ class Testimonials extends Templater
       return "$shortcode_class ytp-$design";
     }
     return $shortcode_class . " design-must-be-basic-or-jump";
+  }
+
+  /**
+   * Return html for "no testimonials available"
+   */
+  protected function render_no_testimonials()
+  {
+    /* translators: When no audience feedback can be found. */
+    return '<p>' . __("At this time no audience feedback is present.", "yesticket") . '</p>';
   }
 
   /**

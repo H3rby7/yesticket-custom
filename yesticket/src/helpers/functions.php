@@ -62,48 +62,6 @@ function ytp_debug($file, $line, $log)
 }
 
 /**
- * Return html for "no events available"
- */
-function ytp_render_no_events()
-{
-  /* translators: When no upcoming events can be found. */
-  return '<p>' . __("At this time no upcoming events are available.", "yesticket") . '</p>';
-}
-
-/**
- * Return html for "no testimonials available"
- */
-function ytp_render_no_testimonials()
-{
-  /* translators: When no audience feedback can be found. */
-  return '<p>' . __("At this time no audience feedback is present.", "yesticket") . '</p>';
-}
-
-/**
- * Print event type localized.
- * (Workaround to make the event $type translatable)
- * 
- * @param string $type of the event
- * 
- */
-function ytp_render_eventType($type)
-{
-  if (\strcasecmp('auftritt', $type) === 0) {
-    /* translators: Event Type 'Performance' */
-    return _e("Performance", "yesticket");
-  }
-  if ((\strcasecmp('workshop', $type) === 0) or (\strcasecmp('kurs', $type) === 0)) {
-    /* translators: Event Type 'Workshop' */
-    return _e("Workshop", "yesticket");
-  }
-  if (\strcasecmp('festival', $type) === 0) {
-    /* translators: Event Type 'Festival' */
-    return _e("Festival", "yesticket");
-  }
-  _e($type, 'yesticket');
-}
-
-/**
  * Create date using the wp timezone
  * 
  * @param string $datetimestring

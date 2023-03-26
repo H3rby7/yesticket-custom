@@ -89,7 +89,7 @@ abstract class EventUsingShortcode extends Templater
     try {
       $result = $this->api->getEvents($att);
       if (!\is_countable($result) or \count($result) < 1) {
-        $content .= \ytp_render_no_events();
+        $content .= $this->render_no_events();
       } else {
         $content .= $this->render_contents($result, $att);
       }
@@ -112,6 +112,39 @@ abstract class EventUsingShortcode extends Templater
     \ob_start();
     parent::render_template($template, $variables);
     return \ob_get_clean();
+  }
+
+  /**
+   * Return html for "no events available"
+   */
+  protected function render_no_events()
+  {
+    /* translators: When no upcoming events can be found. */
+    return '<p>' . __("At this time no upcoming events are available.", "yesticket") . '</p>';
+  }
+
+  /**
+   * Print event type localized.
+   * (Workaround to make the event $type translatable)
+   * 
+   * @param string $type of the event
+   * 
+   */
+  public function render_eventType($type)
+  {
+    if (\strcasecmp('auftritt', $type) === 0) {
+      /* translators: Event Type 'Performance' */
+      return _e("Performance", "yesticket");
+    }
+    if ((\strcasecmp('workshop', $type) === 0) or (\strcasecmp('kurs', $type) === 0)) {
+      /* translators: Event Type 'Workshop' */
+      return _e("Workshop", "yesticket");
+    }
+    if (\strcasecmp('festival', $type) === 0) {
+      /* translators: Event Type 'Festival' */
+      return _e("Festival", "yesticket");
+    }
+    _e($type, 'yesticket');
   }
 
   /**

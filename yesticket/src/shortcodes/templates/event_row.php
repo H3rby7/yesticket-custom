@@ -3,7 +3,7 @@
     <h3 class='ytp-event-name'>
       <?php echo \htmlentities($item->event_name); ?>
       <?php if ($att["type"] == "all") { ?>
-        <span class='ytp-event-type'><?php \ytp_render_eventType($item->event_type); ?></span>
+        <span class='ytp-event-type'><?php $this->render_eventType($item->event_type); ?></span>
       <?php } ?>
     </h3>
     <span class='ytp-event-location'><?php echo \htmlentities($item->location_name); ?></span>

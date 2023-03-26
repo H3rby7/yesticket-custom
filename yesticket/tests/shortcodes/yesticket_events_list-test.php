@@ -190,7 +190,7 @@ class EventsListShortcodeTest extends YTP_TranslateTestCase
    * @param int $event_id (between 1000 and 9999!)
    * @param string $event_type a valid event type
    * 
-   * @see \ytp_render_eventType
+   * @see \YesTicket\EventUsingShortcode::render_eventType
    */
   function createMockEvent($event_id = 2161, $event_type = "auftritt")
   {

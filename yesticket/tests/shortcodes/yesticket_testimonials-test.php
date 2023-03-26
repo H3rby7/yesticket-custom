@@ -201,8 +201,6 @@ class TestimonialsShortcodeTest extends YTP_TranslateTestCase
 
   /**
    * @param int $event_id (between 1000 and 9999!)
-   * 
-   * @see \ytp_render_eventType
    */
   function createMockTestimonial($event_id = 2161)
   {
