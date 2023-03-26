@@ -61,7 +61,6 @@ class TestimonialsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getTestimonials')
-      // Expect call using the defaults
       ->with($this->anything())
       ->will($this->throwException(new InvalidArgumentException("api-key not set!")));
     // Call shortcode
@@ -80,7 +79,6 @@ class TestimonialsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getTestimonials')
-      // Expect call using the defaults
       ->with($this->anything())
       ->will($this->returnValue(json_decode('{"message":"no items found"}')));
     // Translations
@@ -133,7 +131,7 @@ class TestimonialsShortcodeTest extends YTP_TranslateTestCase
     $mock_result = [$this->createMockTestimonial()];
     $api_mock->expects($this->once())
       ->method('getTestimonials')
-      // Expect call using the defaults
+      // Expect call using different design and details
       ->with($this->identicalTo(array('env' => NULL, 'api-version' => NULL, 'organizer' => NULL, 'key' => NULL, 'type' => 'all', 'count' => 100, 'design' => 'jump', 'details' => 'yes',)))
       ->will($this->returnValue($mock_result));
     // Translations
@@ -172,7 +170,6 @@ class TestimonialsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getTestimonials')
-      // Expect call using the defaults
       ->with($this->identicalTo($input_att))
       ->will($this->returnValue([]));
     $this->expectTranslate("At this time no audience feedback is present.");
@@ -187,7 +184,6 @@ class TestimonialsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getTestimonials')
-      // Expect call using the defaults
       ->with($this->anything())
       ->will($this->returnValue([]));
     $this->expectTranslate("At this time no audience feedback is present.");

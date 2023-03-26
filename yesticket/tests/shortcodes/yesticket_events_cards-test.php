@@ -61,7 +61,6 @@ class EventsCardsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getEvents')
-      // Expect call using the defaults
       ->with($this->anything())
       ->will($this->throwException(new InvalidArgumentException("api-key not set!")));
     // Call shortcode
@@ -80,7 +79,6 @@ class EventsCardsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getEvents')
-      // Expect call using the defaults
       ->with($this->anything())
       ->will($this->returnValue(json_decode('{"message":"no cards found"}')));
     // Translations
@@ -132,7 +130,7 @@ class EventsCardsShortcodeTest extends YTP_TranslateTestCase
     $mock_result = [$this->createMockEvent()];
     $api_mock->expects($this->once())
       ->method('getEvents')
-      // Expect call using the defaults
+      // Expect call using different type, theme and count
       ->with($this->identicalTo(array('env' => NULL, 'api-version' => NULL, 'organizer' => NULL, 'key' => NULL, 'type' => 'performance', 'count' => 16, 'theme' => 'dark', 'grep' => NULL)))
       ->will($this->returnValue($mock_result));
     // Call shortcode
@@ -171,7 +169,6 @@ class EventsCardsShortcodeTest extends YTP_TranslateTestCase
     $api_mock = $this->initMock();
     $api_mock->expects($this->once())
       ->method('getEvents')
-      // Expect call using the defaults
       ->with($this->identicalTo($input_att))
       ->will($this->returnValue([]));
     $this->expectTranslate("At this time no upcoming events are available.");
