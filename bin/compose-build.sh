@@ -7,4 +7,4 @@ DIST_DIR=/src/dist
 bash prepare-zip.sh /src
 cd $DIST_DIR
 zip -r /src/yesticket.zip ./*
-rm -rf $DIST_DIR
+rm -rf ./*

@@ -81,7 +81,7 @@ Zip the files inside the `yesticket` folder. It should contain the following fil
 ## Automated Test-Setup
 
 TODO: 
-- [ ] write and use automated tests.
+- [x] write and use automated tests.
 - [ ] run automated tests for different PHP/WP versions
 
 [Credits to chriszarate](https://github.com/chriszarate/docker-compose-wordpress)
