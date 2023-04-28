@@ -1,10 +1,19 @@
 # 2.0.1
 
 * Fix cache saving items indefinitely when the time was not explicitely set.
+* Development: Introduced Matrix Testing to test against different PHP/Wordpress Versions
 
 ## Compability
 
-Same as 2.0.0
+WP-VERSION | PHP 7.2 | PHP 7.3 | PHP 7.4 | PHP 8.0 | PHP 8.1 | PHP 8.2
+---------- | ------- | ------- | ------- | ------- | ------- | -------
+5.6        | yes     | yes     | yes     | -       | -       | -
+5.7        | yes     | yes     | yes     | -       | -       | -
+5.8        | yes     | yes     | yes     | -       | -       | -
+5.9        | yes     | yes     | yes     | yes     | yes     | -
+6.0        | yes     | yes     | yes     | yes     | yes     | -
+6.1        | yes     | yes     | yes     | yes     | yes     | yes
+6.2        | yes     | yes     | yes     | yes     | yes     | yes
 
 # 2.0.0
 
