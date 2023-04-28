@@ -12,9 +12,9 @@ include_once(__DIR__ . "/../utility.php");
 class SettingsRequiredTest extends YTP_TranslateTestCase
 {
 
-  public function set_up(): void
+  public function setUp(): void
   {
-    parent::set_up();
+    parent::setUp();
     $this->expectTranslate("Required Settings");
     $this->expectTranslate("Your 'key'");
     $this->expectTranslate("Your 'organizer-ID'");

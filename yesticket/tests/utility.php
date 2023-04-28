@@ -182,9 +182,9 @@ abstract class YTP_TranslateTestCase extends YTP_HtmlTestCase
   protected $assertedTranslations = [];
   protected $actualTranslations = [];
 
-  public function set_up(): void
+  public function setUp(): void
   {
-    parent::set_up();
+    parent::setUp();
     $this->assertedTranslations = [];
     $this->actualTranslations = [];
     \remove_all_filters('gettext', 69);

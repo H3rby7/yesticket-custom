@@ -11,9 +11,9 @@ include_once(__DIR__ . "/../utility.php");
 class SettingsTechnicalTest extends YTP_TranslateTestCase
 {
 
-  public function set_up(): void
+  public function setUp(): void
   {
-    parent::set_up();
+    parent::setUp();
     $this->expectTranslate("Technical Settings");
     $this->expectTranslate("Cache time in minutes");
   }
