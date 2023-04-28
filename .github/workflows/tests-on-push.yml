@@ -51,7 +51,7 @@ jobs:
         with:
           php-version: ${{ matrix.version_php }}
           extensions: intl
-          tools: phpunit:8, composer
+          tools: phpunit:7, composer
           coverage: xdebug
       # - name: Composer Info
       #   run: |
