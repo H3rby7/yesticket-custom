@@ -26,22 +26,37 @@ jobs:
         # options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     strategy:
       matrix:
-        version_wordpress: [5.6, 5.9.2, 6.1.1]
-        version_php: [7.2, 7.3, 7.4, 8.0, 8.1]
-        exclude:
-        # Exclude certain combinations as we lack the docker image
+        version_wordpress: [5.6]
+        version_php: [7.2]
+        version_php_unit: [7]
+        # Use 'include' to run only certain combinations as we lack the docker image
         # See: https://hub.docker.com/_/wordpress/tags?page=1&name=6.1.1-php7.4
-          # Wordpress 5.6 is only available as docker image for PHP < 8.1
+        include:
           - version_wordpress: 5.6
-            version_php: 8.1
-          # Wordpress 5.9.2 is only available as docker image for PHP > 7.2
-          - version_wordpress: 5.9.2
             version_php: 7.2
-          # Wordpress 6.1.1 is only available as docker image for PHP > 7.3
-          - version_wordpress: 6.1.1
-            version_php: 7.2
-          - version_wordpress: 6.1.1
+          - version_wordpress: 5.6
             version_php: 7.3
+          - version_wordpress: 5.6
+            version_php: 7.4
+          - version_wordpress: 5.6
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 5.9.2
+            version_php: 7.3
+          - version_wordpress: 5.9.2
+            version_php: 7.4
+          - version_wordpress: 5.9.2
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 5.9.2
+            version_php: 8.1
+            version_php_unit: 8
+          - version_wordpress: 6.1.1
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 6.1.1
+            version_php: 8.1
+            version_php_unit: 8
       fail-fast: true
     steps:
       - name: Check out repository code
@@ -51,7 +66,7 @@ jobs:
         with:
           php-version: ${{ matrix.version_php }}
           extensions: intl
-          tools: phpunit:7, composer
+          tools: phpunit:${{ matrix.version_php_unit }}, composer
           coverage: xdebug
       # - name: Composer Info
       #   run: |
