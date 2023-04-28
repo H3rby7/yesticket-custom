@@ -90,6 +90,8 @@ jobs:
           extensions: intl
           tools: phpunit:${{ matrix.version_php_unit }}, composer
           coverage: xdebug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - name: Composer Info
       #   run: |
       #     cd ${{ github.workspace }}/yesticket
