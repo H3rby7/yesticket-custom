@@ -3,7 +3,7 @@
 /**
  * Plugin Name: YesTicket
  * Plugin URI: https://www.yesticket.org/
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: YesTicket
  * Author URI: https://www.yesticket.org/
  * Description: Online Ticketing
