@@ -43,7 +43,8 @@ abstract class Cache
    */
   protected function cache($CACHE_KEY, $data)
   {
-    $saved = \set_transient($CACHE_KEY, $data, PluginOptions::getInstance()->getCacheTimeInMinutes() * MINUTE_IN_SECONDS);
+    $cache_minutes = PluginOptions::getInstance()->getCacheTimeInMinutes();
+    $saved = \set_transient($CACHE_KEY, $data, $cache_minutes * 60);
     if (!$saved) {
       // @codeCoverageIgnoreStart
       \ytp_debug(__FILE__, __LINE__, "Could not cache item '$CACHE_KEY'");

@@ -167,14 +167,18 @@ class PluginOptions
   /**
    * Get the cache time in minutes
    * 
-   * @return string cache time or default, see $settings_technical_args
+   * @return int cache time or default, see $settings_technical_args
    */
   public function getCacheTimeInMinutes()
   {
-    return $this->getOptionNumber(
+    $minutes = $this->getOptionNumber(
       PluginOptions::SETTINGS_TECHNICAL_KEY,
       'cache_time_in_minutes'
     );
+    if (!isset($minutes) || !\is_numeric($minutes) || !is_int($minutes) || $minutes < 1) {
+      $minutes = 60;
+    }
+    return \intval($minutes);
   }
 
   /**
