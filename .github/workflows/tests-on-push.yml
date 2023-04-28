@@ -41,9 +41,6 @@ jobs:
           - version_wordpress: 5.6
             version_php: 7.4
             version_php_unit: 7
-          - version_wordpress: 5.6
-            version_php: 8.0
-            version_php_unit: 8
           - version_wordpress: 5.9.2
             version_php: 7.3
             version_php_unit: 7
