@@ -66,6 +66,7 @@ jobs:
       - name: Composer update
         run: |
           cd ${{ github.workspace }}/yesticket
+          sed -i -E "s/(johnpbloch\/wordpress-core\": \").+(\",)/\1${{ matrix.version_wordpress }}\2/g" composer.json
           composer update -n
           composer dump-autoload
           ls -al `composer config vendor-dir --absolute`
