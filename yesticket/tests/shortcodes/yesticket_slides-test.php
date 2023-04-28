@@ -42,7 +42,7 @@ class SlidesShortcodeTest extends YTP_TranslateTestCase
   /**
    * @covers YesTicket\Slides::registerFiles
    */
-  function test_shortcode_registerFiles()
+  function todo_test_shortcode_registerFiles()
   {
     // TODO: test if styles and js get registered!
   }
@@ -50,7 +50,7 @@ class SlidesShortcodeTest extends YTP_TranslateTestCase
   /**
    * @covers YesTicket\Slides::shortCode
    */
-  function test_shortcode_enqueues_files()
+  function todo_test_shortcode_enqueues_files()
   {
     // TODO: test if styles and js get enqueued!
   }

@@ -24,15 +24,51 @@ jobs:
           MYSQL_PASSWORD: "test"
         # Set health checks to wait until mariadb has started
         # options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+    strategy:
+      matrix:
+        version_wordpress: [5.6]
+        version_php: [7.2]
+        version_php_unit: [7]
+        # Use 'include' to run only certain combinations as we lack the docker image
+        # See: https://hub.docker.com/_/wordpress/tags?page=1&name=6.1.1-php7.4
+        include:
+          - version_wordpress: 5.6
+            version_php: 7.2
+            version_php_unit: 7
+          - version_wordpress: 5.6
+            version_php: 7.3
+            version_php_unit: 7
+          - version_wordpress: 5.6
+            version_php: 7.4
+            version_php_unit: 7
+          - version_wordpress: 5.9.2
+            version_php: 7.3
+            version_php_unit: 7
+          - version_wordpress: 5.9.2
+            version_php: 7.4
+            version_php_unit: 7
+          - version_wordpress: 5.9.2
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 5.9.2
+            version_php: 8.1
+            version_php_unit: 8
+          - version_wordpress: 6.1.1
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 6.1.1
+            version_php: 8.1
+            version_php_unit: 8
+      fail-fast: true
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.2
+          php-version: ${{ matrix.version_php }}
           extensions: intl
-          tools: phpunit:8, composer
+          tools: phpunit:${{ matrix.version_php_unit }}, composer
           coverage: xdebug
       # - name: Composer Info
       #   run: |
@@ -47,12 +83,13 @@ jobs:
       - name: Composer update
         run: |
           cd ${{ github.workspace }}/yesticket
+          sed -i -E "s/(johnpbloch\/wordpress-core\": \").+(\",)/\1${{ matrix.version_wordpress }}\2/g" composer.json
           composer update -n
           composer dump-autoload
           ls -al `composer config vendor-dir --absolute`
       - name: Prepare WP Test-lib files
         env:
-          VERSION_WP: 6.1.1
+          VERSION_WP: ${{ matrix.version_wordpress }}
         run: |
           DB_HOST=127.0.0.1:${{ job.services.mariadb.ports[3306] }}
           echo -n Will connect to DB at $DB_HOST

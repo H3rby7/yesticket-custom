@@ -23,7 +23,7 @@ class CacheTest extends WP_UnitTestCase
 {
   private $testClass;
 
-  function setUp(): void
+  public function setUp(): void
   {
     $this->testClass = new TestCacheImpl();
   }

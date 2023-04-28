@@ -9,9 +9,9 @@ class EventUsingShortcodeTest extends WP_UnitTestCase
 
   private $impl = null;
 
-  public function set_up(): void
+  public function setUp(): void
   {
-    parent::set_up();
+    parent::setUp();
     \add_filter('locale', function () {
       return 'en_EN';
     }, 69);
