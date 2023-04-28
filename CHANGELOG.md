@@ -1,3 +1,11 @@
+# 2.0.1
+
+* Fix cache saving items indefinitely when the time was not explicitely set.
+
+## Compability
+
+Same as 2.0.0
+
 # 2.0.0
 
 ## Main Features
@@ -17,7 +25,7 @@
 
 WP-VERSION | PHP VERSION | STATUS
 ---------- | ----------- | -------
-5.6.0      | 7.2         | to check.
+5.6.0      | 7.2         | works.
 5.9.2      | 7.3         | to check.
 6.1.1      | 7.4         | to check.
 6.1.1      | 8.0         | to check.

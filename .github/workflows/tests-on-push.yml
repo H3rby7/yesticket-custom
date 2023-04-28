@@ -24,13 +24,32 @@ jobs:
           MYSQL_PASSWORD: "test"
         # Set health checks to wait until mariadb has started
         # options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+    strategy:
+      matrix:
+        version_wordpress: [5.6, 5.9.2, 6.1.1]
+        version_php: [7.2, 7.3, 7.4, 8.0, 8.1]
+        exclude:
+        # Exclude certain combinations as we lack the docker image
+        # See: https://hub.docker.com/_/wordpress/tags?page=1&name=6.1.1-php7.4
+          # Wordpress 5.6 is only available as docker image for PHP < 8.1
+          - version_wordpress: 5.6
+            version_php: 8.1
+          # Wordpress 5.9.2 is only available as docker image for PHP > 7.2
+          - version_wordpress: 5.9.2
+            version_php: 7.2
+          # Wordpress 6.1.1 is only available as docker image for PHP > 7.3
+          - version_wordpress: 6.1.1
+            version_php: 7.2
+          - version_wordpress: 6.1.1
+            version_php: 7.3
+      fail-fast: true
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.2
+          php-version: ${{ matrix.version_php }}
           extensions: intl
           tools: phpunit:8, composer
           coverage: xdebug
@@ -52,7 +71,7 @@ jobs:
           ls -al `composer config vendor-dir --absolute`
       - name: Prepare WP Test-lib files
         env:
-          VERSION_WP: 6.1.1
+          VERSION_WP: ${{ matrix.version_wordpress }}
         run: |
           DB_HOST=127.0.0.1:${{ job.services.mariadb.ports[3306] }}
           echo -n Will connect to DB at $DB_HOST
