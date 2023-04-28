@@ -29,9 +29,9 @@ jobs:
         version_wordpress: [5.6]
         version_php: [7.2]
         version_php_unit: [7]
-        # Use 'include' to run only certain combinations as we lack the docker image
-        # See: https://hub.docker.com/_/wordpress/tags?page=1&name=6.1.1-php7.4
+        # See: https://make.wordpress.org/core/handbook/references/phpunit-compatibility-and-wordpress-versions/
         include:
+          ####### 5.6
           - version_wordpress: 5.6
             version_php: 7.2
             version_php_unit: 7
@@ -41,24 +41,96 @@ jobs:
           - version_wordpress: 5.6
             version_php: 7.4
             version_php_unit: 7
-          - version_wordpress: 5.9.2
+          ####### 5.7
+          - version_wordpress: 5.7
+            version_php: 7.2
+            version_php_unit: 7
+          - version_wordpress: 5.7
             version_php: 7.3
             version_php_unit: 7
-          - version_wordpress: 5.9.2
+          - version_wordpress: 5.7
             version_php: 7.4
             version_php_unit: 7
-          - version_wordpress: 5.9.2
+          ####### 5.8
+          - version_wordpress: 5.8
+            version_php: 7.2
+            version_php_unit: 7
+          - version_wordpress: 5.8
+            version_php: 7.3
+            version_php_unit: 7
+          - version_wordpress: 5.8
+            version_php: 7.4
+            version_php_unit: 7
+          ####### 5.9
+          - version_wordpress: 5.9
+            version_php: 7.2
+            version_php_unit: 8
+          - version_wordpress: 5.9
+            version_php: 7.3
+            version_php_unit: 9
+          - version_wordpress: 5.9
+            version_php: 7.4
+            version_php_unit: 9
+          - version_wordpress: 5.9
             version_php: 8.0
             version_php_unit: 8
-          - version_wordpress: 5.9.2
+          - version_wordpress: 5.9
             version_php: 8.1
+            version_php_unit: 9
+          ####### 6.0
+          - version_wordpress: 6.0
+            version_php: 7.2
             version_php_unit: 8
-          - version_wordpress: 6.1.1
+          - version_wordpress: 6.0
+            version_php: 7.3
+            version_php_unit: 9
+          - version_wordpress: 6.0
+            version_php: 7.4
+            version_php_unit: 9
+          - version_wordpress: 6.0
             version_php: 8.0
             version_php_unit: 8
-          - version_wordpress: 6.1.1
+          - version_wordpress: 6.0
             version_php: 8.1
+            version_php_unit: 9
+          ####### 6.1
+          - version_wordpress: 6.1
+            version_php: 7.2
             version_php_unit: 8
+          - version_wordpress: 6.1
+            version_php: 7.3
+            version_php_unit: 9
+          - version_wordpress: 6.1
+            version_php: 7.4
+            version_php_unit: 9
+          - version_wordpress: 6.1
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 6.1
+            version_php: 8.1
+            version_php_unit: 9
+          - version_wordpress: 6.1
+            version_php: 8.2
+            version_php_unit: 9
+          ####### 6.2
+          - version_wordpress: 6.2
+            version_php: 7.2
+            version_php_unit: 8
+          - version_wordpress: 6.2
+            version_php: 7.3
+            version_php_unit: 9
+          - version_wordpress: 6.2
+            version_php: 7.4
+            version_php_unit: 9
+          - version_wordpress: 6.2
+            version_php: 8.0
+            version_php_unit: 8
+          - version_wordpress: 6.2
+            version_php: 8.1
+            version_php_unit: 9
+          - version_wordpress: 6.2
+            version_php: 8.2
+            version_php_unit: 9
       fail-fast: true
     steps:
       - name: Check out repository code
