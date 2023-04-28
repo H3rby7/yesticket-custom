@@ -10,7 +10,7 @@ class ImageEndpointTest extends WP_UnitTestCase
    * @var WP_REST_Server
    */
   protected $server;
-  protected function setUp(): void
+  public function setUp(): void
   {
     parent::setUp();
     /** @var WP_REST_Server $wp_rest_server */
